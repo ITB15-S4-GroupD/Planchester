@@ -6,6 +6,7 @@ public class HelloPlanchester {
     public static void helloTeam() {
         System.out.println("Hello Team D!");
         System.out.println("Welcome");
+        System.out.println("Hello Christina! Can you push me :D?");
 
     }
     //change2
