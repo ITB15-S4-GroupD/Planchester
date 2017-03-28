@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="871602ea-073e-4798-84d3-a367329907e5" name="Default" comment="" />
+    <list default="true" id="871602ea-073e-4798-84d3-a367329907e5" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -26,8 +28,8 @@
       <file leaf-file-name="HelloPlanchester.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/PlanchesterGUI/src/HelloPlanchester.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="12" lean-forward="false" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="13" />
+            <state relative-caret-position="255">
+              <caret line="15" column="1" lean-forward="true" selection-start-line="15" selection-start-column="1" selection-end-line="15" selection-end-column="1" />
               <folding>
                 <element signature="e#268#269#0" expanded="true" />
                 <element signature="e#323#324#0" expanded="true" />
@@ -722,7 +724,7 @@
       <workItem from="1490691428839" duration="1127000" />
       <workItem from="1490694343383" duration="150000" />
       <workItem from="1490694546775" duration="1107000" />
-      <workItem from="1490695710867" duration="1302000" />
+      <workItem from="1490695710867" duration="1436000" />
     </task>
     <task id="LOCAL-00001" summary="second commit test">
       <created>1490695152709</created>
@@ -749,7 +751,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3768000" />
+    <option name="totallyTimeSpent" value="3902000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1320" height="784" extended-state="6" />
@@ -883,8 +885,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/PlanchesterGUI/src/HelloPlanchester.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="12" lean-forward="false" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="13" />
+        <state relative-caret-position="255">
+          <caret line="15" column="1" lean-forward="true" selection-start-line="15" selection-start-column="1" selection-end-line="15" selection-end-column="1" />
           <folding>
             <element signature="e#268#269#0" expanded="true" />
             <element signature="e#323#324#0" expanded="true" />
