@@ -3,7 +3,6 @@
  */
 public class HelloPlanchester {
 
-    // change
     public static void helloTeam() {
         System.out.println("Hello Team D!");
         System.out.println("Welcome");
