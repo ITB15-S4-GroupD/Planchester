@@ -32,7 +32,7 @@ public class Main extends Application {
     public static Scene scene;
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
 
         Parent root = FXMLLoader.load(getClass().getResource("GUI.fxml"));
         //scene = new Scene(root, 800, 600);
@@ -66,8 +66,7 @@ public class Main extends Application {
         agenda.localeProperty().set(Locale.GERMAN);
         agenda.setDisplayedLocalDateTime(LocalDateTime.now());
 
-        agenda.onMouseClickedProperty().set(new EventHandler<MouseEvent>()
-        {
+        agenda.onMouseClickedProperty().set(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent arg0){
                 System.out.println("Property selection changed");
