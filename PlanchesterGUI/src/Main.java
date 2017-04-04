@@ -9,9 +9,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import jfxtras.scene.control.LocalDateTimePicker;
+import jfxtras.scene.control.LocalTimePicker;
 import jfxtras.scene.control.agenda.Agenda;
 
 import java.time.LocalDate;
@@ -32,7 +35,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         Parent root = FXMLLoader.load(getClass().getResource("GUI.fxml"));
-        scene = new Scene(root, 800, 600);
+        //scene = new Scene(root, 800, 600);
+        scene = new Scene(root);
         Agenda agenda = (Agenda) scene.lookup("#agenda");
 
         Agenda.Appointment appointment = new Agenda.AppointmentImpl();
@@ -60,12 +64,13 @@ public class Main extends Application {
         agenda.setAllowResize(false);
 
         agenda.localeProperty().set(Locale.GERMAN);
+        agenda.setDisplayedLocalDateTime(LocalDateTime.now());
 
         agenda.onMouseClickedProperty().set(new EventHandler<MouseEvent>()
         {
             @Override
             public void handle(MouseEvent arg0){
-                System.out.println("Property Changed");
+                System.out.println("Property selection changed");
                 ObservableList<Agenda.Appointment> appointments = agenda.selectedAppointments();
                 Agenda.Appointment appointment = appointments.get(0);
 
@@ -75,6 +80,14 @@ public class Main extends Application {
                 TextField textField2 = (TextField) scene.lookup("#description");
                 textField2.setText(appointment.getDescription());
 
+                DatePicker datePicker = (DatePicker) scene.lookup("#date");
+                datePicker.setValue(appointment.getStartLocalDateTime().toLocalDate());
+
+                LocalTimePicker startTime = (LocalTimePicker) scene.lookup("#start");
+                startTime.setLocalTime(appointment.getStartLocalDateTime().toLocalTime());
+
+                LocalTimePicker endTime = (LocalTimePicker) scene.lookup("#end");
+                endTime.setLocalTime(appointment.getEndLocalDateTime().toLocalTime());
                 /*
                 Alert alert;
                 alert = new Alert(Alert.AlertType.INFORMATION);
