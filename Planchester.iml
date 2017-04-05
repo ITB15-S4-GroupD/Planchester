@@ -7,7 +7,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="PlanchesterGUI" />
     <orderEntry type="library" name="jfxtras-agenda-8.0-r5" level="project" />
   </component>
 </module>

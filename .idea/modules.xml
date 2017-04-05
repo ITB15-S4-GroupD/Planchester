@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Planchester.iml" filepath="$PROJECT_DIR$/Planchester.iml" />
-      <module fileurl="file://$PROJECT_DIR$/PlanchesterGUI/PlanchesterGUI.iml" filepath="$PROJECT_DIR$/PlanchesterGUI/PlanchesterGUI.iml" />
     </modules>
   </component>
 </project>
