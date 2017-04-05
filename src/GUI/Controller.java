@@ -1,3 +1,5 @@
+package GUI;
+
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
@@ -17,26 +19,26 @@ public class Controller {
 
     @FXML
     private void navigateOneWeekBackClicked() {
-        Agenda agenda = (Agenda) Main.scene.lookup("#agenda");
+        Agenda agenda = (Agenda) PlanchesterGUI.scene.lookup("#agenda");
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
         agenda.setDisplayedLocalDateTime(displayedDate.minus(7, ChronoUnit.DAYS));
     }
 
     @FXML
     private void navigateOneWeekForwardClicked() {
-        Agenda agenda = (Agenda) Main.scene.lookup("#agenda");
+        Agenda agenda = (Agenda) PlanchesterGUI.scene.lookup("#agenda");
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
         agenda.setDisplayedLocalDateTime(displayedDate.plus(7, ChronoUnit.DAYS));
     }
 
     @FXML
     private void saveEventChanges(){
-        Agenda agenda = (Agenda) Main.scene.lookup("#agenda");
-        TextField name = (TextField) Main.scene.lookup("#name");
-        TextField description = (TextField) Main.scene.lookup("#description");
-        DatePicker date = (DatePicker) Main.scene.lookup("#date");
-        LocalTimePicker startTime = (LocalTimePicker) Main.scene.lookup("#start");
-        LocalTimePicker endTime = (LocalTimePicker) Main.scene.lookup("#end");
+        Agenda agenda = (Agenda) PlanchesterGUI.scene.lookup("#agenda");
+        TextField name = (TextField) PlanchesterGUI.scene.lookup("#name");
+        TextField description = (TextField) PlanchesterGUI.scene.lookup("#description");
+        DatePicker date = (DatePicker) PlanchesterGUI.scene.lookup("#date");
+        LocalTimePicker startTime = (LocalTimePicker) PlanchesterGUI.scene.lookup("#start");
+        LocalTimePicker endTime = (LocalTimePicker) PlanchesterGUI.scene.lookup("#end");
 
         LocalDateTime start = LocalDateTime.of(date.getValue(), startTime.getLocalTime());
         LocalDateTime end = LocalDateTime.of(date.getValue(), endTime.getLocalTime());

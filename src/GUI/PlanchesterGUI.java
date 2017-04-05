@@ -1,3 +1,5 @@
+package GUI;
+
 import javafx.application.Application;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -27,18 +29,20 @@ import java.time.temporal.TemporalUnit;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class Main extends Application {
+public class PlanchesterGUI extends Application {
 
     public static Scene scene;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+        // start GUI
         Parent root = FXMLLoader.load(getClass().getResource("GUI.fxml"));
         //scene = new Scene(root, 800, 600);
         scene = new Scene(root);
         Agenda agenda = (Agenda) scene.lookup("#agenda");
 
+        // Test Events
         Agenda.Appointment appointment = new Agenda.AppointmentImpl();
         LocalDateTime start = LocalDateTime.of(2017,Month.APRIL,4,13,00);
         LocalDateTime end = LocalDateTime.of(2017,Month.APRIL,4,16,00);
@@ -66,6 +70,7 @@ public class Main extends Application {
         agenda.localeProperty().set(Locale.GERMAN);
         agenda.setDisplayedLocalDateTime(LocalDateTime.now());
 
+        // event when event selected
         agenda.onMouseClickedProperty().set(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent arg0){
@@ -99,6 +104,7 @@ public class Main extends Application {
             }
         });
 
+        // show GUI
         primaryStage.setTitle("Planchester");
         primaryStage.setScene(scene);
         primaryStage.show();
