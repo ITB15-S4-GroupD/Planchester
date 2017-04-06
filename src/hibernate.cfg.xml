@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.url">jdbc:mysql://mysql.vlbg.org:3306/sem4_team2</property>
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.username">team2</property>
+        <property name="connection.password">8fpE?2j2E6kis2~9</property>
+        <mapping class="Domain.Model.AccountEntity"/>
+        <mapping class="Domain.Model.BrassInstrumentationEntity"/>
+        <mapping class="Domain.Model.DutyDispositionEntity"/>
+        <mapping class="Domain.Model.EventDutyEntity"/>
+        <mapping class="Domain.Model.EventDutyMusicalWorkEntity"/>
+        <mapping class="Domain.Model.EventDutySectionDutyRosterEntity"/>
+        <mapping class="Domain.Model.InstrumentEntity"/>
+        <mapping class="Domain.Model.InstrumentTypeEntity"/>
+        <mapping class="Domain.Model.InstrumentationEntity"/>
+        <mapping class="Domain.Model.MusicalWorkEntity"/>
+        <mapping class="Domain.Model.MusicianPartEntity"/>
+        <mapping class="Domain.Model.PartEntity"/>
+        <mapping class="Domain.Model.PartTypeEntity"/>
+        <mapping class="Domain.Model.PercussionInstrumentationEntity"/>
+        <mapping class="Domain.Model.PersonEntity"/>
+        <mapping class="Domain.Model.PersonOrchestraRoleEntity"/>
+        <mapping class="Domain.Model.RequestEntity"/>
+        <mapping class="Domain.Model.SectionDutyRosterEntity"/>
+        <mapping class="Domain.Model.SpecialInstrumentationEntity"/>
+        <mapping class="Domain.Model.StringInstrumentationEntity"/>
+        <mapping class="Domain.Model.WoodInstrumentationEntity"/>
+
+
+        <!-- DB schema will be updated if needed -->
+        <!-- <property name="hbm2ddl.auto">update</property> -->
+    </session-factory>
+</hibernate-configuration>
