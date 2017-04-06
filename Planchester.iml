@@ -8,5 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="jfxtras-agenda-8.0-r5" level="project" />
+    <orderEntry type="library" name="jfxtras-common-8.0-r5" level="project" />
   </component>
 </module>

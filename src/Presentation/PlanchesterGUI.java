@@ -1,32 +1,19 @@
-package GUI;
+package Presentation;
 
 import javafx.application.Application;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import jfxtras.scene.control.LocalDateTimePicker;
 import jfxtras.scene.control.LocalTimePicker;
 import jfxtras.scene.control.agenda.Agenda;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.Month;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.Temporal;
-import java.time.temporal.TemporalUnit;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class PlanchesterGUI extends Application {
@@ -36,8 +23,8 @@ public class PlanchesterGUI extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        // start GUI
-        Parent root = FXMLLoader.load(getClass().getResource("GUI.fxml"));
+        // start Presentation
+        Parent root = FXMLLoader.load(getClass().getResource("Planchester.fxml"));
         //scene = new Scene(root, 800, 600);
         scene = new Scene(root);
         Agenda agenda = (Agenda) scene.lookup("#agenda");
@@ -92,6 +79,7 @@ public class PlanchesterGUI extends Application {
 
                 LocalTimePicker endTime = (LocalTimePicker) scene.lookup("#end");
                 endTime.setLocalTime(appointment.getEndLocalDateTime().toLocalTime());
+
                 /*
                 Alert alert;
                 alert = new Alert(Alert.AlertType.INFORMATION);
@@ -104,7 +92,7 @@ public class PlanchesterGUI extends Application {
             }
         });
 
-        // show GUI
+        // show Presentation
         primaryStage.setTitle("Planchester");
         primaryStage.setScene(scene);
         primaryStage.show();

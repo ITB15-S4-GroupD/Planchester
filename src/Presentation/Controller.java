@@ -1,4 +1,4 @@
-package GUI;
+package Presentation;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

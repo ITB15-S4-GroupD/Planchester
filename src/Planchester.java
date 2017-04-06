@@ -1,6 +1,6 @@
-import GUI.PlanchesterGUI;
+import Presentation.PlanchesterGUI;
 
-public class Main {
+public class Planchester {
 
     public static void main(String[] args) {
         PlanchesterGUI.main(args);
