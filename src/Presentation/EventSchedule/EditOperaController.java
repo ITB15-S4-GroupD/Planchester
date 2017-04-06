@@ -1,42 +1,21 @@
 package Presentation.EventSchedule;
 
-import Presentation.PlanchesterGUI;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
-import jfxtras.scene.control.LocalTimePicker;
-import jfxtras.scene.control.agenda.Agenda;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 /**
  * Created by timorzipa on 06/04/2017.
  */
-public class Controller {
-    @FXML
-    private void selectionChanged() {
-        System.out.println("selection changed");
-    }
+public class EditOperaController {
 
     @FXML
-    private void navigateOneWeekBackClicked() {
-        Agenda agenda = (Agenda) PlanchesterGUI.scene.lookup("#agenda");
-        LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
-        agenda.setDisplayedLocalDateTime(displayedDate.minus(7, ChronoUnit.DAYS));
-    }
+    public void initialize() {
 
-    @FXML
-    private void navigateOneWeekForwardClicked() {
-        Agenda agenda = (Agenda) PlanchesterGUI.scene.lookup("#agenda");
-        LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
-        agenda.setDisplayedLocalDateTime(displayedDate.plus(7, ChronoUnit.DAYS));
     }
 
     @FXML
     private void saveEventChanges(){
-        Agenda agenda = (Agenda) PlanchesterGUI.scene.lookup("#agenda");
+        // TODO: save data
+        /*
         TextField name = (TextField) PlanchesterGUI.scene.lookup("#name");
         TextField description = (TextField) PlanchesterGUI.scene.lookup("#description");
         DatePicker date = (DatePicker) PlanchesterGUI.scene.lookup("#date");
@@ -55,5 +34,6 @@ public class Controller {
         appointment.setEndLocalDateTime(end);
 
         agenda.refresh();
+        */
     }
 }
