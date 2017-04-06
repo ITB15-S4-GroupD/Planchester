@@ -41,6 +41,6 @@ public class EventSchedule {
     }
 
     public List<EventSchedule> getAllEventDutyInBetween(Date start, Date end){
-
+        return null;
     }
 }

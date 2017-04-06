@@ -4,11 +4,15 @@ import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import jfxtras.scene.control.LocalTimePicker;
 import jfxtras.scene.control.agenda.Agenda;
@@ -22,11 +26,46 @@ public class PlanchesterGUI {
 
     public void start(Stage primaryStage) throws Exception {
 
+        primaryStage.setTitle("Planchester");
+
+        Group root = new Group();
+        Scene scene = new Scene(root, 1200, 900, Color.WHITE);
+
+        TabPane tabPane = new TabPane();
+        tabPane.setMaxHeight(Double.MAX_VALUE);
+        tabPane.setMaxWidth(Double.MAX_VALUE);
+        tabPane.setTabMaxHeight(Double.MAX_VALUE);
+        tabPane.setTabMaxWidth(Double.MAX_VALUE);
+
+        tabPane.autosize();
+
+        //Create Tabs
+        Tab dutyRoster = new Tab();
+        dutyRoster.setText("Duty Roster");
+
+        Tab eventSchedule = new Tab();
+        eventSchedule.setText("Event Schedule");
+        eventSchedule.setContent(FXMLLoader.load(getClass().getResource("EventSchedule/EventSchedule.fxml")));
+
+        // add Tabs
+        tabPane.getTabs().add(dutyRoster);
+        tabPane.getTabs().add(eventSchedule);
+
+        root.getChildren().add(tabPane);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+
+        /*
+
+
         // start Presentation
         Parent root = FXMLLoader.load(getClass().getResource("Planchester.fxml"));
         //scene = new Scene(root, 800, 600);
         scene = new Scene(root);
         Agenda agenda = (Agenda) scene.lookup("#agenda");
+
+        //Tab eventSchedule = (Tab) scene.lookup("#eventScheduleTab");
 
         // Test Events
         Agenda.Appointment appointment = new Agenda.AppointmentImpl();
@@ -79,7 +118,7 @@ public class PlanchesterGUI {
                 LocalTimePicker endTime = (LocalTimePicker) scene.lookup("#end");
                 endTime.setLocalTime(appointment.getEndLocalDateTime().toLocalTime());
 
-                /*
+
                 Alert alert;
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Property Clicked");
@@ -87,7 +126,7 @@ public class PlanchesterGUI {
                 alert.setContentText(appointment.getDescription());
 
                 alert.showAndWait();
-                */
+
             }
         });
 
@@ -95,5 +134,7 @@ public class PlanchesterGUI {
         primaryStage.setTitle("Planchester");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        */
     }
 }
