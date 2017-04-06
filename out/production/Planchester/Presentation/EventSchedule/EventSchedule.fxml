@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.Font?>
 <?import jfxtras.scene.control.agenda.Agenda?>
-<?import jfxtras.scene.control.LocalTimePicker?>
-<?import javafx.geometry.Insets?>
 
 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="578.0" prefWidth="917.0"
             fx:controller="Presentation.EventSchedule.EventScheduleController" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
