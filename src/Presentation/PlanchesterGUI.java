@@ -16,11 +16,10 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Locale;
 
-public class PlanchesterGUI extends Application {
+public class PlanchesterGUI {
 
     public static Scene scene;
 
-    @Override
     public void start(Stage primaryStage) throws Exception {
 
         // start Presentation
