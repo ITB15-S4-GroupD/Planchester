@@ -1,9 +1,6 @@
 package Domain.Model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by Bernd on 06.04.2017.
@@ -12,6 +9,7 @@ import javax.persistence.Table;
 @Table(name = "Part", schema = "sem4_team2", catalog = "")
 public class PartEntity {
     private int partId;
+    private Enum sectionType;
 
     @Id
     @Column(name = "partID")
@@ -38,5 +36,15 @@ public class PartEntity {
     @Override
     public int hashCode() {
         return partId;
+    }
+
+    @Basic
+    @Column(name = "sectionType")
+    public Enum getSectionType() {
+        return sectionType;
+    }
+
+    public void setSectionType(Enum sectionType) {
+        this.sectionType = sectionType;
     }
 }

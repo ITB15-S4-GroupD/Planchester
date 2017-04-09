@@ -1,14 +1,20 @@
 package Presentation.EventSchedule;
 
 import Presentation.PlanchesterGUI;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
+import javafx.stage.PopupBuilder;
+import javafx.stage.Stage;
 import jfxtras.scene.control.LocalTimePicker;
 import jfxtras.scene.control.agenda.Agenda;
 
@@ -16,15 +22,27 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Created by timorzipa on 06/04/2017.
  */
 public class EventScheduleController {
 
+    //i:List for ChoiceBox to choice new duty
+    ObservableList<String> dutyTypes = FXCollections.observableArrayList("Concert performance",
+            "Opera performance","Tour duty","Hofkapelle","Rehearsal","Non-musical duty");
+
+    //i:Mapping choiced duty for loading form/file
+    Map<String, String> dutyToForm = new HashMap<>();
+
     @FXML Agenda agenda;
     @FXML ScrollPane scrollPane;
+    //i:declare the choice box
+    @FXML private ChoiceBox choiceNewDuty;
 
     @FXML
     public void initialize() {
@@ -89,6 +107,22 @@ public class EventScheduleController {
                 System.out.println("Property selection changed");
             }
         });
+
+        //i:ChoiceBox choiceNewDuty initialisieren
+        choiceNewDuty.setItems(dutyTypes);
+        choiceNewDuty.setValue("Opera performance");
+
+        //i:Map initialisieren
+        dutyToForm.put("Opera performance","CreateOpera.fxml");
+        dutyToForm.put("Concert performance","CreateConcert.fxml");
+        dutyToForm.put("Tour duty","CreateTour.fxml");
+        dutyToForm.put("Hofkapelle","CreateHofkapelle.fxml");
+        dutyToForm.put("Rehearsal","CreateRehearsal.fxml");
+        dutyToForm.put("Non-musical duty","CreateNonMusical.fxml");
+
+
+
+
     }
 
     @FXML
@@ -124,5 +158,31 @@ public class EventScheduleController {
         appointment.setEndLocalDateTime(end);
 
         agenda.refresh();
+    }
+
+    //i:Formular je nach ausgewähltem Dienst wird angezeigt
+    @FXML
+    private void showNewDuty(){
+
+        //IODO build missing forms for new duty types
+
+    String choice = choiceNewDuty.getValue().toString();
+    String formToLoad = dutyToForm.get( choice );
+
+
+        try {
+            scrollPane.setContent(FXMLLoader.load(getClass().getResource(formToLoad)));
+
+        } catch (Exception e) {
+            Alert dialog = new Alert(Alert.AlertType.CONFIRMATION);
+            dialog.setHeaderText( "Your choice: " + choice );
+            dialog.setContentText("Trying to open file " + formToLoad + ":\n" + "Form unsupported yet");
+            dialog.setResizable(true);
+            dialog.getDialogPane().setPrefSize(350, 200);
+            dialog.showAndWait();
+            final Optional<ButtonType> result = dialog.showAndWait();
+
+            e.printStackTrace();
+        }
     }
 }
