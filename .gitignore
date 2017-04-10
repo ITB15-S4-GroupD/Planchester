@@ -8,6 +8,10 @@
 *.war
 *.ear
 
+# Folders #
+out/
+.idea/
+
 *.exe
 workspace.xml
 
