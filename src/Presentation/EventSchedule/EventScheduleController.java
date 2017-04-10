@@ -35,7 +35,6 @@ import java.util.*;
  * Created by timorzipa on 06/04/2017.
  */
 public class EventScheduleController {
-
     //i:List for ChoiceBox to choice new duty
     ObservableList<String> dutyTypes = FXCollections.observableArrayList("Concert performance",
             "Opera performance","Tour duty","Hofkapelle","Rehearsal","Non-musical duty");
@@ -148,14 +147,12 @@ public class EventScheduleController {
         dutyToForm.put("Rehearsal","CreateRehearsal.fxml");
         dutyToForm.put("Non-musical duty","CreateNonMusical.fxml");
 
-
         comboNewDuty.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> selected, String oldVal, String newVal) {
 
                 String choice = newVal;
                 String formToLoad = dutyToForm.get( choice );
-
 
                 if( choice.equals("choose duty")) {
                     return;
@@ -227,8 +224,4 @@ public class EventScheduleController {
 
         agenda.refresh();
     }
-
-
-
-
 }

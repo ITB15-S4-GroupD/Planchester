@@ -46,9 +46,7 @@ public class PlanchesterGUI {
 
         // set and show scene
         Scene scene = new Scene(tabPane, 1200, 900, Color.WHITE);
-
         primaryStage.setMaximized(true);
-
         primaryStage.setScene(scene);
         primaryStage.show();
     }
