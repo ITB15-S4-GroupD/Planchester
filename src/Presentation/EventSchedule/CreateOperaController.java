@@ -1,8 +1,12 @@
 package Presentation.EventSchedule;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import jfxtras.scene.control.LocalTimePicker;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Optional;
 
 /**
@@ -36,23 +40,65 @@ public class CreateOperaController {
         String collectedData = "Event Name: " + txtName.getText() + "\n" +
                 "Description: " + txtDescription.getText() + "\n" +
                 "Date: " + pckDate.getValue() + "\n" +
-                "Start Time: " + pckStartTime.getLocalTime().toString() + "\n" +
+                "Start Time: " + pckStartTime.get().getLocalTime().toString() + "\n" +
                 "End Time: " + pckEndTime.getLocalTime().toString() + "\n" +
                 "Location: " + txtLocation.getText() + "\n" +
                 "Description: " + txtDescription.getText() + "\n" +
                 "Work: " + choiceWork.getValue() + "\n" +
                 "Conductor: " + txtConductor.getText() + "\n" +
                 "Points: " + txtPoints.getText() + "\n";
+        String warning=" ";
 
+        boolean validate = true;
 
-        Alert dialog = new Alert(Alert.AlertType.CONFIRMATION);
-        dialog.setHeaderText( "Daten werden gespeichert: " );
-        dialog.setContentText(collectedData);
-        dialog.setResizable(true);
-        dialog.getDialogPane().setPrefSize(350, 500);
-        dialog.showAndWait();
-        final Optional<ButtonType> result = dialog.showAndWait();
+         if(txtName==null){
+             validate=false;
+             warning = warning+"Name missing\n";
+         }
+         if(txtDescription==null){
+             validate=false;
+             warning = warning+"Description missing\n";
+         }
+         LocalDate date = pckDate.getValue();
+         if(pckDate==null||date.isAfter(LocalDate.now())){
+             validate=false;
+             warning=warning+"Date wrong\n";
+         }
 
+        LocalTime start = pckStartTime.get().getLocalTime();
+
+         if(txtLocation==null){
+             validate=false;
+             warning=warning+"Location missing\n";
+         }
+
+         if(txtConductor==null){
+             validate=false;
+             warning=warning+"Conductor missing\n";
+         }
+         if(txtPoints==null){
+             validate=false;
+             warning=warning+"Points missing\n";
+         }
+
+        if(validate=true) {
+            Alert dialog = new Alert(Alert.AlertType.CONFIRMATION);
+            dialog.setHeaderText("Daten werden gespeichert: ");
+            dialog.setContentText(collectedData);
+            dialog.setResizable(true);
+            dialog.getDialogPane().setPrefSize(350, 500);
+            dialog.showAndWait();
+            final Optional<ButtonType> result = dialog.showAndWait();
+
+        }else{
+            Alert problem = new Alert(Alert.AlertType.ERROR);
+            problem.setHeaderText("Fehler ");
+            problem.setContentText(warning);
+            problem.setResizable(true);
+            problem.getDialogPane().setPrefSize(350, 500);
+            problem.showAndWait();
+            final Optional<ButtonType> result = problem.showAndWait();
+        }
     }
 
 }
