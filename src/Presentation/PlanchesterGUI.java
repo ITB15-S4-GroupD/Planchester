@@ -31,7 +31,5 @@ public class PlanchesterGUI {
         Scene scene = new Scene(tabPane, 1200, 900, Color.WHITE);
         primaryStage.setScene(scene);
         primaryStage.show();
-
-
     }
 }
