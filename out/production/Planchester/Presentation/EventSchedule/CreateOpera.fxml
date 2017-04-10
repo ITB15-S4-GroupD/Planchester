@@ -55,7 +55,7 @@
             <TextArea fx:id="txtDescription" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <DatePicker fx:id="pckDate" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <LocalTimePicker id="start" fx:id="pckStartTime" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <LocalTimePicker id="start" fx:id="pckEndTime" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <LocalTimePicker id="end" fx:id="pckEndTime" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <TextField fx:id="txtLocation" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <ChoiceBox fx:id="choiceWork" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <TextField fx:id="txtConductor" GridPane.columnIndex="1" GridPane.rowIndex="7" />
