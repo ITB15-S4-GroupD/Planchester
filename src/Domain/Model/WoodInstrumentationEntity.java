@@ -15,6 +15,7 @@ public class WoodInstrumentationEntity {
     private int bassoon;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "woodInstrumentationID")
     public int getWoodInstrumentationId() {
         return woodInstrumentationId;
