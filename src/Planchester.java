@@ -1,3 +1,4 @@
+import Domain.Model.InstrumentEntity;
 import Presentation.PlanchesterGUI;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -12,6 +13,7 @@ public class Planchester extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+        /*
         Configuration cfg = new Configuration();
         cfg.configure("hibernate.cfg.xml");// populates the data of the
         // configuration file
@@ -27,12 +29,19 @@ public class Planchester extends Application {
 
         Query query = session.createQuery("FROM InstrumentEntity");
         java.util.List list = query.list();
-        System.out.println(list);
+
+        for(Object o : list){
+            InstrumentEntity ie = (InstrumentEntity) o;
+
+            System.out.println(ie.getDescription());
+        }
+
         t.commit();
         session.close();
+        */
 
-        //PlanchesterGUI gui = new PlanchesterGUI();
-        //gui.start(primaryStage);
+        PlanchesterGUI gui = new PlanchesterGUI();
+        gui.start(primaryStage);
     }
 
     public static void main(String[] args) {

@@ -14,6 +14,8 @@ public class PersonOrchestraRoleEntity {
     private PersonEntity personByPerson;
 
     @Id
+    @ManyToOne
+    @JoinColumn(name = "person", referencedColumnName = "personId", nullable = false)
     @Column(name = "person")
     public int getPerson() {
         return person;
@@ -52,12 +54,6 @@ public class PersonOrchestraRoleEntity {
         int result = person;
         result = 31 * result + (orchestraRole != null ? orchestraRole.hashCode() : 0);
         return result;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "person", referencedColumnName = "personId", nullable = false)
-    public PersonEntity getPersonByPerson() {
-        return personByPerson;
     }
 
     public void setPersonByPerson(PersonEntity personByPerson) {

@@ -14,6 +14,8 @@ public class EventDutySectionDutyRosterEntity {
     private EventDutyEntity eventDutyByEventDuty;
 
     @Id
+    @ManyToOne
+    @JoinColumn(name = "eventDuty", referencedColumnName = "eventDutyID", nullable = false)
     @Column(name = "eventDuty")
     public int getEventDuty() {
         return eventDuty;
@@ -51,12 +53,6 @@ public class EventDutySectionDutyRosterEntity {
         int result = eventDuty;
         result = 31 * result + sectionDutyRoster;
         return result;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "eventDuty", referencedColumnName = "eventDutyID", nullable = false)
-    public EventDutyEntity getEventDutyByEventDuty() {
-        return eventDutyByEventDuty;
     }
 
     public void setEventDutyByEventDuty(EventDutyEntity eventDutyByEventDuty) {

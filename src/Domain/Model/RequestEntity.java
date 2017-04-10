@@ -17,6 +17,8 @@ public class RequestEntity {
     private PersonEntity personByMusician;
 
     @Id
+    @ManyToOne
+    @JoinColumn(name = "eventDuty", referencedColumnName = "eventDutyID", nullable = false)
     @Column(name = "eventDuty")
     public int getEventDuty() {
         return eventDuty;
@@ -27,6 +29,8 @@ public class RequestEntity {
     }
 
     @Id
+    @ManyToOne
+    @JoinColumn(name = "musician", referencedColumnName = "personId", nullable = false)
     @Column(name = "musician")
     public int getMusician() {
         return musician;
@@ -81,20 +85,8 @@ public class RequestEntity {
         return result;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "eventDuty", referencedColumnName = "eventDutyID", nullable = false)
-    public EventDutyEntity getEventDutyByEventDuty() {
-        return eventDutyByEventDuty;
-    }
-
     public void setEventDutyByEventDuty(EventDutyEntity eventDutyByEventDuty) {
         this.eventDutyByEventDuty = eventDutyByEventDuty;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "musician", referencedColumnName = "personId", nullable = false)
-    public PersonEntity getPersonByMusician() {
-        return personByMusician;
     }
 
     public void setPersonByMusician(PersonEntity personByMusician) {
