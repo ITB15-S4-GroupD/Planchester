@@ -51,15 +51,15 @@
             <Label text="Work" GridPane.rowIndex="6" />
             <Label text="Conductor" GridPane.rowIndex="7" />
             <Label text="Points" GridPane.rowIndex="8" />
-            <TextField fx:id="txtName" prefHeight="25.0" prefWidth="199.0" GridPane.columnIndex="1" />
-            <TextArea fx:id="txtDescription" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <DatePicker fx:id="pckDate" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <LocalTimePicker id="start" fx:id="pckStartTime" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <LocalTimePicker id="end" fx:id="pckEndTime" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <TextField fx:id="txtLocation" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <ChoiceBox fx:id="choiceWork" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <TextField fx:id="txtConductor" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <TextField fx:id="txtPoints" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <TextField fx:id="name" prefHeight="25.0" prefWidth="199.0" GridPane.columnIndex="1" />
+            <TextArea fx:id="description" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <DatePicker fx:id="date" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <LocalTimePicker id="start" fx:id="startTime" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <LocalTimePicker id="start" fx:id="endTime" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="eventLocation" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <ChoiceBox fx:id="musicalWork" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <TextField fx:id="conductor" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <TextField fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="8" />
          </children>
          <padding>
             <Insets left="10.0" right="10.0" />
