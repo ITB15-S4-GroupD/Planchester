@@ -1,6 +1,8 @@
 package Presentation.EventSchedule;
 
 import Presentation.PlanchesterGUI;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -12,13 +14,12 @@ import jfxtras.scene.control.LocalTimePicker;
 import jfxtras.scene.control.agenda.Agenda;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by timorzipa on 06/04/2017.
@@ -35,7 +36,8 @@ public class EventScheduleController {
     @FXML private Agenda agenda;
     @FXML private ScrollPane scrollPane;
     //i:declare the choice box
-    @FXML private ChoiceBox choiceNewEventDuty;
+    @FXML private ComboBox comboNewDuty;
+    @FXML private Label calenderWeekLabel;
 
     @FXML
     public void initialize() {
@@ -67,6 +69,9 @@ public class EventScheduleController {
         agenda.setAllowResize(false);
         agenda.localeProperty().set(Locale.GERMAN);
         agenda.setDisplayedLocalDateTime(LocalDateTime.now());
+
+        //set CalenderWeek
+        setCalenderWeekLabel();
 
         agenda.onMouseClickedProperty().set(new EventHandler<MouseEvent>() {
             @Override
@@ -102,8 +107,8 @@ public class EventScheduleController {
         });
 
         //i:ChoiceBox choiceNewEventDuty initialisieren
-        choiceNewEventDuty.setItems(dutyTypes);
-        choiceNewEventDuty.setValue("Opera performance");
+        comboNewDuty.setItems(dutyTypes);
+        comboNewDuty.setPromptText("Choose Eventtype");
 
         //i:Map initialisieren
         dutyToForm.put("Opera performance","CreateOpera.fxml");
@@ -112,18 +117,62 @@ public class EventScheduleController {
         dutyToForm.put("Hofkapelle","CreateHofkapelle.fxml");
         dutyToForm.put("Rehearsal","CreateRehearsal.fxml");
         dutyToForm.put("Non-musical duty","CreateNonMusical.fxml");
+
+
+        comboNewDuty.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> selected, String oldVal, String newVal) {
+
+                String choice = newVal;
+                String formToLoad = dutyToForm.get( choice );
+
+
+                if( choice.equals("choose duty")) {
+                    return;
+                }
+
+                try {
+                    scrollPane.setContent(FXMLLoader.load(getClass().getResource(formToLoad)));
+
+                } catch (Exception e) {
+                    Alert dialog = new Alert(Alert.AlertType.CONFIRMATION);
+                    dialog.setHeaderText( "Your choice: " + choice );
+                    dialog.setContentText("Trying to open file " + formToLoad + ":\n" + "Form unsupported yet");
+                    dialog.setResizable(true);
+                    dialog.getDialogPane().setPrefSize(350, 200);
+                    dialog.showAndWait();
+                    final Optional<ButtonType> result = dialog.showAndWait();
+
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void setCalenderWeekLabel() {
+        Calendar cal = agenda.getDisplayedCalendar();
+        int week = cal.get(Calendar.WEEK_OF_YEAR);
+        calenderWeekLabel.setText("Calender Week " + String.valueOf(week));
     }
 
     @FXML
     private void navigateOneWeekBackClicked() {
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
         agenda.setDisplayedLocalDateTime(displayedDate.minus(7, ChronoUnit.DAYS));
+        setCalenderWeekLabel();
     }
 
     @FXML
     private void navigateOneWeekForwardClicked() {
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
         agenda.setDisplayedLocalDateTime(displayedDate.plus(7, ChronoUnit.DAYS));
+        setCalenderWeekLabel();
+    }
+
+    @FXML
+    private void showActualWeekClicked() {
+        agenda.setDisplayedLocalDateTime(LocalDateTime.now());
+        setCalenderWeekLabel();
     }
 
     @FXML
@@ -149,29 +198,7 @@ public class EventScheduleController {
         agenda.refresh();
     }
 
-    //i:Formular je nach ausgewähltem Dienst wird angezeigt
-    @FXML
-    private void showNewDuty(){
-
-        //IODO build missing forms for new duty types
-
-    String choice = choiceNewEventDuty.getValue().toString();
-    String formToLoad = dutyToForm.get( choice );
 
 
-        try {
-            scrollPane.setContent(FXMLLoader.load(getClass().getResource(formToLoad)));
 
-        } catch (Exception e) {
-            Alert dialog = new Alert(Alert.AlertType.CONFIRMATION);
-            dialog.setHeaderText( "Your choice: " + choice );
-            dialog.setContentText("Trying to open file " + formToLoad + ":\n" + "Form unsupported yet");
-            dialog.setResizable(true);
-            dialog.getDialogPane().setPrefSize(350, 200);
-            dialog.showAndWait();
-            final Optional<ButtonType> result = dialog.showAndWait();
-
-            e.printStackTrace();
-        }
-    }
 }
