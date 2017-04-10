@@ -15,6 +15,7 @@ public class BrassInstrumentationEntity {
     private int tube;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "brassInstrumentationID")
     public int getBrassInstrumentationId() {
         return brassInstrumentationId;

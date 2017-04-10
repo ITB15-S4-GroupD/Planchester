@@ -14,6 +14,7 @@ public class AccountEntity {
     private Enum accountRole;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "accountID")
     public int getAccountId() {
         return accountId;
@@ -44,6 +45,7 @@ public class AccountEntity {
     }
 
     @Basic
+    @Enumerated(EnumType.STRING)
     @Column(name = "accountRole")
     public Enum getAccountRole() {
         return accountRole;

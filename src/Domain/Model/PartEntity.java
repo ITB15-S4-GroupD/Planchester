@@ -12,6 +12,7 @@ public class PartEntity {
     private Enum sectionType;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "partID")
     public int getPartId() {
         return partId;
@@ -39,6 +40,7 @@ public class PartEntity {
     }
 
     @Basic
+    @Enumerated(EnumType.STRING)
     @Column(name = "sectionType")
     public Enum getSectionType() {
         return sectionType;

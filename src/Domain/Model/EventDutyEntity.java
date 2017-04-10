@@ -22,6 +22,7 @@ public class EventDutyEntity {
     private EventDutyEntity eventDutyByRehearsalFor;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "eventDutyID")
     public int getEventDutyId() {
         return eventDutyId;
@@ -72,6 +73,7 @@ public class EventDutyEntity {
     }
 
     @Basic
+    @Enumerated(EnumType.STRING)
     @Column(name = "eventType")
     public Enum getEventType() {
         return eventType;
@@ -82,6 +84,7 @@ public class EventDutyEntity {
     }
 
     @Basic
+    @Enumerated(EnumType.STRING)
     @Column(name = "eventStatus")
     public Enum getEventStatus() {
         return eventStatus;

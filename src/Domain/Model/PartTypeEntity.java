@@ -12,6 +12,7 @@ public class PartTypeEntity {
     private String partType;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "partTypeID")
     public int getPartTypeId() {
         return partTypeId;

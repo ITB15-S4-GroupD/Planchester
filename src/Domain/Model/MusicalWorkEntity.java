@@ -14,6 +14,7 @@ public class MusicalWorkEntity {
     private InstrumentationEntity instrumentationByInstrumentationId;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "musicalWorkID")
     public int getMusicalWorkId() {
         return musicalWorkId;

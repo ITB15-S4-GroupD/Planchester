@@ -12,6 +12,7 @@ public class InstrumentTypeEntity {
     private String instrumentType;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "instrumentTypeID")
     public int getInstrumentTypeId() {
         return instrumentTypeId;

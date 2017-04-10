@@ -14,6 +14,7 @@ public class InstrumentEntity {
     private String description;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "instrumentID")
     public int getInstrumentId() {
         return instrumentId;

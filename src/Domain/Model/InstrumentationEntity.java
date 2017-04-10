@@ -12,6 +12,7 @@ public class InstrumentationEntity {
     private BrassInstrumentationEntity brassInstrumentationByBrassInstrumentation;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "instrumentationID")
     public int getInstrumentationId() {
         return instrumentationId;

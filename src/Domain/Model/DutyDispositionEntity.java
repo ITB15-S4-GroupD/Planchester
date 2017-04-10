@@ -56,6 +56,7 @@ public class DutyDispositionEntity {
     }
 
     @Basic
+    @Enumerated(EnumType.STRING)
     @Column(name = "dutyDispositionStatus")
     public Enum getDutyDispositionStatus() {
         return dutyDispositionStatus;
