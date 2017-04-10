@@ -45,7 +45,6 @@ public class EventScheduleController {
 
     @FXML private Agenda agenda;
     @FXML private ScrollPane scrollPane;
-    //i:declare the choice box
     @FXML private ComboBox comboNewDuty;
     @FXML private Label calenderWeekLabel;
 
@@ -154,7 +153,7 @@ public class EventScheduleController {
             public void changed(ObservableValue<? extends String> selected, String oldVal, String newVal) {
 
                 String choice = newVal;
-                String formToLoad = dutyToForm.get( choice );
+                String formToLoad = dutyToForm.get(choice);
 
 
                 if( choice.equals("choose duty")) {
@@ -163,16 +162,13 @@ public class EventScheduleController {
 
                 try {
                     scrollPane.setContent(FXMLLoader.load(getClass().getResource(formToLoad)));
-
                 } catch (Exception e) {
-                    Alert dialog = new Alert(Alert.AlertType.CONFIRMATION);
+                    Alert dialog = new Alert(Alert.AlertType.INFORMATION);
                     dialog.setHeaderText( "Your choice: " + choice );
                     dialog.setContentText("Trying to open file " + formToLoad + ":\n" + "Form unsupported yet");
                     dialog.setResizable(true);
                     dialog.getDialogPane().setPrefSize(350, 200);
                     dialog.showAndWait();
-                    final Optional<ButtonType> result = dialog.showAndWait();
-
                     e.printStackTrace();
                 }
             }
