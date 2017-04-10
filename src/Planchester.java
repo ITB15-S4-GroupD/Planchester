@@ -12,34 +12,6 @@ public class Planchester extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-        /*
-        Configuration cfg = new Configuration();
-        cfg.configure("hibernate.cfg.xml");// populates the data of the
-        // configuration file
-
-        // creating seession factory object
-        SessionFactory factory = cfg.buildSessionFactory();
-
-        // creating session object
-        Session session = factory.openSession();
-
-        // creating transaction object
-        Transaction t = session.beginTransaction();
-
-        Query query = session.createQuery("FROM InstrumentEntity");
-        java.util.List list = query.list();
-
-        for(Object o : list){
-            InstrumentEntity ie = (InstrumentEntity) o;
-
-            System.out.println(ie.getDescription());
-        }
-
-        t.commit();
-        session.close();
-        */
-
         PlanchesterGUI gui = new PlanchesterGUI();
         gui.start(primaryStage);
     }

@@ -1,13 +1,22 @@
 package Presentation.EventSchedule;
 
+import Application.EventSchedule;
+import Domain.PresentationModels.Enum.EventType;
+import Domain.PresentationModels.EventDutyDTO;
 import Presentation.PlanchesterGUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import jfxtras.scene.control.LocalTimePicker;
 import jfxtras.scene.control.agenda.Agenda;
 
@@ -15,10 +24,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by timorzipa on 06/04/2017.
@@ -39,39 +45,60 @@ public class EventScheduleController {
 
     @FXML
     public void initialize() {
+        Agenda.AppointmentGroup opera = new Agenda.AppointmentGroupImpl();
+        opera.setStyleClass("group1");
+        Agenda.AppointmentGroup concert = new Agenda.AppointmentGroupImpl();
+        concert.setStyleClass("group2");
+        Agenda.AppointmentGroup hofkapelle = new Agenda.AppointmentGroupImpl();
+        hofkapelle.setStyleClass("group3");
+        Agenda.AppointmentGroup tour = new Agenda.AppointmentGroupImpl();
+        tour.setStyleClass("group4");
+        Agenda.AppointmentGroup rehearsal = new Agenda.AppointmentGroupImpl();
+        rehearsal.setStyleClass("group5");
+        Agenda.AppointmentGroup nonMusicalEvent = new Agenda.AppointmentGroupImpl();
+        nonMusicalEvent.setStyleClass("group6");
 
-        // Test Events
-        Agenda.Appointment appointment = new Agenda.AppointmentImpl();
-        LocalDateTime start = LocalDateTime.of(2017, Month.APRIL,4,13,00);
-        LocalDateTime end = LocalDateTime.of(2017, Month.APRIL,4,16,00);
-        appointment.setStartLocalDateTime(start);
-        appointment.setEndLocalDateTime(end);
-        appointment.setDescription("Test 1");
-        appointment.setLocation("Raum 5");
-        appointment.setSummary("Title 1");
+        List<EventDutyDTO> events = EventSchedule.getAllEventDuty();
+        for(EventDutyDTO event : events) {
+            //convert Timestamp to Calendar
+            Calendar starttimeCalendar = Calendar.getInstance();
+            starttimeCalendar.setTimeInMillis(event.getEventDuty().getStarttime().getTime());
+            Calendar endtimeCalendar = Calendar.getInstance();
+            endtimeCalendar.setTimeInMillis(event.getEventDuty().getEndtime().getTime());
 
-        Agenda.Appointment appointment2 = new Agenda.AppointmentImpl();
-        LocalDateTime start2 = LocalDateTime.of(2017, Month.APRIL,3,12,00);
-        LocalDateTime end2 = LocalDateTime.of(2017, Month.APRIL,3,14,00);
-        appointment2.setStartLocalDateTime(start2);
-        appointment2.setEndLocalDateTime(end2);
-        appointment2.setDescription("Test 2");
-        appointment2.setLocation("Room 3");
-        appointment2.setSummary("Title 2");
+            Agenda.Appointment appointment = new Agenda.AppointmentImpl();
+            appointment.setSummary(event.getEventDuty().getName());
+            appointment.setDescription(event.getEventDuty().getDescription());
+            appointment.setLocation(event.getEventDuty().getLocation());
+            appointment.setStartTime(starttimeCalendar);
+            appointment.setEndTime(endtimeCalendar);
 
-        agenda.appointments().add(appointment);
-        agenda.appointments().add(appointment2);
+            if(EventType.Opera.equals(event.getEventDuty().getEventType())) {
+                appointment.setAppointmentGroup(opera);
+            } else if(EventType.Concert.equals(event.getEventDuty().getEventType())) {
+                appointment.setAppointmentGroup(concert);
+            } else if(EventType.Tour.equals(event.getEventDuty().getEventType())) {
+                appointment.setAppointmentGroup(tour);
+            } else if(EventType.Rehearsal.equals(event.getEventDuty().getEventType())) {
+                appointment.setAppointmentGroup(rehearsal);
+            } else if(EventType.Hofkapelle.equals(event.getEventDuty().getEventType())) {
+                appointment.setAppointmentGroup(hofkapelle);
+            } else if(EventType.NonMusicalEvent.equals(event.getEventDuty().getEventType())) {
+                appointment.setAppointmentGroup(nonMusicalEvent);
+            }
 
+            agenda.appointments().add(appointment);
+        }
         // agenda settings
-        agenda.setAllowDragging(false);
+        agenda.setAllowDragging(false); //drag and drop the event
         agenda.setAllowResize(false);
         agenda.localeProperty().set(Locale.GERMAN);
-        agenda.setDisplayedLocalDateTime(LocalDateTime.now());
+        agenda.setDisplayedLocalDateTime(LocalDateTime.now()); //show current week in event scheduler
 
         agenda.onMouseClickedProperty().set(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent arg0){
-                // TODO: check what type of event was selected an load correct fxml file
+                // TODO timo: check what type of event was selected an load correct fxml file
                 try {
                     scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditOpera.fxml")));
 

@@ -14,8 +14,8 @@ public class EventDutyEntity {
     private String description;
     private Timestamp starttime;
     private Timestamp endtime;
-    private Enum eventType;
-    private Enum eventStatus;
+    private String eventType;
+    private String eventStatus;
     private String conductor;
     private String location;
     private double defaultPoints;
@@ -72,25 +72,21 @@ public class EventDutyEntity {
         this.endtime = endtime;
     }
 
-    @Basic
-    @Enumerated(EnumType.STRING)
-    @Column(name = "eventType")
-    public Enum getEventType() {
+    @Column(name = "eventType", columnDefinition = "enum('Opera', 'Concert', 'Hofkapelle', 'Tour', 'Rehearsal', 'NonMusicalEvent')")
+    public String getEventType() {
         return eventType;
     }
 
-    public void setEventType(Enum eventType) {
+    public void setEventType(String eventType) {
         this.eventType = eventType;
     }
 
-    @Basic
-    @Enumerated(EnumType.STRING)
-    @Column(name = "eventStatus")
-    public Enum getEventStatus() {
+    @Column(name = "eventStatus", columnDefinition = "enum('Unpublished', 'Published', 'Cancelled')")
+    public String getEventStatus() {
         return eventStatus;
     }
 
-    public void setEventStatus(Enum eventStatus) {
+    public void setEventStatus(String eventStatus) {
         this.eventStatus = eventStatus;
     }
 

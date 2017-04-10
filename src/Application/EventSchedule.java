@@ -1,6 +1,7 @@
 package Application;
 
 import Domain.PresentationModels.EventDutyDTO;
+import Persistence.EventDuty;
 
 import java.time.Month;
 import java.util.Date;
@@ -11,36 +12,41 @@ import java.util.List;
  */
 public class EventSchedule {
 
-    public void publish(Month month){
+    public static void publish(Month month){
 
     }
 
-    public void createOpera(EventDutyDTO eventDuty){
+    public static void createOpera(EventDutyDTO eventDuty){
 
     }
 
-    public void createTour(EventDutyDTO eventDuty){
+    public static void createTour(EventDutyDTO eventDuty){
 
     }
 
-    public void createHofkapelle(EventDutyDTO eventDuty){
+    public static void createHofkapelle(EventDutyDTO eventDuty){
 
     }
 
-    public void createConcert(EventDutyDTO eventDuty){
+    public static void createConcert(EventDutyDTO eventDuty){
 
     }
 
-    public void update(EventDutyDTO eventDuty)
+    public static void update(EventDutyDTO eventDuty)
     {
 
     }
 
-    public void delete(EventDutyDTO eventDuty){
+    public static void delete(EventDutyDTO eventDuty){
 
     }
 
-    public List<EventSchedule> getAllEventDutyInBetween(Date start, Date end){
+    public static List<EventDutyDTO> getAllEventDutyInBetween(Date start, Date end){
         return null;
+    }
+
+    //todo julia: just for tests, final should be getAllEventDutyInBetween, never getAll()!
+    public static List<EventDutyDTO> getAllEventDuty(){
+        return EventDuty.getAllEventDuty();
     }
 }

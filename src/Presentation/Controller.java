@@ -13,11 +13,6 @@ import java.time.temporal.ChronoUnit;
 public class Controller {
 
     @FXML
-    private void selectionChanged() {
-        System.out.println("selection changed");
-    }
-
-    @FXML
     private void navigateOneWeekBackClicked() {
         Agenda agenda = (Agenda) PlanchesterGUI.scene.lookup("#agenda");
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
@@ -53,6 +48,4 @@ public class Controller {
 
         agenda.refresh();
     }
-
-
 }
