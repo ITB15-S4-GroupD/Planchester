@@ -3,7 +3,6 @@ package Presentation;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.Screen;
@@ -48,13 +47,7 @@ public class PlanchesterGUI {
         // set and show scene
         Scene scene = new Scene(tabPane, 1200, 900, Color.WHITE);
 
-        Screen screen = Screen.getPrimary();
-        Rectangle2D bounds = screen.getVisualBounds();
-
-        primaryStage.setX(bounds.getMinX());
-        primaryStage.setY(bounds.getMinY());
-        primaryStage.setWidth(bounds.getWidth());
-        primaryStage.setHeight(bounds.getHeight());
+        primaryStage.setMaximized(true);
 
         primaryStage.setScene(scene);
         primaryStage.show();
