@@ -36,11 +36,12 @@ public class CreateOperaController {
     private void saveNewOperaDuty(){
 
     //i: Test
+        System.out.println("ICH BIN DA");
 
         String collectedData = "Event Name: " + txtName.getText() + "\n" +
                 "Description: " + txtDescription.getText() + "\n" +
                 "Date: " + pckDate.getValue() + "\n" +
-                "Start Time: " + pckStartTime.get().getLocalTime().toString() + "\n" +
+                "Start Time: " + pckStartTime.getLocalTime().toString() + "\n" +
                 "End Time: " + pckEndTime.getLocalTime().toString() + "\n" +
                 "Location: " + txtLocation.getText() + "\n" +
                 "Description: " + txtDescription.getText() + "\n" +
@@ -59,13 +60,14 @@ public class CreateOperaController {
              validate=false;
              warning = warning+"Description missing\n";
          }
+
          LocalDate date = pckDate.getValue();
          if(pckDate==null||date.isAfter(LocalDate.now())){
              validate=false;
              warning=warning+"Date wrong\n";
          }
 
-        LocalTime start = pckStartTime.get().getLocalTime();
+        LocalTime start = pckStartTime.getLocalTime();
 
          if(txtLocation==null){
              validate=false;

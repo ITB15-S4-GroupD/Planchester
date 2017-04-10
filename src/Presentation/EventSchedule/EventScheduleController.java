@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -78,20 +79,19 @@ public class EventScheduleController {
             appointment.setStartTime(starttimeCalendar);
             appointment.setEndTime(endtimeCalendar);
 
-            if(EventType.Opera.equals(event.getEventDuty().getEventType())) {
+            if(EventType.Opera.toString().equals(event.getEventDuty().getEventType())) {
                 appointment.setAppointmentGroup(opera);
-            } else if(EventType.Concert.equals(event.getEventDuty().getEventType())) {
+            } else if(EventType.Concert.toString().equals(event.getEventDuty().getEventType())) {
                 appointment.setAppointmentGroup(concert);
-            } else if(EventType.Tour.equals(event.getEventDuty().getEventType())) {
+            } else if(EventType.Tour.toString().equals(event.getEventDuty().getEventType())) {
                 appointment.setAppointmentGroup(tour);
-            } else if(EventType.Rehearsal.equals(event.getEventDuty().getEventType())) {
+            } else if(EventType.Rehearsal.toString().equals(event.getEventDuty().getEventType())) {
                 appointment.setAppointmentGroup(rehearsal);
-            } else if(EventType.Hofkapelle.equals(event.getEventDuty().getEventType())) {
+            } else if(EventType.Hofkapelle.toString().equals(event.getEventDuty().getEventType())) {
                 appointment.setAppointmentGroup(hofkapelle);
-            } else if(EventType.NonMusicalEvent.equals(event.getEventDuty().getEventType())) {
+            } else if(EventType.NonMusicalEvent.toString().equals(event.getEventDuty().getEventType())) {
                 appointment.setAppointmentGroup(nonMusicalEvent);
             }
-
             agenda.appointments().add(appointment);
         }
         // agenda settings
