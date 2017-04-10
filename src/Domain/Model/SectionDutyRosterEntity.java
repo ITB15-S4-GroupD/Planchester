@@ -13,6 +13,7 @@ public class SectionDutyRosterEntity {
     private Enum sectionType;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sectionDutyRosterID")
     public int getSectionDutyRosterId() {
         return sectionDutyRosterId;

@@ -15,6 +15,7 @@ public class PercussionInstrumentationEntity {
     private String percussionDescription;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "percussionInstrumentationID")
     public int getPercussionInstrumentationId() {
         return percussionInstrumentationId;

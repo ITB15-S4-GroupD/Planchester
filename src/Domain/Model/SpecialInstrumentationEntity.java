@@ -15,6 +15,7 @@ public class SpecialInstrumentationEntity {
     private InstrumentationEntity instrumentationByInstrumentationId;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "specialInstrumentationID")
     public int getSpecialInstrumentationId() {
         return specialInstrumentationId;

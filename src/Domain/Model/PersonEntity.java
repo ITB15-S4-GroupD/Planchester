@@ -20,6 +20,7 @@ public class PersonEntity {
     private AccountEntity accountByAccount;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "personId")
     public int getPersonId() {
         return personId;

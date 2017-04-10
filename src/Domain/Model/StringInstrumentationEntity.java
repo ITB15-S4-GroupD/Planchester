@@ -16,6 +16,7 @@ public class StringInstrumentationEntity {
     private int doublebass;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "stringInstrumentationID")
     public int getStringInstrumentationId() {
         return stringInstrumentationId;
