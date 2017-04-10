@@ -26,6 +26,7 @@ public class SpecialInstrumentationEntity {
     }
 
     @Basic
+    @Enumerated(EnumType.STRING)
     @Column(name = "sectionType")
     public Enum getSectionType() {
         return sectionType;

@@ -37,6 +37,7 @@ public class RequestEntity {
     }
 
     @Basic
+    @Enumerated(EnumType.STRING)
     @Column(name = "requestType")
     public Enum getRequestType() {
         return requestType;

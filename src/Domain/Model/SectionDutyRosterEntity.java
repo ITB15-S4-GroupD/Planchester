@@ -24,6 +24,7 @@ public class SectionDutyRosterEntity {
     }
 
     @Basic
+    @Enumerated(EnumType.STRING)
     @Column(name = "dutyRosterStatus")
     public Enum getDutyRosterStatus() {
         return dutyRosterStatus;
@@ -34,6 +35,7 @@ public class SectionDutyRosterEntity {
     }
 
     @Basic
+    @Enumerated(EnumType.STRING)
     @Column(name = "sectionType")
     public Enum getSectionType() {
         return sectionType;

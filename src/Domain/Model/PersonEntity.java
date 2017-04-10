@@ -101,6 +101,7 @@ public class PersonEntity {
     }
 
     @Basic
+    @Enumerated(EnumType.STRING)
     @Column(name = "personRole")
     public Enum getPersonRole() {
         return personRole;
