@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Text?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Text?>
 <?import jfxtras.scene.control.LocalTimePicker?>
 
 <GridPane prefHeight="441.0" prefWidth="398.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.EditOperaController">
@@ -64,6 +68,9 @@
                 </LocalTimePicker>
             </children>
         </GridPane>
-        <Button mnemonicParsing="false" onMouseClicked="#saveEventChanges" text="Save changes" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+        <Button mnemonicParsing="false" onMouseClicked="#saveEventChanges" text="Save changes" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+         <GridPane.margin>
+            <Insets top="1.0" />
+         </GridPane.margin></Button>
     </children>
 </GridPane>

@@ -1,20 +1,13 @@
 package Presentation.EventSchedule;
 
 import Presentation.PlanchesterGUI;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
-import javafx.stage.Popup;
-import javafx.stage.PopupBuilder;
-import javafx.stage.Stage;
 import jfxtras.scene.control.LocalTimePicker;
 import jfxtras.scene.control.agenda.Agenda;
 
@@ -39,10 +32,10 @@ public class EventScheduleController {
     //i:Mapping choiced duty for loading form/file
     Map<String, String> dutyToForm = new HashMap<>();
 
-    @FXML Agenda agenda;
-    @FXML ScrollPane scrollPane;
+    @FXML private Agenda agenda;
+    @FXML private ScrollPane scrollPane;
     //i:declare the choice box
-    @FXML private ChoiceBox choiceNewDuty;
+    @FXML private ChoiceBox choiceNewEventDuty;
 
     @FXML
     public void initialize() {
@@ -108,9 +101,9 @@ public class EventScheduleController {
             }
         });
 
-        //i:ChoiceBox choiceNewDuty initialisieren
-        choiceNewDuty.setItems(dutyTypes);
-        choiceNewDuty.setValue("Opera performance");
+        //i:ChoiceBox choiceNewEventDuty initialisieren
+        choiceNewEventDuty.setItems(dutyTypes);
+        choiceNewEventDuty.setValue("Opera performance");
 
         //i:Map initialisieren
         dutyToForm.put("Opera performance","CreateOpera.fxml");
@@ -119,10 +112,6 @@ public class EventScheduleController {
         dutyToForm.put("Hofkapelle","CreateHofkapelle.fxml");
         dutyToForm.put("Rehearsal","CreateRehearsal.fxml");
         dutyToForm.put("Non-musical duty","CreateNonMusical.fxml");
-
-
-
-
     }
 
     @FXML
@@ -166,7 +155,7 @@ public class EventScheduleController {
 
         //IODO build missing forms for new duty types
 
-    String choice = choiceNewDuty.getValue().toString();
+    String choice = choiceNewEventDuty.getValue().toString();
     String formToLoad = dutyToForm.get( choice );
 
 
