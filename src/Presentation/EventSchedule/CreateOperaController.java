@@ -70,8 +70,7 @@ public class CreateOperaController {
 
         LocalTime start = startTime.getLocalTime();
         LocalTime end = endTime.getLocalTime();
-        if(start.isAfter(end))
-        {
+        if(start.isAfter(end)) {
             validate = false;
             warning = warning + "Endtime ist not after starttime\n";
         }
