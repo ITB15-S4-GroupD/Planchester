@@ -42,9 +42,6 @@ public class Planchester extends Application {
         */
 
         PlanchesterGUI gui = new PlanchesterGUI();
-
-        Image applicationIcon = new Image(getClass().getResourceAsStream("logoplanchester.png"));
-        primaryStage.getIcons().add(applicationIcon);
         gui.start(primaryStage);
 
     }
