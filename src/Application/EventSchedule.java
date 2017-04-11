@@ -17,7 +17,7 @@ public class EventSchedule {
     }
 
     public static void createOpera(EventDutyDTO eventDuty){
-
+        EventDuty.createNewEventDuty(eventDuty);
     }
 
     public static void createTour(EventDutyDTO eventDuty){
@@ -32,8 +32,7 @@ public class EventSchedule {
 
     }
 
-    public static void update(EventDutyDTO eventDuty)
-    {
+    public static void update(EventDutyDTO eventDuty){
 
     }
 

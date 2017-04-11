@@ -26,6 +26,7 @@ import jfxtras.scene.control.agenda.Agenda;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
@@ -43,55 +44,38 @@ public class EventScheduleController {
     //i:Mapping choiced duty for loading form/file
     Map<String, String> dutyToForm = new HashMap<>();
 
+    @FXML private static Agenda staticAgenda;
     @FXML private Agenda agenda;
     @FXML private ScrollPane scrollPane;
     @FXML private ComboBox comboNewDuty;
     @FXML private Label calenderWeekLabel;
+    private static Agenda.AppointmentGroup opera;
+    private static Agenda.AppointmentGroup concert;
+    private static Agenda.AppointmentGroup hofkapelle;
+    private static Agenda.AppointmentGroup tour;
+    private static Agenda.AppointmentGroup rehearsal;
+    private static Agenda.AppointmentGroup nonMusicalEvent;
 
     @FXML
     public void initialize() {
-        Agenda.AppointmentGroup opera = new Agenda.AppointmentGroupImpl();
+        staticAgenda = agenda;
+
+        opera = new Agenda.AppointmentGroupImpl();
         opera.setStyleClass("group1");
-        Agenda.AppointmentGroup concert = new Agenda.AppointmentGroupImpl();
+        concert = new Agenda.AppointmentGroupImpl();
         concert.setStyleClass("group2");
-        Agenda.AppointmentGroup hofkapelle = new Agenda.AppointmentGroupImpl();
+        hofkapelle = new Agenda.AppointmentGroupImpl();
         hofkapelle.setStyleClass("group3");
-        Agenda.AppointmentGroup tour = new Agenda.AppointmentGroupImpl();
+        tour = new Agenda.AppointmentGroupImpl();
         tour.setStyleClass("group4");
-        Agenda.AppointmentGroup rehearsal = new Agenda.AppointmentGroupImpl();
+        rehearsal = new Agenda.AppointmentGroupImpl();
         rehearsal.setStyleClass("group5");
-        Agenda.AppointmentGroup nonMusicalEvent = new Agenda.AppointmentGroupImpl();
+        nonMusicalEvent = new Agenda.AppointmentGroupImpl();
         nonMusicalEvent.setStyleClass("group6");
 
         List<EventDutyDTO> events = EventSchedule.getAllEventDuty();
         for(EventDutyDTO event : events) {
-            //convert Timestamp to Calendar
-            Calendar starttimeCalendar = Calendar.getInstance();
-            starttimeCalendar.setTimeInMillis(event.getEventDuty().getStarttime().getTime());
-            Calendar endtimeCalendar = Calendar.getInstance();
-            endtimeCalendar.setTimeInMillis(event.getEventDuty().getEndtime().getTime());
-
-            Agenda.Appointment appointment = new Agenda.AppointmentImpl();
-            appointment.setSummary(event.getEventDuty().getName());
-            appointment.setDescription(event.getEventDuty().getDescription());
-            appointment.setLocation(event.getEventDuty().getLocation());
-            appointment.setStartTime(starttimeCalendar);
-            appointment.setEndTime(endtimeCalendar);
-
-            if(EventType.Opera.toString().equals(event.getEventDuty().getEventType())) {
-                appointment.setAppointmentGroup(opera);
-            } else if(EventType.Concert.toString().equals(event.getEventDuty().getEventType())) {
-                appointment.setAppointmentGroup(concert);
-            } else if(EventType.Tour.toString().equals(event.getEventDuty().getEventType())) {
-                appointment.setAppointmentGroup(tour);
-            } else if(EventType.Rehearsal.toString().equals(event.getEventDuty().getEventType())) {
-                appointment.setAppointmentGroup(rehearsal);
-            } else if(EventType.Hofkapelle.toString().equals(event.getEventDuty().getEventType())) {
-                appointment.setAppointmentGroup(hofkapelle);
-            } else if(EventType.NonMusicalEvent.toString().equals(event.getEventDuty().getEventType())) {
-                appointment.setAppointmentGroup(nonMusicalEvent);
-            }
-            agenda.appointments().add(appointment);
+            addEventDuty(event);
         }
         // agenda settings
         agenda.setAllowDragging(false); //drag and drop the event
@@ -175,6 +159,40 @@ public class EventScheduleController {
         });
     }
 
+    public static void addEventDuty(EventDutyDTO event){
+        //convert Timestamp to Calendar
+        Calendar starttimeCalendar = Calendar.getInstance();
+        starttimeCalendar.setTimeInMillis(event.getEventDuty().getStarttime().getTime());
+        Calendar endtimeCalendar = Calendar.getInstance();
+        endtimeCalendar.setTimeInMillis(event.getEventDuty().getEndtime().getTime());
+
+        Agenda.Appointment appointment = new Agenda.AppointmentImpl();
+        appointment.setSummary(event.getEventDuty().getName());
+        appointment.setDescription(event.getEventDuty().getDescription());
+        appointment.setLocation(event.getEventDuty().getLocation());
+        appointment.setStartTime(starttimeCalendar);
+        appointment.setEndTime(endtimeCalendar);
+
+        if(EventType.Opera.toString().equals(event.getEventDuty().getEventType())) {
+            appointment.setAppointmentGroup(opera);
+        } else if(EventType.Concert.toString().equals(event.getEventDuty().getEventType())) {
+            appointment.setAppointmentGroup(concert);
+        } else if(EventType.Tour.toString().equals(event.getEventDuty().getEventType())) {
+            appointment.setAppointmentGroup(tour);
+        } else if(EventType.Rehearsal.toString().equals(event.getEventDuty().getEventType())) {
+            appointment.setAppointmentGroup(rehearsal);
+        } else if(EventType.Hofkapelle.toString().equals(event.getEventDuty().getEventType())) {
+            appointment.setAppointmentGroup(hofkapelle);
+        } else if(EventType.NonMusicalEvent.toString().equals(event.getEventDuty().getEventType())) {
+            appointment.setAppointmentGroup(nonMusicalEvent);
+        }
+        staticAgenda.appointments().add(appointment);
+    }
+
+    public static void setDisplayedLocalDateTime(LocalDateTime localDateTime){
+        staticAgenda.setDisplayedLocalDateTime(localDateTime);
+    }
+
     private void setCalenderWeekLabel() {
         Calendar cal = agenda.getDisplayedCalendar();
         int week = cal.get(Calendar.WEEK_OF_YEAR);
@@ -223,8 +241,4 @@ public class EventScheduleController {
 
         agenda.refresh();
     }
-
-
-
-
 }
