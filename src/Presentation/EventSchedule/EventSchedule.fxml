@@ -39,33 +39,32 @@
                 </GridPane>
             <GridPane GridPane.rowIndex="2">
               <columnConstraints>
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="218.0" minWidth="10.0" prefWidth="162.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="309.0" minWidth="10.0" prefWidth="71.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="309.0" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="309.0" minWidth="10.0" prefWidth="224.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="379.0" minWidth="10.0" prefWidth="376.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="309.0" minWidth="10.0" prefWidth="162.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label fx:id="calenderWeekLabel" text="Label" GridPane.columnIndex="3">
-                     <font>
-                        <Font size="22.0" />
-                     </font>
-                  </Label>
                   <GridPane prefHeight="30.0" prefWidth="193.0">
                     <columnConstraints>
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="88.0" minWidth="10.0" prefWidth="46.0" />
                       <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="135.0" minWidth="10.0" prefWidth="115.0" />
                       <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="102.0" minWidth="10.0" prefWidth="46.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="102.0" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button fx:id="btnOpenNewDuty" mnemonicParsing="false" onMouseClicked="#showActualWeekClicked" prefHeight="25.0" prefWidth="104.0" text="Current Week" GridPane.columnIndex="1" />
                               <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#navigateOneWeekForwardClicked" prefHeight="25.0" prefWidth="25.0" text="&gt;" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                               <Button mnemonicParsing="false" onMouseClicked="#navigateOneWeekBackClicked" prefHeight="25.0" prefWidth="25.0" text="&lt;" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Label fx:id="calenderWeekLabel" text="Label" GridPane.columnIndex="1">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="btnOpenNewDuty" mnemonicParsing="false" onMouseClicked="#showActualWeekClicked" prefHeight="25.0" prefWidth="104.0" text="Current Week" GridPane.columnIndex="3" />
                      </children>
                   </GridPane>
                </children>
