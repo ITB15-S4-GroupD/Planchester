@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Text?>
 <?import jfxtras.scene.control.LocalTimePicker?>
 
-<GridPane fx:id="gridNewOpera" prefHeight="506.0" prefWidth="351.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.CreateOperaController">
+<GridPane fx:id="gridNewOpera" prefHeight="506.0" prefWidth="351.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.CreateOperaController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -72,8 +72,8 @@
       </Text>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" translateX="-59.0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
         <buttons>
-            <Button fx:id="btnDiscard" mnemonicParsing="false" text="Discard" />
-          <Button fx:id="btnSaveNewOpera" mnemonicParsing="false" onAction="#saveNewOperaDuty" text="Save" />
+            <Button fx:id="btnDiscard" mnemonicParsing="false" onAction="#discard" text="Discard" />
+          <Button fx:id="btnSaveNewOpera" mnemonicParsing="false" onAction="#save" text="Save" />
         </buttons>
       </ButtonBar>
    </children>

@@ -145,19 +145,19 @@ public class CreateOperaController {
     @FXML
     public boolean discard(){
         // Ask if changes should really be discarded, if something has been entered
-        if(!name.getText().isEmpty() || !description.getText().isEmpty() || date != null
+        if(!name.getText().isEmpty() || !description.getText().isEmpty() || date.getValue() != null
                 || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty() || !points.getText().isEmpty())
         {
-            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION, "Discard changes?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION, "Discard changes?", ButtonType.YES, ButtonType.NO);
 
             confirmation.showAndWait();
 
-            if (confirmation.getResult() == ButtonType.YES) {
-                // remove content of sidebar
-                EventScheduleController.resetSideContent();
-                return true;
+            if (confirmation.getResult() == ButtonType.NO) {
+                return false;
             }
         }
-        return false;
+        // remove content of sidebar
+        EventScheduleController.resetSideContent();
+        return true;
     }
 }
