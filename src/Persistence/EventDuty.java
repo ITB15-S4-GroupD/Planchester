@@ -22,15 +22,9 @@ public class EventDuty {
         List<EventDutyDTO> eventDutyList = new ArrayList<>();
 
         Configuration cfg = new Configuration();
-        cfg.configure("hibernate.cfg.xml");// populates the data of the configuration file
-
-        // creating session factory object
+        cfg.configure("hibernate.cfg.xml");
         SessionFactory factory = cfg.buildSessionFactory();
-
-        // creating session object
         Session session = factory.openSession();
-
-        // creating transaction object
         Transaction transaction = session.beginTransaction();
 
         Query query = session.createQuery("FROM EventDutyEntity");
@@ -49,5 +43,16 @@ public class EventDuty {
     public static List<EventDutyDTO> getEventDutyByWeek(Date start, Date end) {
        //TODO Julia
         return null;
+    }
+
+    public static void createNewEventDuty(EventDutyDTO eventDutyDTO){
+        Configuration cfg = new Configuration();
+        cfg.configure("hibernate.cfg.xml");
+        SessionFactory factory = cfg.buildSessionFactory();
+        Session session = factory.openSession();
+        session.beginTransaction();
+        session.save(eventDutyDTO.getEventDuty());
+        session.getTransaction().commit();
+        session.close();
     }
 }

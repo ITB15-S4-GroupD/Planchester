@@ -1,12 +1,19 @@
 package Presentation.EventSchedule;
 
+import Application.EventSchedule;
+import Domain.Model.EventDutyEntity;
+import Domain.PresentationModels.Enum.EventStatus;
+import Domain.PresentationModels.Enum.EventType;
+import Domain.PresentationModels.EventDutyDTO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import jfxtras.scene.control.LocalTimePicker;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 /**
@@ -63,7 +70,7 @@ public class CreateOperaController {
 
         LocalTime start = startTime.getLocalTime();
         LocalTime end = endTime.getLocalTime();
-        if(!start.isAfter(end))
+        if(start.isAfter(end))
         {
             validate = false;
             warning = warning + "Endtime ist not after starttime\n";
@@ -85,13 +92,47 @@ public class CreateOperaController {
         }
 
         if(validate){
-            // TODO: save in DB
-            
+            // create object
+            EventDutyEntity eventDutyEntity = new EventDutyEntity();
+
+            // save text data
+            eventDutyEntity.setName(name.getText());
+            eventDutyEntity.setDescription(description.getText());
+            eventDutyEntity.setLocation(eventLocation.getText());
+            eventDutyEntity.setEventType(EventType.Opera.toString());
+            eventDutyEntity.setEventStatus(EventStatus.Unpublished.toString());
+            eventDutyEntity.setConductor(conductor.getText());
+
+            // save points
+            eventDutyEntity.setDefaultPoints(Double.parseDouble(points.getText()));
+
+            // save time
+            Timestamp startTimestamp = Timestamp.valueOf(LocalDateTime.of(date, startTime.getLocalTime()));
+            Timestamp endTimestamp = Timestamp.valueOf(LocalDateTime.of(date, endTime.getLocalTime()));
+            eventDutyEntity.setStarttime(startTimestamp);
+            eventDutyEntity.setEndtime(endTimestamp);
+
+            // save object
+            EventDutyDTO eventDutyDTO = new EventDutyDTO(eventDutyEntity);
+            EventSchedule.createOpera(eventDutyDTO);
+
+            // add event to agenda
+            EventScheduleController.addEventDuty(eventDutyDTO);
+
+            // set agenda view to week of created event
+            EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getEventDuty().getStarttime().toLocalDateTime());
+
+            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmation.setHeaderText("Event saved");
+            confirmation.setContentText("Event saved");
+            confirmation.setResizable(false);
+            confirmation.getDialogPane().setPrefSize(350, 500);
+            confirmation.showAndWait();
         }else{
             Alert problem = new Alert(Alert.AlertType.ERROR);
             problem.setHeaderText("Error");
             problem.setContentText(warning);
-            problem.setResizable(true);
+            problem.setResizable(false);
             problem.getDialogPane().setPrefSize(350, 500);
             problem.showAndWait();
         }
