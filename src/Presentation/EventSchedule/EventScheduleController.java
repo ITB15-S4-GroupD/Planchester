@@ -37,15 +37,17 @@ import java.util.*;
  */
 public class EventScheduleController {
     //i:List for ChoiceBox to choice new duty
-    ObservableList<String> dutyTypes = FXCollections.observableArrayList("Concert performance",
-            "Opera performance","Tour duty","Hofkapelle","Rehearsal","Non-musical duty");
+    ObservableList<String> dutyTypes = FXCollections.observableArrayList("Concert",
+            "Opera","Tour","Hofkapelle","Rehearsal","Non-musical event");
 
     //i:Mapping choiced duty for loading form/file
     Map<String, String> dutyToForm = new HashMap<>();
 
-    @FXML private static Agenda staticAgenda;
+    private static Agenda staticAgenda;
     @FXML private Agenda agenda;
+    private static ScrollPane staticScrollPane;
     @FXML private ScrollPane scrollPane;
+    private static ComboBox staticComboNewDuty;
     @FXML private ComboBox comboNewDuty;
     @FXML private Label calenderWeekLabel;
     private static Agenda.AppointmentGroup opera;
@@ -58,6 +60,8 @@ public class EventScheduleController {
     @FXML
     public void initialize() {
         staticAgenda = agenda;
+        staticScrollPane = scrollPane;
+        staticComboNewDuty = comboNewDuty;
 
         opera = new Agenda.AppointmentGroupImpl();
         opera.setStyleClass("group1");
@@ -123,12 +127,12 @@ public class EventScheduleController {
         comboNewDuty.setPromptText("Choose Eventtype");
 
         //i:Map initialisieren
-        dutyToForm.put("Opera performance","CreateOpera.fxml");
-        dutyToForm.put("Concert performance","CreateConcert.fxml");
-        dutyToForm.put("Tour duty","CreateTour.fxml");
+        dutyToForm.put("Opera","CreateOpera.fxml");
+        dutyToForm.put("Concert","CreateConcert.fxml");
+        dutyToForm.put("Tour","CreateTour.fxml");
         dutyToForm.put("Hofkapelle","CreateHofkapelle.fxml");
         dutyToForm.put("Rehearsal","CreateRehearsal.fxml");
-        dutyToForm.put("Non-musical duty","CreateNonMusical.fxml");
+        dutyToForm.put("Non-musical event","CreateNonMusical.fxml");
 
         comboNewDuty.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -196,6 +200,11 @@ public class EventScheduleController {
         calenderWeekLabel.setText("Calender Week " + String.valueOf(week));
     }
 
+    public static void resetSideContent(){
+        staticScrollPane.setContent(null);
+        staticComboNewDuty.getSelectionModel().clearSelection();
+    }
+
     @FXML
     private void navigateOneWeekBackClicked() {
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
@@ -218,7 +227,7 @@ public class EventScheduleController {
 
     @FXML
     private void saveEventChanges(){
-        // TODO: implement for every kind of event
+        // TODO: implement into edit controllers
         TextField name = (TextField) PlanchesterGUI.scene.lookup("#name");
         TextField description = (TextField) PlanchesterGUI.scene.lookup("#description");
         DatePicker date = (DatePicker) PlanchesterGUI.scene.lookup("#date");

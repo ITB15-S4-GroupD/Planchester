@@ -48,7 +48,7 @@ public class CreateOperaController {
     }
 
     @FXML
-    private void saveNewOperaDuty(){
+    private void save(){
         String warning = "";
         boolean validate = true;
 
@@ -57,10 +57,12 @@ public class CreateOperaController {
             warning = warning + "Name missing\n";
         }
 
+        /*
         if(description.getText().isEmpty()){
             validate = false;
             warning = warning + "Description missing\n";
         }
+        */
 
         LocalDate date = this.date.getValue();
         if(date == null || !date.isAfter(LocalDate.now())){
@@ -121,12 +123,15 @@ public class CreateOperaController {
             // set agenda view to week of created event
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getEventDuty().getStarttime().toLocalDateTime());
 
-            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmation.setHeaderText("Event saved");
-            confirmation.setContentText("Event saved");
-            confirmation.setResizable(false);
-            confirmation.getDialogPane().setPrefSize(350, 500);
-            confirmation.showAndWait();
+            // remove content of sidebar
+            EventScheduleController.resetSideContent();
+
+            Alert information = new Alert(Alert.AlertType.INFORMATION);
+            information.setHeaderText("Event saved");
+            information.setContentText("Event saved");
+            information.setResizable(false);
+            information.getDialogPane().setPrefSize(350, 500);
+            information.showAndWait();
         }else{
             Alert problem = new Alert(Alert.AlertType.ERROR);
             problem.setHeaderText("Error");
@@ -135,5 +140,24 @@ public class CreateOperaController {
             problem.getDialogPane().setPrefSize(350, 500);
             problem.showAndWait();
         }
+    }
+
+    @FXML
+    public boolean discard(){
+        // Ask if changes should really be discarded, if something has been entered
+        if(!name.getText().isEmpty() || !description.getText().isEmpty() || date != null
+                || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty() || !points.getText().isEmpty())
+        {
+            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION, "Discard changes?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+
+            confirmation.showAndWait();
+
+            if (confirmation.getResult() == ButtonType.YES) {
+                // remove content of sidebar
+                EventScheduleController.resetSideContent();
+                return true;
+            }
+        }
+        return false;
     }
 }
