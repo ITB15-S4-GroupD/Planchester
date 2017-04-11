@@ -14,9 +14,6 @@ public class Planchester extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         PlanchesterGUI gui = new PlanchesterGUI();
-
-        Image applicationIcon = new Image(getClass().getResourceAsStream("logoplanchester.png"));
-        primaryStage.getIcons().add(applicationIcon);
         gui.start(primaryStage);
 
     }
