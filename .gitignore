@@ -9,7 +9,7 @@
 *.ear
 
 # Folders #
-out/
+out/*
 
 # executable files #
 *.exe
