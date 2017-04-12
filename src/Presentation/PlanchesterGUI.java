@@ -5,8 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.Screen;
-import javafx.geometry.Rectangle2D;
+import javafx.scene.image.Image;
 
 public class PlanchesterGUI {
 
@@ -15,6 +14,8 @@ public class PlanchesterGUI {
     public void start(Stage primaryStage) throws Exception {
 
         primaryStage.setTitle("Planchester");
+
+
 
         TabPane tabPane = new TabPane();
         //Create Tabs
@@ -34,21 +35,23 @@ public class PlanchesterGUI {
         Tab user = new Tab();
         user.setText("User Administration");
 
+        Tab support = new Tab();
+        support.setText("Support");
+
         // add Tabs
         tabPane.getTabs().add(dutyRoster);
         tabPane.getTabs().add(eventSchedule);
         tabPane.getTabs().add(musicalWorks);
         tabPane.getTabs().add(instruments);
         tabPane.getTabs().add(user);
+        tabPane.getTabs().add(support);
 
         //Tabs not closeable
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         // set and show scene
         Scene scene = new Scene(tabPane, 1200, 900, Color.WHITE);
-
         primaryStage.setMaximized(true);
-
         primaryStage.setScene(scene);
         primaryStage.show();
     }

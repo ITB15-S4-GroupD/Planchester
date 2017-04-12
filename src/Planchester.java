@@ -1,6 +1,7 @@
 import Domain.Model.InstrumentEntity;
 import Presentation.PlanchesterGUI;
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,6 +15,7 @@ public class Planchester extends Application {
     public void start(Stage primaryStage) throws Exception {
         PlanchesterGUI gui = new PlanchesterGUI();
         gui.start(primaryStage);
+
     }
 
     public static void main(String[] args) {

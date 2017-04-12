@@ -10,9 +10,11 @@
 
 # Folders #
 out/
-.idea/
 
+# executable files #
 *.exe
+
+# .idea files #
 workspace.xml
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml

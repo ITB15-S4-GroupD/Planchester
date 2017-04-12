@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="sem4_team2@mysql.vlbg.org" uuid="27b6c95a-50b4-4193-91a1-8160b0319126">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
+    </data-source>
+    <data-source name="hibernate.cfg.xml/Hibernate" uuid="9a6080de-f485-44d4-8a83-3b4ed486a0dc">
+      <database-info product="MySQL" version="5.5.5-10.0.29-MariaDB-0+deb8u1" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.40 ( Revision: 402933ef52cad9aa82624e80acbea46e3a701ce6 )">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>team2</user-name>
+      <introspection-schemas>*:sem4_team2</introspection-schemas>
+    </data-source>
+  </component>
+</project>
