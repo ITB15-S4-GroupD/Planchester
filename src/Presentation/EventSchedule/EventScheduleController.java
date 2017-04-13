@@ -36,9 +36,6 @@ import java.util.*;
  * Created by timorzipa on 06/04/2017.
  */
 public class EventScheduleController {
-    //i:List for ChoiceBox to choice new duty
-    ObservableList<String> dutyTypes = FXCollections.observableArrayList("Concert",
-            "Opera","Tour","Hofkapelle","Rehearsal","Non-musical event");
 
     //i:Mapping choiced duty for loading form/file
     Map<String, String> dutyToForm = new HashMap<>();
@@ -91,7 +88,7 @@ public class EventScheduleController {
 
         agenda.onMouseClickedProperty().set(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(MouseEvent arg0){
+            public void handle(MouseEvent arg0) {
                 // TODO timo: check what type of event was selected an load correct fxml file
                 try {
                     scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditOpera.fxml")));
@@ -122,7 +119,8 @@ public class EventScheduleController {
             }
         });
 
-        //i:ChoiceBox choiceNewEventDuty initialisieren
+        //List for Combobox to choice new duty
+        ObservableList<String> dutyTypes = FXCollections.observableArrayList("Concert","Opera","Tour","Hofkapelle","Rehearsal","Non-musical event");
         comboNewDuty.setItems(dutyTypes);
         comboNewDuty.setPromptText("Choose Eventtype");
 
@@ -160,7 +158,66 @@ public class EventScheduleController {
         });
     }
 
-    public static void addEventDuty(EventDutyDTO event){
+    @FXML
+    private void navigateOneWeekBackClicked() {
+        LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
+        agenda.setDisplayedLocalDateTime(displayedDate.minus(7, ChronoUnit.DAYS));
+        setCalenderWeekLabel();
+    }
+
+    @FXML
+    private void navigateOneWeekForwardClicked() {
+        LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
+        agenda.setDisplayedLocalDateTime(displayedDate.plus(7, ChronoUnit.DAYS));
+        setCalenderWeekLabel();
+    }
+
+    @FXML
+    private void showActualWeekClicked() {
+        agenda.setDisplayedLocalDateTime(LocalDateTime.now());
+        setCalenderWeekLabel();
+    }
+
+    @FXML
+    private void saveEventChanges() {
+        // TODO: implement into edit controllers
+        TextField name = (TextField) PlanchesterGUI.scene.lookup("#name");
+        TextField description = (TextField) PlanchesterGUI.scene.lookup("#description");
+        DatePicker date = (DatePicker) PlanchesterGUI.scene.lookup("#date");
+        LocalTimePicker startTime = (LocalTimePicker) PlanchesterGUI.scene.lookup("#start");
+        LocalTimePicker endTime = (LocalTimePicker) PlanchesterGUI.scene.lookup("#end");
+
+        LocalDateTime start = LocalDateTime.of(date.getValue(), startTime.getLocalTime());
+        LocalDateTime end = LocalDateTime.of(date.getValue(), endTime.getLocalTime());
+
+        ObservableList<Agenda.Appointment> appointments = agenda.selectedAppointments();
+        Agenda.Appointment appointment = appointments.get(0);
+
+        appointment.setSummary(name.getText());
+        appointment.setDescription(description.getText());
+        appointment.setStartLocalDateTime(start);
+        appointment.setEndLocalDateTime(end);
+
+        agenda.refresh();
+    }
+
+
+    public static void setDisplayedLocalDateTime(LocalDateTime localDateTime) {
+        staticAgenda.setDisplayedLocalDateTime(localDateTime);
+    }
+
+    private void setCalenderWeekLabel() {
+        Calendar cal = agenda.getDisplayedCalendar();
+        int week = cal.get(Calendar.WEEK_OF_YEAR);
+        calenderWeekLabel.setText("Calender Week " + String.valueOf(week));
+    }
+
+    public static void resetSideContent() {
+        staticScrollPane.setContent(null);
+        staticComboNewDuty.getSelectionModel().clearSelection();
+    }
+
+    public static void addEventDuty(EventDutyDTO event) {
         //convert Timestamp to Calendar
         Calendar starttimeCalendar = Calendar.getInstance();
         starttimeCalendar.setTimeInMillis(event.getEventDuty().getStarttime().getTime());
@@ -188,63 +245,5 @@ public class EventScheduleController {
             appointment.setAppointmentGroup(nonMusicalEvent);
         }
         staticAgenda.appointments().add(appointment);
-    }
-
-    public static void setDisplayedLocalDateTime(LocalDateTime localDateTime){
-        staticAgenda.setDisplayedLocalDateTime(localDateTime);
-    }
-
-    private void setCalenderWeekLabel() {
-        Calendar cal = agenda.getDisplayedCalendar();
-        int week = cal.get(Calendar.WEEK_OF_YEAR);
-        calenderWeekLabel.setText("Calender Week " + String.valueOf(week));
-    }
-
-    public static void resetSideContent(){
-        staticScrollPane.setContent(null);
-        staticComboNewDuty.getSelectionModel().clearSelection();
-    }
-
-    @FXML
-    private void navigateOneWeekBackClicked() {
-        LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
-        agenda.setDisplayedLocalDateTime(displayedDate.minus(7, ChronoUnit.DAYS));
-        setCalenderWeekLabel();
-    }
-
-    @FXML
-    private void navigateOneWeekForwardClicked() {
-        LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
-        agenda.setDisplayedLocalDateTime(displayedDate.plus(7, ChronoUnit.DAYS));
-        setCalenderWeekLabel();
-    }
-
-    @FXML
-    private void showActualWeekClicked() {
-        agenda.setDisplayedLocalDateTime(LocalDateTime.now());
-        setCalenderWeekLabel();
-    }
-
-    @FXML
-    private void saveEventChanges(){
-        // TODO: implement into edit controllers
-        TextField name = (TextField) PlanchesterGUI.scene.lookup("#name");
-        TextField description = (TextField) PlanchesterGUI.scene.lookup("#description");
-        DatePicker date = (DatePicker) PlanchesterGUI.scene.lookup("#date");
-        LocalTimePicker startTime = (LocalTimePicker) PlanchesterGUI.scene.lookup("#start");
-        LocalTimePicker endTime = (LocalTimePicker) PlanchesterGUI.scene.lookup("#end");
-
-        LocalDateTime start = LocalDateTime.of(date.getValue(), startTime.getLocalTime());
-        LocalDateTime end = LocalDateTime.of(date.getValue(), endTime.getLocalTime());
-
-        ObservableList<Agenda.Appointment> appointments = agenda.selectedAppointments();
-        Agenda.Appointment appointment = appointments.get(0);
-
-        appointment.setSummary(name.getText());
-        appointment.setDescription(description.getText());
-        appointment.setStartLocalDateTime(start);
-        appointment.setEndLocalDateTime(end);
-
-        agenda.refresh();
     }
 }

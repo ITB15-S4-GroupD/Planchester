@@ -10,9 +10,7 @@ import java.util.Optional;
  * Created by Ina on 09.04.2017.
  */
 public class CreateHofkapelleController {
-
-    @FXML
-    private TextField txtName;
+    @FXML private TextField txtName;
     @FXML private TextArea txtDescription;
     @FXML private DatePicker pckDate;
     @FXML private LocalTimePicker pckStartTime;
@@ -24,18 +22,10 @@ public class CreateHofkapelleController {
 
     @FXML
     public void initialize() {
-
-        /* IODO fill Works from DB into choiceWork
-                Fit fields to duty Hofkapelle (copied from opera)
-         */
-
     }
 
     @FXML
-    private void saveNewHofkapelle(){
-
-        //i: Test
-
+    private void saveNewHofkapelle() {
         String collectedData = "Event Name: " + txtName.getText() + "\n" +
                 "Description: " + txtDescription.getText() + "\n" +
                 "Date: " + pckDate.getValue() + "\n" +
@@ -47,7 +37,6 @@ public class CreateHofkapelleController {
                 "Conductor: " + txtConductor.getText() + "\n" +
                 "Points: " + txtPoints.getText() + "\n";
 
-
         Alert dialog = new Alert(Alert.AlertType.CONFIRMATION);
         dialog.setHeaderText( "Daten werden gespeichert: " );
         dialog.setContentText(collectedData);
@@ -55,7 +44,5 @@ public class CreateHofkapelleController {
         dialog.getDialogPane().setPrefSize(350, 500);
         dialog.showAndWait();
         final Optional<ButtonType> result = dialog.showAndWait();
-
     }
-
 }

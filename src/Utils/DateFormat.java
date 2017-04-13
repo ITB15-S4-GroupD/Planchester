@@ -8,8 +8,8 @@ import java.util.Calendar;
  */
 public class DateFormat {
     public static Calendar convertTimestampToCalendar(Timestamp timestamp) {
-        Calendar starttimeCalendar = Calendar.getInstance();
-        starttimeCalendar.setTimeInMillis(timestamp.getTime());
-        return starttimeCalendar;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp.getTime());
+        return calendar;
     }
 }
