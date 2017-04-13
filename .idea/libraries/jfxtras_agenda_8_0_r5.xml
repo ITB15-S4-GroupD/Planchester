@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="jfxtras-agenda-8.0-r5">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/jfxtras-agenda-8.0-r5.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

@@ -27,7 +27,7 @@ public class Controller {
     }
 
     @FXML
-    private void saveEventChanges(){
+    private void saveEventChanges() {
         Agenda agenda = (Agenda) PlanchesterGUI.scene.lookup("#agenda");
         TextField name = (TextField) PlanchesterGUI.scene.lookup("#name");
         TextField description = (TextField) PlanchesterGUI.scene.lookup("#description");

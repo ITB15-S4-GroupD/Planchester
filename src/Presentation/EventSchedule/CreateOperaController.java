@@ -2,8 +2,8 @@ package Presentation.EventSchedule;
 
 import Application.EventSchedule;
 import Domain.Model.EventDutyEntity;
-import Domain.PresentationModels.Enum.EventStatus;
-import Domain.PresentationModels.Enum.EventType;
+import Domain.Enum.EventStatus;
+import Domain.Enum.EventType;
 import Domain.PresentationModels.EventDutyDTO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -20,7 +20,6 @@ import java.time.LocalTime;
  * Created by Ina on 08.04.2017.
  */
 public class CreateOperaController {
-
     @FXML private TextField name;
     @FXML private TextArea description;
     @FXML private DatePicker date;
@@ -31,10 +30,8 @@ public class CreateOperaController {
     @FXML private TextField conductor;
     @FXML private TextField points;
 
-
     @FXML
     public void initialize() {
-
         points.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -43,29 +40,28 @@ public class CreateOperaController {
                 }
             }
         });
-
         //TODO all: fill Works from DB into musicalWork
     }
 
     @FXML
-    private void save(){
+    private void save() {
         String warning = "";
         boolean validate = true;
 
-        if(name.getText().isEmpty()){
+        if(name.getText().isEmpty()) {
             validate = false;
             warning = warning + "Name missing\n";
         }
 
         /*
-        if(description.getText().isEmpty()){
+        if(description.getText().isEmpty()) {
             validate = false;
             warning = warning + "Description missing\n";
         }
         */
 
         LocalDate date = this.date.getValue();
-        if(date == null || !date.isAfter(LocalDate.now())){
+        if(date == null || !date.isAfter(LocalDate.now())) {
             validate = false;
             warning = warning + "Date wrong\n";
         }
@@ -77,22 +73,22 @@ public class CreateOperaController {
             warning = warning + "Endtime ist not after starttime\n";
         }
 
-        if(eventLocation.getText().isEmpty()){
+        if(eventLocation.getText().isEmpty()) {
             validate = false;
             warning = warning + "Location missing\n";
         }
 
-        if(conductor.getText().isEmpty()){
+        if(conductor.getText().isEmpty()) {
             validate = false;
             warning = warning + "Conductor missing\n";
         }
 
-        if(points.getText().isEmpty()){
+        if(points.getText().isEmpty()) {
             validate = false;
             warning = warning + "Points missing\n";
         }
 
-        if(validate){
+        if(validate) {
             // create object
             EventDutyEntity eventDutyEntity = new EventDutyEntity();
 
@@ -132,7 +128,8 @@ public class CreateOperaController {
             information.setResizable(false);
             information.getDialogPane().setPrefSize(350, 500);
             information.showAndWait();
-        }else{
+
+        }else {
             Alert problem = new Alert(Alert.AlertType.ERROR);
             problem.setHeaderText("Error");
             problem.setContentText(warning);
@@ -143,7 +140,7 @@ public class CreateOperaController {
     }
 
     @FXML
-    public boolean discard(){
+    public boolean discard() {
         // Ask if changes should really be discarded, if something has been entered
         if(!name.getText().isEmpty() || !description.getText().isEmpty() || date.getValue() != null
                 || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty() || !points.getText().isEmpty())

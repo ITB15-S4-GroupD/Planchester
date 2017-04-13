@@ -30,7 +30,7 @@ public class EventDuty {
         Query query = session.createQuery("FROM EventDutyEntity");
         List list = query.list();
 
-        for(Object o : list){
+        for(Object o : list) {
             EventDutyEntity eventDuty = (EventDutyEntity) o;
             eventDutyList.add(new EventDutyDTO(eventDuty));
         }
@@ -45,7 +45,7 @@ public class EventDuty {
         return null;
     }
 
-    public static void createNewEventDuty(EventDutyDTO eventDutyDTO){
+    public static void createNewEventDuty(EventDutyDTO eventDutyDTO) {
         Configuration cfg = new Configuration();
         cfg.configure("hibernate.cfg.xml");
         SessionFactory factory = cfg.buildSessionFactory();
