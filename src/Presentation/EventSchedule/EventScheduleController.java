@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
 import jfxtras.scene.control.LocalTimePicker;
 import jfxtras.scene.control.agenda.Agenda;
 
@@ -73,34 +74,42 @@ public class EventScheduleController {
         agenda.localeProperty().set(Locale.GERMAN);
         agenda.setDisplayedLocalDateTime(LocalDateTime.now()); //show current week in event scheduler
 
+        // disable edit menu
+        agenda.setEditAppointmentCallback(new Callback<Agenda.Appointment, Void>() {
+            @Override
+            public Void call(Agenda.Appointment param) {
+                return null;
+            }
+        });
+
         //set CalenderWeek
         setCalenderWeekLabel();
 
         agenda.onMouseClickedProperty().set(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(MouseEvent arg0) {
-                // TODO timo: check what type of event was selected an load correct fxml file
+            public void handle(MouseEvent arg0){
+                // TODO all: check what type of event was selected an load correct fxml file
                 try {
-                    scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditOpera.fxml")));
-
                     ObservableList<Agenda.Appointment> appointments = agenda.selectedAppointments();
-                    Agenda.Appointment appointment = appointments.get(0);
+                    if(!appointments.isEmpty()) {
+                        Agenda.Appointment appointment = appointments.get(0);
+                        scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditOpera.fxml")));
 
-                    TextField textField = (TextField) scrollPane.lookup("#name");
-                    textField.setText(appointment.getSummary());
+                        TextField textField = (TextField) scrollPane.lookup("#name");
+                        textField.setText(appointment.getSummary());
 
-                    TextField textField2 = (TextField) scrollPane.lookup("#description");
-                    textField2.setText(appointment.getDescription());
+                        TextField textField2 = (TextField) scrollPane.lookup("#description");
+                        textField2.setText(appointment.getDescription());
 
-                    DatePicker datePicker = (DatePicker) scrollPane.lookup("#date");
-                    datePicker.setValue(appointment.getStartLocalDateTime().toLocalDate());
+                        DatePicker datePicker = (DatePicker) scrollPane.lookup("#date");
+                        datePicker.setValue(appointment.getStartLocalDateTime().toLocalDate());
 
-                    LocalTimePicker startTime = (LocalTimePicker) scrollPane.lookup("#start");
-                    startTime.setLocalTime(appointment.getStartLocalDateTime().toLocalTime());
+                        LocalTimePicker startTime = (LocalTimePicker) scrollPane.lookup("#start");
+                        startTime.setLocalTime(appointment.getStartLocalDateTime().toLocalTime());
 
-                    LocalTimePicker endTime = (LocalTimePicker) scrollPane.lookup("#end");
-                    endTime.setLocalTime(appointment.getEndLocalDateTime().toLocalTime());
-
+                        LocalTimePicker endTime = (LocalTimePicker) scrollPane.lookup("#end");
+                        endTime.setLocalTime(appointment.getEndLocalDateTime().toLocalTime());
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -208,7 +217,6 @@ public class EventScheduleController {
     }
 
     public static void addEventDuty(EventDutyDTO event) {
-
         Agenda.Appointment appointment = new Agenda.AppointmentImpl();
         appointment.setSummary(event.getEventDuty().getName());
         appointment.setDescription(event.getEventDuty().getDescription());
