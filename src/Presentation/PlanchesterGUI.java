@@ -14,9 +14,6 @@ public class PlanchesterGUI {
     public void start(Stage primaryStage) throws Exception {
 
         primaryStage.setTitle("Planchester");
-
-
-
         TabPane tabPane = new TabPane();
         //Create Tabs
         Tab dutyRoster = new Tab();
