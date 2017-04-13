@@ -2,8 +2,8 @@ package Presentation.EventSchedule;
 
 import Application.EventSchedule;
 import Domain.Model.EventDutyEntity;
-import Domain.PresentationModels.Enum.EventStatus;
-import Domain.PresentationModels.Enum.EventType;
+import Domain.Enum.EventStatus;
+import Domain.Enum.EventType;
 import Domain.PresentationModels.EventDutyDTO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

@@ -1,4 +1,4 @@
-package Domain.PresentationModels.Enum;
+package Domain.Enum;
 
 /**
  * Created by julia on 13.04.2017.
