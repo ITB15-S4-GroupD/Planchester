@@ -4,6 +4,7 @@ import Application.EventSchedule;
 import Domain.Enum.EventType;
 import Domain.PresentationModels.EventDutyDTO;
 import Presentation.PlanchesterGUI;
+import Utils.DateFormat;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -207,18 +208,13 @@ public class EventScheduleController {
     }
 
     public static void addEventDuty(EventDutyDTO event) {
-        //convert Timestamp to Calendar
-        Calendar starttimeCalendar = Calendar.getInstance();
-        starttimeCalendar.setTimeInMillis(event.getEventDuty().getStarttime().getTime());
-        Calendar endtimeCalendar = Calendar.getInstance();
-        endtimeCalendar.setTimeInMillis(event.getEventDuty().getEndtime().getTime());
 
         Agenda.Appointment appointment = new Agenda.AppointmentImpl();
         appointment.setSummary(event.getEventDuty().getName());
         appointment.setDescription(event.getEventDuty().getDescription());
         appointment.setLocation(event.getEventDuty().getLocation());
-        appointment.setStartTime(starttimeCalendar);
-        appointment.setEndTime(endtimeCalendar);
+        appointment.setStartTime(DateFormat.convertTimestampToCalendar(event.getEventDuty().getStarttime()));
+        appointment.setEndTime(DateFormat.convertTimestampToCalendar(event.getEventDuty().getEndtime()));
 
         if(EventType.Opera.toString().equals(event.getEventDuty().getEventType())) {
             appointment.setAppointmentGroup(opera);
