@@ -1,13 +1,9 @@
-import Domain.Model.InstrumentEntity;
 import Presentation.PlanchesterGUI;
 import javafx.application.Application;
-import javafx.scene.image.Image;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.stage.Stage;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
+import javafx.stage.WindowEvent;
 
 public class Planchester extends Application {
 
@@ -16,6 +12,13 @@ public class Planchester extends Application {
         PlanchesterGUI gui = new PlanchesterGUI();
         gui.start(primaryStage);
 
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent t) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
     }
 
     public static void main(String[] args) {

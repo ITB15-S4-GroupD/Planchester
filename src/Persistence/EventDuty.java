@@ -1,16 +1,16 @@
 package Persistence;
 
-import Domain.Model.EventDutyEntity;
-import Domain.Model.InstrumentEntity;
+import Domain.Entities.EventDutyEntity;
 import Domain.PresentationModels.EventDutyDTO;
+import Utils.DateHelper;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
+import javax.activation.DataHandler;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -19,40 +19,39 @@ import java.util.List;
 public class EventDuty {
 
     public static List<EventDutyDTO> getAllEventDuty() {
-        List<EventDutyDTO> eventDutyList = new ArrayList<>();
-
-        Configuration cfg = new Configuration();
-        cfg.configure("hibernate.cfg.xml");
-        SessionFactory factory = cfg.buildSessionFactory();
-        Session session = factory.openSession();
-        Transaction transaction = session.beginTransaction();
-
+        Session session = DatabaseHelper.beginSession();
         Query query = session.createQuery("FROM EventDutyEntity");
         List list = query.list();
 
-        for(Object o : list){
+        List<EventDutyDTO> eventDutyList = new ArrayList<>();
+        for(Object o : list) {
             EventDutyEntity eventDuty = (EventDutyEntity) o;
             eventDutyList.add(new EventDutyDTO(eventDuty));
         }
-
-        transaction.commit();
-        session.close();
+        DatabaseHelper.closeSession(session);
         return eventDutyList;
     }
 
-    public static List<EventDutyDTO> getEventDutyByWeek(Date start, Date end) {
-       //TODO Julia
-        return null;
+    public static List<EventDutyDTO> getEventDutyInRange(Calendar start, Calendar end) {
+        Session session = DatabaseHelper.beginSession();
+        List list = session.createQuery("FROM EventDutyEntity WHERE starttime >= '"
+                + DateHelper.convertCalendarToTimestamp(start)
+                + "' AND endtime <= '"
+                + DateHelper.convertCalendarToTimestamp(end)
+                + "'").list();
+
+        List<EventDutyDTO> eventDutyList = new ArrayList<>();
+        for(Object o : list) {
+            EventDutyEntity eventDuty = (EventDutyEntity) o;
+            eventDutyList.add(new EventDutyDTO(eventDuty));
+        }
+        DatabaseHelper.closeSession(session);
+        return eventDutyList;
     }
 
-    public static void createNewEventDuty(EventDutyDTO eventDutyDTO){
-        Configuration cfg = new Configuration();
-        cfg.configure("hibernate.cfg.xml");
-        SessionFactory factory = cfg.buildSessionFactory();
-        Session session = factory.openSession();
-        session.beginTransaction();
+    public static void createNewEventDuty(EventDutyDTO eventDutyDTO) {
+        Session session = DatabaseHelper.beginSession();
         session.save(eventDutyDTO.getEventDuty());
-        session.getTransaction().commit();
-        session.close();
+        DatabaseHelper.closeSession(session);
     }
 }
