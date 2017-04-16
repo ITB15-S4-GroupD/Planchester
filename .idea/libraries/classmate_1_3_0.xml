@@ -1,0 +1,22 @@
+<component name="libraryTable">
+  <library name="classmate-1.3.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Dropbox/Group D/Projekt/External Libraries/classmate-1.3.0.jar!/" />
+      <root url="jar://$USER_HOME$/Dropbox/Group D/Projekt/External Libraries/dom4j-1.6.1.jar!/" />
+      <root url="jar://$USER_HOME$/Dropbox/Group D/Projekt/External Libraries/hibernate-commons-annotations-5.0.1.Final.jar!/" />
+      <root url="jar://$USER_HOME$/Dropbox/Group D/Projekt/External Libraries/hibernate-core-5.2.9.Final.jar!/" />
+      <root url="jar://$USER_HOME$/Dropbox/Group D/Projekt/External Libraries/hibernate-jpa-2.1-api-1.0.0.Final.jar!/" />
+      <root url="jar://$USER_HOME$/Dropbox/Group D/Projekt/External Libraries/jandex-2.0.3.Final.jar!/" />
+      <root url="jar://$USER_HOME$/Dropbox/Group D/Projekt/External Libraries/javassist-3.20.0-GA.jar!/" />
+      <root url="jar://$USER_HOME$/Dropbox/Group D/Projekt/External Libraries/jboss-logging-3.3.0.Final.jar!/" />
+      <root url="jar://$USER_HOME$/Dropbox/Group D/Projekt/External Libraries/jboss-transaction-api_1.2_spec-1.0.1.Final.jar!/" />
+      <root url="jar://$USER_HOME$/Dropbox/Group D/Projekt/External Libraries/jfoenix-0.0.0-SNAPSHOT-retrolambda.jar!/" />
+      <root url="jar://$USER_HOME$/Dropbox/Group D/Projekt/External Libraries/jfxtras-agenda-8.0-r5.jar!/" />
+      <root url="jar://$USER_HOME$/Dropbox/Group D/Projekt/External Libraries/jfxtras-common-8.0-r5.jar!/" />
+      <root url="jar://$USER_HOME$/Dropbox/Group D/Projekt/External Libraries/jfxtras-controls-8.0-r5.jar!/" />
+      <root url="jar://$USER_HOME$/Dropbox/Group D/Projekt/External Libraries/mysql-connector-java-5.1.40-bin.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
