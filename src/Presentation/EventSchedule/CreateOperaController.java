@@ -141,15 +141,12 @@ public class CreateOperaController {
 
     @FXML
     public boolean discard() {
-        // Ask if changes should really be discarded, if something has been entered
         if(!name.getText().isEmpty() || !description.getText().isEmpty() || date.getValue() != null
-                || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty() || !points.getText().isEmpty())
-        {
-            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION, "Discard changes?", ButtonType.YES, ButtonType.NO);
+                || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty() || !points.getText().isEmpty()) {
+            Alert confirmationAlterMessage = new Alert(Alert.AlertType.CONFIRMATION, "Do you really want to discard your changes?", ButtonType.YES, ButtonType.NO);
+            confirmationAlterMessage.showAndWait();
 
-            confirmation.showAndWait();
-
-            if (confirmation.getResult() == ButtonType.NO) {
+            if (confirmationAlterMessage.getResult() == ButtonType.NO) {
                 return false;
             }
         }

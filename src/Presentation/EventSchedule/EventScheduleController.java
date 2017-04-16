@@ -19,6 +19,7 @@ import jfxtras.scene.control.LocalTimePicker;
 import jfxtras.scene.control.agenda.Agenda;
 
 import java.io.IOException;
+import java.rmi.UnexpectedException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -42,15 +43,25 @@ public class EventScheduleController {
     private static Agenda.AppointmentGroup rehearsal;
     private static Agenda.AppointmentGroup nonMusicalEvent;
 
+    private static Map<String, String> eventToSelectFromCombobox = new HashMap<>();
+    static {
+        eventToSelectFromCombobox.put(EventType.Opera.toString(),"CreateOpera.fxml");
+        eventToSelectFromCombobox.put(EventType.Concert.toString(),"CreateConcert.fxml");
+        eventToSelectFromCombobox.put(EventType.Tour.toString(),"CreateTour.fxml");
+        eventToSelectFromCombobox.put(EventType.Hofkapelle.toString(),"CreateHofkapelle.fxml");
+        eventToSelectFromCombobox.put(EventType.Rehearsal.toString(),"CreateRehearsal.fxml");
+        eventToSelectFromCombobox.put(EventType.NonMusicalEvent.toString(),"CreateNonMusical.fxml");
+    }
+
     @FXML
     public void initialize() {
         staticAgenda = agenda;
         staticScrollPane = scrollPane;
         staticComboNewDuty = comboNewEvent;
 
-        initializeAppointmentGroupsForEventtypes();
         initialzeCalendarSettings();
         initialzeCalendarView();
+        initializeAppointmentGroupsForEventtypes();
 
         //EventHandler: show clicked event details on gui
         agenda.onMouseClickedProperty().set(new EventHandler<MouseEvent>() {
@@ -64,7 +75,11 @@ public class EventScheduleController {
         comboNewEvent.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> selected, String oldVal, String newVal) {
-                showEmptyEventDetailView(newVal);
+                try {
+                    showEmptyEventDetailView(newVal);
+                } catch (UnexpectedException e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
+                }
             }
         });
     }
@@ -231,34 +246,16 @@ public class EventScheduleController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         System.out.println("Property selection changed");
     }
 
-    private void showEmptyEventDetailView(String newVal) {
-        Map<String, String> eventToSelectFromCombobox = new HashMap<>();
-        eventToSelectFromCombobox.put("Opera","CreateOpera.fxml");
-        eventToSelectFromCombobox.put("Concert","CreateConcert.fxml");
-        eventToSelectFromCombobox.put("Tour","CreateTour.fxml");
-        eventToSelectFromCombobox.put("Hofkapelle","CreateHofkapelle.fxml");
-        eventToSelectFromCombobox.put("Rehearsal","CreateRehearsal.fxml");
-        eventToSelectFromCombobox.put("Non-musical event","CreateNonMusical.fxml");
+    private void showEmptyEventDetailView(String selectedComboboxParameter) throws UnexpectedException {
+        String formToLoad = eventToSelectFromCombobox.get(selectedComboboxParameter);
 
-        String choice = newVal;
-        String formToLoad = eventToSelectFromCombobox.get(choice);
-        if( choice.equals("choose duty")) {
-            return;
-        }
         try {
             scrollPane.setContent(FXMLLoader.load(getClass().getResource(formToLoad)));
         } catch (Exception e) {
-            Alert dialog = new Alert(Alert.AlertType.INFORMATION);
-            dialog.setHeaderText( "Your choice: " + choice );
-            dialog.setContentText("Trying to open file " + formToLoad + ":\n" + "Form unsupported yet");
-            dialog.setResizable(true);
-            dialog.getDialogPane().setPrefSize(350, 200);
-            dialog.showAndWait();
-            e.printStackTrace();
+            throw new UnexpectedException("No controll found for selected type.");
         }
     }
 
