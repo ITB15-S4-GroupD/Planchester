@@ -106,9 +106,6 @@
      */
     -fx-hover-base: ladder(
         -fx-base,
-        derive(-fx-base,20%) 20%,
-        derive(-fx-base,30%) 35%,
-        derive(-fx-base,40%) 50%
      );
 
     /* A little darker than -fx-base and used as the -fx-color for the
@@ -3160,8 +3157,7 @@
 .web-view .form-select-button .arrow {
     -fx-background-insets: 1 0 -1 0, 0;
     -fx-background-color: -fx-mark-highlight-color, -fx-mark-color;
-    -fx-padding: 0.166667em 0.333333em 0.166667em 0.333333em; /* 2 4 2 4 */
-    -fx-shape: "M 0 0 h 7 l -3.5 4 z";
+
 }
 
 .web-view .form-select-button {
@@ -4242,32 +4238,7 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     -fx-font-size: 0.833em; /* 10px */
 }
 
-.dialog-pane > .button-bar > .container > .details-button.more {
-    -fx-graphic: url("dialog-more-details.png");
-}
-
-.dialog-pane > .button-bar > .container > .details-button.less {
-    -fx-graphic: url("dialog-fewer-details.png");
-}
-
 .dialog-pane > .button-bar > .container > .details-button:hover {
     -fx-underline: true;
 }
 
-.alert.confirmation.dialog-pane,
-.text-input-dialog.dialog-pane,
-.choice-dialog.dialog-pane {
-    -fx-graphic: url("dialog-confirm.png");
-}
-
-.alert.information.dialog-pane {
-    -fx-graphic: url("dialog-information.png");
-}
-
-.alert.error.dialog-pane {
-    -fx-graphic: url("dialog-error.png");
-}
-
-.alert.warning.dialog-pane {
-    -fx-graphic: url("dialog-warning.png");
-}
