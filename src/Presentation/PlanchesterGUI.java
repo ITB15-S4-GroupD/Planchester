@@ -7,11 +7,17 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 
+import java.io.File;
+import java.net.URL;
+
 public class PlanchesterGUI {
 
     public static Scene scene;
 
     public void start(Stage primaryStage) throws Exception {
+
+        Image image = new Image(new File("../Images/logoplanchester.png").toURI().toString());
+        primaryStage.getIcons().add(image);
 
         primaryStage.setTitle("Planchester");
         TabPane tabPane = new TabPane();
@@ -49,6 +55,15 @@ public class PlanchesterGUI {
         // set and show scene
         Scene scene = new Scene(tabPane, 1200, 900, Color.WHITE);
         primaryStage.setMaximized(true);
+
+        URL url = this.getClass().getResource("CSS\\stylesheet.css");
+        if (url == null) {
+            System.out.println("CSS Resource not found. Aborting.");
+        }
+        String css = url.toExternalForm();
+        scene.getStylesheets().add(css);
+
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }

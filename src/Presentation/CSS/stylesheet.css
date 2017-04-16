@@ -3141,16 +3141,19 @@
 }
 
 .combo-box-base:hover > .arrow-button,
+/*
 .date-picker:hover > .arrow-button {
     -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color;
     -fx-background-insets: 0, 1, 2;
     -fx-background-radius: 0 5 5 0, 0 4 4 0, 0 3 3 0;
 }
-
+*/
 .combo-box-base:showing > .arrow-button,
+/*
 .date-picker:showing > .arrow-button {
     -fx-color: -fx-pressed-base;
-} 
+}
+*/
 
 /* ------- ARROW* ------- */
 .combo-box-base > .arrow-button > .arrow,
@@ -3178,6 +3181,7 @@ all inherit from Menu Control's popup-menu. --- */
 Only the properties with values that are different from the TextBox are specified here. ---*/
 
 .combo-box-base:editable > .text-field,
+
 .date-picker > .text-field {
     -fx-padding: 0.166667em 0.416667em 0.25em 0.416667em; /* 2 5 3 5 */
     /*-fx-padding: 0px;*/

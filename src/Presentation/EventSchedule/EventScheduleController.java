@@ -37,19 +37,23 @@ import java.util.*;
  */
 public class EventScheduleController {
     //i:List for ChoiceBox to choice new duty
-    ObservableList<String> dutyTypes = FXCollections.observableArrayList("Concert",
-            "Opera","Tour","Hofkapelle","Rehearsal","Non-musical event");
+    private ObservableList<String> eventTypes = FXCollections.observableArrayList("Concert",
+            "Opera", "Tour", "Hofkapelle", "Rehearsal", "Non-musical event");
 
     //i:Mapping choiced duty for loading form/file
-    Map<String, String> dutyToForm = new HashMap<>();
+    Map<String, String> eventToForm = new HashMap<>();
 
     private static Agenda staticAgenda;
-    @FXML private Agenda agenda;
+    @FXML
+    private Agenda agenda;
     private static ScrollPane staticScrollPane;
-    @FXML private ScrollPane scrollPane;
-    private static ComboBox staticComboNewDuty;
-    @FXML private ComboBox comboNewDuty;
-    @FXML private Label calenderWeekLabel;
+    @FXML
+    private ScrollPane scrollPane;
+    private static ComboBox staticComboNewEvent;
+    @FXML
+    private ComboBox comboNewEvent;
+    @FXML
+    private Label calenderWeekLabel;
     private static Agenda.AppointmentGroup opera;
     private static Agenda.AppointmentGroup concert;
     private static Agenda.AppointmentGroup hofkapelle;
@@ -61,7 +65,7 @@ public class EventScheduleController {
     public void initialize() {
         staticAgenda = agenda;
         staticScrollPane = scrollPane;
-        staticComboNewDuty = comboNewDuty;
+        staticComboNewEvent = comboNewEvent;
 
         opera = new Agenda.AppointmentGroupImpl();
         opera.setStyleClass("group1");
@@ -77,7 +81,7 @@ public class EventScheduleController {
         nonMusicalEvent.setStyleClass("group6");
 
         List<EventDutyDTO> events = EventSchedule.getAllEventDuty();
-        for(EventDutyDTO event : events) {
+        for (EventDutyDTO event : events) {
             addEventDuty(event);
         }
         // agenda settings
@@ -86,12 +90,11 @@ public class EventScheduleController {
         agenda.localeProperty().set(Locale.GERMAN);
         agenda.setDisplayedLocalDateTime(LocalDateTime.now()); //show current week in event scheduler
 
-        //set CalenderWeek
         setCalenderWeekLabel();
 
         agenda.onMouseClickedProperty().set(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(MouseEvent arg0){
+            public void handle(MouseEvent arg0) {
                 // TODO timo: check what type of event was selected an load correct fxml file
                 try {
                     scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditOpera.fxml")));
@@ -122,26 +125,29 @@ public class EventScheduleController {
             }
         });
 
-        //i:ChoiceBox choiceNewEventDuty initialisieren
-        comboNewDuty.setItems(dutyTypes);
-        comboNewDuty.setPromptText("Choose Eventtype");
+        initializeComboboxNewEvent();
+    }
 
-        //i:Map initialisieren
-        dutyToForm.put("Opera","CreateOpera.fxml");
-        dutyToForm.put("Concert","CreateConcert.fxml");
-        dutyToForm.put("Tour","CreateTour.fxml");
-        dutyToForm.put("Hofkapelle","CreateHofkapelle.fxml");
-        dutyToForm.put("Rehearsal","CreateRehearsal.fxml");
-        dutyToForm.put("Non-musical event","CreateNonMusical.fxml");
+    private void initializeComboboxNewEvent() {
 
-        comboNewDuty.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+        comboNewEvent.setItems(eventTypes);
+        comboNewEvent.setPromptText("Add new Event");
+
+        eventToForm.put("Opera", "CreateOpera.fxml");
+        eventToForm.put("Concert", "CreateConcert.fxml");
+        eventToForm.put("Tour", "CreateTour.fxml");
+        eventToForm.put("Hofkapelle", "CreateHofkapelle.fxml");
+        eventToForm.put("Rehearsal", "CreateRehearsal.fxml");
+        eventToForm.put("Non-musical event", "CreateNonMusical.fxml");
+
+        comboNewEvent.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> selected, String oldVal, String newVal) {
 
                 String choice = newVal;
-                String formToLoad = dutyToForm.get(choice);
+                String formToLoad = eventToForm.get(choice);
 
-                if( choice.equals("choose duty")) {
+                if (choice.equals("choose duty")) {
                     return;
                 }
 
@@ -149,7 +155,7 @@ public class EventScheduleController {
                     scrollPane.setContent(FXMLLoader.load(getClass().getResource(formToLoad)));
                 } catch (Exception e) {
                     Alert dialog = new Alert(Alert.AlertType.INFORMATION);
-                    dialog.setHeaderText( "Your choice: " + choice );
+                    dialog.setHeaderText("Your choice: " + choice);
                     dialog.setContentText("Trying to open file " + formToLoad + ":\n" + "Form unsupported yet");
                     dialog.setResizable(true);
                     dialog.getDialogPane().setPrefSize(350, 200);
@@ -160,7 +166,7 @@ public class EventScheduleController {
         });
     }
 
-    public static void addEventDuty(EventDutyDTO event){
+    public static void addEventDuty(EventDutyDTO event) {
         //convert Timestamp to Calendar
         Calendar starttimeCalendar = Calendar.getInstance();
         starttimeCalendar.setTimeInMillis(event.getEventDuty().getStarttime().getTime());
@@ -174,23 +180,23 @@ public class EventScheduleController {
         appointment.setStartTime(starttimeCalendar);
         appointment.setEndTime(endtimeCalendar);
 
-        if(EventType.Opera.toString().equals(event.getEventDuty().getEventType())) {
+        if (EventType.Opera.toString().equals(event.getEventDuty().getEventType())) {
             appointment.setAppointmentGroup(opera);
-        } else if(EventType.Concert.toString().equals(event.getEventDuty().getEventType())) {
+        } else if (EventType.Concert.toString().equals(event.getEventDuty().getEventType())) {
             appointment.setAppointmentGroup(concert);
-        } else if(EventType.Tour.toString().equals(event.getEventDuty().getEventType())) {
+        } else if (EventType.Tour.toString().equals(event.getEventDuty().getEventType())) {
             appointment.setAppointmentGroup(tour);
-        } else if(EventType.Rehearsal.toString().equals(event.getEventDuty().getEventType())) {
+        } else if (EventType.Rehearsal.toString().equals(event.getEventDuty().getEventType())) {
             appointment.setAppointmentGroup(rehearsal);
-        } else if(EventType.Hofkapelle.toString().equals(event.getEventDuty().getEventType())) {
+        } else if (EventType.Hofkapelle.toString().equals(event.getEventDuty().getEventType())) {
             appointment.setAppointmentGroup(hofkapelle);
-        } else if(EventType.NonMusicalEvent.toString().equals(event.getEventDuty().getEventType())) {
+        } else if (EventType.NonMusicalEvent.toString().equals(event.getEventDuty().getEventType())) {
             appointment.setAppointmentGroup(nonMusicalEvent);
         }
         staticAgenda.appointments().add(appointment);
     }
 
-    public static void setDisplayedLocalDateTime(LocalDateTime localDateTime){
+    public static void setDisplayedLocalDateTime(LocalDateTime localDateTime) {
         staticAgenda.setDisplayedLocalDateTime(localDateTime);
     }
 
@@ -200,9 +206,9 @@ public class EventScheduleController {
         calenderWeekLabel.setText("Calender Week " + String.valueOf(week));
     }
 
-    public static void resetSideContent(){
+    public static void resetSideContent() {
         staticScrollPane.setContent(null);
-        staticComboNewDuty.getSelectionModel().clearSelection();
+        staticComboNewEvent.getSelectionModel().clearSelection();
     }
 
     @FXML
@@ -226,7 +232,7 @@ public class EventScheduleController {
     }
 
     @FXML
-    private void saveEventChanges(){
+    private void saveEventChanges() {
         // TODO: implement into edit controllers
         TextField name = (TextField) PlanchesterGUI.scene.lookup("#name");
         TextField description = (TextField) PlanchesterGUI.scene.lookup("#description");

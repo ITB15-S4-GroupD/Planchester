@@ -3,8 +3,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -51,40 +49,35 @@
                <children>
                   <GridPane id="buttonCSS" prefHeight="30.0" prefWidth="405.0" stylesheets="@../CSS/button.css">
                     <columnConstraints>
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="88.0" minWidth="10.0" prefWidth="28.0" />
-                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="203.0" minWidth="10.0" prefWidth="202.0" />
-                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="102.0" minWidth="10.0" prefWidth="18.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="88.0" minWidth="10.0" prefWidth="48.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="203.0" minWidth="10.0" prefWidth="164.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="102.0" minWidth="10.0" prefWidth="51.0" />
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="170.0" minWidth="10.0" prefWidth="170.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                              <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#navigateOneWeekForwardClicked" prefHeight="25.0" prefWidth="25.0" styleClass="glass-grey" stylesheets="@../CSS/buttons.css" text="&gt;" textOverrun="CENTER_WORD_ELLIPSIS" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                              <Button mnemonicParsing="false" onMouseClicked="#navigateOneWeekBackClicked" prefHeight="25.0" prefWidth="25.0" styleClass="glass-grey" stylesheets="@../CSS/buttons.css" text="&lt;" textOverrun="CENTER_ELLIPSIS" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                              <Button alignment="CENTER" contentDisplay="CENTER" ellipsisString="" mnemonicParsing="false" onMouseClicked="#navigateOneWeekForwardClicked" prefHeight="25.0" prefWidth="30.0" text="&gt;" textOverrun="CENTER_WORD_ELLIPSIS" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                              <Button ellipsisString="" mnemonicParsing="false" onMouseClicked="#navigateOneWeekBackClicked" prefHeight="25.0" prefWidth="30.0" text="&lt;" textOverrun="CENTER_ELLIPSIS" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                         <Label fx:id="calenderWeekLabel" text="Label" GridPane.columnIndex="1">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Button fx:id="btnOpenNewDuty" mnemonicParsing="false" onMouseClicked="#showActualWeekClicked" prefHeight="27.0" prefWidth="146.0" styleClass="glass-grey" stylesheets="@../CSS/buttons.css" text="Current Week" GridPane.columnIndex="3" />
+                        <Button fx:id="btnOpenNewDuty" mnemonicParsing="false" onMouseClicked="#showActualWeekClicked" prefHeight="27.0" prefWidth="146.0" text="Current Week" GridPane.columnIndex="3" />
                      </children>
                   </GridPane>
                   <GridPane GridPane.columnIndex="2">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="28.0" minWidth="2.0" prefWidth="16.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="65.0" minWidth="10.0" prefWidth="51.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <MenuButton mnemonicParsing="false" text="MenuButton" GridPane.columnIndex="1">
-                          <items>
-                            <MenuItem mnemonicParsing="false" text="Action 1" />
-                            <MenuItem mnemonicParsing="false" text="Action 2" />
-                          </items>
-                        </MenuButton>
+                        <ComboBox fx:id="comboNewEvent" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="120.0" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
                </children>
@@ -97,14 +90,6 @@
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
-               <children>
-                  <Label text="Add new Duty:  " textAlignment="CENTER">
-                     <font>
-                        <Font name="Calibri" size="18.0" />
-                     </font>
-                  </Label>
-                  <ComboBox fx:id="comboNewDuty" prefHeight="27.0" prefWidth="177.0" GridPane.columnIndex="1" />
-               </children>
             </GridPane>
             <Label contentDisplay="CENTER" text="Event Schedule  " textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1">
                <font>
