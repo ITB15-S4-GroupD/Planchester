@@ -16,6 +16,9 @@ public class Planchester extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        PlanchesterGUI gui = new PlanchesterGUI();
+        gui.start(primaryStage);
+
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
@@ -23,9 +26,6 @@ public class Planchester extends Application {
                 System.exit(0);
             }
         });
-        PlanchesterGUI gui = new PlanchesterGUI();
-        gui.start(primaryStage);
-
     }
 
     public static void main(String[] args) {
