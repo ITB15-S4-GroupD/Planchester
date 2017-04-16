@@ -9,16 +9,31 @@ import javafx.scene.image.Image;
 
 import java.io.File;
 import java.net.URL;
+import java.rmi.UnexpectedException;
 
 public class PlanchesterGUI {
-
     public static Scene scene;
 
     public void start(Stage primaryStage) throws Exception {
-        Image image = new Image(new File("../Images/logoplanchester.png").toURI().toString());
-        primaryStage.getIcons().add(image);
+        TabPane tabPane = createTabs();
+
         primaryStage.setTitle("Planchester");
-      
+        primaryStage.setMaximized(true);
+
+        // set and show scene
+        scene = new Scene(tabPane, 1200, 900, Color.WHITE);
+        URL url = this.getClass().getResource("CSS/stylesheet.css");
+        if (url == null) {
+            throw new UnexpectedException("CSS Resource not found. Aborting.");
+        }
+        String css = url.toExternalForm();
+        scene.getStylesheets().add(css);
+        primaryStage.setScene(scene);
+        primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
+        primaryStage.show();
+    }
+
+    private TabPane createTabs() throws java.io.IOException {
         TabPane tabPane = new TabPane();
         Tab dutyRoster = new Tab();
         dutyRoster.setText("Duty Roster");
@@ -49,20 +64,6 @@ public class PlanchesterGUI {
 
         //Tabs not closeable
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-
-        // set and show scene
-        Scene scene = new Scene(tabPane, 1200, 900, Color.WHITE);
-        primaryStage.setMaximized(true);
-
-        URL url = this.getClass().getResource("CSS\\stylesheet.css");
-        if (url == null) {
-            System.out.println("CSS Resource not found. Aborting.");
-        }
-        String css = url.toExternalForm();
-        scene.getStylesheets().add(css);
-
-
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        return tabPane;
     }
 }
