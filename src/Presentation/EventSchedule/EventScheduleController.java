@@ -32,7 +32,7 @@ public class EventScheduleController {
     private static ScrollPane staticScrollPane;
     @FXML private ScrollPane scrollPane;
     private static ComboBox staticComboNewDuty;
-    @FXML private ComboBox comboNewDuty;
+    @FXML private ComboBox comboNewDuty = new ComboBox();
     @FXML private Label calenderWeekLabel;
 
     private static Agenda.AppointmentGroup opera;
