@@ -52,7 +52,7 @@ public class EventScheduleController {
         initialzeCalendarSettings();
         initialzeCalendarView();
 
-        //EventHandler: show event on gui
+        //EventHandler: show clicked event details on gui
         agenda.onMouseClickedProperty().set(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent arg0){
@@ -60,6 +60,7 @@ public class EventScheduleController {
             }
         });
 
+        //EventHandler: show empty form for adding a new EventDuty
         comboNewDuty.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> selected, String oldVal, String newVal) {
@@ -73,6 +74,11 @@ public class EventScheduleController {
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
         agenda.setDisplayedLocalDateTime(displayedDate.minus(7, ChronoUnit.DAYS));
         setCalenderWeekLabel();
+
+        List<EventDutyDTO> events = EventSchedule.getEventDutyForWeek(agenda.getDisplayedCalendar());
+        for(EventDutyDTO event : events) {
+            addEventDutyToGUI(event);
+        }
     }
 
     @FXML
@@ -80,6 +86,11 @@ public class EventScheduleController {
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
         agenda.setDisplayedLocalDateTime(displayedDate.plus(7, ChronoUnit.DAYS));
         setCalenderWeekLabel();
+
+        List<EventDutyDTO> events = EventSchedule.getEventDutyForWeek(agenda.getDisplayedCalendar());
+        for(EventDutyDTO event : events) {
+            addEventDutyToGUI(event);
+        }
     }
 
     @FXML
@@ -182,7 +193,7 @@ public class EventScheduleController {
         setAddNewDutyCombobox();
 
         //put events to calendar
-        List<EventDutyDTO> events = EventSchedule.getEventDutyForActualWeek();
+        List<EventDutyDTO> events = EventSchedule.getEventDutyForCurrentWeek();
         for(EventDutyDTO event : events) {
             addEventDutyToGUI(event);
         }
