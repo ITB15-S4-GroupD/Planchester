@@ -13,7 +13,7 @@ public class EditOperaController {
     }
 
     @FXML
-    private void saveEventChanges(){
+    private void saveEventChanges() {
         // TODO: save data
         /*
         TextField name = (TextField) PlanchesterGUI.scene.lookup("#name");

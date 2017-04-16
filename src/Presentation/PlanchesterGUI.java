@@ -15,13 +15,11 @@ public class PlanchesterGUI {
     public static Scene scene;
 
     public void start(Stage primaryStage) throws Exception {
-
         Image image = new Image(new File("../Images/logoplanchester.png").toURI().toString());
         primaryStage.getIcons().add(image);
-
         primaryStage.setTitle("Planchester");
+      
         TabPane tabPane = new TabPane();
-        //Create Tabs
         Tab dutyRoster = new Tab();
         dutyRoster.setText("Duty Roster");
 
@@ -35,8 +33,8 @@ public class PlanchesterGUI {
         Tab instruments = new Tab();
         instruments.setText("Instruments");
 
-        Tab user = new Tab();
-        user.setText("User Administration");
+        Tab userAdministration = new Tab();
+        userAdministration.setText("User Administration");
 
         Tab support = new Tab();
         support.setText("Support");
@@ -46,7 +44,7 @@ public class PlanchesterGUI {
         tabPane.getTabs().add(eventSchedule);
         tabPane.getTabs().add(musicalWorks);
         tabPane.getTabs().add(instruments);
-        tabPane.getTabs().add(user);
+        tabPane.getTabs().add(userAdministration);
         tabPane.getTabs().add(support);
 
         //Tabs not closeable
