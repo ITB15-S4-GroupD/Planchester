@@ -1,12 +1,12 @@
 package Domain.PresentationModels;
 
-import Domain.IEventDuty;
-import Domain.Model.EventDutyEntity;
+import Domain.IEventDutyHandler;
+import Domain.Entities.EventDutyEntity;
 
 /**
  * Created by timorzipa on 06/04/2017.
  */
-public class EventDutyDTO implements IEventDuty {
+public class EventDutyDTO implements IEventDutyHandler {
     private EventDutyEntity eventDuty;
 
     public EventDutyDTO(EventDutyEntity eventDuty) {

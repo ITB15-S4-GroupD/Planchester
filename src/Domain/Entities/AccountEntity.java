@@ -1,4 +1,4 @@
-package Domain.Model;
+package Domain.Entities;
 
 import javax.persistence.*;
 

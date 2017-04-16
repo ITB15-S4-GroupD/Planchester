@@ -2,9 +2,10 @@ package Application;
 
 import Domain.PresentationModels.EventDutyDTO;
 import Persistence.EventDuty;
+import Utils.DateHelper;
 
 import java.time.Month;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -40,8 +41,12 @@ public class EventSchedule {
 
     }
 
-    public static List<EventDutyDTO> getAllEventDutyInBetween(Date start, Date end) {
-        return null;
+    public static List<EventDutyDTO> getEventDutyForActualWeek() {
+        return getEventDutyInRange(DateHelper.getStartOfWeek(Calendar.getInstance()), DateHelper.getEndOfWeek(Calendar.getInstance()));
+    }
+
+    public static List<EventDutyDTO> getEventDutyInRange(Calendar start, Calendar end) {
+        return EventDuty.getEventDutyInRange(start, end);
     }
 
     //todo julia: just for tests, final should be getAllEventDutyInBetween, never getAll()!

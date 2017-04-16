@@ -1,4 +1,4 @@
-package Domain.Model;
+package Domain.Entities;
 
 import javax.persistence.*;
 
@@ -6,19 +6,16 @@ import javax.persistence.*;
  * Created by Bernd on 06.04.2017.
  */
 @Entity
-@Table(name = "Request", schema = "sem4_team2", catalog = "")
-@IdClass(RequestEntityPK.class)
-public class RequestEntity {
+@Table(name = "DutyDisposition", schema = "sem4_team2", catalog = "")
+@IdClass(DutyDispositionEntityPK.class)
+public class DutyDispositionEntity {
     private int eventDuty;
     private int musician;
-    private Enum requestType;
+    private double points;
     private String description;
-    private EventDutyEntity eventDutyByEventDuty;
-    private PersonEntity personByMusician;
+    private Enum dutyDispositionStatus;
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "eventDuty", referencedColumnName = "eventDutyID", nullable = false)
     @Column(name = "eventDuty")
     public int getEventDuty() {
         return eventDuty;
@@ -29,8 +26,6 @@ public class RequestEntity {
     }
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "musician", referencedColumnName = "personId", nullable = false)
     @Column(name = "musician")
     public int getMusician() {
         return musician;
@@ -41,14 +36,13 @@ public class RequestEntity {
     }
 
     @Basic
-    @Enumerated(EnumType.STRING)
-    @Column(name = "requestType")
-    public Enum getRequestType() {
-        return requestType;
+    @Column(name = "points")
+    public double getPoints() {
+        return points;
     }
 
-    public void setRequestType(Enum requestType) {
-        this.requestType = requestType;
+    public void setPoints(double points) {
+        this.points = points;
     }
 
     @Basic
@@ -61,35 +55,44 @@ public class RequestEntity {
         this.description = description;
     }
 
+    @Basic
+    @Enumerated(EnumType.STRING)
+    @Column(name = "dutyDispositionStatus")
+    public Enum getDutyDispositionStatus() {
+        return dutyDispositionStatus;
+    }
+
+    public void setDutyDispositionStatus(Enum dutyDispositionStatus) {
+        this.dutyDispositionStatus = dutyDispositionStatus;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RequestEntity that = (RequestEntity) o;
+        DutyDispositionEntity that = (DutyDispositionEntity) o;
 
         if (eventDuty != that.eventDuty) return false;
         if (musician != that.musician) return false;
-        if (requestType != null ? !requestType.equals(that.requestType) : that.requestType != null) return false;
+        if (Double.compare(that.points, points) != 0) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
+        if (dutyDispositionStatus != null ? !dutyDispositionStatus.equals(that.dutyDispositionStatus) : that.dutyDispositionStatus != null)
+            return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = eventDuty;
+        int result;
+        long temp;
+        result = eventDuty;
         result = 31 * result + musician;
-        result = 31 * result + (requestType != null ? requestType.hashCode() : 0);
+        temp = Double.doubleToLongBits(points);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (dutyDispositionStatus != null ? dutyDispositionStatus.hashCode() : 0);
         return result;
-    }
-
-    public void setEventDutyByEventDuty(EventDutyEntity eventDutyByEventDuty) {
-        this.eventDutyByEventDuty = eventDutyByEventDuty;
-    }
-
-    public void setPersonByMusician(PersonEntity personByMusician) {
-        this.personByMusician = personByMusician;
     }
 }

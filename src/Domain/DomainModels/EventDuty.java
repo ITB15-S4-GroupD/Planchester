@@ -1,12 +1,12 @@
 package Domain.DomainModels;
 
-import Domain.IEventDuty;
-import Domain.Model.EventDutyEntity;
+import Domain.IEventDutyHandler;
+import Domain.Entities.EventDutyEntity;
 
 /**
  * Created by julia on 13.04.2017.
  */
-public class EventDuty implements IEventDuty {
+public class EventDuty implements IEventDutyHandler {
     private EventDutyEntity eventDuty;
 
     @Override

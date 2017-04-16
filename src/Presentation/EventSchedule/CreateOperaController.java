@@ -1,7 +1,7 @@
 package Presentation.EventSchedule;
 
 import Application.EventSchedule;
-import Domain.Model.EventDutyEntity;
+import Domain.Entities.EventDutyEntity;
 import Domain.Enum.EventStatus;
 import Domain.Enum.EventType;
 import Domain.PresentationModels.EventDutyDTO;
@@ -114,7 +114,7 @@ public class CreateOperaController {
             EventSchedule.createOpera(eventDutyDTO);
 
             // add event to agenda
-            EventScheduleController.addEventDuty(eventDutyDTO);
+            EventScheduleController.addEventDutyToGUI(eventDutyDTO);
 
             // set agenda view to week of created event
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getEventDuty().getStarttime().toLocalDateTime());

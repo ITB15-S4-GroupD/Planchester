@@ -1,19 +1,18 @@
-package Domain.Model;
+package Domain.Entities;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  * Created by Bernd on 06.04.2017.
  */
-@Entity
-@Table(name = "Musician_Part", schema = "sem4_team2", catalog = "")
-@IdClass(MusicianPartEntityPK.class)
-public class MusicianPartEntity {
+public class MusicianPartEntityPK implements Serializable {
     private int musician;
     private int part;
 
-    @Id
     @Column(name = "musician")
+    @Id
     public int getMusician() {
         return musician;
     }
@@ -22,8 +21,8 @@ public class MusicianPartEntity {
         this.musician = musician;
     }
 
-    @Id
     @Column(name = "part")
+    @Id
     public int getPart() {
         return part;
     }
@@ -37,7 +36,7 @@ public class MusicianPartEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MusicianPartEntity that = (MusicianPartEntity) o;
+        MusicianPartEntityPK that = (MusicianPartEntityPK) o;
 
         if (musician != that.musician) return false;
         if (part != that.part) return false;

@@ -1,6 +1,4 @@
-package Domain.Model;
-
-import Domain.IEventDuty;
+package Domain.Entities;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

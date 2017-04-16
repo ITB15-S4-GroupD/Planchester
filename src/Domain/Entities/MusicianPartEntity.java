@@ -1,28 +1,19 @@
-package Domain.Model;
+package Domain.Entities;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import java.io.Serializable;
+import javax.persistence.*;
 
 /**
  * Created by Bernd on 06.04.2017.
  */
-public class RequestEntityPK implements Serializable {
-    private int eventDuty;
+@Entity
+@Table(name = "Musician_Part", schema = "sem4_team2", catalog = "")
+@IdClass(MusicianPartEntityPK.class)
+public class MusicianPartEntity {
     private int musician;
+    private int part;
 
-    @Column(name = "eventDuty")
     @Id
-    public int getEventDuty() {
-        return eventDuty;
-    }
-
-    public void setEventDuty(int eventDuty) {
-        this.eventDuty = eventDuty;
-    }
-
     @Column(name = "musician")
-    @Id
     public int getMusician() {
         return musician;
     }
@@ -31,23 +22,33 @@ public class RequestEntityPK implements Serializable {
         this.musician = musician;
     }
 
+    @Id
+    @Column(name = "part")
+    public int getPart() {
+        return part;
+    }
+
+    public void setPart(int part) {
+        this.part = part;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RequestEntityPK that = (RequestEntityPK) o;
+        MusicianPartEntity that = (MusicianPartEntity) o;
 
-        if (eventDuty != that.eventDuty) return false;
         if (musician != that.musician) return false;
+        if (part != that.part) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = eventDuty;
-        result = 31 * result + musician;
+        int result = musician;
+        result = 31 * result + part;
         return result;
     }
 }

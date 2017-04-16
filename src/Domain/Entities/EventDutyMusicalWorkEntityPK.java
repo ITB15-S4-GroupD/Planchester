@@ -1,22 +1,18 @@
-package Domain.Model;
+package Domain.Entities;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  * Created by Bernd on 06.04.2017.
  */
-@Entity
-@Table(name = "EventDuty_MusicalWork", schema = "sem4_team2", catalog = "")
-@IdClass(EventDutyMusicalWorkEntityPK.class)
-public class EventDutyMusicalWorkEntity {
+public class EventDutyMusicalWorkEntityPK implements Serializable {
     private int eventDuty;
     private int musicalWork;
-    private EventDutyEntity eventDutyByEventDuty;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "eventDuty", referencedColumnName = "eventDutyID", nullable = false)
     @Column(name = "eventDuty")
+    @Id
     public int getEventDuty() {
         return eventDuty;
     }
@@ -25,8 +21,8 @@ public class EventDutyMusicalWorkEntity {
         this.eventDuty = eventDuty;
     }
 
-    @Id
     @Column(name = "musicalWork")
+    @Id
     public int getMusicalWork() {
         return musicalWork;
     }
@@ -40,7 +36,7 @@ public class EventDutyMusicalWorkEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        EventDutyMusicalWorkEntity that = (EventDutyMusicalWorkEntity) o;
+        EventDutyMusicalWorkEntityPK that = (EventDutyMusicalWorkEntityPK) o;
 
         if (eventDuty != that.eventDuty) return false;
         if (musicalWork != that.musicalWork) return false;
@@ -53,9 +49,5 @@ public class EventDutyMusicalWorkEntity {
         int result = eventDuty;
         result = 31 * result + musicalWork;
         return result;
-    }
-
-    public void setEventDutyByEventDuty(EventDutyEntity eventDutyByEventDuty) {
-        this.eventDutyByEventDuty = eventDutyByEventDuty;
     }
 }

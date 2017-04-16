@@ -1,4 +1,4 @@
-package Domain.Model;
+package Domain.Entities;
 
 import javax.persistence.*;
 
@@ -6,11 +6,11 @@ import javax.persistence.*;
  * Created by Bernd on 06.04.2017.
  */
 @Entity
-@Table(name = "EventDuty_SectionDutyRoster", schema = "sem4_team2", catalog = "")
-@IdClass(EventDutySectionDutyRosterEntityPK.class)
-public class EventDutySectionDutyRosterEntity {
+@Table(name = "EventDuty_MusicalWork", schema = "sem4_team2", catalog = "")
+@IdClass(EventDutyMusicalWorkEntityPK.class)
+public class EventDutyMusicalWorkEntity {
     private int eventDuty;
-    private int sectionDutyRoster;
+    private int musicalWork;
     private EventDutyEntity eventDutyByEventDuty;
 
     @Id
@@ -26,13 +26,13 @@ public class EventDutySectionDutyRosterEntity {
     }
 
     @Id
-    @Column(name = "sectionDutyRoster")
-    public int getSectionDutyRoster() {
-        return sectionDutyRoster;
+    @Column(name = "musicalWork")
+    public int getMusicalWork() {
+        return musicalWork;
     }
 
-    public void setSectionDutyRoster(int sectionDutyRoster) {
-        this.sectionDutyRoster = sectionDutyRoster;
+    public void setMusicalWork(int musicalWork) {
+        this.musicalWork = musicalWork;
     }
 
     @Override
@@ -40,10 +40,10 @@ public class EventDutySectionDutyRosterEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        EventDutySectionDutyRosterEntity that = (EventDutySectionDutyRosterEntity) o;
+        EventDutyMusicalWorkEntity that = (EventDutyMusicalWorkEntity) o;
 
         if (eventDuty != that.eventDuty) return false;
-        if (sectionDutyRoster != that.sectionDutyRoster) return false;
+        if (musicalWork != that.musicalWork) return false;
 
         return true;
     }
@@ -51,7 +51,7 @@ public class EventDutySectionDutyRosterEntity {
     @Override
     public int hashCode() {
         int result = eventDuty;
-        result = 31 * result + sectionDutyRoster;
+        result = 31 * result + musicalWork;
         return result;
     }
 

@@ -1,18 +1,22 @@
-package Domain.Model;
+package Domain.Entities;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import java.io.Serializable;
+import javax.persistence.*;
 
 /**
  * Created by Bernd on 06.04.2017.
  */
-public class EventDutySectionDutyRosterEntityPK implements Serializable {
+@Entity
+@Table(name = "EventDuty_SectionDutyRoster", schema = "sem4_team2", catalog = "")
+@IdClass(EventDutySectionDutyRosterEntityPK.class)
+public class EventDutySectionDutyRosterEntity {
     private int eventDuty;
     private int sectionDutyRoster;
+    private EventDutyEntity eventDutyByEventDuty;
 
-    @Column(name = "eventDuty")
     @Id
+    @ManyToOne
+    @JoinColumn(name = "eventDuty", referencedColumnName = "eventDutyID", nullable = false)
+    @Column(name = "eventDuty")
     public int getEventDuty() {
         return eventDuty;
     }
@@ -21,8 +25,8 @@ public class EventDutySectionDutyRosterEntityPK implements Serializable {
         this.eventDuty = eventDuty;
     }
 
-    @Column(name = "sectionDutyRoster")
     @Id
+    @Column(name = "sectionDutyRoster")
     public int getSectionDutyRoster() {
         return sectionDutyRoster;
     }
@@ -36,7 +40,7 @@ public class EventDutySectionDutyRosterEntityPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        EventDutySectionDutyRosterEntityPK that = (EventDutySectionDutyRosterEntityPK) o;
+        EventDutySectionDutyRosterEntity that = (EventDutySectionDutyRosterEntity) o;
 
         if (eventDuty != that.eventDuty) return false;
         if (sectionDutyRoster != that.sectionDutyRoster) return false;
@@ -49,5 +53,9 @@ public class EventDutySectionDutyRosterEntityPK implements Serializable {
         int result = eventDuty;
         result = 31 * result + sectionDutyRoster;
         return result;
+    }
+
+    public void setEventDutyByEventDuty(EventDutyEntity eventDutyByEventDuty) {
+        this.eventDutyByEventDuty = eventDutyByEventDuty;
     }
 }

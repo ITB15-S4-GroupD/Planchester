@@ -1,4 +1,4 @@
-package Domain.Model;
+package Domain.Entities;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -7,9 +7,9 @@ import java.io.Serializable;
 /**
  * Created by Bernd on 06.04.2017.
  */
-public class EventDutyMusicalWorkEntityPK implements Serializable {
+public class RequestEntityPK implements Serializable {
     private int eventDuty;
-    private int musicalWork;
+    private int musician;
 
     @Column(name = "eventDuty")
     @Id
@@ -21,14 +21,14 @@ public class EventDutyMusicalWorkEntityPK implements Serializable {
         this.eventDuty = eventDuty;
     }
 
-    @Column(name = "musicalWork")
+    @Column(name = "musician")
     @Id
-    public int getMusicalWork() {
-        return musicalWork;
+    public int getMusician() {
+        return musician;
     }
 
-    public void setMusicalWork(int musicalWork) {
-        this.musicalWork = musicalWork;
+    public void setMusician(int musician) {
+        this.musician = musician;
     }
 
     @Override
@@ -36,10 +36,10 @@ public class EventDutyMusicalWorkEntityPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        EventDutyMusicalWorkEntityPK that = (EventDutyMusicalWorkEntityPK) o;
+        RequestEntityPK that = (RequestEntityPK) o;
 
         if (eventDuty != that.eventDuty) return false;
-        if (musicalWork != that.musicalWork) return false;
+        if (musician != that.musician) return false;
 
         return true;
     }
@@ -47,7 +47,7 @@ public class EventDutyMusicalWorkEntityPK implements Serializable {
     @Override
     public int hashCode() {
         int result = eventDuty;
-        result = 31 * result + musicalWork;
+        result = 31 * result + musician;
         return result;
     }
 }
