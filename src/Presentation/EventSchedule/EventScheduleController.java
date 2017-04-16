@@ -31,8 +31,8 @@ public class EventScheduleController {
     @FXML private Agenda agenda;
     private static ScrollPane staticScrollPane;
     @FXML private ScrollPane scrollPane;
-    private static ComboBox staticComboNewDuty;
-    @FXML private ComboBox comboNewDuty;
+    private static ComboBox staticComboNewEvent;
+    @FXML private ComboBox comboNewEvent;
     @FXML private Label calenderWeekLabel;
 
     private static Agenda.AppointmentGroup opera;
@@ -46,7 +46,7 @@ public class EventScheduleController {
     public void initialize() {
         staticAgenda = agenda;
         staticScrollPane = scrollPane;
-        staticComboNewDuty = comboNewDuty;
+        staticComboNewEvent = comboNewEvent;
 
         initializeAppointmentGroupsForEventtypes();
         initialzeCalendarSettings();
@@ -61,7 +61,7 @@ public class EventScheduleController {
         });
 
         //EventHandler: show empty form for adding a new EventDuty
-        comboNewDuty.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+        comboNewEvent.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> selected, String oldVal, String newVal) {
                 showEmptyEventDetailView(newVal);
@@ -129,7 +129,7 @@ public class EventScheduleController {
 
     public static void resetSideContent() {
         staticScrollPane.setContent(null);
-        staticComboNewDuty.getSelectionModel().clearSelection();
+        staticComboNewEvent.getSelectionModel().clearSelection();
     }
 
     public static void addEventDutyToGUI(EventDutyDTO event) {
@@ -190,7 +190,7 @@ public class EventScheduleController {
     private void initialzeCalendarView() {
         //set CalenderWeek
         setCalenderWeekLabel();
-        setAddNewDutyCombobox();
+        setAddNewEventCombobox();
 
         //put events to calendar
         List<EventDutyDTO> events = EventSchedule.getEventDutyForCurrentWeek();
@@ -199,10 +199,10 @@ public class EventScheduleController {
         }
     }
 
-    private void setAddNewDutyCombobox() {
+    private void setAddNewEventCombobox() {
         ObservableList<String> dutyTypes = FXCollections.observableArrayList(EventType.Concert.toString(), EventType.Opera.toString(), EventType.Tour.toString(), EventType.Hofkapelle.toString(), EventType.Rehearsal.toString(), EventType.NonMusicalEvent.toString() );
-        comboNewDuty.setItems(dutyTypes);
-        comboNewDuty.setPromptText("Choose Eventtype");
+        comboNewEvent.setItems(dutyTypes);
+        comboNewEvent.setPromptText("Add new Event");
     }
 
     private void showEventDetailView() {
