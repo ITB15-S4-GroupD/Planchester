@@ -5,6 +5,8 @@ import Domain.Enum.EventType;
 import Domain.Models.EventDutyModel;
 import Presentation.PlanchesterGUI;
 import Utils.DateHelper;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -32,11 +34,10 @@ public class EventScheduleController {
     @FXML private Agenda agenda;
     private static ScrollPane staticScrollPane;
     @FXML private ScrollPane scrollPane;
-    private static ComboBox staticComboNewEvent;
-    @FXML private ComboBox comboNewEvent;
+    private static MenuButton staticAddNewEvent;
+    @FXML private MenuButton addNewEvent;
     @FXML private Label calenderWeekLabel;
 
-    @FXML private MenuButton addNewEvent;
     @FXML private MenuItem addNewConcert;
     @FXML private MenuItem addNewOpera;
     @FXML private MenuItem addNewTour;
@@ -65,21 +66,23 @@ public class EventScheduleController {
     public void initialize() {
         staticAgenda = agenda;
         staticScrollPane = scrollPane;
-        staticComboNewEvent = comboNewEvent;
+        staticAddNewEvent = addNewEvent;
 
         initialzeCalendarSettings();
         initialzeCalendarView();
 
         initializeAppointmentGroupsForEventtypes();
         //EventHandler: show empty form for adding a new EventDuty
-        comboNewEvent.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+        addNewEvent.onActionProperty().addListener(new ChangeListener<EventHandler<ActionEvent>>() {
             @Override
-            public void changed(ObservableValue<? extends String> selected, String oldVal, String newVal) {
+            public void changed(ObservableValue<? extends EventHandler<ActionEvent>> observable, EventHandler<ActionEvent> oldValue, EventHandler<ActionEvent> newValue) {
                 try {
-                    showEmptyEventDetailView(newVal);
+                    showEmptyEventDetailView(newValue.toString());
                 } catch (UnexpectedException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
                 }
+            }
+        });
     }
 
     private void setEventToMenuItems() {
@@ -155,7 +158,7 @@ public class EventScheduleController {
 
     public static void resetSideContent() {
         staticScrollPane.setContent(null);
-        staticComboNewEvent.getSelectionModel().clearSelection();
+        //staticAddNewEvent.getSelectionModel().clearSelection();
     }
 
     private static void initializeAppointmentGroupsForEventtypes() {
