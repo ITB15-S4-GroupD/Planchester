@@ -5,10 +5,8 @@ import Domain.Enum.EventType;
 import Domain.Models.EventDutyModel;
 import Presentation.PlanchesterGUI;
 import Utils.DateHelper;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +16,8 @@ import javafx.util.Callback;
 import jfxtras.scene.control.LocalTimePicker;
 import jfxtras.scene.control.agenda.Agenda;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.rmi.UnexpectedException;
 import java.time.LocalDateTime;
@@ -32,9 +32,17 @@ public class EventScheduleController {
     @FXML private Agenda agenda;
     private static ScrollPane staticScrollPane;
     @FXML private ScrollPane scrollPane;
-    private static ComboBox staticComboNewDuty;
+    private static ComboBox staticComboNewEvent;
     @FXML private ComboBox comboNewEvent;
     @FXML private Label calenderWeekLabel;
+
+    @FXML private MenuButton addNewEvent;
+    @FXML private MenuItem addNewConcert;
+    @FXML private MenuItem addNewOpera;
+    @FXML private MenuItem addNewTour;
+    @FXML private MenuItem addNewHofkappelle;
+    @FXML private MenuItem addNewRehearsal;
+    @FXML private MenuItem addNewNonMusicalEvent;
 
     private static Agenda.AppointmentGroup opera;
     private static Agenda.AppointmentGroup concert;
@@ -57,20 +65,12 @@ public class EventScheduleController {
     public void initialize() {
         staticAgenda = agenda;
         staticScrollPane = scrollPane;
-        staticComboNewDuty = comboNewEvent;
+        staticComboNewEvent = comboNewEvent;
 
         initialzeCalendarSettings();
         initialzeCalendarView();
+
         initializeAppointmentGroupsForEventtypes();
-
-        //EventHandler: show clicked event details on gui
-        agenda.onMouseClickedProperty().set(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent arg0){
-                showEventDetailView();
-            }
-        });
-
         //EventHandler: show empty form for adding a new EventDuty
         comboNewEvent.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -79,6 +79,17 @@ public class EventScheduleController {
                     showEmptyEventDetailView(newVal);
                 } catch (UnexpectedException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
+                }
+    }
+
+    private void setEventToMenuItems() {
+        addNewOpera.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    scrollPane.setContent(FXMLLoader.load(getClass().getResource("CreateOpera.fxml")));
+                } catch (Exception e) {
+                    System.out.println("Resource not found. Aborting.");
                 }
             }
         });
@@ -144,7 +155,7 @@ public class EventScheduleController {
 
     public static void resetSideContent() {
         staticScrollPane.setContent(null);
-        staticComboNewDuty.getSelectionModel().clearSelection();
+        staticComboNewEvent.getSelectionModel().clearSelection();
     }
 
     private static void initializeAppointmentGroupsForEventtypes() {
@@ -181,7 +192,7 @@ public class EventScheduleController {
     private void initialzeCalendarView() {
         //set CalenderWeek
         setCalenderWeekLabel();
-        setAddNewEventCombobox();
+        setAddNewEventMenuButton();
 
         //put events to calendar
         List<EventDutyModel> events = EventSchedule.getEventDutyForCurrentWeek();
@@ -214,10 +225,20 @@ public class EventScheduleController {
         staticAgenda.appointments().add(appointment);
     }
 
-    private void setAddNewEventCombobox() {
-        ObservableList<String> eventTypes = FXCollections.observableArrayList(EventType.Concert.toString(), EventType.Opera.toString(), EventType.Tour.toString(), EventType.Hofkapelle.toString(), EventType.Rehearsal.toString(), EventType.NonMusicalEvent.toString() );
-        comboNewEvent.setItems(eventTypes);
-        comboNewEvent.setPromptText("Add new Event");
+    private void setAddNewEventMenuButton() {
+        addNewConcert = new MenuItem(EventType.Concert.toString());
+        addNewOpera = new MenuItem(EventType.Opera.toString());
+        addNewTour = new  MenuItem(EventType.Tour.toString());
+        addNewHofkappelle = new MenuItem(EventType.Hofkapelle.toString());
+        addNewRehearsal = new MenuItem(EventType.Rehearsal.toString());
+        addNewNonMusicalEvent = new MenuItem(EventType.NonMusicalEvent.toString());
+
+        addNewEvent.getItems().add(addNewConcert);
+        addNewEvent.getItems().add(addNewOpera);
+        addNewEvent.getItems().add(addNewTour);
+        addNewEvent.getItems().add(addNewHofkappelle);
+        addNewEvent.getItems().add(addNewRehearsal);
+        addNewEvent.getItems().add(addNewNonMusicalEvent);
     }
 
     private void showEventDetailView() {

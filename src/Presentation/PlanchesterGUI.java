@@ -64,6 +64,20 @@ public class PlanchesterGUI {
 
         //Tabs not closeable
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        return tabPane;
+
+        // set and show scene
+        Scene scene = new Scene(tabPane, 1200, 900, Color.WHITE);
+        primaryStage.setMaximized(true);
+
+        URL url = this.getClass().getResource("CSS/stylesheet.css");
+        if (url == null) {
+            System.out.println("CSS Resource not found. Aborting.");
+        }
+        String css = url.toExternalForm();
+        scene.getStylesheets().add(css);
+
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 }

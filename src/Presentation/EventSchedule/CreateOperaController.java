@@ -5,6 +5,10 @@ import Domain.Entities.EventDutyEntity;
 import Domain.Enum.EventStatus;
 import Domain.Enum.EventType;
 import Domain.Models.EventDutyModel;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTimePicker;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import jfxtras.scene.control.LocalTimePicker;
@@ -20,9 +24,11 @@ import java.time.LocalTime;
 public class CreateOperaController {
     @FXML private TextField name;
     @FXML private TextArea description;
-    @FXML private DatePicker date;
-    @FXML private LocalTimePicker startTime;
-    @FXML private LocalTimePicker endTime;
+
+    @FXML private JFXTimePicker startTime;
+    @FXML private JFXTimePicker endTime;
+    @FXML private JFXDatePicker date;
+
     @FXML private TextField eventLocation;
     @FXML private ChoiceBox<String> musicalWork;
     @FXML private TextField conductor;
@@ -56,8 +62,8 @@ public class CreateOperaController {
             warning = warning + "Date wrong\n";
         }
 
-        LocalTime start = startTime.getLocalTime();
-        LocalTime end = endTime.getLocalTime();
+        LocalTime start = startTime.getValue();
+        LocalTime end = endTime.getValue();
         if(start.isAfter(end)) {
             validate = false;
             warning = warning + "Endtime ist not after starttime\n";
@@ -94,8 +100,8 @@ public class CreateOperaController {
             eventDutyEntity.setDefaultPoints(Double.parseDouble(points.getText()));
 
             // save time
-            Timestamp startTimestamp = Timestamp.valueOf(LocalDateTime.of(date, startTime.getLocalTime()));
-            Timestamp endTimestamp = Timestamp.valueOf(LocalDateTime.of(date, endTime.getLocalTime()));
+            Timestamp startTimestamp = Timestamp.valueOf(LocalDateTime.of(date, startTime.getValue()));
+            Timestamp endTimestamp = Timestamp.valueOf(LocalDateTime.of(date, endTime.getValue()));
             eventDutyEntity.setStarttime(startTimestamp);
             eventDutyEntity.setEndtime(endTimestamp);
 
