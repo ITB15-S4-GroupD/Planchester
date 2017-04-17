@@ -54,7 +54,7 @@ public class PlanchesterGUI {
         Scene scene = new Scene(tabPane, 1200, 900, Color.WHITE);
         primaryStage.setMaximized(true);
 
-        URL url = this.getClass().getResource("CSS\\stylesheet.css");
+        URL url = this.getClass().getResource("CSS/stylesheet.css");
         if (url == null) {
             System.out.println("CSS Resource not found. Aborting.");
         }
