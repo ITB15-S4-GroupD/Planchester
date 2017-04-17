@@ -5,8 +5,11 @@ import Domain.Enum.EventType;
 import Domain.Models.EventDutyModel;
 import Presentation.PlanchesterGUI;
 import Utils.DateHelper;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTimePicker;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -64,6 +67,9 @@ public class EventScheduleController {
 
     @FXML
     public void initialize() {
+        initializeAppointmentGroupsForEventtypes();
+        initialzeCalendarSettings();
+
         staticAgenda = agenda;
         staticScrollPane = scrollPane;
         staticAddNewEvent = addNewEvent;
@@ -72,7 +78,12 @@ public class EventScheduleController {
         initialzeCalendarView();
         setEventToMenuItems();
 
-        initializeAppointmentGroupsForEventtypes();
+        agenda.selectedAppointments().addListener(new ListChangeListener<Agenda.Appointment>() {
+            @Override
+            public void onChanged(Change<? extends Agenda.Appointment> c) {
+                showEventDetailView();
+            }
+        });
     }
 
     private void setEventToMenuItems() {
@@ -247,29 +258,19 @@ public class EventScheduleController {
                 TextField textField2 = (TextField) scrollPane.lookup("#description");
                 textField2.setText(appointment.getDescription());
 
-                DatePicker datePicker = (DatePicker) scrollPane.lookup("#date");
+                JFXDatePicker datePicker = (JFXDatePicker) scrollPane.lookup("#date");
                 datePicker.setValue(appointment.getStartLocalDateTime().toLocalDate());
 
-                LocalTimePicker startTime = (LocalTimePicker) scrollPane.lookup("#start");
-                startTime.setLocalTime(appointment.getStartLocalDateTime().toLocalTime());
+                JFXTimePicker startTime = (JFXTimePicker) scrollPane.lookup("#start");
+                startTime.setValue(appointment.getStartLocalDateTime().toLocalTime());
 
-                LocalTimePicker endTime = (LocalTimePicker) scrollPane.lookup("#end");
-                endTime.setLocalTime(appointment.getEndLocalDateTime().toLocalTime());
+                JFXTimePicker endTime = (JFXTimePicker) scrollPane.lookup("#end");
+                endTime.setValue(appointment.getEndLocalDateTime().toLocalTime());
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         System.out.println("Property selection changed");
-    }
-
-    private void showEmptyEventDetailView(String selectedComboboxParameter) throws UnexpectedException {
-        String formToLoad = eventToSelectFromCombobox.get(selectedComboboxParameter);
-
-        try {
-            scrollPane.setContent(FXMLLoader.load(getClass().getResource(formToLoad)));
-        } catch (Exception e) {
-            throw new UnexpectedException("No controll found for selected type.");
-        }
     }
 
     private void setCalenderWeekLabel() {

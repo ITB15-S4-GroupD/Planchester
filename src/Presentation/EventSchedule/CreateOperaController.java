@@ -41,6 +41,8 @@ public class CreateOperaController {
 
     @FXML
     private void save() {
+        System.out.print("save clicked");
+
         String warning = "";
         boolean validate = true;
 
@@ -48,13 +50,6 @@ public class CreateOperaController {
             validate = false;
             warning = warning + "Name missing\n";
         }
-
-        /*
-        if(description.getText().isEmpty()) {
-            validate = false;
-            warning = warning + "Description missing\n";
-        }
-        */
 
         LocalDate date = this.date.getValue();
         if(date == null || !date.isAfter(LocalDate.now())) {
@@ -64,7 +59,7 @@ public class CreateOperaController {
 
         LocalTime start = startTime.getValue();
         LocalTime end = endTime.getValue();
-        if(start.isAfter(end)) {
+        if(start == null || end == null ||start.isAfter(end)) {
             validate = false;
             warning = warning + "Endtime ist not after starttime\n";
         }
