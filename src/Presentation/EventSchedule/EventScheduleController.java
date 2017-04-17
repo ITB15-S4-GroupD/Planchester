@@ -5,10 +5,8 @@ import Domain.Enum.EventType;
 import Domain.PresentationModels.EventDutyDTO;
 import Presentation.PlanchesterGUI;
 import Utils.DateHelper;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +16,8 @@ import javafx.util.Callback;
 import jfxtras.scene.control.LocalTimePicker;
 import jfxtras.scene.control.agenda.Agenda;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -35,6 +35,14 @@ public class EventScheduleController {
     @FXML private ComboBox comboNewEvent;
     @FXML private Label calenderWeekLabel;
 
+    @FXML private MenuButton addNewEvent;
+    @FXML private MenuItem addNewConcert;
+    @FXML private MenuItem addNewOpera;
+    @FXML private MenuItem addNewTour;
+    @FXML private MenuItem addNewHofkappelle;
+    @FXML private MenuItem addNewRehearsal;
+    @FXML private MenuItem addNewNonMusicalEvent;
+
     private static Agenda.AppointmentGroup opera;
     private static Agenda.AppointmentGroup concert;
     private static Agenda.AppointmentGroup hofkapelle;
@@ -51,6 +59,7 @@ public class EventScheduleController {
         initializeAppointmentGroupsForEventtypes();
         initialzeCalendarSettings();
         initialzeCalendarView();
+        setEventToMenuItems();
 
         //EventHandler: show clicked event details on gui
         agenda.onMouseClickedProperty().set(new EventHandler<MouseEvent>() {
@@ -60,11 +69,19 @@ public class EventScheduleController {
             }
         });
 
-        //EventHandler: show empty form for adding a new EventDuty
-        comboNewEvent.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+
+    }
+
+    private void setEventToMenuItems() {
+        addNewOpera.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void changed(ObservableValue<? extends String> selected, String oldVal, String newVal) {
-                showEmptyEventDetailView(newVal);
+            public void handle(ActionEvent event) {
+                try {
+                    scrollPane.setContent(FXMLLoader.load(getClass().getResource("CreateOpera.fxml")));
+                } catch (Exception e) {
+                    System.out.println("Resource not found. Aborting.");
+                }
+
             }
         });
     }
@@ -190,7 +207,7 @@ public class EventScheduleController {
     private void initialzeCalendarView() {
         //set CalenderWeek
         setCalenderWeekLabel();
-        setAddNewEventCombobox();
+        setAddNewEventMenuButton();
 
         //put events to calendar
         List<EventDutyDTO> events = EventSchedule.getEventDutyForCurrentWeek();
@@ -199,10 +216,24 @@ public class EventScheduleController {
         }
     }
 
-    private void setAddNewEventCombobox() {
-        ObservableList<String> dutyTypes = FXCollections.observableArrayList(EventType.Concert.toString(), EventType.Opera.toString(), EventType.Tour.toString(), EventType.Hofkapelle.toString(), EventType.Rehearsal.toString(), EventType.NonMusicalEvent.toString() );
-        comboNewEvent.setItems(dutyTypes);
-        comboNewEvent.setPromptText("Add new Event");
+    private void setAddNewEventMenuButton() {
+        addNewConcert = new MenuItem(EventType.Concert.toString());
+        addNewOpera = new MenuItem(EventType.Opera.toString());
+        addNewTour = new  MenuItem(EventType.Tour.toString());
+        addNewHofkappelle = new MenuItem(EventType.Hofkapelle.toString());
+        addNewRehearsal = new MenuItem(EventType.Rehearsal.toString());
+        addNewNonMusicalEvent = new MenuItem(EventType.NonMusicalEvent.toString());
+
+
+
+        addNewEvent.getItems().add(addNewConcert);
+        addNewEvent.getItems().add(addNewOpera);
+        addNewEvent.getItems().add(addNewTour);
+        addNewEvent.getItems().add(addNewHofkappelle);
+        addNewEvent.getItems().add(addNewRehearsal);
+        addNewEvent.getItems().add(addNewNonMusicalEvent);
+
+
     }
 
     private void showEventDetailView() {
@@ -235,31 +266,8 @@ public class EventScheduleController {
         System.out.println("Property selection changed");
     }
 
-    private void showEmptyEventDetailView(String newVal) {
-        Map<String, String> dutiesToSelectFromCombobox = new HashMap<>();
-        dutiesToSelectFromCombobox.put("Opera","CreateOpera.fxml");
-        dutiesToSelectFromCombobox.put("Concert","CreateConcert.fxml");
-        dutiesToSelectFromCombobox.put("Tour","CreateTour.fxml");
-        dutiesToSelectFromCombobox.put("Hofkapelle","CreateHofkapelle.fxml");
-        dutiesToSelectFromCombobox.put("Rehearsal","CreateRehearsal.fxml");
-        dutiesToSelectFromCombobox.put("Non-musical event","CreateNonMusical.fxml");
+    private void showAddNewEvent(String newVal) {
 
-        String choice = newVal;
-        String formToLoad = dutiesToSelectFromCombobox.get(choice);
-        if( choice.equals("choose duty")) {
-            return;
-        }
-        try {
-            scrollPane.setContent(FXMLLoader.load(getClass().getResource(formToLoad)));
-        } catch (Exception e) {
-            Alert dialog = new Alert(Alert.AlertType.INFORMATION);
-            dialog.setHeaderText( "Your choice: " + choice );
-            dialog.setContentText("Trying to open file " + formToLoad + ":\n" + "Form unsupported yet");
-            dialog.setResizable(true);
-            dialog.getDialogPane().setPrefSize(350, 200);
-            dialog.showAndWait();
-            e.printStackTrace();
-        }
     }
 
     private void setCalenderWeekLabel() {
