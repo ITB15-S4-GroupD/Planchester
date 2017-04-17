@@ -70,19 +70,9 @@ public class EventScheduleController {
 
         initialzeCalendarSettings();
         initialzeCalendarView();
+        setEventToMenuItems();
 
         initializeAppointmentGroupsForEventtypes();
-        //EventHandler: show empty form for adding a new EventDuty
-        addNewEvent.onActionProperty().addListener(new ChangeListener<EventHandler<ActionEvent>>() {
-            @Override
-            public void changed(ObservableValue<? extends EventHandler<ActionEvent>> observable, EventHandler<ActionEvent> oldValue, EventHandler<ActionEvent> newValue) {
-                try {
-                    showEmptyEventDetailView(newValue.toString());
-                } catch (UnexpectedException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
-                }
-            }
-        });
     }
 
     private void setEventToMenuItems() {
@@ -158,7 +148,6 @@ public class EventScheduleController {
 
     public static void resetSideContent() {
         staticScrollPane.setContent(null);
-        //staticAddNewEvent.getSelectionModel().clearSelection();
     }
 
     private static void initializeAppointmentGroupsForEventtypes() {
