@@ -1,7 +1,7 @@
 package Persistence;
 
 import Domain.Entities.EventDutyEntity;
-import Domain.Models.EventDuty;
+import Domain.Models.EventDutyModel;
 import Utils.DateHelper;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -13,23 +13,23 @@ import java.util.List;
 /**
  * Created by julia on 10.04.2017.
  */
-public class TestQueries {
+public class EventDuty {
 
-    public static List<EventDuty> getAllEventDuty() {
+    public static List<EventDutyModel> getAllEventDuty() {
         Session session = DatabaseHelper.beginSession();
         Query query = session.createQuery("FROM EventDutyEntity");
         List list = query.list();
 
-        List<EventDuty> eventDutyList = new ArrayList<EventDuty>();
+        List<EventDutyModel> eventDutyList = new ArrayList<EventDutyModel>();
         for(Object o : list) {
             EventDutyEntity eventDutyEntity = (EventDutyEntity) o;
-            eventDutyList.add(new EventDuty(eventDutyEntity));
+            eventDutyList.add(new EventDutyModel(eventDutyEntity));
         }
         DatabaseHelper.closeSession(session);
         return eventDutyList;
     }
 
-    public static List<EventDuty> getEventDutyInRange(Calendar start, Calendar end) {
+    public static List<EventDutyModel> getEventDutyInRange(Calendar start, Calendar end) {
         Session session = DatabaseHelper.beginSession();
         List list = session.createQuery("FROM EventDutyEntity WHERE starttime >= '"
                 + DateHelper.convertCalendarToTimestamp(start)
@@ -37,16 +37,16 @@ public class TestQueries {
                 + DateHelper.convertCalendarToTimestamp(end)
                 + "'").list();
 
-        List<EventDuty> eventDutyList = new ArrayList<EventDuty>();
+        List<EventDutyModel> eventDutyList = new ArrayList<EventDutyModel>();
         for(Object o : list) {
             EventDutyEntity eventDutyEntity = (EventDutyEntity) o;
-            eventDutyList.add(new EventDuty(eventDutyEntity));
+            eventDutyList.add(new EventDutyModel(eventDutyEntity));
         }
         DatabaseHelper.closeSession(session);
         return eventDutyList;
     }
 
-    public static void createNewEventDuty(EventDuty eventDuty) {
+    public static void createNewEventDuty(EventDutyModel eventDuty) {
         Session session = DatabaseHelper.beginSession();
         session.save(eventDuty.getEventDuty());
         DatabaseHelper.closeSession(session);

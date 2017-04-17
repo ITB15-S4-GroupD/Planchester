@@ -7,10 +7,10 @@ import java.awt.*;
 /**
  * Created by julia on 13.04.2017.
  */
-public class EventDuty {
+public class EventDutyModel {
     private EventDutyEntity eventDuty;
 
-    public EventDuty(EventDutyEntity eventDutyEntity) {
+    public EventDutyModel(EventDutyEntity eventDutyEntity) {
         //todo julia: change!
         eventDuty = eventDutyEntity;
     }

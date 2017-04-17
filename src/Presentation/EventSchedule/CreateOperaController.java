@@ -4,9 +4,7 @@ import Application.EventSchedule;
 import Domain.Entities.EventDutyEntity;
 import Domain.Enum.EventStatus;
 import Domain.Enum.EventType;
-import Domain.PresentationModels.EventDutyDTO;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import Domain.Models.EventDutyModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import jfxtras.scene.control.LocalTimePicker;
@@ -32,14 +30,6 @@ public class CreateOperaController {
 
     @FXML
     public void initialize() {
-        points.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    points.setText(newValue.replaceAll("[^\\d]", ""));
-                }
-            }
-        });
         //TODO all: fill Works from DB into musicalWork
     }
 
@@ -110,14 +100,14 @@ public class CreateOperaController {
             eventDutyEntity.setEndtime(endTimestamp);
 
             // save object
-            EventDutyDTO eventDutyDTO = new EventDutyDTO(eventDutyEntity);
-            EventSchedule.createOpera(eventDutyDTO);
+            EventDutyModel eventDuty = new EventDutyModel(eventDutyEntity);
+            EventSchedule.createOpera(eventDuty);
 
             // add event to agenda
-            EventScheduleController.addEventDutyToGUI(eventDutyDTO);
+            EventScheduleController.addEventDutyToGUI(eventDuty);
 
             // set agenda view to week of created event
-            EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getEventDuty().getStarttime().toLocalDateTime());
+            EventScheduleController.setDisplayedLocalDateTime(eventDuty.getEventDuty().getStarttime().toLocalDateTime());
 
             // remove content of sidebar
             EventScheduleController.resetSideContent();
