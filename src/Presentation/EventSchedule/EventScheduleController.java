@@ -250,11 +250,11 @@ public class EventScheduleController {
                 Agenda.Appointment appointment = appointments.get(0);
                 scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditOpera.fxml")));
 
-                TextField textField = (TextField) scrollPane.lookup("#name");
-                textField.setText(appointment.getSummary());
+                TextField name = (TextField) scrollPane.lookup("#name");
+                name.setText(appointment.getSummary());
 
-                TextField textField2 = (TextField) scrollPane.lookup("#description");
-                textField2.setText(appointment.getDescription());
+                TextField description = (TextField) scrollPane.lookup("#description");
+                description.setText(appointment.getDescription());
 
                 JFXDatePicker datePicker = (JFXDatePicker) scrollPane.lookup("#date");
                 datePicker.setValue(appointment.getStartLocalDateTime().toLocalDate());
