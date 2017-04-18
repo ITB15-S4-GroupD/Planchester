@@ -51,15 +51,15 @@
             <Label text="Work" GridPane.rowIndex="6" />
             <Label text="Conductor" GridPane.rowIndex="7" />
             <Label text="Points" GridPane.rowIndex="8" />
-            <TextField fx:id="name" prefHeight="25.0" prefWidth="199.0" GridPane.columnIndex="1" />
+            <TextField style="-fx-control-inner-background: grey; -fx-text-box-border: grey; -fx-focus-color: grey ;" fx:id="name" prefHeight="25.0" prefWidth="199.0" GridPane.columnIndex="1" />
             <TextArea fx:id="description" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="eventLocation" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <ChoiceBox fx:id="musicalWork" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <ChoiceBox style="-fx-text-box-border: grey ; -fx-focus-color: grey ;" fx:id="musicalWork" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <TextField fx:id="conductor" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <TextField fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-            <JFXTimePicker fx:id="startTime" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <JFXTimePicker fx:id="endTime" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <JFXDatePicker fx:id="date" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField style="-fx-text-box-border: grey ; -fx-focus-color: grey ;" fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <JFXTimePicker style="-fx-text-box-border: grey ; -fx-focus-color: grey ;" fx:id="startTime" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <JFXTimePicker style="-fx-text-box-border: grey ; -fx-focus-color: grey ;" fx:id="endTime" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <JFXDatePicker style="-fx-text-box-border: grey ; -fx-focus-color: grey ;" fx:id="date" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
          <padding>
             <Insets left="10.0" right="10.0" />

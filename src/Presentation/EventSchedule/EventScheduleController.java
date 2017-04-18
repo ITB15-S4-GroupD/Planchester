@@ -83,11 +83,11 @@ public class EventScheduleController {
         staticAgenda = agenda;
         staticScrollPane = scrollPane;
 
+        getGroupColorsFromCSS();
         initializeAppointmentGroupsForEventtypes(); //must be the first call
         initialzeCalendarSettings();
         initialzeCalendarView();
         setEventToMenuItems();
-        getGroupColorsFromCSS();
 
         agenda.selectedAppointments().addListener(new ListChangeListener<Agenda.Appointment>() {
             @Override
