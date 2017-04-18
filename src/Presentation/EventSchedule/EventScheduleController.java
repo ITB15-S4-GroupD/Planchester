@@ -171,23 +171,23 @@ public class EventScheduleController {
 
     public static void addEventDutyToGUI(EventDutyModel event) {
         Agenda.Appointment appointment = new Agenda.AppointmentImpl();
-        appointment.setSummary(event.getEventDuty().getName());
-        appointment.setDescription(event.getEventDuty().getDescription());
-        appointment.setLocation(event.getEventDuty().getLocation());
-        appointment.setStartTime(DateHelper.convertTimestampToCalendar(event.getEventDuty().getStarttime()));
-        appointment.setEndTime(DateHelper.convertTimestampToCalendar(event.getEventDuty().getEndtime()));
+        appointment.setSummary(event.getName());
+        appointment.setDescription(event.getDescription());
+        appointment.setLocation(event.getLocation());
+        appointment.setStartTime(DateHelper.convertTimestampToCalendar(event.getStarttime()));
+        appointment.setEndTime(DateHelper.convertTimestampToCalendar(event.getEndtime()));
 
-        if(EventType.Opera.toString().equals(event.getEventDuty().getEventType())) {
+        if(EventType.Opera.toString().equals(event.getEventType())) {
             appointment.setAppointmentGroup(opera);
-        } else if(EventType.Concert.toString().equals(event.getEventDuty().getEventType())) {
+        } else if(EventType.Concert.toString().equals(event.getEventType())) {
             appointment.setAppointmentGroup(concert);
-        } else if(EventType.Tour.toString().equals(event.getEventDuty().getEventType())) {
+        } else if(EventType.Tour.toString().equals(event.getEventType())) {
             appointment.setAppointmentGroup(tour);
-        } else if(EventType.Rehearsal.toString().equals(event.getEventDuty().getEventType())) {
+        } else if(EventType.Rehearsal.toString().equals(event.getEventType())) {
             appointment.setAppointmentGroup(rehearsal);
-        } else if(EventType.Hofkapelle.toString().equals(event.getEventDuty().getEventType())) {
+        } else if(EventType.Hofkapelle.toString().equals(event.getEventType())) {
             appointment.setAppointmentGroup(hofkapelle);
-        } else if(EventType.NonMusicalEvent.toString().equals(event.getEventDuty().getEventType())) {
+        } else if(EventType.NonMusicalEvent.toString().equals(event.getEventType())) {
             appointment.setAppointmentGroup(nonMusicalEvent);
         }
         staticLoadedEventsMap.put(appointment, event);
@@ -199,7 +199,10 @@ public class EventScheduleController {
     }
 
     public static Agenda.Appointment getSelectedAppointment() {
-        return staticAgenda.selectedAppointments().get(0);
+        if(!staticAgenda.selectedAppointments().isEmpty()) {
+            return staticAgenda.selectedAppointments().get(0);
+        }
+        return null;
     }
 
     public static void setSelectedAppointment(EventDutyModel eventDutyModel) {
@@ -209,7 +212,6 @@ public class EventScheduleController {
                 staticAgenda.selectedAppointments().add(entry.getKey());
             }
         }
-
     }
 
     private void setCalenderWeekLabel() {
@@ -311,7 +313,7 @@ public class EventScheduleController {
                 Agenda.Appointment appointment = appointments.get(0);
                 EventDutyModel eventDutyModel = getEventForAppointment(appointment);
 
-                if(EventType.Opera.toString().equals(eventDutyModel.getEventDuty().getEventType())) {
+                if(EventType.Opera.toString().equals(eventDutyModel.getEventType())) {
                     scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditOpera.fxml")));
                 }
             }

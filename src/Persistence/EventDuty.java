@@ -15,6 +15,12 @@ import java.util.List;
  */
 public class EventDuty {
 
+    public static void insertEventDuty(EventDutyModel eventDutyModel) {
+        Session session = DatabaseHelper.beginSession();
+        session.save(eventDutyModel.getEventDutyEntity());
+        DatabaseHelper.closeSession(session);
+    }
+
     public static List<EventDutyModel> getAllEventDuty() {
         Session session = DatabaseHelper.beginSession();
         Query query = session.createQuery("FROM EventDutyEntity");
@@ -44,11 +50,5 @@ public class EventDuty {
         }
         DatabaseHelper.closeSession(session);
         return eventDutyList;
-    }
-
-    public static void createNewEventDuty(EventDutyModel eventDuty) {
-        Session session = DatabaseHelper.beginSession();
-        session.save(eventDuty.getEventDuty());
-        DatabaseHelper.closeSession(session);
     }
 }
