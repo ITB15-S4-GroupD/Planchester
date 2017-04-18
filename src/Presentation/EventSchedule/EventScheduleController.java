@@ -5,6 +5,7 @@ import Domain.Enum.EventType;
 import Domain.PresentationModels.EventDutyDTO;
 import Presentation.PlanchesterGUI;
 import Utils.DateHelper;
+import com.jfoenix.controls.JFXTextField;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -49,6 +50,13 @@ public class EventScheduleController {
     private static Agenda.AppointmentGroup tour;
     private static Agenda.AppointmentGroup rehearsal;
     private static Agenda.AppointmentGroup nonMusicalEvent;
+
+    @FXML private JFXTextField colorKeyConcert;
+    @FXML private JFXTextField colorKeyOpera;
+    @FXML private JFXTextField colorKeyTour;
+    @FXML private JFXTextField colorKeyHofkapelle;
+    @FXML private JFXTextField colorKeyRehearsal;
+    @FXML private JFXTextField colorKeyNonMusical;
 
     @FXML
     public void initialize() {
@@ -206,12 +214,23 @@ public class EventScheduleController {
         //set CalenderWeek
         setCalenderWeekLabel();
         setAddNewEventMenuButton();
+        setColorKeyMap();
 
         //put events to calendar
         List<EventDutyDTO> events = EventSchedule.getEventDutyForCurrentWeek();
         for(EventDutyDTO event : events) {
             addEventDutyToGUI(event);
         }
+    }
+
+    private void setColorKeyMap() {
+        colorKeyOpera.setStyle("-fx-control-inner-background: #D06B64;");
+        colorKeyConcert.setStyle("-fx-control-inner-background: #F83A22;");
+        colorKeyTour.setStyle("-fx-control-inner-background: #FA573C;");
+        colorKeyHofkapelle.setStyle("-fx-control-inner-background: #FF7537;");
+        colorKeyRehearsal.setStyle("-fx-control-inner-background: #FFAD46;");
+        colorKeyNonMusical.setStyle("-fx-control-inner-background: #42D692;");
+
     }
 
     private void setAddNewEventMenuButton() {
@@ -228,7 +247,6 @@ public class EventScheduleController {
         addNewEvent.getItems().add(addNewHofkapelle);
         addNewEvent.getItems().add(addNewRehearsal);
         addNewEvent.getItems().add(addNewNonMusicalEvent);
-
 
     }
 
