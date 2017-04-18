@@ -26,6 +26,7 @@ public class EditOperaController {
     @FXML private TextField points;
 
     private EventDutyModel initEventDutyModel; // remember init data
+    private Agenda.Appointment initAppointment; // remember init data
 
     @FXML
     public void initialize() {
@@ -41,6 +42,7 @@ public class EditOperaController {
         conductor.setText(eventDutyModel.getEventDuty().getConductor());
         points.setText((String.valueOf(eventDutyModel.getEventDuty().getDefaultPoints())));
 
+        initAppointment = appointment;
         initEventDutyModel = eventDutyModel;
     }
 
@@ -70,6 +72,7 @@ public class EditOperaController {
 
         // remove content of sidebar
         EventScheduleController.resetSideContent();
+        EventScheduleController.removeSelection(initAppointment);
         return true;
     }
 }

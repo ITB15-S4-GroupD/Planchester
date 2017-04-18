@@ -38,7 +38,6 @@ public class EventScheduleController {
     @FXML private Agenda agenda;
     private static ScrollPane staticScrollPane;
     @FXML private ScrollPane scrollPane;
-    private static MenuButton staticAddNewEvent;
     @FXML private MenuButton addNewEvent;
     @FXML private Label calenderWeekLabel;
 
@@ -56,7 +55,7 @@ public class EventScheduleController {
     private static Agenda.AppointmentGroup rehearsal;
     private static Agenda.AppointmentGroup nonMusicalEvent;
 
-    private Agenda.Appointment selectedAppointment;
+    private static Agenda.Appointment selectedAppointment;
 
     public static Map<Agenda.Appointment, EventDutyModel> staticLoadedEventsMap = new HashMap<>();
 
@@ -74,7 +73,6 @@ public class EventScheduleController {
     public void initialize() {
         staticAgenda = agenda;
         staticScrollPane = scrollPane;
-        staticAddNewEvent = addNewEvent;
 
         initializeAppointmentGroupsForEventtypes(); //must be the first call
         initialzeCalendarSettings();
@@ -155,30 +153,6 @@ public class EventScheduleController {
         setCalenderWeekLabel();
     }
 
-    @FXML
-    private void saveEventChanges() {
-        // TODO: implement into edit controllers
-        TextField name = (TextField) PlanchesterGUI.scene.lookup("#name");
-        TextField description = (TextField) PlanchesterGUI.scene.lookup("#description");
-        DatePicker date = (DatePicker) PlanchesterGUI.scene.lookup("#date");
-        LocalTimePicker startTime = (LocalTimePicker) PlanchesterGUI.scene.lookup("#start");
-        LocalTimePicker endTime = (LocalTimePicker) PlanchesterGUI.scene.lookup("#end");
-
-        LocalDateTime start = LocalDateTime.of(date.getValue(), startTime.getLocalTime());
-        LocalDateTime end = LocalDateTime.of(date.getValue(), endTime.getLocalTime());
-
-        ObservableList<Agenda.Appointment> appointments = agenda.selectedAppointments();
-        Agenda.Appointment appointment = appointments.get(0);
-
-        appointment.setSummary(name.getText());
-        appointment.setDescription(description.getText());
-        appointment.setStartLocalDateTime(start);
-        appointment.setEndLocalDateTime(end);
-
-        agenda.refresh();
-    }
-
-
     public static void setDisplayedLocalDateTime(LocalDateTime localDateTime) {
         staticAgenda.setDisplayedLocalDateTime(localDateTime);
     }
@@ -199,6 +173,14 @@ public class EventScheduleController {
 
     public static void resetSideContent() {
         staticScrollPane.setContent(null);
+    }
+
+    public static void removeSelection(Agenda.Appointment appointment) {
+        if(!staticAgenda.selectedAppointments().isEmpty() && staticAgenda.selectedAppointments().get(0) == appointment)
+        {
+            staticAgenda.selectedAppointments().clear();
+            selectedAppointment = null;
+        }
     }
 
     private static void initializeAppointmentGroupsForEventtypes() {
