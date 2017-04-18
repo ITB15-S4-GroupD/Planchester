@@ -25,8 +25,9 @@
             <RowConstraints fillHeight="false" maxHeight="72.0" minHeight="10.0" prefHeight="32.0" />
             <RowConstraints fillHeight="false" maxHeight="121.0" minHeight="10.0" prefHeight="44.0" />
                 <RowConstraints fillHeight="false" maxHeight="119.0" minHeight="21.0" prefHeight="44.0" />
-                <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="428.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="593.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="41.0" minHeight="10.0" prefHeight="39.0" />
             </rowConstraints>
             <children>
                 <Agenda fx:id="agenda" prefHeight="40.0" prefWidth="200.0" stylesheets="@../CSS/agenda.css" GridPane.rowIndex="3" />
@@ -108,14 +109,14 @@
                   <Font name="Calibri Bold" size="32.0" />
                </font>
             </Label>
-            <GridPane GridPane.rowIndex="4">
+            <GridPane GridPane.rowIndex="5">
               <columnConstraints>
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="95.0" prefWidth="95.0" />
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="95.0" prefWidth="95.0" />
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="95.0" prefWidth="95.0" />
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="95.0" prefWidth="95.0" />
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="95.0" prefWidth="95.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="95.0" prefWidth="95.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
@@ -127,7 +128,7 @@
                   <JFXTextField fx:id="colorKeyTour" alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="90.0" text="Tour" GridPane.columnIndex="2" />
                   <JFXTextField fx:id="colorKeyHofkapelle" alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="90.0" text="Hofkapelle" GridPane.columnIndex="3" />
                   <JFXTextField fx:id="colorKeyRehearsal" alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="90.0" text="Rehearsal" GridPane.columnIndex="4" />
-                  <JFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="105.0" text="Non Musical Event" GridPane.columnIndex="5" />
+                  <JFXTextField fx:id="colorKeyNonMusical" alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="90.0" text="Non Musical " GridPane.columnIndex="5" />
                </children>
             </GridPane>
                 

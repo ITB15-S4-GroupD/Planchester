@@ -5,6 +5,7 @@ import Domain.Enum.EventType;
 import Domain.Models.EventDutyModel;
 import Presentation.PlanchesterGUI;
 import Utils.DateHelper;
+import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
 import javafx.beans.value.ChangeListener;
@@ -56,6 +57,13 @@ public class EventScheduleController {
     private static Agenda.AppointmentGroup tour;
     private static Agenda.AppointmentGroup rehearsal;
     private static Agenda.AppointmentGroup nonMusicalEvent;
+
+    @FXML private JFXTextField colorKeyConcert;
+    @FXML private JFXTextField colorKeyOpera;
+    @FXML private JFXTextField colorKeyTour;
+    @FXML private JFXTextField colorKeyHofkapelle;
+    @FXML private JFXTextField colorKeyRehearsal;
+    @FXML private JFXTextField colorKeyNonMusical;
 
     private static Agenda.Appointment selectedAppointment;
 
@@ -216,6 +224,7 @@ public class EventScheduleController {
         //set CalenderWeek
         setCalenderWeekLabel();
         setAddNewEventMenuButton();
+        setColorKeyMap();
 
         //put events to calendar
         List<EventDutyModel> events = EventSchedule.getEventDutyForCurrentWeek();
@@ -224,6 +233,15 @@ public class EventScheduleController {
         }
     }
 
+    private void setColorKeyMap() {
+        colorKeyOpera.setStyle("-fx-control-inner-background: #D06B64;");
+        colorKeyConcert.setStyle("-fx-control-inner-background: #F83A22;");
+        colorKeyTour.setStyle("-fx-control-inner-background: #FA573C;");
+        colorKeyHofkapelle.setStyle("-fx-control-inner-background: #FF7537;");
+        colorKeyRehearsal.setStyle("-fx-control-inner-background: #FFAD46;");
+        colorKeyNonMusical.setStyle("-fx-control-inner-background: #42D692;");
+    }
+  
     public static void addEventDutyToGUI(EventDutyModel event) {
         Agenda.Appointment appointment = new Agenda.AppointmentImpl();
         appointment.setSummary(event.getEventDuty().getName());
