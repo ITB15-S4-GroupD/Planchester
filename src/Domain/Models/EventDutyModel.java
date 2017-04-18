@@ -1,20 +1,24 @@
-package Domain.DomainModels;
+package Domain.Models;
 
-import Domain.IEventDutyHandler;
 import Domain.Entities.EventDutyEntity;
+
+import java.awt.*;
 
 /**
  * Created by julia on 13.04.2017.
  */
-public class EventDuty implements IEventDutyHandler {
+public class EventDutyModel {
     private EventDutyEntity eventDuty;
 
-    @Override
+    public EventDutyModel(EventDutyEntity eventDutyEntity) {
+        //todo julia: change!
+        eventDuty = eventDutyEntity;
+    }
+
     public EventDutyEntity getEventDuty() {
         return eventDuty;
     }
 
-    @Override
     public void setEventDuty(EventDutyEntity eventDuty) {
         this.eventDuty = eventDuty;
     }

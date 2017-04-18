@@ -1,6 +1,6 @@
 package Application;
 
-import Domain.PresentationModels.EventDutyDTO;
+import Domain.Models.EventDutyModel;
 import Persistence.EventDuty;
 import Utils.DateHelper;
 
@@ -21,45 +21,45 @@ public class EventSchedule {
     public static void publish(Month month) {
     }
 
-    public static void createOpera(EventDutyDTO eventDuty) {
+    public static void createOpera(EventDutyModel eventDuty) {
         EventDuty.createNewEventDuty(eventDuty);
     }
 
-    public static void createTour(EventDutyDTO eventDuty) {
+    public static void createTour(EventDuty eventDuty) {
 
     }
 
-    public static void createHofkapelle(EventDutyDTO eventDuty) {
+    public static void createHofkapelle(EventDuty eventDuty) {
 
     }
 
-    public static void createConcert(EventDutyDTO eventDuty) {
+    public static void createConcert(EventDuty eventDuty) {
 
     }
 
-    public static void update(EventDutyDTO eventDuty) {
+    public static void update(EventDuty eventDuty) {
 
     }
 
-    public static void delete(EventDutyDTO eventDuty) {
+    public static void delete(EventDuty eventDuty) {
 
     }
 
-    public static List<EventDutyDTO> getEventDutyForCurrentWeek() {
+    public static List<EventDutyModel> getEventDutyForCurrentWeek() {
         Calendar today = Calendar.getInstance();
         return getEventDutyInRange(DateHelper.getStartOfWeek(today), DateHelper.getEndOfWeek(today));
     }
 
-    public static List<EventDutyDTO> getEventDutyForWeek(Calendar cal) {
+    public static List<EventDutyModel> getEventDutyForWeek(Calendar cal) {
         return getEventDutyInRange(DateHelper.getStartOfWeek(cal), DateHelper.getEndOfWeek(cal));
     }
 
-    private static List<EventDutyDTO> getEventDutyInRange(Calendar startdayOfWeek, Calendar enddayOfWeek) {
+    private static List<EventDutyModel> getEventDutyInRange(Calendar startdayOfWeek, Calendar enddayOfWeek) {
         if(loadedEventsStartdate != null && loadedEventsEnddate != null &&
                 loadedEventsStartdate.compareTo(startdayOfWeek) <= 0 && loadedEventsEnddate.compareTo(enddayOfWeek) >= 0) {
-            return new ArrayList<EventDutyDTO>();
+            return new ArrayList<EventDutyModel>();
         }
-        List<EventDutyDTO> eventDuties = EventDuty.getEventDutyInRange(startdayOfWeek, enddayOfWeek);
+        List<EventDutyModel> eventDuties = EventDuty.getEventDutyInRange(startdayOfWeek, enddayOfWeek);
         setLoadedEventsStartAndEnddate(startdayOfWeek, enddayOfWeek);
         return eventDuties;
     }

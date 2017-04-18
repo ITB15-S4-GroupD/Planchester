@@ -2,15 +2,21 @@ package Presentation.EventSchedule;
 
 import Application.EventSchedule;
 import Domain.Enum.EventType;
-import Domain.PresentationModels.EventDutyDTO;
+import Domain.Models.EventDutyModel;
 import Presentation.PlanchesterGUI;
 import Utils.DateHelper;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTimePicker;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,6 +28,7 @@ import jfxtras.scene.control.agenda.Agenda;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.rmi.UnexpectedException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -34,9 +41,9 @@ public class EventScheduleController {
     @FXML private Agenda agenda;
     private static ScrollPane staticScrollPane;
     @FXML private ScrollPane scrollPane;
+    @FXML private MenuButton addNewEvent;
     @FXML private Label calenderWeekLabel;
 
-    @FXML private MenuButton addNewEvent;
     @FXML private MenuItem addNewConcert;
     @FXML private MenuItem addNewOpera;
     @FXML private MenuItem addNewTour;
@@ -58,25 +65,51 @@ public class EventScheduleController {
     @FXML private JFXTextField colorKeyRehearsal;
     @FXML private JFXTextField colorKeyNonMusical;
 
+    private static Agenda.Appointment selectedAppointment;
+
+    public static Map<Agenda.Appointment, EventDutyModel> staticLoadedEventsMap = new HashMap<>();
+
+    private static Map<String, String> eventToSelectFromCombobox = new HashMap<>();
+    static {
+        eventToSelectFromCombobox.put(EventType.Opera.toString(),"CreateOpera.fxml");
+        eventToSelectFromCombobox.put(EventType.Concert.toString(),"CreateConcert.fxml");
+        eventToSelectFromCombobox.put(EventType.Tour.toString(),"CreateTour.fxml");
+        eventToSelectFromCombobox.put(EventType.Hofkapelle.toString(),"CreateHofkapelle.fxml");
+        eventToSelectFromCombobox.put(EventType.Rehearsal.toString(),"CreateRehearsal.fxml");
+        eventToSelectFromCombobox.put(EventType.NonMusicalEvent.toString(),"CreateNonMusical.fxml");
+    }
+
     @FXML
     public void initialize() {
         staticAgenda = agenda;
         staticScrollPane = scrollPane;
 
-        initializeAppointmentGroupsForEventtypes();
+        initializeAppointmentGroupsForEventtypes(); //must be the first call
         initialzeCalendarSettings();
         initialzeCalendarView();
         setEventToMenuItems();
 
-        //EventHandler: show clicked event details on gui
-        agenda.onMouseClickedProperty().set(new EventHandler<MouseEvent>() {
+        agenda.selectedAppointments().addListener(new ListChangeListener<Agenda.Appointment>() {
             @Override
-            public void handle(MouseEvent arg0){
-                showEventDetailView();
+            public void onChanged(Change<? extends Agenda.Appointment> c) {
+                if(agenda.selectedAppointments().isEmpty()) {
+                    return;
+                }
+
+                if(selectedAppointment != null && (agenda.selectedAppointments().get(0) != selectedAppointment)) {
+                    if(tryResetSideContent() == null) {
+                        showEventDetailView();
+                        selectedAppointment = agenda.selectedAppointments().get(0);
+                    } else {
+                        agenda.selectedAppointments().clear();
+                        agenda.selectedAppointments().add(selectedAppointment);
+                    }
+                } else if(selectedAppointment == null && tryResetSideContent() == null) {
+                    showEventDetailView();
+                    selectedAppointment = agenda.selectedAppointments().get(0);
+                }
             }
         });
-
-
     }
 
     private void setEventToMenuItems() {
@@ -84,11 +117,14 @@ public class EventScheduleController {
             @Override
             public void handle(ActionEvent event) {
                 try {
-                    scrollPane.setContent(FXMLLoader.load(getClass().getResource("CreateOpera.fxml")));
+                    if(tryResetSideContent() == null) {
+                        agenda.selectedAppointments().clear();
+                        selectedAppointment = null;
+                        scrollPane.setContent(FXMLLoader.load(getClass().getResource("CreateOpera.fxml")));
+                    }
                 } catch (Exception e) {
                     System.out.println("Resource not found. Aborting.");
                 }
-
             }
         });
     }
@@ -99,8 +135,8 @@ public class EventScheduleController {
         agenda.setDisplayedLocalDateTime(displayedDate.minus(7, ChronoUnit.DAYS));
         setCalenderWeekLabel();
 
-        List<EventDutyDTO> events = EventSchedule.getEventDutyForWeek(agenda.getDisplayedCalendar());
-        for(EventDutyDTO event : events) {
+        List<EventDutyModel> events = EventSchedule.getEventDutyForWeek(agenda.getDisplayedCalendar());
+        for(EventDutyModel event : events) {
             addEventDutyToGUI(event);
         }
     }
@@ -111,8 +147,8 @@ public class EventScheduleController {
         agenda.setDisplayedLocalDateTime(displayedDate.plus(7, ChronoUnit.DAYS));
         setCalenderWeekLabel();
 
-        List<EventDutyDTO> events = EventSchedule.getEventDutyForWeek(agenda.getDisplayedCalendar());
-        for(EventDutyDTO event : events) {
+        List<EventDutyModel> events = EventSchedule.getEventDutyForWeek(agenda.getDisplayedCalendar());
+        for(EventDutyModel event : events) {
             addEventDutyToGUI(event);
         }
     }
@@ -123,60 +159,34 @@ public class EventScheduleController {
         setCalenderWeekLabel();
     }
 
-    @FXML
-    private void saveEventChanges() {
-        // TODO: implement into edit controllers
-        TextField name = (TextField) PlanchesterGUI.scene.lookup("#name");
-        TextField description = (TextField) PlanchesterGUI.scene.lookup("#description");
-        DatePicker date = (DatePicker) PlanchesterGUI.scene.lookup("#date");
-        LocalTimePicker startTime = (LocalTimePicker) PlanchesterGUI.scene.lookup("#start");
-        LocalTimePicker endTime = (LocalTimePicker) PlanchesterGUI.scene.lookup("#end");
-
-        LocalDateTime start = LocalDateTime.of(date.getValue(), startTime.getLocalTime());
-        LocalDateTime end = LocalDateTime.of(date.getValue(), endTime.getLocalTime());
-
-        ObservableList<Agenda.Appointment> appointments = agenda.selectedAppointments();
-        Agenda.Appointment appointment = appointments.get(0);
-
-        appointment.setSummary(name.getText());
-        appointment.setDescription(description.getText());
-        appointment.setStartLocalDateTime(start);
-        appointment.setEndLocalDateTime(end);
-
-        agenda.refresh();
-    }
-
-
     public static void setDisplayedLocalDateTime(LocalDateTime localDateTime) {
         staticAgenda.setDisplayedLocalDateTime(localDateTime);
+    }
+
+    public static Node tryResetSideContent() {
+        if(getSideContent() == null) {
+            return null;
+        } else {
+            Button discard = (Button) PlanchesterGUI.scene.lookup("#discard");
+            discard.fire();
+            return getSideContent();
+        }
+    }
+
+    public static Node getSideContent() {
+        return staticScrollPane.getContent();
     }
 
     public static void resetSideContent() {
         staticScrollPane.setContent(null);
     }
 
-    public static void addEventDutyToGUI(EventDutyDTO event) {
-        Agenda.Appointment appointment = new Agenda.AppointmentImpl();
-        appointment.setSummary(event.getEventDuty().getName());
-        appointment.setDescription(event.getEventDuty().getDescription());
-        appointment.setLocation(event.getEventDuty().getLocation());
-        appointment.setStartTime(DateHelper.convertTimestampToCalendar(event.getEventDuty().getStarttime()));
-        appointment.setEndTime(DateHelper.convertTimestampToCalendar(event.getEventDuty().getEndtime()));
-
-        if(EventType.Opera.toString().equals(event.getEventDuty().getEventType())) {
-            appointment.setAppointmentGroup(opera);
-        } else if(EventType.Concert.toString().equals(event.getEventDuty().getEventType())) {
-            appointment.setAppointmentGroup(concert);
-        } else if(EventType.Tour.toString().equals(event.getEventDuty().getEventType())) {
-            appointment.setAppointmentGroup(tour);
-        } else if(EventType.Rehearsal.toString().equals(event.getEventDuty().getEventType())) {
-            appointment.setAppointmentGroup(rehearsal);
-        } else if(EventType.Hofkapelle.toString().equals(event.getEventDuty().getEventType())) {
-            appointment.setAppointmentGroup(hofkapelle);
-        } else if(EventType.NonMusicalEvent.toString().equals(event.getEventDuty().getEventType())) {
-            appointment.setAppointmentGroup(nonMusicalEvent);
+    public static void removeSelection(Agenda.Appointment appointment) {
+        if(!staticAgenda.selectedAppointments().isEmpty() && staticAgenda.selectedAppointments().get(0) == appointment)
+        {
+            staticAgenda.selectedAppointments().clear();
+            selectedAppointment = null;
         }
-        staticAgenda.appointments().add(appointment);
     }
 
     private static void initializeAppointmentGroupsForEventtypes() {
@@ -198,7 +208,7 @@ public class EventScheduleController {
         // agenda settings
         agenda.setAllowDragging(false); //drag and drop the event
         agenda.setAllowResize(false);
-        agenda.localeProperty().set(Locale.GERMAN);
+        agenda.localeProperty().set(Locale.UK);
         agenda.setDisplayedLocalDateTime(LocalDateTime.now()); //show current week in event scheduler
 
         // disable edit menu
@@ -217,8 +227,8 @@ public class EventScheduleController {
         setColorKeyMap();
 
         //put events to calendar
-        List<EventDutyDTO> events = EventSchedule.getEventDutyForCurrentWeek();
-        for(EventDutyDTO event : events) {
+        List<EventDutyModel> events = EventSchedule.getEventDutyForCurrentWeek();
+        for(EventDutyModel event : events) {
             addEventDutyToGUI(event);
         }
     }
@@ -230,7 +240,37 @@ public class EventScheduleController {
         colorKeyHofkapelle.setStyle("-fx-control-inner-background: #FF7537;");
         colorKeyRehearsal.setStyle("-fx-control-inner-background: #FFAD46;");
         colorKeyNonMusical.setStyle("-fx-control-inner-background: #42D692;");
+    }
+  
+    public static void addEventDutyToGUI(EventDutyModel event) {
+        Agenda.Appointment appointment = new Agenda.AppointmentImpl();
+        appointment.setSummary(event.getEventDuty().getName());
+        appointment.setDescription(event.getEventDuty().getDescription());
+        appointment.setLocation(event.getEventDuty().getLocation());
+        appointment.setStartTime(DateHelper.convertTimestampToCalendar(event.getEventDuty().getStarttime()));
+        appointment.setEndTime(DateHelper.convertTimestampToCalendar(event.getEventDuty().getEndtime()));
 
+        if(EventType.Opera.toString().equals(event.getEventDuty().getEventType())) {
+            appointment.setAppointmentGroup(opera);
+        } else if(EventType.Concert.toString().equals(event.getEventDuty().getEventType())) {
+            appointment.setAppointmentGroup(concert);
+        } else if(EventType.Tour.toString().equals(event.getEventDuty().getEventType())) {
+            appointment.setAppointmentGroup(tour);
+        } else if(EventType.Rehearsal.toString().equals(event.getEventDuty().getEventType())) {
+            appointment.setAppointmentGroup(rehearsal);
+        } else if(EventType.Hofkapelle.toString().equals(event.getEventDuty().getEventType())) {
+            appointment.setAppointmentGroup(hofkapelle);
+        } else if(EventType.NonMusicalEvent.toString().equals(event.getEventDuty().getEventType())) {
+            appointment.setAppointmentGroup(nonMusicalEvent);
+        }
+
+        staticLoadedEventsMap.put(appointment, event);
+
+        staticAgenda.appointments().add(appointment);
+    }
+
+    public static EventDutyModel getEventForAppointment(Agenda.Appointment appointment) {
+        return staticLoadedEventsMap.get(appointment);
     }
 
     private void setAddNewEventMenuButton() {
@@ -247,7 +287,6 @@ public class EventScheduleController {
         addNewEvent.getItems().add(addNewHofkapelle);
         addNewEvent.getItems().add(addNewRehearsal);
         addNewEvent.getItems().add(addNewNonMusicalEvent);
-
     }
 
     private void showEventDetailView() {
@@ -256,37 +295,35 @@ public class EventScheduleController {
             ObservableList<Agenda.Appointment> appointments = agenda.selectedAppointments();
             if(!appointments.isEmpty()) {
                 Agenda.Appointment appointment = appointments.get(0);
-                scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditOpera.fxml")));
+                EventDutyModel eventDutyModel = getEventForAppointment(appointment);
 
-                TextField textField = (TextField) scrollPane.lookup("#name");
-                textField.setText(appointment.getSummary());
-
-                TextField textField2 = (TextField) scrollPane.lookup("#description");
-                textField2.setText(appointment.getDescription());
-
-                DatePicker datePicker = (DatePicker) scrollPane.lookup("#date");
-                datePicker.setValue(appointment.getStartLocalDateTime().toLocalDate());
-
-                LocalTimePicker startTime = (LocalTimePicker) scrollPane.lookup("#start");
-                startTime.setLocalTime(appointment.getStartLocalDateTime().toLocalTime());
-
-                LocalTimePicker endTime = (LocalTimePicker) scrollPane.lookup("#end");
-                endTime.setLocalTime(appointment.getEndLocalDateTime().toLocalTime());
+                if(EventType.Opera.toString().equals(eventDutyModel.getEventDuty().getEventType())) {
+                    scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditOpera.fxml")));
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         System.out.println("Property selection changed");
     }
 
-    private void showAddNewEvent(String newVal) {
-
+    public static Agenda.Appointment getSelectedAppointment() {
+        return staticAgenda.selectedAppointments().get(0);
     }
 
     private void setCalenderWeekLabel() {
         Calendar cal = agenda.getDisplayedCalendar();
         int week = cal.get(Calendar.WEEK_OF_YEAR);
         calenderWeekLabel.setText("Calender Week " + String.valueOf(week));
+    }
+
+    public static void setSelectedAppointment(EventDutyModel eventDutyModel) {
+        for (Map.Entry<Agenda.Appointment, EventDutyModel> entry : staticLoadedEventsMap.entrySet()) {
+            if (Objects.equals(eventDutyModel, entry.getValue())) {
+                staticAgenda.selectedAppointments().clear();
+                staticAgenda.selectedAppointments().add(entry.getKey());
+            }
+        }
+
     }
 }

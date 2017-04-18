@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import jfxtras.scene.control.agenda.Agenda?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="700.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.EventScheduleController">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="700.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.EventScheduleController">
     <children>
         <GridPane layoutX="52.0" layoutY="101.0" prefHeight="545.0" prefWidth="842.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
@@ -51,7 +51,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <GridPane id="buttonCSS" prefHeight="30.0" prefWidth="405.0" stylesheets="@../CSS/button.css">
+                  <GridPane id="buttonCSS" prefHeight="30.0" prefWidth="405.0">
                     <columnConstraints>
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="88.0" minWidth="10.0" prefWidth="48.0" />
                       <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="203.0" minWidth="10.0" prefWidth="164.0" />
