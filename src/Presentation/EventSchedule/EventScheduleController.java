@@ -100,10 +100,6 @@ public class EventScheduleController {
                     showEventDetailView();
                     selectedAppointment = agenda.selectedAppointments().get(0);
                 }
-                else
-                {
-                    agenda.selectedAppointments().clear();
-                }
             }
         });
     }
@@ -301,5 +297,15 @@ public class EventScheduleController {
         Calendar cal = agenda.getDisplayedCalendar();
         int week = cal.get(Calendar.WEEK_OF_YEAR);
         calenderWeekLabel.setText("Calender Week " + String.valueOf(week));
+    }
+
+    public static void setSelectedAppointment(EventDutyModel eventDutyModel) {
+        for (Map.Entry<Agenda.Appointment, EventDutyModel> entry : staticLoadedEventsMap.entrySet()) {
+            if (Objects.equals(eventDutyModel, entry.getValue())) {
+                staticAgenda.selectedAppointments().clear();
+                staticAgenda.selectedAppointments().add(entry.getKey());
+            }
+        }
+
     }
 }

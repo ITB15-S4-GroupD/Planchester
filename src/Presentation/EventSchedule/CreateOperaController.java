@@ -105,8 +105,6 @@ public class CreateOperaController {
             return;
         }
 
-
-
         // create object
         EventDutyEntity eventDutyEntity = new EventDutyEntity();
 
@@ -139,6 +137,9 @@ public class CreateOperaController {
 
         // remove content of sidebar
         EventScheduleController.resetSideContent();
+
+        // select created appointment
+        EventScheduleController.setSelectedAppointment(eventDuty);
 
         /*
         Alert information = new Alert(Alert.AlertType.INFORMATION);
