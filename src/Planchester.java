@@ -15,14 +15,6 @@ public class Planchester extends Application {
 
         PlanchesterGUI gui = new PlanchesterGUI();
         gui.start(primaryStage);
-
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent t) {
-                Platform.exit();
-                System.exit(0);
-            }
-        });
     }
 
     public static void main(String[] args) {

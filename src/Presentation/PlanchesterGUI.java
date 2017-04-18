@@ -1,11 +1,14 @@
 package Presentation;
 
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
+import javafx.stage.WindowEvent;
 
 import java.io.File;
 import java.net.URL;
@@ -19,6 +22,13 @@ public class PlanchesterGUI {
 
         primaryStage.setTitle("Planchester");
         primaryStage.setMaximized(true);
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent t) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
 
         // set and show scene
         scene = new Scene(tabPane, 1200, 900, Color.WHITE);

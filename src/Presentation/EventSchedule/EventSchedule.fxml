@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import jfxtras.scene.control.agenda.Agenda?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="700.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.EventScheduleController">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="700.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.EventScheduleController">
     <children>
         <GridPane layoutX="52.0" layoutY="101.0" prefHeight="545.0" prefWidth="842.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
@@ -26,8 +26,7 @@
             <RowConstraints fillHeight="false" maxHeight="121.0" minHeight="10.0" prefHeight="44.0" />
                 <RowConstraints fillHeight="false" maxHeight="119.0" minHeight="21.0" prefHeight="44.0" />
                 <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="593.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="41.0" minHeight="10.0" prefHeight="39.0" />
+                <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="NEVER" />
             </rowConstraints>
             <children>
                 <Agenda fx:id="agenda" prefHeight="40.0" prefWidth="200.0" stylesheets="@../CSS/agenda.css" GridPane.rowIndex="3" />
@@ -75,14 +74,14 @@
                   <GridPane GridPane.columnIndex="2">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="179.0" minWidth="2.0" prefWidth="49.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="206.0" minWidth="10.0" prefWidth="86.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="163.0" minWidth="0.0" prefWidth="147.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="206.0" minWidth="10.0" prefWidth="75.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="176.0" minWidth="0.0" prefWidth="176.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <MenuButton fx:id="addNewEvent" alignment="CENTER_RIGHT" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="146.0" text="Add new Event" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+                        <MenuButton fx:id="addNewEvent" alignment="CENTER_RIGHT" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="173.0" text="Add new Event" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
                            <graphic>
                               <ImageView disable="true" fitHeight="23.0" fitWidth="26.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" smooth="false">
                                  <image>
@@ -109,7 +108,7 @@
                   <Font name="Calibri Bold" size="32.0" />
                </font>
             </Label>
-            <GridPane GridPane.rowIndex="5">
+            <GridPane GridPane.rowIndex="4">
               <columnConstraints>
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="95.0" prefWidth="95.0" />
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="95.0" prefWidth="95.0" />
