@@ -24,11 +24,9 @@ import java.time.LocalTime;
 public class CreateOperaController {
     @FXML private TextField name;
     @FXML private TextArea description;
-
     @FXML private JFXTimePicker startTime;
     @FXML private JFXTimePicker endTime;
     @FXML private JFXDatePicker date;
-
     @FXML private TextField eventLocation;
     @FXML private ChoiceBox<String> musicalWork;
     @FXML private TextField conductor;
@@ -37,6 +35,7 @@ public class CreateOperaController {
     @FXML
     public void initialize() {
         //TODO all: fill Works from DB into musicalWork
+
         points.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {

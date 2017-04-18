@@ -18,6 +18,7 @@ import javafx.util.Callback;
 import jfxtras.scene.control.agenda.Agenda;
 
 import java.io.IOException;
+import java.rmi.UnexpectedException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -189,9 +190,7 @@ public class EventScheduleController {
         } else if(EventType.NonMusicalEvent.toString().equals(event.getEventDuty().getEventType())) {
             appointment.setAppointmentGroup(nonMusicalEvent);
         }
-
         staticLoadedEventsMap.put(appointment, event);
-
         staticAgenda.appointments().add(appointment);
     }
 
@@ -230,7 +229,7 @@ public class EventScheduleController {
                         scrollPane.setContent(FXMLLoader.load(getClass().getResource("CreateOpera.fxml")));
                     }
                 } catch (Exception e) {
-                    System.out.println("Resource not found. Aborting.");
+                    e.printStackTrace();
                 }
             }
         });
@@ -270,7 +269,7 @@ public class EventScheduleController {
     private void initialzeCalendarView() {
         //set CalenderWeek
         setCalenderWeekLabel();
-        setAddNewEventMenuButton();
+        addEventTypeEntriesToMenuButton();
         setColorKeyMap();
 
         //put events to calendar
@@ -289,7 +288,7 @@ public class EventScheduleController {
         colorKeyNonMusical.setStyle(colorNonMusical);
     }
 
-    private void setAddNewEventMenuButton() {
+    private void addEventTypeEntriesToMenuButton() {
         addNewConcert = new MenuItem(EventType.Concert.toString());
         addNewOpera = new MenuItem(EventType.Opera.toString());
         addNewTour = new  MenuItem(EventType.Tour.toString());
@@ -319,6 +318,5 @@ public class EventScheduleController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Property selection changed");
     }
 }
