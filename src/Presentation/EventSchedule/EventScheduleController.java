@@ -67,13 +67,11 @@ public class EventScheduleController {
 
     @FXML
     public void initialize() {
-        initializeAppointmentGroupsForEventtypes();
-        initialzeCalendarSettings();
-
         staticAgenda = agenda;
         staticScrollPane = scrollPane;
         staticAddNewEvent = addNewEvent;
 
+        initializeAppointmentGroupsForEventtypes(); //must be the first call
         initialzeCalendarSettings();
         initialzeCalendarView();
         setEventToMenuItems();
@@ -180,7 +178,7 @@ public class EventScheduleController {
         // agenda settings
         agenda.setAllowDragging(false); //drag and drop the event
         agenda.setAllowResize(false);
-        agenda.localeProperty().set(Locale.GERMAN);
+        agenda.localeProperty().set(Locale.UK);
         agenda.setDisplayedLocalDateTime(LocalDateTime.now()); //show current week in event scheduler
 
         // disable edit menu
