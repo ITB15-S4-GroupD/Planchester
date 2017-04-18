@@ -17,6 +17,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import jfxtras.scene.control.LocalTimePicker;
@@ -44,7 +46,7 @@ public class EventScheduleController {
     @FXML private MenuItem addNewConcert;
     @FXML private MenuItem addNewOpera;
     @FXML private MenuItem addNewTour;
-    @FXML private MenuItem addNewHofkappelle;
+    @FXML private MenuItem addNewHofkapelle;
     @FXML private MenuItem addNewRehearsal;
     @FXML private MenuItem addNewNonMusicalEvent;
 
@@ -261,14 +263,14 @@ public class EventScheduleController {
         addNewConcert = new MenuItem(EventType.Concert.toString());
         addNewOpera = new MenuItem(EventType.Opera.toString());
         addNewTour = new  MenuItem(EventType.Tour.toString());
-        addNewHofkappelle = new MenuItem(EventType.Hofkapelle.toString());
+        addNewHofkapelle = new MenuItem(EventType.Hofkapelle.toString());
         addNewRehearsal = new MenuItem(EventType.Rehearsal.toString());
         addNewNonMusicalEvent = new MenuItem(EventType.NonMusicalEvent.toString());
 
         addNewEvent.getItems().add(addNewConcert);
         addNewEvent.getItems().add(addNewOpera);
         addNewEvent.getItems().add(addNewTour);
-        addNewEvent.getItems().add(addNewHofkappelle);
+        addNewEvent.getItems().add(addNewHofkapelle);
         addNewEvent.getItems().add(addNewRehearsal);
         addNewEvent.getItems().add(addNewNonMusicalEvent);
     }
