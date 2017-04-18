@@ -17,7 +17,10 @@ import javafx.scene.control.*;
 import javafx.util.Callback;
 import jfxtras.scene.control.agenda.Agenda;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -26,12 +29,12 @@ import java.util.*;
  * Created by timorzipa on 06/04/2017.
  */
 public class EventScheduleController {
-    private final String operaColor = "-fx-control-inner-background: #D06B64;";
-    private final String colorConcert = "-fx-control-inner-background: #F83A22;";
-    private final String colorTour = "-fx-control-inner-background: #FA573C;";
-    private final String colorRehearsal = "-fx-control-inner-background: #FFAD46;";
-    private final String colorNonMusical = "-fx-control-inner-background: #42D692;";
-    private final String colorHofkapelle = "-fx-control-inner-background: #FF7537;";
+    private String operaColor = "-fx-control-inner-background: #D06B64;";
+    private String colorConcert = "-fx-control-inner-background: #F83A22;";
+    private String colorTour = "-fx-control-inner-background: #FF7537;";
+    private String colorRehearsal = "-fx-control-inner-background: #FFAD46;";
+    private String colorNonMusical = "-fx-control-inner-background: #42D692;";
+    private String colorHofkapelle = "-fx-control-inner-background: #FA573C;";
 
     private static Agenda staticAgenda;
     private static ScrollPane staticScrollPane;
@@ -84,6 +87,7 @@ public class EventScheduleController {
         initialzeCalendarSettings();
         initialzeCalendarView();
         setEventToMenuItems();
+        getGroupColorsFromCSS();
 
         agenda.selectedAppointments().addListener(new ListChangeListener<Agenda.Appointment>() {
             @Override
@@ -211,6 +215,44 @@ public class EventScheduleController {
             }
         }
 
+    }
+
+    private void getGroupColorsFromCSS() {
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/Presentation/CSS/agenda.css"), "UTF-8"));
+            String line = br.readLine();
+
+            while (line != null) {
+                if(line.contains("group1")) {
+                    operaColor = "-fx-control-inner-background: " + getColor(line) + ";";
+                } else if(line.contains("group2")) {
+                    colorConcert = "-fx-control-inner-background: " + getColor(line) + ";";
+                } else if(line.contains("group3")) {
+                    colorHofkapelle = "-fx-control-inner-background: " + getColor(line) + ";";
+                } else if(line.contains("group4")) {
+                    colorTour = "-fx-control-inner-background: " + getColor(line) + ";";
+                } else if(line.contains("group5")) {
+                    colorRehearsal = "-fx-control-inner-background: " + getColor(line) + ";";
+                } else if(line.contains("group6")) {
+                    colorNonMusical = "-fx-control-inner-background: " + getColor(line) + ";";
+                }
+                line = br.readLine();
+            }
+            br.close();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private String getColor(String s) {
+        try {
+            return s.substring(s.indexOf("#"),s.indexOf("#")+7);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private void setCalenderWeekLabel() {
