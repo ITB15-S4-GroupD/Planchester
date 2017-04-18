@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
@@ -55,6 +56,10 @@ public class EventScheduleController {
     private static Agenda.AppointmentGroup rehearsal;
     private static Agenda.AppointmentGroup nonMusicalEvent;
 
+    private Agenda.Appointment selectedAppointment;
+
+    public static Map<Agenda.Appointment, EventDutyModel> staticLoadedEventsMap = new HashMap<>();
+
     private static Map<String, String> eventToSelectFromCombobox = new HashMap<>();
     static {
         eventToSelectFromCombobox.put(EventType.Opera.toString(),"CreateOpera.fxml");
@@ -79,7 +84,26 @@ public class EventScheduleController {
         agenda.selectedAppointments().addListener(new ListChangeListener<Agenda.Appointment>() {
             @Override
             public void onChanged(Change<? extends Agenda.Appointment> c) {
-                showEventDetailView();
+                if(agenda.selectedAppointments().isEmpty()) {
+                    return;
+                }
+
+                if(selectedAppointment != null && (agenda.selectedAppointments().get(0) != selectedAppointment)) {
+                    if(tryResetSideContent() == null) {
+                        showEventDetailView();
+                        selectedAppointment = agenda.selectedAppointments().get(0);
+                    } else {
+                        agenda.selectedAppointments().clear();
+                        agenda.selectedAppointments().add(selectedAppointment);
+                    }
+                } else if(selectedAppointment == null && tryResetSideContent() == null) {
+                    showEventDetailView();
+                    selectedAppointment = agenda.selectedAppointments().get(0);
+                }
+                else
+                {
+                    agenda.selectedAppointments().clear();
+                }
             }
         });
     }
@@ -89,7 +113,11 @@ public class EventScheduleController {
             @Override
             public void handle(ActionEvent event) {
                 try {
-                    scrollPane.setContent(FXMLLoader.load(getClass().getResource("CreateOpera.fxml")));
+                    if(tryResetSideContent() == null) {
+                        agenda.selectedAppointments().clear();
+                        selectedAppointment = null;
+                        scrollPane.setContent(FXMLLoader.load(getClass().getResource("CreateOpera.fxml")));
+                    }
                 } catch (Exception e) {
                     System.out.println("Resource not found. Aborting.");
                 }
@@ -153,6 +181,20 @@ public class EventScheduleController {
 
     public static void setDisplayedLocalDateTime(LocalDateTime localDateTime) {
         staticAgenda.setDisplayedLocalDateTime(localDateTime);
+    }
+
+    public static Node tryResetSideContent() {
+        if(getSideContent() == null) {
+            return null;
+        } else {
+            Button discard = (Button) PlanchesterGUI.scene.lookup("#discard");
+            discard.fire();
+            return getSideContent();
+        }
+    }
+
+    public static Node getSideContent() {
+        return staticScrollPane.getContent();
     }
 
     public static void resetSideContent() {
@@ -223,7 +265,14 @@ public class EventScheduleController {
         } else if(EventType.NonMusicalEvent.toString().equals(event.getEventDuty().getEventType())) {
             appointment.setAppointmentGroup(nonMusicalEvent);
         }
+
+        staticLoadedEventsMap.put(appointment, event);
+
         staticAgenda.appointments().add(appointment);
+    }
+
+    public static EventDutyModel getEventForAppointment(Agenda.Appointment appointment) {
+        return staticLoadedEventsMap.get(appointment);
     }
 
     private void setAddNewEventMenuButton() {
@@ -248,27 +297,20 @@ public class EventScheduleController {
             ObservableList<Agenda.Appointment> appointments = agenda.selectedAppointments();
             if(!appointments.isEmpty()) {
                 Agenda.Appointment appointment = appointments.get(0);
-                scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditOpera.fxml")));
+                EventDutyModel eventDutyModel = getEventForAppointment(appointment);
 
-                TextField textField = (TextField) scrollPane.lookup("#name");
-                textField.setText(appointment.getSummary());
-
-                TextField textField2 = (TextField) scrollPane.lookup("#description");
-                textField2.setText(appointment.getDescription());
-
-                JFXDatePicker datePicker = (JFXDatePicker) scrollPane.lookup("#date");
-                datePicker.setValue(appointment.getStartLocalDateTime().toLocalDate());
-
-                JFXTimePicker startTime = (JFXTimePicker) scrollPane.lookup("#start");
-                startTime.setValue(appointment.getStartLocalDateTime().toLocalTime());
-
-                JFXTimePicker endTime = (JFXTimePicker) scrollPane.lookup("#end");
-                endTime.setValue(appointment.getEndLocalDateTime().toLocalTime());
+                if(EventType.Opera.toString().equals(eventDutyModel.getEventDuty().getEventType())) {
+                    scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditOpera.fxml")));
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         System.out.println("Property selection changed");
+    }
+
+    public static Agenda.Appointment getSelectedAppointment() {
+        return staticAgenda.selectedAppointments().get(0);
     }
 
     private void setCalenderWeekLabel() {
