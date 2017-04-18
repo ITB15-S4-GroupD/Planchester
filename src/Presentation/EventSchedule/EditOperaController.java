@@ -2,6 +2,7 @@ package Presentation.EventSchedule;
 
 import Domain.Entities.EventDutyEntity;
 import Domain.Models.EventDutyModel;
+import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
 import javafx.fxml.FXML;
@@ -25,22 +26,22 @@ public class EditOperaController {
     @FXML private TextField conductor;
     @FXML private TextField points;
 
-    private EventDutyModel initEventDutyModel; // remember init data
-    private Agenda.Appointment initAppointment; // remember init data
+    private EventDutyModel initEventDutyModel; // remember init data to compare
+    private Agenda.Appointment initAppointment; // remember init data to compare
 
     @FXML
     public void initialize() {
         Agenda.Appointment appointment = EventScheduleController.getSelectedAppointment();
+        EventDutyModel eventDutyModel = EventScheduleController.getEventForAppointment(appointment);
+
         name.setText(appointment.getSummary());
         description.setText(appointment.getDescription());
         date.setValue(appointment.getStartLocalDateTime().toLocalDate());
         startTime.setValue(appointment.getStartLocalDateTime().toLocalTime());
         endTime.setValue(appointment.getEndLocalDateTime().toLocalTime());
         eventLocation.setText(appointment.getLocation());
-
-        EventDutyModel eventDutyModel = EventScheduleController.getEventForAppointment(appointment);
-        conductor.setText(eventDutyModel.getEventDuty().getConductor());
-        points.setText((String.valueOf(eventDutyModel.getEventDuty().getDefaultPoints())));
+        conductor.setText(eventDutyModel.getConductor());
+        points.setText((String.valueOf(eventDutyModel.getDefaultPoints())));
 
         initAppointment = appointment;
         initEventDutyModel = eventDutyModel;
@@ -54,22 +55,22 @@ public class EditOperaController {
     @FXML
     public boolean discard() {
         // TODO: check with init data for changes
-        if(!name.getText().equals(initEventDutyModel.getEventDuty().getName())
-                || !description.getText().equals(initEventDutyModel.getEventDuty().getDescription())
-                || !date.getValue().equals(initEventDutyModel.getEventDuty().getEndtime().toLocalDateTime().toLocalDate())
-                || !startTime.getValue().equals(initEventDutyModel.getEventDuty().getStarttime().toLocalDateTime().toLocalTime())
-                || !endTime.getValue().equals(initEventDutyModel.getEventDuty().getEndtime().toLocalDateTime().toLocalTime())
-                || !conductor.getText().equals(initEventDutyModel.getEventDuty().getConductor())
-                || !eventLocation.getText().equals(initEventDutyModel.getEventDuty().getLocation())
-                || Double.parseDouble(points.getText()) != initEventDutyModel.getEventDuty().getDefaultPoints()){
-            Alert confirmationAlterMessage = new Alert(Alert.AlertType.CONFIRMATION, "Do you really want to discard your changes?", ButtonType.YES, ButtonType.NO);
-            confirmationAlterMessage.showAndWait();
+        if(!name.getText().equals(initEventDutyModel.getName())
+                || !description.getText().equals(initEventDutyModel.getDescription())
+                || !date.getValue().equals(initEventDutyModel.getEndtime().toLocalDateTime().toLocalDate())
+                || !startTime.getValue().equals(initEventDutyModel.getStarttime().toLocalDateTime().toLocalTime())
+                || !endTime.getValue().equals(initEventDutyModel.getEndtime().toLocalDateTime().toLocalTime())
+                || !conductor.getText().equals(initEventDutyModel.getConductor())
+                || !eventLocation.getText().equals(initEventDutyModel.getLocation())
+                || Double.parseDouble(points.getText()) != initEventDutyModel.getDefaultPoints()) {
 
-            if (confirmationAlterMessage.getResult() == ButtonType.NO) {
+            Alert confirmationAlertMessage = new Alert(Alert.AlertType.CONFIRMATION, PlanchesterMessages.DISCARD_CHANGES, ButtonType.YES, ButtonType.NO);
+            confirmationAlertMessage.showAndWait();
+
+            if (confirmationAlertMessage.getResult() == ButtonType.NO) {
                 return false;
             }
         }
-
         // remove content of sidebar
         EventScheduleController.resetSideContent();
         EventScheduleController.removeSelection(initAppointment);

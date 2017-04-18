@@ -1,6 +1,9 @@
 package Utils;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Calendar;
 
 /**
@@ -15,6 +18,11 @@ public class DateHelper {
 
     public static Timestamp convertCalendarToTimestamp(Calendar calendar) {
         return new Timestamp(calendar.getTimeInMillis());
+    }
+
+    public static Timestamp mergeDateAndTime(LocalDate date, LocalTime time) {
+        return Timestamp.valueOf(LocalDateTime.of(date, time));
+
     }
 
     public static Calendar getStartOfWeek(Calendar dayOfWeek) {

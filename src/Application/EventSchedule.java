@@ -13,31 +13,29 @@ import java.util.List;
  * Created by timorzipa on 06/04/2017.
  */
 public class EventSchedule {
-
     private static Calendar loadedEventsStartdate; //start of the already loaded calendar
     private static Calendar loadedEventsEnddate; //end of the already loaded calendar
-
 
     public static void publish(Month month) {
     }
 
-    public static void createOpera(EventDutyModel eventDuty) {
-        EventDuty.createNewEventDuty(eventDuty);
+    public static void insertOperaEventDuty(EventDutyModel eventDuty) {
+        EventDuty.insertEventDuty(eventDuty);
     }
 
-    public static void createTour(EventDuty eventDuty) {
-
-    }
-
-    public static void createHofkapelle(EventDuty eventDuty) {
+    public static void insertTourEventDuty(EventDuty eventDuty) {
 
     }
 
-    public static void createConcert(EventDuty eventDuty) {
+    public static void insertHofkapelleEventDuty(EventDuty eventDuty) {
 
     }
 
-    public static void update(EventDuty eventDuty) {
+    public static void insertConcertEventDuty(EventDuty eventDuty) {
+
+    }
+
+    public static void store(EventDuty eventDuty) {
 
     }
 
