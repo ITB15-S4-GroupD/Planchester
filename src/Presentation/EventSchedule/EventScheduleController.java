@@ -30,12 +30,12 @@ import java.util.*;
  * Created by timorzipa on 06/04/2017.
  */
 public class EventScheduleController {
-    private String operaColor = "-fx-control-inner-background: #D06B64;";
-    private String colorConcert = "-fx-control-inner-background: #F83A22;";
-    private String colorTour = "-fx-control-inner-background: #FF7537;";
-    private String colorRehearsal = "-fx-control-inner-background: #FFAD46;";
-    private String colorNonMusical = "-fx-control-inner-background: #42D692;";
-    private String colorHofkapelle = "-fx-control-inner-background: #FA573C;";
+    private String colorOpera;
+    private String colorConcert;
+    private String colorTour;
+    private String colorRehearsal;
+    private String colorNonMusical;
+    private String colorHofkapelle;
 
     private static Agenda staticAgenda;
     private static ScrollPane staticScrollPane;
@@ -225,7 +225,7 @@ public class EventScheduleController {
 
             while (line != null) {
                 if(line.contains("group1")) {
-                    operaColor = "-fx-control-inner-background: " + getColor(line) + ";";
+                    colorOpera = "-fx-control-inner-background: " + getColor(line) + ";";
                 } else if(line.contains("group2")) {
                     colorConcert = "-fx-control-inner-background: " + getColor(line) + ";";
                 } else if(line.contains("group3")) {
@@ -324,7 +324,7 @@ public class EventScheduleController {
     }
 
     private void setColorKeyMap() {
-        colorKeyOpera.setStyle(operaColor);
+        colorKeyOpera.setStyle(colorOpera);
         colorKeyConcert.setStyle(colorConcert);
         colorKeyTour.setStyle(colorTour);
         colorKeyHofkapelle.setStyle(colorHofkapelle);

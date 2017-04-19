@@ -34,11 +34,46 @@ public class CreateOperaController {
     public void initialize() {
         //TODO all: fill Works from DB into musicalWork
 
+        name.setStyle("-fx-control-inner-background: #ffdec9");
+        date.setStyle("-fx-control-inner-background: #ffdec9");
+        startTime.setStyle("-fx-control-inner-background: #ffdec9");
+
         points.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 if (!newValue.matches("\\d*")) {
                     points.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+        name.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if(name.getText().equals("") || name.getText() == null) {
+                    name.setStyle("-fx-control-inner-background: #ffdec9");
+                } else {
+                    name.setStyle("-fx-control-inner-background: #ffffff");
+                }
+
+            }
+        });
+        date.valueProperty().addListener(new ChangeListener<LocalDate>() {
+            @Override
+            public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
+                if(date.getValue() == null) {
+                    date.setStyle("-fx-control-inner-background: #ffdec9");
+                } else {
+                    date.setStyle("-fx-control-inner-background: #ffffff");
+                }
+            }
+        });
+        startTime.valueProperty().addListener(new ChangeListener<LocalTime>() {
+            @Override
+            public void changed(ObservableValue<? extends LocalTime> observable, LocalTime oldValue, LocalTime newValue) {
+                if(startTime.getValue() == null) {
+                    startTime.setStyle("-fx-control-inner-background: #ffdec9");
+                } else {
+                    startTime.setStyle("-fx-control-inner-background: #ffffff");
                 }
             }
         });
