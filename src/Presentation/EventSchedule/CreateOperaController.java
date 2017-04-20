@@ -37,6 +37,7 @@ public class CreateOperaController {
         name.setStyle("-fx-control-inner-background: #ffdec9");
         date.setStyle("-fx-control-inner-background: #ffdec9");
         startTime.setStyle("-fx-control-inner-background: #ffdec9");
+        checkRequiredFields();
 
         points.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -46,6 +47,10 @@ public class CreateOperaController {
                 }
             }
         });
+
+    }
+
+    private void checkRequiredFields() {
         name.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -67,6 +72,7 @@ public class CreateOperaController {
                 }
             }
         });
+
         startTime.valueProperty().addListener(new ChangeListener<LocalTime>() {
             @Override
             public void changed(ObservableValue<? extends LocalTime> observable, LocalTime oldValue, LocalTime newValue) {

@@ -277,6 +277,49 @@ public class EventScheduleController {
                 }
             }
         });
+        addNewConcert.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    if(tryResetSideContent() == null) {
+                        agenda.selectedAppointments().clear();
+                        selectedAppointment = null;
+                        scrollPane.setContent(FXMLLoader.load(getClass().getResource("CreateConcert.fxml")));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        addNewHofkapelle.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    if(tryResetSideContent() == null) {
+                        agenda.selectedAppointments().clear();
+                        selectedAppointment = null;
+                        scrollPane.setContent(FXMLLoader.load(getClass().getResource("CreateHofkapelle.fxml")));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        addNewTour.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    if(tryResetSideContent() == null) {
+                        agenda.selectedAppointments().clear();
+                        selectedAppointment = null;
+                        scrollPane.setContent(FXMLLoader.load(getClass().getResource("CreateTour.fxml")));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private static void initializeAppointmentGroupsForEventtypes() {
@@ -357,6 +400,12 @@ public class EventScheduleController {
 
                 if(EventType.Opera.toString().equals(eventDutyModel.getEventType())) {
                     scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditOpera.fxml")));
+                } else if(EventType.Concert.toString().equals(eventDutyModel.getEventType())) {
+                    scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditConcert.fxml")));
+                } else if(EventType.Tour.toString().equals(eventDutyModel.getEventType())) {
+                    scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditTour.fxml")));
+                } else if(EventType.Hofkapelle.toString().equals(eventDutyModel.getEventType())) {
+                    scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditHofkapelle.fxml")));
                 }
             }
         } catch (IOException e) {
