@@ -5,17 +5,17 @@ import com.jfoenix.controls.JFXTimePicker;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import jfxtras.scene.control.LocalTimePicker;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Optional;
 
 /**
- * Created by Ina on 09.04.2017.
+ * Created by Christina on 20.04.2017.
  */
-public class CreateHofkapelleController {
+public class CreateConcertController {
 
     @FXML private TextField name;
     @FXML private TextArea description;
@@ -46,6 +46,7 @@ public class CreateHofkapelleController {
         EventScheduleController.resetSideContent();
         return true;
     }
+
     private void checkRequiredFields() {
         name.textProperty().addListener(new ChangeListener<String>() {
             @Override

@@ -4,7 +4,6 @@
 <?import com.jfoenix.controls.JFXTimePicker?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
@@ -22,12 +21,12 @@
    <rowConstraints>
       <RowConstraints maxHeight="94.66667175292969" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="443.99999237060547" minHeight="10.0" prefHeight="430.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="59.333343505859375" minHeight="0.0" prefHeight="37.333343505859375" vgrow="NEVER" />
+      <RowConstraints maxHeight="59.333343505859375" minHeight="10.0" prefHeight="37.333343505859375" vgrow="NEVER" />
    </rowConstraints>
    <children>
       <GridPane fx:id="gridNewOperaData" prefHeight="338.0" prefWidth="314.0" GridPane.rowIndex="1">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="153.33331298828125" minWidth="10.0" prefWidth="91.33331298828125" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="153.33331298828125" minWidth="10.0" prefWidth="92.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="223.66668701171875" minWidth="10.0" prefWidth="223.66668701171875" />
         </columnConstraints>
         <rowConstraints>
@@ -45,10 +44,10 @@
             <Label text="Event Name" />
             <Label text="Description" GridPane.rowIndex="1" />
             <Label text="Date" GridPane.rowIndex="2" />
-            <Label text="Start" GridPane.rowIndex="3" />
-            <Label text="End" GridPane.rowIndex="4" />
+            <Label text="Starttime" GridPane.rowIndex="3" />
+            <Label text="Endtime" GridPane.rowIndex="4" />
             <Label text="Location" GridPane.rowIndex="5" />
-            <Label text="Work" GridPane.rowIndex="6" />
+            <Label text="Musical Work" GridPane.rowIndex="6" />
             <Label text="Conductor" GridPane.rowIndex="7" />
             <Label text="Points" GridPane.rowIndex="8" />
             <TextField fx:id="name" prefHeight="25.0" prefWidth="199.0" GridPane.columnIndex="1" />
@@ -70,11 +69,18 @@
             <Font size="22.0" />
          </font>
       </Text>
-      <ButtonBar prefHeight="40.0" prefWidth="200.0" translateX="-59.0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-        <buttons>
-            <Button id="discard" fx:id="btnDiscard" mnemonicParsing="false" onAction="#discard" text="Discard" />
-          <Button fx:id="btnSaveNewOpera" mnemonicParsing="false" onAction="#save" text="Save" />
-        </buttons>
-      </ButtonBar>
+      <GridPane GridPane.rowIndex="2">
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+          <Button fx:id="btnSaveNewOpera" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#save" prefHeight="25.0" prefWidth="80.0" text="Save" GridPane.columnIndex="1" />
+            <Button id="discard" fx:id="btnDiscard" mnemonicParsing="false" onAction="#discard" prefHeight="25.0" prefWidth="80.0" text="Discard" />
+         </children>
+      </GridPane>
    </children>
 </GridPane>
