@@ -98,8 +98,9 @@ public class EventScheduleController {
             public void handle(MouseEvent event) {
                 if(event.getTarget().toString().contains("DayBodyPane")) {
                     if(editOpen == true){
-                        resetSideContent();
-                        removeSelection();
+                        if(tryResetSideContent() == null) {
+                            removeSelection();
+                        }
                     }
                 }
             }
