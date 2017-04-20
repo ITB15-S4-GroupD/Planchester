@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import jfxtras.scene.control.agenda.Agenda;
 
@@ -36,6 +37,8 @@ public class EventScheduleController {
     private String colorRehearsal;
     private String colorNonMusical;
     private String colorHofkapelle;
+
+    private static boolean editOpen = false;
 
     private static Agenda staticAgenda;
     private static ScrollPane staticScrollPane;
@@ -90,6 +93,19 @@ public class EventScheduleController {
         initialzeCalendarView();
         setEventToMenuItems();
 
+        agenda.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(event.getTarget().toString().contains("DayBodyPane")) {
+                    if(editOpen == true){
+                        if(tryResetSideContent() == null) {
+                            removeSelection();
+                        }
+                    }
+                }
+            }
+        });
+
         agenda.selectedAppointments().addListener(new ListChangeListener<Agenda.Appointment>() {
             @Override
             public void onChanged(Change<? extends Agenda.Appointment> c) {
@@ -99,15 +115,15 @@ public class EventScheduleController {
 
                 if(selectedAppointment != null && (agenda.selectedAppointments().get(0) != selectedAppointment)) {
                     if(tryResetSideContent() == null) {
-                        showEventDetailView();
                         selectedAppointment = agenda.selectedAppointments().get(0);
+                        showEventDetailView();
                     } else {
                         agenda.selectedAppointments().clear();
                         agenda.selectedAppointments().add(selectedAppointment);
                     }
                 } else if(selectedAppointment == null && tryResetSideContent() == null) {
-                    showEventDetailView();
                     selectedAppointment = agenda.selectedAppointments().get(0);
+                    showEventDetailView();
                 }
             }
         });
@@ -163,14 +179,19 @@ public class EventScheduleController {
 
     public static void resetSideContent() {
         staticScrollPane.setContent(null);
+        editOpen = false;
     }
 
     public static void removeSelection(Agenda.Appointment appointment) {
-        if(!staticAgenda.selectedAppointments().isEmpty() && staticAgenda.selectedAppointments().get(0) == appointment)
-        {
+        if(!staticAgenda.selectedAppointments().isEmpty() && staticAgenda.selectedAppointments().get(0) == appointment) {
             staticAgenda.selectedAppointments().clear();
             selectedAppointment = null;
         }
+    }
+
+    public static void removeSelection() {
+        staticAgenda.selectedAppointments().clear();
+        selectedAppointment = null;
     }
 
     public static void addEventDutyToGUI(EventDutyModel event) {
@@ -357,6 +378,7 @@ public class EventScheduleController {
 
                 if(EventType.Opera.toString().equals(eventDutyModel.getEventType())) {
                     scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditOpera.fxml")));
+                    editOpen = true;
                 }
             }
         } catch (IOException e) {
