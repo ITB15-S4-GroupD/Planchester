@@ -33,8 +33,6 @@ public class CreateTourController {
         startDate.setStyle(PlanchesterConstants.BACKGROUNDSTYLE_REQUIRED);
         endDate.setStyle(PlanchesterConstants.BACKGROUNDSTYLE_REQUIRED);
         checkRequiredFields();
-
-
     }
 
     @FXML
