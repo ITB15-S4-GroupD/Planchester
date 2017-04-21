@@ -19,8 +19,9 @@ public class EventSchedule {
     public static void publish(Month month) {
     }
 
-    public static void insertOperaEventDuty(EventDutyModel eventDuty) {
-        EventDuty.insertEventDuty(eventDuty);
+    public static void insertNewOperaPerformance(EventDutyModel eventDuty) {
+//        eventDuty.prevalidate();
+//        EventDuty.insertNewOperaPerformance(eventDuty);
     }
 
     public static void insertTourEventDuty(EventDuty eventDuty) {
