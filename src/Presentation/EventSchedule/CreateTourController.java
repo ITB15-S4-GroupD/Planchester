@@ -28,9 +28,9 @@ public class CreateTourController {
 
     @FXML
     public void initialize() {
-        name.setStyle("-fx-control-inner-background: #ffdec9");
-        startDate.setStyle("-fx-control-inner-background: #ffdec9");
-        endDate.setStyle("-fx-control-inner-background: #ffdec9");
+        name.setStyle(PlanchesterConstants.BACKGROUNDSTYLE_REQUIRED);
+        startDate.setStyle(PlanchesterConstants.BACKGROUNDSTYLE_REQUIRED);
+        endDate.setStyle(PlanchesterConstants.BACKGROUNDSTYLE_REQUIRED);
         checkRequiredFields();
 
 
@@ -53,9 +53,9 @@ public class CreateTourController {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 if(name.getText().equals("") || name.getText() == null) {
-                    name.setStyle("-fx-control-inner-background: #ffdec9");
+                    name.setStyle(PlanchesterConstants.BACKGROUNDSTYLE_REQUIRED);
                 } else {
-                    name.setStyle("-fx-control-inner-background: #ffffff");
+                    name.setStyle(PlanchesterConstants.BACKGROUNDSTYLE_FILLED);
                 }
 
             }
@@ -64,9 +64,9 @@ public class CreateTourController {
             @Override
             public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
                 if(startDate.getValue() == null) {
-                    startDate.setStyle("-fx-control-inner-background: #ffdec9");
+                    startDate.setStyle(PlanchesterConstants.BACKGROUNDSTYLE_REQUIRED);
                 } else {
-                    startDate.setStyle("-fx-control-inner-background: #ffffff");
+                    startDate.setStyle(PlanchesterConstants.BACKGROUNDSTYLE_FILLED);
                 }
             }
         });
@@ -75,9 +75,9 @@ public class CreateTourController {
             @Override
             public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
                 if(endDate.getValue() == null) {
-                    endDate.setStyle("-fx-control-inner-background: #ffdec9");
+                    endDate.setStyle(PlanchesterConstants.BACKGROUNDSTYLE_REQUIRED);
                 } else {
-                    endDate.setStyle("-fx-control-inner-background: #ffffff");
+                    endDate.setStyle(PlanchesterConstants.BACKGROUNDSTYLE_FILLED);
                 }
             }
         });

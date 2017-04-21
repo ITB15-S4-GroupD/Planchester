@@ -5,6 +5,7 @@ import Domain.Enum.EventStatus;
 import Domain.Enum.EventType;
 import Domain.Models.EventDutyModel;
 import Utils.DateHelper;
+import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
@@ -34,9 +35,9 @@ public class CreateOperaController {
     public void initialize() {
         //TODO all: fill Works from DB into musicalWork
 
-        name.setStyle("-fx-control-inner-background: #ffdec9");
-        date.setStyle("-fx-control-inner-background: #ffdec9");
-        startTime.setStyle("-fx-control-inner-background: #ffdec9");
+        name.setStyle(PlanchesterConstants.BACKGROUNDSTYLE_REQUIRED);
+        date.setStyle(PlanchesterConstants.BACKGROUNDSTYLE_REQUIRED);
+        startTime.setStyle(PlanchesterConstants.BACKGROUNDSTYLE_REQUIRED);
         checkRequiredFields();
 
         points.textProperty().addListener(new ChangeListener<String>() {
@@ -47,7 +48,6 @@ public class CreateOperaController {
                 }
             }
         });
-
     }
 
     private void checkRequiredFields() {
@@ -55,9 +55,9 @@ public class CreateOperaController {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 if(name.getText().equals("") || name.getText() == null) {
-                    name.setStyle("-fx-control-inner-background: #ffdec9");
+                    name.setStyle(PlanchesterConstants.BACKGROUNDSTYLE_REQUIRED);
                 } else {
-                    name.setStyle("-fx-control-inner-background: #ffffff");
+                    name.setStyle(PlanchesterConstants.BACKGROUNDSTYLE_FILLED);
                 }
 
             }
@@ -66,9 +66,9 @@ public class CreateOperaController {
             @Override
             public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
                 if(date.getValue() == null) {
-                    date.setStyle("-fx-control-inner-background: #ffdec9");
+                    date.setStyle(PlanchesterConstants.BACKGROUNDSTYLE_REQUIRED);
                 } else {
-                    date.setStyle("-fx-control-inner-background: #ffffff");
+                    date.setStyle(PlanchesterConstants.BACKGROUNDSTYLE_FILLED);
                 }
             }
         });
@@ -77,9 +77,9 @@ public class CreateOperaController {
             @Override
             public void changed(ObservableValue<? extends LocalTime> observable, LocalTime oldValue, LocalTime newValue) {
                 if(startTime.getValue() == null) {
-                    startTime.setStyle("-fx-control-inner-background: #ffdec9");
+                    startTime.setStyle(PlanchesterConstants.BACKGROUNDSTYLE_REQUIRED);
                 } else {
-                    startTime.setStyle("-fx-control-inner-background: #ffffff");
+                    startTime.setStyle(PlanchesterConstants.BACKGROUNDSTYLE_FILLED);
                 }
             }
         });
