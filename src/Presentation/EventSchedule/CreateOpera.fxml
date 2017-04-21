@@ -73,7 +73,7 @@
       <ButtonBar prefHeight="40.0" prefWidth="200.0" translateX="-59.0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
         <buttons>
             <Button id="discard" fx:id="btnDiscard" mnemonicParsing="false" onAction="#discard" text="Discard" />
-          <Button fx:id="btnSaveNewOpera" mnemonicParsing="false" onAction="#save" text="Save" />
+          <Button fx:id="btnSaveNewOpera" mnemonicParsing="false" onAction="#insertNewOperaPerformance" text="Save" />
         </buttons>
       </ButtonBar>
    </children>

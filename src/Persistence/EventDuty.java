@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class EventDuty {
 
-    public static void insertEventDuty(EventDutyModel eventDutyModel) {
+    public static void insertNewOperaPerformance(EventDutyModel eventDutyModel) {
         Session session = DatabaseHelper.beginSession();
         session.save(eventDutyModel.getEventDutyEntity());
         DatabaseHelper.closeSession(session);
