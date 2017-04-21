@@ -5,23 +5,22 @@ import com.jfoenix.controls.JFXTimePicker;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import jfxtras.scene.control.LocalTimePicker;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Optional;
+import java.util.Locale;
 
 /**
- * Created by Ina on 09.04.2017.
+ * Created by Christina on 20.04.2017.
  */
-public class CreateHofkapelleController {
-
+public class CreateTourController {
     @FXML private TextField name;
     @FXML private TextArea description;
-    @FXML private JFXTimePicker startTime;
-    @FXML private JFXTimePicker endTime;
-    @FXML private JFXDatePicker date;
+    @FXML private JFXDatePicker startDate;
+    @FXML private JFXDatePicker endDate;
     @FXML private TextField eventLocation;
     @FXML private ChoiceBox<String> musicalWork;
     @FXML private TextField conductor;
@@ -30,9 +29,11 @@ public class CreateHofkapelleController {
     @FXML
     public void initialize() {
         name.setStyle("-fx-control-inner-background: #ffdec9");
-        date.setStyle("-fx-control-inner-background: #ffdec9");
-        startTime.setStyle("-fx-control-inner-background: #ffdec9");
+        startDate.setStyle("-fx-control-inner-background: #ffdec9");
+        endDate.setStyle("-fx-control-inner-background: #ffdec9");
         checkRequiredFields();
+
+
     }
 
     @FXML
@@ -46,6 +47,7 @@ public class CreateHofkapelleController {
         EventScheduleController.resetSideContent();
         return true;
     }
+
     private void checkRequiredFields() {
         name.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -58,24 +60,24 @@ public class CreateHofkapelleController {
 
             }
         });
-        date.valueProperty().addListener(new ChangeListener<LocalDate>() {
+        startDate.valueProperty().addListener(new ChangeListener<LocalDate>() {
             @Override
             public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
-                if(date.getValue() == null) {
-                    date.setStyle("-fx-control-inner-background: #ffdec9");
+                if(startDate.getValue() == null) {
+                    startDate.setStyle("-fx-control-inner-background: #ffdec9");
                 } else {
-                    date.setStyle("-fx-control-inner-background: #ffffff");
+                    startDate.setStyle("-fx-control-inner-background: #ffffff");
                 }
             }
         });
 
-        startTime.valueProperty().addListener(new ChangeListener<LocalTime>() {
+        endDate.valueProperty().addListener(new ChangeListener<LocalDate>() {
             @Override
-            public void changed(ObservableValue<? extends LocalTime> observable, LocalTime oldValue, LocalTime newValue) {
-                if(startTime.getValue() == null) {
-                    startTime.setStyle("-fx-control-inner-background: #ffdec9");
+            public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
+                if(endDate.getValue() == null) {
+                    endDate.setStyle("-fx-control-inner-background: #ffdec9");
                 } else {
-                    startTime.setStyle("-fx-control-inner-background: #ffffff");
+                    endDate.setStyle("-fx-control-inner-background: #ffffff");
                 }
             }
         });

@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import jfxtras.scene.control.agenda.Agenda;
 
@@ -30,12 +31,14 @@ import java.util.*;
  * Created by timorzipa on 06/04/2017.
  */
 public class EventScheduleController {
-    private String operaColor = "-fx-control-inner-background: #D06B64;";
-    private String colorConcert = "-fx-control-inner-background: #F83A22;";
-    private String colorTour = "-fx-control-inner-background: #FF7537;";
-    private String colorRehearsal = "-fx-control-inner-background: #FFAD46;";
-    private String colorNonMusical = "-fx-control-inner-background: #42D692;";
-    private String colorHofkapelle = "-fx-control-inner-background: #FA573C;";
+    private String colorOpera;
+    private String colorConcert;
+    private String colorTour;
+    private String colorRehearsal;
+    private String colorNonMusical;
+    private String colorHofkapelle;
+
+    private static boolean editOpen = false;
 
     private static Agenda staticAgenda;
     private static ScrollPane staticScrollPane;
@@ -90,25 +93,32 @@ public class EventScheduleController {
         initialzeCalendarView();
         setEventToMenuItems();
 
-        agenda.selectedAppointments().addListener(new ListChangeListener<Agenda.Appointment>() {
-            @Override
-            public void onChanged(Change<? extends Agenda.Appointment> c) {
-                if(agenda.selectedAppointments().isEmpty()) {
-                    return;
-                }
-
-                if(selectedAppointment != null && (agenda.selectedAppointments().get(0) != selectedAppointment)) {
+        agenda.setOnMouseClicked(event -> {
+            if(event.getTarget().toString().contains("DayBodyPane")) {
+                if(editOpen == true){
                     if(tryResetSideContent() == null) {
-                        showEventDetailView();
-                        selectedAppointment = agenda.selectedAppointments().get(0);
-                    } else {
-                        agenda.selectedAppointments().clear();
-                        agenda.selectedAppointments().add(selectedAppointment);
+                        removeSelection();
                     }
-                } else if(selectedAppointment == null && tryResetSideContent() == null) {
-                    showEventDetailView();
-                    selectedAppointment = agenda.selectedAppointments().get(0);
                 }
+            }
+        });
+
+        agenda.selectedAppointments().addListener((ListChangeListener<Agenda.Appointment>) c -> {
+            if(agenda.selectedAppointments().isEmpty()) {
+                return;
+            }
+
+            if(selectedAppointment != null && (agenda.selectedAppointments().get(0) != selectedAppointment)) {
+                if(tryResetSideContent() == null) {
+                    selectedAppointment = agenda.selectedAppointments().get(0);
+                    showEventDetailView();
+                } else {
+                    agenda.selectedAppointments().clear();
+                    agenda.selectedAppointments().add(selectedAppointment);
+                }
+            } else if(selectedAppointment == null && tryResetSideContent() == null) {
+                selectedAppointment = agenda.selectedAppointments().get(0);
+                showEventDetailView();
             }
         });
     }
@@ -163,14 +173,19 @@ public class EventScheduleController {
 
     public static void resetSideContent() {
         staticScrollPane.setContent(null);
+        editOpen = false;
     }
 
     public static void removeSelection(Agenda.Appointment appointment) {
-        if(!staticAgenda.selectedAppointments().isEmpty() && staticAgenda.selectedAppointments().get(0) == appointment)
-        {
+        if(!staticAgenda.selectedAppointments().isEmpty() && staticAgenda.selectedAppointments().get(0) == appointment) {
             staticAgenda.selectedAppointments().clear();
             selectedAppointment = null;
         }
+    }
+
+    public static void removeSelection() {
+        staticAgenda.selectedAppointments().clear();
+        selectedAppointment = null;
     }
 
     public static void addEventDutyToGUI(EventDutyModel event) {
@@ -225,7 +240,7 @@ public class EventScheduleController {
 
             while (line != null) {
                 if(line.contains("group1")) {
-                    operaColor = "-fx-control-inner-background: " + getColor(line) + ";";
+                    colorOpera = "-fx-control-inner-background: " + getColor(line) + ";";
                 } else if(line.contains("group2")) {
                     colorConcert = "-fx-control-inner-background: " + getColor(line) + ";";
                 } else if(line.contains("group3")) {
@@ -277,6 +292,49 @@ public class EventScheduleController {
                 }
             }
         });
+        addNewConcert.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    if(tryResetSideContent() == null) {
+                        agenda.selectedAppointments().clear();
+                        selectedAppointment = null;
+                        scrollPane.setContent(FXMLLoader.load(getClass().getResource("CreateConcert.fxml")));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        addNewHofkapelle.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    if(tryResetSideContent() == null) {
+                        agenda.selectedAppointments().clear();
+                        selectedAppointment = null;
+                        scrollPane.setContent(FXMLLoader.load(getClass().getResource("CreateHofkapelle.fxml")));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        addNewTour.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    if(tryResetSideContent() == null) {
+                        agenda.selectedAppointments().clear();
+                        selectedAppointment = null;
+                        scrollPane.setContent(FXMLLoader.load(getClass().getResource("CreateTour.fxml")));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private static void initializeAppointmentGroupsForEventtypes() {
@@ -302,12 +360,7 @@ public class EventScheduleController {
         agenda.setDisplayedLocalDateTime(LocalDateTime.now()); //show current week in event scheduler
 
         // disable edit menu
-        agenda.setEditAppointmentCallback(new Callback<Agenda.Appointment, Void>() {
-            @Override
-            public Void call(Agenda.Appointment param) {
-                return null;
-            }
-        });
+        agenda.setEditAppointmentCallback(param -> null);
     }
 
     private void initialzeCalendarView() {
@@ -324,7 +377,7 @@ public class EventScheduleController {
     }
 
     private void setColorKeyMap() {
-        colorKeyOpera.setStyle(operaColor);
+        colorKeyOpera.setStyle(colorOpera);
         colorKeyConcert.setStyle(colorConcert);
         colorKeyTour.setStyle(colorTour);
         colorKeyHofkapelle.setStyle(colorHofkapelle);
@@ -357,6 +410,16 @@ public class EventScheduleController {
 
                 if(EventType.Opera.toString().equals(eventDutyModel.getEventType())) {
                     scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditOpera.fxml")));
+                    editOpen = true;
+                } else if(EventType.Concert.toString().equals(eventDutyModel.getEventType())) {
+                    scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditConcert.fxml")));
+                    editOpen = true;
+                } else if(EventType.Tour.toString().equals(eventDutyModel.getEventType())) {
+                    scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditTour.fxml")));
+                    editOpen = true;
+                } else if(EventType.Hofkapelle.toString().equals(eventDutyModel.getEventType())) {
+                    scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditHofkapelle.fxml")));
+                    editOpen = true;
                 }
             }
         } catch (IOException e) {
