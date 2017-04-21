@@ -4,8 +4,9 @@
 <?import com.jfoenix.controls.JFXTimePicker?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -14,13 +15,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane fx:id="gridNewOpera" prefHeight="506.0" prefWidth="351.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.CreateOperaController">
+<GridPane fx:id="gridNewOpera" prefHeight="602.0" prefWidth="361.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.CreateOperaController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
    <rowConstraints>
-      <RowConstraints maxHeight="94.66667175292969" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="443.99999237060547" minHeight="10.0" prefHeight="430.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="94.66667175292969" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="522.0" minHeight="10.0" prefHeight="517.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="59.333343505859375" minHeight="10.0" prefHeight="37.333343505859375" vgrow="NEVER" />
    </rowConstraints>
    <children>
@@ -30,14 +31,15 @@
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="223.66668701171875" minWidth="10.0" prefWidth="223.66668701171875" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="56.0" minHeight="10.0" prefHeight="56.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="57.66668701171875" minHeight="10.0" prefHeight="57.66668701171875" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="39.33331298828125" minHeight="10.0" prefHeight="17.33331298828125" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="29.666656494140625" minHeight="9.66668701171875" prefHeight="29.666656494140625" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="37.333343505859375" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="47.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="45.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="51.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="99.0" minHeight="10.0" prefHeight="42.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="138.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="154.0" minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="174.0" minHeight="9.66668701171875" prefHeight="160.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="128.0" minHeight="9.66668701171875" prefHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="90.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
@@ -48,17 +50,32 @@
             <Label text="Endtime" GridPane.rowIndex="4" />
             <Label text="Location" GridPane.rowIndex="5" />
             <Label text="Musical Work" GridPane.rowIndex="6" />
-            <Label text="Conductor" GridPane.rowIndex="7" />
-            <Label text="Points" GridPane.rowIndex="8" />
+            <Label text="Conductor" GridPane.rowIndex="8" />
+            <Label text="Points" GridPane.rowIndex="9" />
             <TextField fx:id="name" prefHeight="25.0" prefWidth="199.0" GridPane.columnIndex="1" />
             <TextArea fx:id="description" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="eventLocation" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <ChoiceBox fx:id="musicalWork" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <TextField fx:id="conductor" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <TextField fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <TextField fx:id="conductor" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <TextField fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="9" />
             <JFXTimePicker fx:id="startTime" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <JFXTimePicker fx:id="endTime" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <JFXDatePicker fx:id="date" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <GridPane prefHeight="101.0" prefWidth="224.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="207.0" minWidth="10.0" prefWidth="199.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <TableView prefHeight="117.0" prefWidth="193.0">
+                     <columns>
+                        <TableColumn editable="false" prefWidth="206.0" sortable="false" text="Title" />
+                     </columns>
+                  </TableView>
+               </children>
+            </GridPane>
+            <Button mnemonicParsing="false" onMouseClicked="#editInstrumentation" text="Change Musical Work &amp; Instrumention" GridPane.columnIndex="1" GridPane.rowIndex="7" />
          </children>
          <padding>
             <Insets left="10.0" right="10.0" />

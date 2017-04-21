@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.InstrumentationController">
+   <children>
+      <GridPane alignment="CENTER" layoutX="-3.0" layoutY="-3.0" prefHeight="700.0" prefWidth="676.0">
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="320.0" minWidth="10.0" prefWidth="277.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="379.0" minWidth="10.0" prefWidth="372.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="201.0" minHeight="10.0" prefHeight="54.0" valignment="CENTER" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="701.0" minHeight="10.0" prefHeight="587.0" vgrow="SOMETIMES" />
+            <RowConstraints />
+            <RowConstraints />
+        </rowConstraints>
+         <children>
+            <Label text="Musical Works">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Label>
+             <ScrollPane fx:id="scrollPane" minHeight="-Infinity" prefHeight="315.0" prefWidth="375.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <GridPane minHeight="-Infinity" prefHeight="700.0" prefWidth="376.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="200.0" minHeight="10.0" prefHeight="199.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="160.0" minHeight="10.0" prefHeight="160.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="195.0" minHeight="10.0" prefHeight="146.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="152.0" minHeight="10.0" prefHeight="124.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="109.0" minHeight="10.0" prefHeight="69.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <GridPane>
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="147.0" minWidth="10.0" prefWidth="92.0" />
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="301.0" minWidth="10.0" prefWidth="92.0" />
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="301.0" minWidth="10.0" prefWidth="92.0" />
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="301.0" minWidth="10.0" prefWidth="92.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Label text="Strings">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label text="1. Violin" GridPane.rowIndex="1" />
+                                <Label text="2. Violin " GridPane.rowIndex="2" />
+                                <Label text="Viola" GridPane.rowIndex="3" />
+                                <Label text="Violoncello" GridPane.rowIndex="4" />
+                                <Label text="Doublebass" GridPane.rowIndex="5" />
+                                <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                            </children>
+                        </GridPane>
+                        <GridPane GridPane.rowIndex="1">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="92.0" />
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="273.0" minWidth="10.0" prefWidth="92.0" />
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="273.0" minWidth="10.0" prefWidth="92.0" />
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="273.0" minWidth="10.0" prefWidth="92.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="30.0" minHeight="0.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Label text="Brass">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label text="Horn" GridPane.rowIndex="1" />
+                                <Label text="Trumpet" GridPane.rowIndex="2" />
+                                <Label text="Trombone" GridPane.rowIndex="3" />
+                                <Label text="Tuba" GridPane.rowIndex="4" />
+                                <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                            </children>
+                        </GridPane>
+                        <GridPane GridPane.rowIndex="2">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="92.0" minWidth="10.0" prefWidth="92.0" />
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="101.0" minWidth="9.0" prefWidth="92.0" />
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="92.0" />
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="285.0" minWidth="10.0" prefWidth="92.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Label text="Flute" GridPane.rowIndex="1" />
+                                <Label text="Wood">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label text="Clarinet" GridPane.rowIndex="3" />
+                                <Label text="Oboe" GridPane.rowIndex="2" />
+                                <Label text="Bassoon" GridPane.rowIndex="4" />
+                                <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                            </children>
+                        </GridPane>
+                        <GridPane GridPane.rowIndex="3">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="92.0" />
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="92.0" />
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="92.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Label text="Percussion">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label text="Kettledrum" GridPane.rowIndex="1" />
+                                <Label text="Percussion" GridPane.rowIndex="3" />
+                                <Label text="Harp" GridPane.rowIndex="2" />
+                                <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                           <TextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                            </children>
+                        </GridPane>
+                        <GridPane GridPane.rowIndex="4">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="92.0" minWidth="10.0" prefWidth="92.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="253.0" minWidth="10.0" prefWidth="253.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Label text="Description" />
+                                <TextArea prefHeight="115.0" prefWidth="280.0" GridPane.columnIndex="1" />
+                            </children>
+                        </GridPane>
+                    </children>
+                    <opaqueInsets>
+                        <Insets left="10.0" />
+                    </opaqueInsets>
+                    <padding>
+                        <Insets left="10.0" />
+                    </padding>
+                </GridPane>
+             </ScrollPane>
+            <GridPane GridPane.rowIndex="1">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="563.0" minHeight="10.0" prefHeight="550.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="296.0" minHeight="10.0" prefHeight="56.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <TableView prefHeight="200.0" prefWidth="200.0">
+                    <columns>
+                      <TableColumn prefWidth="280.0" text="Title" />
+                    </columns>
+                  </TableView>
+                  <GridPane prefHeight="31.0" prefWidth="281.0" GridPane.rowIndex="1">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Button mnemonicParsing="false" text="Discard" />
+                        <Button mnemonicParsing="false" text="Apply" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+               </children>
+            </GridPane>
+            <GridPane GridPane.columnIndex="1">
+              <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="Instrumentation">
+                     <font>
+                        <Font size="21.0" />
+                     </font>
+                  </Label>
+                  <GridPane GridPane.rowIndex="1">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="88.0" minWidth="10.0" prefWidth="80.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="113.0" minWidth="10.0" prefWidth="101.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="114.0" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="95.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <JFXRadioButton prefHeight="17.0" prefWidth="60.0" text="Standard" GridPane.columnIndex="1" />
+                        <JFXRadioButton text="Alternative" GridPane.columnIndex="2" />
+                        <Label text="Event" GridPane.columnIndex="3" />
+                     </children>
+                  </GridPane>
+               </children>
+            </GridPane>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </GridPane>
+   </children>
+</AnchorPane>
