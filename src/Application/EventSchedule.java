@@ -23,23 +23,23 @@ public class EventSchedule {
         EventDuty.insertEventDuty(eventDuty);
     }
 
-    public static void insertTourEventDuty(EventDuty eventDuty) {
+    public static void insertTourEventDuty(EventDutyModel eventDuty) {
 
     }
 
-    public static void insertHofkapelleEventDuty(EventDuty eventDuty) {
+    public static void insertHofkapelleEventDuty(EventDutyModel eventDuty) {
 
     }
 
-    public static void insertConcertEventDuty(EventDuty eventDuty) {
+    public static void insertConcertEventDuty(EventDutyModel eventDuty) {
 
     }
 
-    public static void store(EventDuty eventDuty) {
+    public static void store(EventDutyModel eventDuty) {
 
     }
 
-    public static void delete(EventDuty eventDuty) {
+    public static void delete(EventDutyModel eventDuty) {
 
     }
 
