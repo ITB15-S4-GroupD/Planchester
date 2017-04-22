@@ -5,7 +5,6 @@ import Domain.Models.EventDutyModel;
 import Utils.DateHelper;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -20,6 +19,7 @@ public class EventDuty {
         session.save(eventDutyModel.getEventDutyEntity());
         DatabaseHelper.closeSession(session);
     }
+
 
     public static List<EventDutyModel> getAllEventDuty() {
         Session session = DatabaseHelper.beginSession();
