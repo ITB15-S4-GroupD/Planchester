@@ -3,6 +3,7 @@ package Domain.Models;
 import Domain.Entities.EventDutyEntity;
 import Domain.Enum.EventStatus;
 import Domain.Enum.EventType;
+import Utils.PlanchesterMessages;
 import Utils.Validator;
 
 import javax.xml.bind.ValidationException;
@@ -74,10 +75,10 @@ public class EventDutyModel {
         Validator.validateTimestampAfterToday(endtime);
         Validator.validateTimestamp1BeforeTimestamp2(starttime, endtime);
         if(eventType == null || !EventType.contains(eventType)) {
-            throw new ValidationException("Eventtype wrong");
+            throw new ValidationException(PlanchesterMessages.VALIDATION_FAILED);
         }
         if(eventStatus == null || !EventStatus.contains(eventStatus)) {
-            throw new ValidationException("Eventstatus wrong");
+            throw new ValidationException(PlanchesterMessages.VALIDATION_FAILED);
         }
         Validator.validateString(conductor, 25);
         Validator.validateString(location, 255);
