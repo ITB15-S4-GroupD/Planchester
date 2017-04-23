@@ -60,7 +60,7 @@ public class CreateConcertController {
         if( !points.getText().isEmpty() ) eventDutyModel.setDefaultPoints(Double.parseDouble(points.getText()));
         //TODO eventDutyByRehearsalFor and instrumentation
 
-        EventSchedule.insertNewEventDutyModel(eventDutyModel);
+        EventSchedule.insertConcertEventDuty(eventDutyModel);
 
         EventScheduleController.addEventDutyToGUI(eventDutyModel); // add event to agenda
         EventScheduleController.setDisplayedLocalDateTime(eventDutyModel.getStarttime().toLocalDateTime()); // set agenda view to week of created event
