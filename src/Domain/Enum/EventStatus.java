@@ -7,8 +7,8 @@ public enum EventStatus {
     Unpublished, Published, Cancelled;
 
     public static boolean contains(String s) {
-        for (EventStatus enumValue : values()) {
-            if (enumValue.name().equals(s)) {
+        for (EventStatus es : values()) {
+            if (es.name().equals(s)) {
                 return true;
             }
         }

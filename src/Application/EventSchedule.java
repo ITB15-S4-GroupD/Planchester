@@ -1,9 +1,15 @@
 package Application;
 
+import Domain.Enum.EventStatus;
+import Domain.Enum.EventType;
 import Domain.Models.EventDutyModel;
 import Persistence.EventDuty;
+import Presentation.EventSchedule.EventScheduleController;
 import Utils.DateHelper;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,18 +27,36 @@ public class EventSchedule {
 
     public static void insertNewOperaPerformance(EventDutyModel eventDuty) {
 //        eventDuty.prevalidate();
-//        EventDuty.insertNewOperaPerformance(eventDuty);
+        EventDuty.insertNewEventDuty(eventDuty);
     }
 
     public static void insertTourEventDuty(EventDutyModel eventDuty) {
 
+        EventDutyModel nextTourDay = null;
+        LocalDate dateStart = eventDuty.getStarttime().toLocalDateTime().toLocalDate();
+        LocalDate dateEnd = eventDuty.getEndtime().toLocalDateTime().toLocalDate();
+        LocalTime timeStart = LocalTime.of(0,0);
+        LocalTime timeEnd = LocalTime.of(23, 59);
+        LocalDate current = dateStart;
+
+        while( !current.isAfter(dateEnd) ){
+            eventDuty.setStarttime(DateHelper.mergeDateAndTime(current, timeStart));
+            eventDuty.setEndtime(DateHelper.mergeDateAndTime(current, timeEnd));
+            EventDuty.insertNewEventDuty(eventDuty);
+            EventScheduleController.addEventDutyToGUI(eventDuty); // add event to agenda
+            current = LocalDate.parse(current.toString()).plusDays(1);
+        }
+
+        EventScheduleController.resetSideContent(); // remove content of sidebar
+        EventScheduleController.setDisplayedLocalDateTime(eventDuty.getStarttime().toLocalDateTime()); // set agenda view to week of created event
+        EventScheduleController.setSelectedAppointment(eventDuty); // select last created appointment
     }
-
     public static void insertHofkapelleEventDuty(EventDutyModel eventDuty) {
-
+        EventDuty.insertNewEventDuty(eventDuty);
     }
 
     public static void insertConcertEventDuty(EventDutyModel eventDuty) {
+        EventDuty.insertNewEventDuty(eventDuty);
 
     }
 
