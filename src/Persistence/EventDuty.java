@@ -15,9 +15,9 @@ import java.util.List;
  */
 public class EventDuty {
 
-    public static void insertNewEventDuty(EventDutyModel eventDutyModel) {
+    public static void insertNewEventDuty(EventDutyEntity eventDutyEntity) {
         Session session = DatabaseHelper.beginSession();
-        session.save(eventDutyModel.getEventDutyEntity());
+        session.save(eventDutyEntity);
         DatabaseHelper.closeSession(session);
     }
 

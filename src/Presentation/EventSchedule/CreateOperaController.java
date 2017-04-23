@@ -102,14 +102,12 @@ public class CreateOperaController {
         eventDutyModel.setStarttime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
         eventDutyModel.setEndtime(DateHelper.mergeDateAndTime(date.getValue(), endTime.getValue()));
 
-        EventSchedule.insertNewOperaPerformance(eventDutyModel);
+        EventSchedule.insertNewEventDutyModel(eventDutyModel);
 
         EventScheduleController.addEventDutyToGUI(eventDutyModel); // add event to agenda
         EventScheduleController.setDisplayedLocalDateTime(eventDutyModel.getStarttime().toLocalDateTime()); // set agenda view to week of created event
         EventScheduleController.resetSideContent(); // remove content of sidebar
         EventScheduleController.setSelectedAppointment(eventDutyModel); // select created appointment
-
-        EventDuty.insertNewEventDuty(eventDutyModel);
     }
 
     private void prevalidateGUI() {

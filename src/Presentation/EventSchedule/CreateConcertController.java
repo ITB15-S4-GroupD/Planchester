@@ -59,14 +59,12 @@ public class CreateConcertController {
         eventDutyModel.setDefaultPoints(Double.parseDouble(points.getText()));
         eventDutyModel.setEventStatus(EventStatus.Unpublished.toString());
 
-        EventSchedule.insertConcertEventDuty(eventDutyModel);
+        EventSchedule.insertNewEventDutyModel(eventDutyModel);
 
         EventScheduleController.addEventDutyToGUI(eventDutyModel); // add event to agenda
         EventScheduleController.setDisplayedLocalDateTime(eventDutyModel.getStarttime().toLocalDateTime()); // set agenda view to week of created event
         EventScheduleController.resetSideContent(); // remove content of sidebar
         EventScheduleController.setSelectedAppointment(eventDutyModel); // select created appointment
-
-        EventDuty.insertNewEventDuty(eventDutyModel);
     }
 
     @FXML
