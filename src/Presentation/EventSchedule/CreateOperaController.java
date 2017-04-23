@@ -4,6 +4,7 @@ import Application.EventSchedule;
 import Domain.Enum.EventStatus;
 import Domain.Enum.EventType;
 import Domain.Models.EventDutyModel;
+import Persistence.EventDuty;
 import Utils.DateHelper;
 import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
@@ -107,6 +108,8 @@ public class CreateOperaController {
         EventScheduleController.setDisplayedLocalDateTime(eventDutyModel.getStarttime().toLocalDateTime()); // set agenda view to week of created event
         EventScheduleController.resetSideContent(); // remove content of sidebar
         EventScheduleController.setSelectedAppointment(eventDutyModel); // select created appointment
+
+        EventDuty.insertNewEventDuty(eventDutyModel);
     }
 
     private void prevalidateGUI() {

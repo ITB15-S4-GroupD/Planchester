@@ -42,7 +42,9 @@ public class CreateConcertController {
     }
 
     @FXML
-    private void save() {
+    private void insertNewConcertPerformance() {
+        prevalidateGUI();
+  
         // create object
         EventDutyModel eventDutyModel = new EventDutyModel();
 
@@ -64,7 +66,7 @@ public class CreateConcertController {
         EventScheduleController.resetSideContent(); // remove content of sidebar
         EventScheduleController.setSelectedAppointment(eventDutyModel); // select created appointment
 
-        EventDuty.insertNewOperaPerformance(eventDutyModel);
+        EventDuty.insertNewEventDuty(eventDutyModel);
     }
 
     @FXML
@@ -84,8 +86,7 @@ public class CreateConcertController {
         return true;
     }
 
-    private void validateGUI() {
-        //TODO implement musical work
+    private void prevalidateGUI() {
         LocalDate today = LocalDate.now();
         LocalTime start = startTime.getValue();
         LocalTime end = endTime.getValue();
@@ -93,29 +94,15 @@ public class CreateConcertController {
         if(name.getText().isEmpty()){
             throwErrorAlertMessage("The Name is missing.");
             name.requestFocus();
-        } else if(description.getText().isEmpty()){
-            throwErrorAlertMessage("The description is missing.");
-            description.requestFocus();
         } else if(date.getValue() == null || date.getValue().isBefore(today) ){
             throwErrorAlertMessage("The date is not valid.");
             date.requestFocus();
         } else if(start == null) {
             throwErrorAlertMessage("The starttime is missing.");
-        } else if(end == null) {
-            throwErrorAlertMessage("The endtime is missing.");
-        } else if(start.isAfter(end) || start.equals(end)) {
+        } else if(end != null && (start.isAfter(end) || start.equals(end))) {
             throwErrorAlertMessage("The endtime is not after the starttime. ");
         } else if(date.getValue().equals(today) && start.isBefore(LocalTime.now())){
             throwErrorAlertMessage("The starttime must be in future. \n");
-        } else if(eventLocation.getText().isEmpty()){
-            throwErrorAlertMessage("The location is missing.");
-            eventLocation.requestFocus();
-        } else if(conductor.getText().isEmpty()){
-            throwErrorAlertMessage("The conductor is missing.");
-            conductor.requestFocus();
-        } else if(points.getText().isEmpty()){
-            throwErrorAlertMessage("The points are missing.");
-            points.requestFocus();
         }
     }
 
