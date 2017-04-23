@@ -51,12 +51,12 @@ public class EventSchedule {
         EventScheduleController.setDisplayedLocalDateTime(eventDutyModel.getStarttime().toLocalDateTime()); // set agenda view to week of created event
         EventScheduleController.setSelectedAppointment(eventDutyModel); // select last created appointment
     }
-    public static void insertHofkapelleEventDuty(EventDutyModel eventDuty) {
-        EventDuty.insertNewEventDuty(eventDuty.getEventDutyEntity());
+    public static void insertHofkapelleEventDuty(EventDutyModel eventDutyModel) {
+        EventDuty.insertNewEventDuty(eventDutyModel.getEventDutyEntity());
     }
 
-    public static void insertConcertEventDuty(EventDutyModel eventDuty) {
-        EventDuty.insertNewEventDuty(eventDuty.getEventDutyEntity());
+    public static void insertConcertEventDuty(EventDutyModel eventDutyModel) {
+        EventDuty.insertNewEventDuty(eventDutyModel.getEventDutyEntity());
     }
 
     public static void store(EventDutyModel eventDuty) {
