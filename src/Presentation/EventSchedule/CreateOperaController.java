@@ -104,13 +104,12 @@ public class CreateOperaController {
         if( !points.getText().isEmpty() ) eventDutyModel.setDefaultPoints(Double.parseDouble(points.getText()));
         //TODO eventDutyByRehearsalFor and instrumentation
 
-        EventSchedule.insertNewOperaPerformance(eventDutyModel);
+        EventSchedule.insertNewEventDutyModel(eventDutyModel);
 
         EventScheduleController.addEventDutyToGUI(eventDutyModel); // add event to agenda
         EventScheduleController.setDisplayedLocalDateTime(eventDutyModel.getStarttime().toLocalDateTime()); // set agenda view to week of created event
         EventScheduleController.resetSideContent(); // remove content of sidebar
         EventScheduleController.setSelectedAppointment(eventDutyModel); // select created appointment
-
         // twice? sh. 111 EventSchedule invokes also this methode
         //EventDuty.insertNewEventDuty(eventDutyModel);
     }

@@ -24,7 +24,7 @@ public class EventSchedule {
 
     public static void publish(Month month) {
     }
-
+  
     public static void insertNewOperaPerformance(EventDutyModel eventDuty) {
 //        eventDuty.prevalidate();
         EventDuty.insertNewEventDuty(eventDuty);
@@ -57,7 +57,6 @@ public class EventSchedule {
 
     public static void insertConcertEventDuty(EventDutyModel eventDuty) {
         EventDuty.insertNewEventDuty(eventDuty);
-
     }
 
     public static void store(EventDutyModel eventDuty) {
