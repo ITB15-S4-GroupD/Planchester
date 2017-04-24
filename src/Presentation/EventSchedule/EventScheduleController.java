@@ -202,6 +202,7 @@ public class EventScheduleController {
             appointment.setAppointmentGroup(concert);
         } else if(EventType.Tour.toString().equals(event.getEventType())) {
             appointment.setAppointmentGroup(tour);
+            appointment.setWholeDay(true);
         } else if(EventType.Rehearsal.toString().equals(event.getEventType())) {
             appointment.setAppointmentGroup(rehearsal);
         } else if(EventType.Hofkapelle.toString().equals(event.getEventType())) {
