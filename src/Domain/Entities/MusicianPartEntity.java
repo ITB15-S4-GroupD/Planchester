@@ -11,9 +11,11 @@ import javax.persistence.*;
 public class MusicianPartEntity {
     private int musician;
     private int part;
+    private PersonEntity personByMusician;
+    private PartEntity partByPart;
 
     @Id
-    @Column(name = "musician")
+    @Column(name = "musician", nullable = false)
     public int getMusician() {
         return musician;
     }
@@ -23,7 +25,7 @@ public class MusicianPartEntity {
     }
 
     @Id
-    @Column(name = "part")
+    @Column(name = "part", nullable = false)
     public int getPart() {
         return part;
     }
@@ -51,4 +53,25 @@ public class MusicianPartEntity {
         result = 31 * result + part;
         return result;
     }
+
+    @ManyToOne
+    @JoinColumn(name = "musician", referencedColumnName = "personId", nullable = false, insertable = false, updatable = false)
+    public PersonEntity getPersonByMusician() {
+        return personByMusician;
+    }
+
+    public void setPersonByMusician(PersonEntity personByMusician) {
+        this.personByMusician = personByMusician;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "part", referencedColumnName = "partID", nullable = false, insertable = false, updatable = false)
+    public PartEntity getPartByPart() {
+        return partByPart;
+    }
+
+    public void setPartByPart(PartEntity partByPart) {
+        this.partByPart = partByPart;
+    }
 }
+

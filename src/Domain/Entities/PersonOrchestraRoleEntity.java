@@ -10,13 +10,11 @@ import javax.persistence.*;
 @IdClass(PersonOrchestraRoleEntityPK.class)
 public class PersonOrchestraRoleEntity {
     private int person;
-    private Enum orchestraRole;
+    private String orchestraRole;
     private PersonEntity personByPerson;
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "person", referencedColumnName = "personId", nullable = false)
-    @Column(name = "person")
+    @Column(name = "person", nullable = false)
     public int getPerson() {
         return person;
     }
@@ -26,12 +24,12 @@ public class PersonOrchestraRoleEntity {
     }
 
     @Id
-    @Column(name = "orchestraRole")
-    public Enum getOrchestraRole() {
+    @Column(name = "orchestraRole", nullable = false, columnDefinition = "enum('Concertmaster', 'Section_leader', 'Tuttiplayer', 'Soloist')")
+    public String getOrchestraRole() {
         return orchestraRole;
     }
 
-    public void setOrchestraRole(Enum orchestraRole) {
+    public void setOrchestraRole(String orchestraRole) {
         this.orchestraRole = orchestraRole;
     }
 
@@ -54,6 +52,12 @@ public class PersonOrchestraRoleEntity {
         int result = person;
         result = 31 * result + (orchestraRole != null ? orchestraRole.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "person", referencedColumnName = "personId", nullable = false, insertable = false, updatable = false)
+    public PersonEntity getPersonByPerson() {
+        return personByPerson;
     }
 
     public void setPersonByPerson(PersonEntity personByPerson) {

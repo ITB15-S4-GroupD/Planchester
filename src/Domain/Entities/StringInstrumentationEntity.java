@@ -1,6 +1,7 @@
 package Domain.Entities;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * Created by Bernd on 06.04.2017.
@@ -14,10 +15,11 @@ public class StringInstrumentationEntity {
     private int viola;
     private int violincello;
     private int doublebass;
+    private Collection<InstrumentationEntity> instrumentationsByStringInstrumentationId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "stringInstrumentationID")
+    @Column(name = "stringInstrumentationID", nullable = false)
     public int getStringInstrumentationId() {
         return stringInstrumentationId;
     }
@@ -27,7 +29,7 @@ public class StringInstrumentationEntity {
     }
 
     @Basic
-    @Column(name = "violin1")
+    @Column(name = "violin1", nullable = false)
     public int getViolin1() {
         return violin1;
     }
@@ -37,7 +39,7 @@ public class StringInstrumentationEntity {
     }
 
     @Basic
-    @Column(name = "violin2")
+    @Column(name = "violin2", nullable = false)
     public int getViolin2() {
         return violin2;
     }
@@ -47,7 +49,7 @@ public class StringInstrumentationEntity {
     }
 
     @Basic
-    @Column(name = "viola")
+    @Column(name = "viola", nullable = false)
     public int getViola() {
         return viola;
     }
@@ -57,7 +59,7 @@ public class StringInstrumentationEntity {
     }
 
     @Basic
-    @Column(name = "violincello")
+    @Column(name = "violincello", nullable = false)
     public int getViolincello() {
         return violincello;
     }
@@ -67,7 +69,7 @@ public class StringInstrumentationEntity {
     }
 
     @Basic
-    @Column(name = "doublebass")
+    @Column(name = "doublebass", nullable = false)
     public int getDoublebass() {
         return doublebass;
     }
@@ -102,5 +104,14 @@ public class StringInstrumentationEntity {
         result = 31 * result + violincello;
         result = 31 * result + doublebass;
         return result;
+    }
+
+    @OneToMany(mappedBy = "stringInstrumentationByStringInstrumentation")
+    public Collection<InstrumentationEntity> getInstrumentationsByStringInstrumentationId() {
+        return instrumentationsByStringInstrumentationId;
+    }
+
+    public void setInstrumentationsByStringInstrumentationId(Collection<InstrumentationEntity> instrumentationsByStringInstrumentationId) {
+        this.instrumentationsByStringInstrumentationId = instrumentationsByStringInstrumentationId;
     }
 }

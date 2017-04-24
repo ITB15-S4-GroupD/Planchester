@@ -1,6 +1,7 @@
 package Domain.Entities;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * Created by Bernd on 06.04.2017.
@@ -13,10 +14,11 @@ public class WoodInstrumentationEntity {
     private int oboe;
     private int clarinet;
     private int bassoon;
+    private Collection<InstrumentationEntity> instrumentationsByWoodInstrumentationId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "woodInstrumentationID")
+    @Column(name = "woodInstrumentationID", nullable = false)
     public int getWoodInstrumentationId() {
         return woodInstrumentationId;
     }
@@ -26,7 +28,7 @@ public class WoodInstrumentationEntity {
     }
 
     @Basic
-    @Column(name = "flute")
+    @Column(name = "flute", nullable = false)
     public int getFlute() {
         return flute;
     }
@@ -36,7 +38,7 @@ public class WoodInstrumentationEntity {
     }
 
     @Basic
-    @Column(name = "oboe")
+    @Column(name = "oboe", nullable = false)
     public int getOboe() {
         return oboe;
     }
@@ -46,7 +48,7 @@ public class WoodInstrumentationEntity {
     }
 
     @Basic
-    @Column(name = "clarinet")
+    @Column(name = "clarinet", nullable = false)
     public int getClarinet() {
         return clarinet;
     }
@@ -56,7 +58,7 @@ public class WoodInstrumentationEntity {
     }
 
     @Basic
-    @Column(name = "bassoon")
+    @Column(name = "bassoon", nullable = false)
     public int getBassoon() {
         return bassoon;
     }
@@ -89,5 +91,14 @@ public class WoodInstrumentationEntity {
         result = 31 * result + clarinet;
         result = 31 * result + bassoon;
         return result;
+    }
+
+    @OneToMany(mappedBy = "woodInstrumentationByWoodInstrumentation")
+    public Collection<InstrumentationEntity> getInstrumentationsByWoodInstrumentationId() {
+        return instrumentationsByWoodInstrumentationId;
+    }
+
+    public void setInstrumentationsByWoodInstrumentationId(Collection<InstrumentationEntity> instrumentationsByWoodInstrumentationId) {
+        this.instrumentationsByWoodInstrumentationId = instrumentationsByWoodInstrumentationId;
     }
 }
