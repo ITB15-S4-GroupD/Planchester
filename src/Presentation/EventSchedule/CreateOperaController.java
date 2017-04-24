@@ -11,7 +11,11 @@ import com.jfoenix.controls.JFXTimePicker;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -159,5 +163,21 @@ public class CreateOperaController {
         // remove content of sidebar
         EventScheduleController.resetSideContent();
         return true;
+    }
+
+    @FXML
+    public void editInstrumentation() {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("Instrumentation.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = new Stage();
+        stage.setTitle("Musical Work & Instrumentation");
+        stage.setScene(scene);
+        stage.show();
     }
 }
