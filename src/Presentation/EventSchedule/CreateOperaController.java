@@ -174,12 +174,12 @@ public class CreateOperaController {
         fxmlLoader.setLocation(getClass().getResource("Instrumentation.fxml"));
         Scene scene = null;
         try {
-            scene = new Scene(fxmlLoader.load(), 680, 680);
+            scene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
             e.printStackTrace();
         }
         Stage stage = new Stage();
-        stage.setTitle("Musical Work & Instrumenation");
+        stage.setTitle("Musical Work & Instrumentation");
         stage.setScene(scene);
         stage.show();
     }
