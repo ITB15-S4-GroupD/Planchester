@@ -1,6 +1,7 @@
 package Domain.Entities;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * Created by Bernd on 06.04.2017.
@@ -11,11 +12,12 @@ public class AccountEntity {
     private int accountId;
     private String username;
     private String password;
-    private Enum accountRole;
+    private String accountRole;
+    private Collection<PersonEntity> peopleByAccountId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "accountID")
+    @Column(name = "accountID", nullable = false)
     public int getAccountId() {
         return accountId;
     }
@@ -25,7 +27,7 @@ public class AccountEntity {
     }
 
     @Basic
-    @Column(name = "username")
+    @Column(name = "username", nullable = false, length = 255)
     public String getUsername() {
         return username;
     }
@@ -35,7 +37,7 @@ public class AccountEntity {
     }
 
     @Basic
-    @Column(name = "password")
+    @Column(name = "password", nullable = false, length = 255, columnDefinition = "enum('Musician', 'Administrator', 'Manager', 'Substitute', 'Section_representative')")
     public String getPassword() {
         return password;
     }
@@ -44,14 +46,12 @@ public class AccountEntity {
         this.password = password;
     }
 
-    @Basic
-    @Enumerated(EnumType.STRING)
-    @Column(name = "accountRole")
-    public Enum getAccountRole() {
+    @Column(name = "accountRole", nullable = false)
+    public String getAccountRole() {
         return accountRole;
     }
 
-    public void setAccountRole(Enum accountRole) {
+    public void setAccountRole(String accountRole) {
         this.accountRole = accountRole;
     }
 
@@ -77,5 +77,14 @@ public class AccountEntity {
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (accountRole != null ? accountRole.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "accountByAccount")
+    public Collection<PersonEntity> getPeopleByAccountId() {
+        return peopleByAccountId;
+    }
+
+    public void setPeopleByAccountId(Collection<PersonEntity> peopleByAccountId) {
+        this.peopleByAccountId = peopleByAccountId;
     }
 }

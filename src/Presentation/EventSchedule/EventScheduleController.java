@@ -93,38 +93,32 @@ public class EventScheduleController {
         initialzeCalendarView();
         setEventToMenuItems();
 
-        agenda.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if(event.getTarget().toString().contains("DayBodyPane")) {
-                    if(editOpen == true){
-                        if(tryResetSideContent() == null) {
-                            removeSelection();
-                        }
+        agenda.setOnMouseClicked(event -> {
+            if(event.getTarget().toString().contains("DayBodyPane")) {
+                if(editOpen == true){
+                    if(tryResetSideContent() == null) {
+                        removeSelection();
                     }
                 }
             }
         });
 
-        agenda.selectedAppointments().addListener(new ListChangeListener<Agenda.Appointment>() {
-            @Override
-            public void onChanged(Change<? extends Agenda.Appointment> c) {
-                if(agenda.selectedAppointments().isEmpty()) {
-                    return;
-                }
+        agenda.selectedAppointments().addListener((ListChangeListener<Agenda.Appointment>) c -> {
+            if(agenda.selectedAppointments().isEmpty()) {
+                return;
+            }
 
-                if(selectedAppointment != null && (agenda.selectedAppointments().get(0) != selectedAppointment)) {
-                    if(tryResetSideContent() == null) {
-                        selectedAppointment = agenda.selectedAppointments().get(0);
-                        showEventDetailView();
-                    } else {
-                        agenda.selectedAppointments().clear();
-                        agenda.selectedAppointments().add(selectedAppointment);
-                    }
-                } else if(selectedAppointment == null && tryResetSideContent() == null) {
+            if(selectedAppointment != null && (agenda.selectedAppointments().get(0) != selectedAppointment)) {
+                if(tryResetSideContent() == null) {
                     selectedAppointment = agenda.selectedAppointments().get(0);
                     showEventDetailView();
+                } else {
+                    agenda.selectedAppointments().clear();
+                    agenda.selectedAppointments().add(selectedAppointment);
                 }
+            } else if(selectedAppointment == null && tryResetSideContent() == null) {
+                selectedAppointment = agenda.selectedAppointments().get(0);
+                showEventDetailView();
             }
         });
     }
@@ -208,6 +202,7 @@ public class EventScheduleController {
             appointment.setAppointmentGroup(concert);
         } else if(EventType.Tour.toString().equals(event.getEventType())) {
             appointment.setAppointmentGroup(tour);
+            appointment.setWholeDay(true);
         } else if(EventType.Rehearsal.toString().equals(event.getEventType())) {
             appointment.setAppointmentGroup(rehearsal);
         } else if(EventType.Hofkapelle.toString().equals(event.getEventType())) {
@@ -366,12 +361,7 @@ public class EventScheduleController {
         agenda.setDisplayedLocalDateTime(LocalDateTime.now()); //show current week in event scheduler
 
         // disable edit menu
-        agenda.setEditAppointmentCallback(new Callback<Agenda.Appointment, Void>() {
-            @Override
-            public Void call(Agenda.Appointment param) {
-                return null;
-            }
-        });
+        agenda.setEditAppointmentCallback(param -> null);
     }
 
     private void initialzeCalendarView() {

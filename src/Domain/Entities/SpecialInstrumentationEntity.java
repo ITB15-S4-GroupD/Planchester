@@ -1,5 +1,7 @@
 package Domain.Entities;
 
+import Domain.Enum.SectionType;
+
 import javax.persistence.*;
 
 /**
@@ -9,14 +11,15 @@ import javax.persistence.*;
 @Table(name = "SpecialInstrumentation", schema = "sem4_team2", catalog = "")
 public class SpecialInstrumentationEntity {
     private int specialInstrumentationId;
-    private Enum sectionType;
+    private String sectionType;
+    private int instrumentationId;
     private String specialInstrument;
     private int specialInstrumentationNumber;
     private InstrumentationEntity instrumentationByInstrumentationId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "specialInstrumentationID")
+    @Column(name = "specialInstrumentationID", nullable = false)
     public int getSpecialInstrumentationId() {
         return specialInstrumentationId;
     }
@@ -25,19 +28,27 @@ public class SpecialInstrumentationEntity {
         this.specialInstrumentationId = specialInstrumentationId;
     }
 
-    @Basic
-    @Enumerated(EnumType.STRING)
-    @Column(name = "sectionType")
-    public Enum getSectionType() {
+    @Column(name = "sectionType", nullable = false, precision = 0, columnDefinition = "enum('Violin1', 'Violin2', 'Viola', 'Violincello', 'Doublebass', 'Woodwind', 'Brass', 'Percussion')")
+    public String getSectionType() {
         return sectionType;
     }
 
-    public void setSectionType(Enum sectionType) {
+    public void setSectionType(String sectionType) {
         this.sectionType = sectionType;
     }
 
     @Basic
-    @Column(name = "specialInstrument")
+    @Column(name = "instrumentationID", nullable = false)
+    public int getInstrumentationId() {
+        return instrumentationId;
+    }
+
+    public void setInstrumentationId(int instrumentationId) {
+        this.instrumentationId = instrumentationId;
+    }
+
+    @Basic
+    @Column(name = "specialInstrument", nullable = false, length = 255)
     public String getSpecialInstrument() {
         return specialInstrument;
     }
@@ -47,7 +58,7 @@ public class SpecialInstrumentationEntity {
     }
 
     @Basic
-    @Column(name = "specialInstrumentationNumber")
+    @Column(name = "specialInstrumentationNumber", nullable = false)
     public int getSpecialInstrumentationNumber() {
         return specialInstrumentationNumber;
     }
@@ -64,6 +75,7 @@ public class SpecialInstrumentationEntity {
         SpecialInstrumentationEntity that = (SpecialInstrumentationEntity) o;
 
         if (specialInstrumentationId != that.specialInstrumentationId) return false;
+        if (instrumentationId != that.instrumentationId) return false;
         if (specialInstrumentationNumber != that.specialInstrumentationNumber) return false;
         if (sectionType != null ? !sectionType.equals(that.sectionType) : that.sectionType != null) return false;
         if (specialInstrument != null ? !specialInstrument.equals(that.specialInstrument) : that.specialInstrument != null)
@@ -76,13 +88,14 @@ public class SpecialInstrumentationEntity {
     public int hashCode() {
         int result = specialInstrumentationId;
         result = 31 * result + (sectionType != null ? sectionType.hashCode() : 0);
+        result = 31 * result + instrumentationId;
         result = 31 * result + (specialInstrument != null ? specialInstrument.hashCode() : 0);
         result = 31 * result + specialInstrumentationNumber;
         return result;
     }
 
     @ManyToOne
-    @JoinColumn(name = "instrumentationID", referencedColumnName = "instrumentationID", nullable = false)
+    @JoinColumn(name = "instrumentationID", referencedColumnName = "instrumentationID", nullable = false, insertable = false, updatable = false)
     public InstrumentationEntity getInstrumentationByInstrumentationId() {
         return instrumentationByInstrumentationId;
     }

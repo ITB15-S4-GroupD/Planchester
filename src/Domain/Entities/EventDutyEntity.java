@@ -4,6 +4,7 @@ import Domain.Models.EventDutyModel;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Collection;
 
 /**
  * Created by Bernd on 06.04.2017.
@@ -21,7 +22,15 @@ public class EventDutyEntity {
     private String conductor;
     private String location;
     private double defaultPoints;
+    private Integer instrumentation;
     private EventDutyEntity eventDutyByRehearsalFor;
+    private Integer rehearsalFor;
+    private InstrumentationEntity instrumentationByInstrumentation;
+    private Collection<EventDutyEntity> eventDutiesByEventDutyId;
+    private Collection<DutyDispositionEntity> dutyDispositionsByEventDutyId;
+    private Collection<EventDutyMusicalWorkEntity> eventDutyMusicalWorksByEventDutyId;
+    private Collection<EventDutySectionDutyRosterEntity> eventDutySectionDutyRostersByEventDutyId;
+    private Collection<RequestEntity> requestsByEventDutyId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -113,6 +122,16 @@ public class EventDutyEntity {
     }
 
     @Basic
+    @Column(name = "rehearsalFor", nullable = true)
+    public Integer getRehearsalFor() {
+        return rehearsalFor;
+    }
+
+    public void setRehearsalFor(Integer rehearsalFor) {
+        this.rehearsalFor = rehearsalFor;
+    }
+
+    @Basic
     @Column(name = "defaultPoints")
     public double getDefaultPoints() {
         return defaultPoints;
@@ -120,6 +139,16 @@ public class EventDutyEntity {
 
     public void setDefaultPoints(double defaultPoints) {
         this.defaultPoints = defaultPoints;
+    }
+
+    @Basic
+    @Column(name = "instrumentation", nullable = true)
+    public Integer getInstrumentation() {
+        return instrumentation;
+    }
+
+    public void setInstrumentation(Integer instrumentation) {
+        this.instrumentation = instrumentation;
     }
 
     @Override
@@ -139,7 +168,8 @@ public class EventDutyEntity {
         if (eventStatus != null ? !eventStatus.equals(that.eventStatus) : that.eventStatus != null) return false;
         if (conductor != null ? !conductor.equals(that.conductor) : that.conductor != null) return false;
         if (location != null ? !location.equals(that.location) : that.location != null) return false;
-
+        if (instrumentation != null ? !instrumentation.equals(that.instrumentation) : that.instrumentation != null) return false;
+        if (rehearsalFor != null ? !rehearsalFor.equals(that.rehearsalFor) : that.rehearsalFor != null) return false;
         return true;
     }
 
@@ -156,13 +186,15 @@ public class EventDutyEntity {
         result = 31 * result + (eventStatus != null ? eventStatus.hashCode() : 0);
         result = 31 * result + (conductor != null ? conductor.hashCode() : 0);
         result = 31 * result + (location != null ? location.hashCode() : 0);
+        result = 31 * result + (rehearsalFor != null ? rehearsalFor.hashCode() : 0);
         temp = Double.doubleToLongBits(defaultPoints);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (instrumentation != null ? instrumentation.hashCode() : 0);
         return result;
     }
 
     @ManyToOne
-    @JoinColumn(name = "rehearsalFor", referencedColumnName = "eventDutyID")
+    @JoinColumn(name = "rehearsalFor", referencedColumnName = "eventDutyID", insertable = false, updatable = false)
     public EventDutyEntity getEventDutyByRehearsalFor() {
         return eventDutyByRehearsalFor;
     }
@@ -170,4 +202,60 @@ public class EventDutyEntity {
     public void setEventDutyByRehearsalFor(EventDutyEntity eventDutyByRehearsalFor) {
         this.eventDutyByRehearsalFor = eventDutyByRehearsalFor;
     }
+
+    @ManyToOne
+    @JoinColumn(name = "instrumentation", referencedColumnName = "instrumentationID", insertable = false, updatable = false)
+    public InstrumentationEntity getInstrumentationByInstrumentation() {
+        return instrumentationByInstrumentation;
+    }
+
+    public void setInstrumentationByInstrumentation(InstrumentationEntity instrumentationByInstrumentation) {
+        this.instrumentationByInstrumentation = instrumentationByInstrumentation;
+    }
+
+    @OneToMany(mappedBy = "eventDutyByEventDuty")
+    public Collection<EventDutyMusicalWorkEntity> getEventDutyMusicalWorksByEventDutyId() {
+        return eventDutyMusicalWorksByEventDutyId;
+    }
+
+    public void setEventDutyMusicalWorksByEventDutyId(Collection<EventDutyMusicalWorkEntity> eventDutyMusicalWorksByEventDutyId) {
+        this.eventDutyMusicalWorksByEventDutyId = eventDutyMusicalWorksByEventDutyId;
+    }
+
+    @OneToMany(mappedBy = "eventDutyByEventDuty")
+    public Collection<DutyDispositionEntity> getDutyDispositionsByEventDutyId() {
+        return dutyDispositionsByEventDutyId;
+    }
+
+    public void setDutyDispositionsByEventDutyId(Collection<DutyDispositionEntity> dutyDispositionsByEventDutyId) {
+        this.dutyDispositionsByEventDutyId = dutyDispositionsByEventDutyId;
+    }
+
+    @OneToMany(mappedBy = "eventDutyByRehearsalFor")
+    public Collection<EventDutyEntity> getEventDutiesByEventDutyId() {
+        return eventDutiesByEventDutyId;
+    }
+
+    public void setEventDutiesByEventDutyId(Collection<EventDutyEntity> eventDutiesByEventDutyId) {
+        this.eventDutiesByEventDutyId = eventDutiesByEventDutyId;
+    }
+
+    @OneToMany(mappedBy = "eventDutyByEventDuty")
+    public Collection<EventDutySectionDutyRosterEntity> getEventDutySectionDutyRostersByEventDutyId() {
+        return eventDutySectionDutyRostersByEventDutyId;
+    }
+
+    public void setEventDutySectionDutyRostersByEventDutyId(Collection<EventDutySectionDutyRosterEntity> eventDutySectionDutyRostersByEventDutyId) {
+        this.eventDutySectionDutyRostersByEventDutyId = eventDutySectionDutyRostersByEventDutyId;
+    }
+
+    @OneToMany(mappedBy = "eventDutyByEventDuty")
+    public Collection<RequestEntity> getRequestsByEventDutyId() {
+        return requestsByEventDutyId;
+    }
+
+    public void setRequestsByEventDutyId(Collection<RequestEntity> requestsByEventDutyId) {
+        this.requestsByEventDutyId = requestsByEventDutyId;
+    }
+
 }

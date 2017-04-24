@@ -1,6 +1,7 @@
 package Domain.Entities;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * Created by Bernd on 06.04.2017.
@@ -10,10 +11,11 @@ import javax.persistence.*;
 public class PartTypeEntity {
     private int partTypeId;
     private String partType;
+    private Collection<PartEntity> partsByPartTypeId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "partTypeID")
+    @Column(name = "partTypeID", nullable = false)
     public int getPartTypeId() {
         return partTypeId;
     }
@@ -23,7 +25,7 @@ public class PartTypeEntity {
     }
 
     @Basic
-    @Column(name = "partType")
+    @Column(name = "partType", nullable = false, length = 255)
     public String getPartType() {
         return partType;
     }
@@ -50,5 +52,14 @@ public class PartTypeEntity {
         int result = partTypeId;
         result = 31 * result + (partType != null ? partType.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "partTypeByPartType")
+    public Collection<PartEntity> getPartsByPartTypeId() {
+        return partsByPartTypeId;
+    }
+
+    public void setPartsByPartTypeId(Collection<PartEntity> partsByPartTypeId) {
+        this.partsByPartTypeId = partsByPartTypeId;
     }
 }
