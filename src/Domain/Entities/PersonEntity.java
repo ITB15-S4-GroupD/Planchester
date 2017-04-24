@@ -1,6 +1,7 @@
 package Domain.Entities;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * Created by Bernd on 06.04.2017.
@@ -16,12 +17,18 @@ public class PersonEntity {
     private String gender;
     private String address;
     private String phoneNumber;
-    private Enum personRole;
+    private String personRole;
+    private Integer account;
+    private Collection<DutyDispositionEntity> dutyDispositionsByPersonId;
+    private Collection<InstrumentEntity> instrumentsByPersonId;
+    private Collection<MusicianPartEntity> musicianPartsByPersonId;
     private AccountEntity accountByAccount;
+    private Collection<PersonOrchestraRoleEntity> personOrchestraRolesByPersonId;
+    private Collection<RequestEntity> requestsByPersonId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "personId")
+    @Column(name = "personId", nullable = false)
     public int getPersonId() {
         return personId;
     }
@@ -31,7 +38,7 @@ public class PersonEntity {
     }
 
     @Basic
-    @Column(name = "initials")
+    @Column(name = "initials", nullable = true, length = 10)
     public String getInitials() {
         return initials;
     }
@@ -41,7 +48,7 @@ public class PersonEntity {
     }
 
     @Basic
-    @Column(name = "firstname")
+    @Column(name = "firstname", nullable = false, length = 255)
     public String getFirstname() {
         return firstname;
     }
@@ -51,7 +58,7 @@ public class PersonEntity {
     }
 
     @Basic
-    @Column(name = "lastname")
+    @Column(name = "lastname", nullable = false, length = 255)
     public String getLastname() {
         return lastname;
     }
@@ -61,7 +68,7 @@ public class PersonEntity {
     }
 
     @Basic
-    @Column(name = "email")
+    @Column(name = "email", nullable = true, length = 255)
     public String getEmail() {
         return email;
     }
@@ -71,7 +78,7 @@ public class PersonEntity {
     }
 
     @Basic
-    @Column(name = "gender")
+    @Column(name = "gender", nullable = false, length = 1)
     public String getGender() {
         return gender;
     }
@@ -81,7 +88,7 @@ public class PersonEntity {
     }
 
     @Basic
-    @Column(name = "address")
+    @Column(name = "address", nullable = false, length = 255)
     public String getAddress() {
         return address;
     }
@@ -91,7 +98,7 @@ public class PersonEntity {
     }
 
     @Basic
-    @Column(name = "phoneNumber")
+    @Column(name = "phoneNumber", nullable = false, length = 255)
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -100,15 +107,23 @@ public class PersonEntity {
         this.phoneNumber = phoneNumber;
     }
 
-    @Basic
-    @Enumerated(EnumType.STRING)
-    @Column(name = "personRole")
-    public Enum getPersonRole() {
+    @Column(name = "personRole", nullable = false, columnDefinition = "enum('Musician', 'Substitute', 'External_musician', 'Orchestral_facility_manager', 'Music_librarian', 'Manager')")
+    public String getPersonRole() {
         return personRole;
     }
 
-    public void setPersonRole(Enum personRole) {
+    public void setPersonRole(String personRole) {
         this.personRole = personRole;
+    }
+
+    @Basic
+    @Column(name = "account", nullable = true)
+    public Integer getAccount() {
+        return account;
+    }
+
+    public void setAccount(Integer account) {
+        this.account = account;
     }
 
     @Override
@@ -127,6 +142,7 @@ public class PersonEntity {
         if (address != null ? !address.equals(that.address) : that.address != null) return false;
         if (phoneNumber != null ? !phoneNumber.equals(that.phoneNumber) : that.phoneNumber != null) return false;
         if (personRole != null ? !personRole.equals(that.personRole) : that.personRole != null) return false;
+        if (account != null ? !account.equals(that.account) : that.account != null) return false;
 
         return true;
     }
@@ -142,16 +158,62 @@ public class PersonEntity {
         result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
         result = 31 * result + (personRole != null ? personRole.hashCode() : 0);
+        result = 31 * result + (account != null ? account.hashCode() : 0);
         return result;
     }
 
+    @OneToMany(mappedBy = "personByMusician")
+    public Collection<DutyDispositionEntity> getDutyDispositionsByPersonId() {
+        return dutyDispositionsByPersonId;
+    }
+
+    public void setDutyDispositionsByPersonId(Collection<DutyDispositionEntity> dutyDispositionsByPersonId) {
+        this.dutyDispositionsByPersonId = dutyDispositionsByPersonId;
+    }
+
+    @OneToMany(mappedBy = "personByMusician")
+    public Collection<InstrumentEntity> getInstrumentsByPersonId() {
+        return instrumentsByPersonId;
+    }
+
+    public void setInstrumentsByPersonId(Collection<InstrumentEntity> instrumentsByPersonId) {
+        this.instrumentsByPersonId = instrumentsByPersonId;
+    }
+
+    @OneToMany(mappedBy = "personByMusician")
+    public Collection<MusicianPartEntity> getMusicianPartsByPersonId() {
+        return musicianPartsByPersonId;
+    }
+
+    public void setMusicianPartsByPersonId(Collection<MusicianPartEntity> musicianPartsByPersonId) {
+        this.musicianPartsByPersonId = musicianPartsByPersonId;
+    }
+
     @ManyToOne
-    @JoinColumn(name = "account", referencedColumnName = "accountID")
+    @JoinColumn(name = "account", referencedColumnName = "accountID", insertable = false, updatable = false)
     public AccountEntity getAccountByAccount() {
         return accountByAccount;
     }
 
     public void setAccountByAccount(AccountEntity accountByAccount) {
         this.accountByAccount = accountByAccount;
+    }
+
+    @OneToMany(mappedBy = "personByPerson")
+    public Collection<PersonOrchestraRoleEntity> getPersonOrchestraRolesByPersonId() {
+        return personOrchestraRolesByPersonId;
+    }
+
+    public void setPersonOrchestraRolesByPersonId(Collection<PersonOrchestraRoleEntity> personOrchestraRolesByPersonId) {
+        this.personOrchestraRolesByPersonId = personOrchestraRolesByPersonId;
+    }
+
+    @OneToMany(mappedBy = "personByMusician")
+    public Collection<RequestEntity> getRequestsByPersonId() {
+        return requestsByPersonId;
+    }
+
+    public void setRequestsByPersonId(Collection<RequestEntity> requestsByPersonId) {
+        this.requestsByPersonId = requestsByPersonId;
     }
 }

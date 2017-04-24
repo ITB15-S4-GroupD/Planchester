@@ -11,15 +11,13 @@ import javax.persistence.*;
 public class RequestEntity {
     private int eventDuty;
     private int musician;
-    private Enum requestType;
+    private String requestType;
     private String description;
     private EventDutyEntity eventDutyByEventDuty;
     private PersonEntity personByMusician;
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "eventDuty", referencedColumnName = "eventDutyID", nullable = false)
-    @Column(name = "eventDuty")
+    @Column(name = "eventDuty", nullable = false)
     public int getEventDuty() {
         return eventDuty;
     }
@@ -29,9 +27,7 @@ public class RequestEntity {
     }
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "musician", referencedColumnName = "personId", nullable = false)
-    @Column(name = "musician")
+    @Column(name = "musician", nullable = false)
     public int getMusician() {
         return musician;
     }
@@ -40,19 +36,17 @@ public class RequestEntity {
         this.musician = musician;
     }
 
-    @Basic
-    @Enumerated(EnumType.STRING)
-    @Column(name = "requestType")
-    public Enum getRequestType() {
+    @Column(name = "requestType", nullable = false, columnDefinition = "enum('Leave_of_absence', 'Playrequest')")
+    public String getRequestType() {
         return requestType;
     }
 
-    public void setRequestType(Enum requestType) {
+    public void setRequestType(String requestType) {
         this.requestType = requestType;
     }
 
     @Basic
-    @Column(name = "description")
+    @Column(name = "description", nullable = true, length = 255)
     public String getDescription() {
         return description;
     }
@@ -85,8 +79,20 @@ public class RequestEntity {
         return result;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "eventDuty", referencedColumnName = "eventDutyID", nullable = false, insertable = false, updatable = false)
+    public EventDutyEntity getEventDutyByEventDuty() {
+        return eventDutyByEventDuty;
+    }
+
     public void setEventDutyByEventDuty(EventDutyEntity eventDutyByEventDuty) {
         this.eventDutyByEventDuty = eventDutyByEventDuty;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "musician", referencedColumnName = "personId", nullable = false, insertable = false, updatable = false)
+    public PersonEntity getPersonByMusician() {
+        return personByMusician;
     }
 
     public void setPersonByMusician(PersonEntity personByMusician) {

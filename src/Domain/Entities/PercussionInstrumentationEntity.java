@@ -1,6 +1,7 @@
 package Domain.Entities;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * Created by Bernd on 06.04.2017.
@@ -13,10 +14,11 @@ public class PercussionInstrumentationEntity {
     private int percussion;
     private int harp;
     private String percussionDescription;
+    private Collection<InstrumentationEntity> instrumentationsByPercussionInstrumentationId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "percussionInstrumentationID")
+    @Column(name = "percussionInstrumentationID", nullable = false)
     public int getPercussionInstrumentationId() {
         return percussionInstrumentationId;
     }
@@ -26,7 +28,7 @@ public class PercussionInstrumentationEntity {
     }
 
     @Basic
-    @Column(name = "kettledrum")
+    @Column(name = "kettledrum", nullable = false)
     public int getKettledrum() {
         return kettledrum;
     }
@@ -36,7 +38,7 @@ public class PercussionInstrumentationEntity {
     }
 
     @Basic
-    @Column(name = "percussion")
+    @Column(name = "percussion", nullable = false)
     public int getPercussion() {
         return percussion;
     }
@@ -46,7 +48,7 @@ public class PercussionInstrumentationEntity {
     }
 
     @Basic
-    @Column(name = "harp")
+    @Column(name = "harp", nullable = false)
     public int getHarp() {
         return harp;
     }
@@ -56,7 +58,7 @@ public class PercussionInstrumentationEntity {
     }
 
     @Basic
-    @Column(name = "percussionDescription")
+    @Column(name = "percussionDescription", nullable = true, length = 255)
     public String getPercussionDescription() {
         return percussionDescription;
     }
@@ -90,5 +92,14 @@ public class PercussionInstrumentationEntity {
         result = 31 * result + harp;
         result = 31 * result + (percussionDescription != null ? percussionDescription.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "percussionInstrumentationByPercussionInstrumentation")
+    public Collection<InstrumentationEntity> getInstrumentationsByPercussionInstrumentationId() {
+        return instrumentationsByPercussionInstrumentationId;
+    }
+
+    public void setInstrumentationsByPercussionInstrumentationId(Collection<InstrumentationEntity> instrumentationsByPercussionInstrumentationId) {
+        this.instrumentationsByPercussionInstrumentationId = instrumentationsByPercussionInstrumentationId;
     }
 }

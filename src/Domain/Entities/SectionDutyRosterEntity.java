@@ -1,6 +1,7 @@
 package Domain.Entities;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * Created by Bernd on 06.04.2017.
@@ -9,12 +10,13 @@ import javax.persistence.*;
 @Table(name = "SectionDutyRoster", schema = "sem4_team2", catalog = "")
 public class SectionDutyRosterEntity {
     private int sectionDutyRosterId;
-    private Enum dutyRosterStatus;
-    private Enum sectionType;
+    private String dutyRosterStatus;
+    private String sectionType;
+    private Collection<EventDutySectionDutyRosterEntity> eventDutySectionDutyRostersBySectionDutyRosterId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "sectionDutyRosterID")
+    @Column(name = "sectionDutyRosterID", nullable = false)
     public int getSectionDutyRosterId() {
         return sectionDutyRosterId;
     }
@@ -23,25 +25,21 @@ public class SectionDutyRosterEntity {
         this.sectionDutyRosterId = sectionDutyRosterId;
     }
 
-    @Basic
-    @Enumerated(EnumType.STRING)
-    @Column(name = "dutyRosterStatus")
-    public Enum getDutyRosterStatus() {
+    @Column(name = "dutyRosterStatus", nullable = false, columnDefinition = "enum('Unpublished', 'Published')")
+    public String getDutyRosterStatus() {
         return dutyRosterStatus;
     }
 
-    public void setDutyRosterStatus(Enum dutyRosterStatus) {
+    public void setDutyRosterStatus(String dutyRosterStatus) {
         this.dutyRosterStatus = dutyRosterStatus;
     }
 
-    @Basic
-    @Enumerated(EnumType.STRING)
-    @Column(name = "sectionType")
-    public Enum getSectionType() {
+    @Column(name = "sectionType", nullable = false, precision = 0, columnDefinition = "enum('Violin1', 'Violin2', 'Viola', 'Violincello', 'Doublebass', 'Woodwind', 'Brass', 'Percussion')")
+    public String getSectionType() {
         return sectionType;
     }
 
-    public void setSectionType(Enum sectionType) {
+    public void setSectionType(String sectionType) {
         this.sectionType = sectionType;
     }
 
@@ -66,5 +64,14 @@ public class SectionDutyRosterEntity {
         result = 31 * result + (dutyRosterStatus != null ? dutyRosterStatus.hashCode() : 0);
         result = 31 * result + (sectionType != null ? sectionType.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "sectionDutyRosterBySectionDutyRoster")
+    public Collection<EventDutySectionDutyRosterEntity> getEventDutySectionDutyRostersBySectionDutyRosterId() {
+        return eventDutySectionDutyRostersBySectionDutyRosterId;
+    }
+
+    public void setEventDutySectionDutyRostersBySectionDutyRosterId(Collection<EventDutySectionDutyRosterEntity> eventDutySectionDutyRostersBySectionDutyRosterId) {
+        this.eventDutySectionDutyRostersBySectionDutyRosterId = eventDutySectionDutyRostersBySectionDutyRosterId;
     }
 }

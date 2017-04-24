@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane fx:id="gridNewTour" prefHeight="506.0" prefWidth="351.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.CreateTourController">
+<GridPane fx:id="gridNewTour" prefHeight="506.0" prefWidth="351.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.CreateTourController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -73,7 +73,7 @@
         </rowConstraints>
          <children>
             <Button id="discard" fx:id="btnDiscard" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#discard" prefHeight="25.0" prefWidth="80.0" text="Discard" />
-            <Button fx:id="btnSaveNewOpera" mnemonicParsing="false" onAction="#save" prefHeight="25.0" prefWidth="80.0" text="Save" GridPane.columnIndex="1" />
+            <Button fx:id="btnSaveNewTour" mnemonicParsing="false" onAction="#insertNewTourPerformance" prefHeight="25.0" prefWidth="80.0" text="Save" GridPane.columnIndex="1" />
          </children>
       </GridPane>
    </children>

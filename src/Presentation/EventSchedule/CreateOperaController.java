@@ -15,7 +15,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -51,7 +50,6 @@ public class CreateOperaController {
                 }
             }
         });
-
     }
 
     private void checkRequiredFields() {
@@ -63,7 +61,6 @@ public class CreateOperaController {
                 } else {
                     name.setStyle("-fx-control-inner-background: #ffffff");
                 }
-
             }
         });
         date.valueProperty().addListener(new ChangeListener<LocalDate>() {
@@ -90,30 +87,38 @@ public class CreateOperaController {
     }
 
     @FXML
-    private void save() {
-        validateGUI();
+    private void insertNewOperaPerformance() {
+        if(!prevalidateGUI())return;
 
         // create object
         EventDutyModel eventDutyModel = new EventDutyModel();
         eventDutyModel.setName(name.getText());
         eventDutyModel.setDescription(description.getText());
-        eventDutyModel.setLocation(eventLocation.getText());
+        eventDutyModel.setStarttime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
+        // If endtime is missing we assume the endtime 2 hours after begin
+        if( endTime.getValue() == null ){
+            eventDutyModel.setEndtime( DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue().plusHours(2)) );
+        }else {
+            eventDutyModel.setEndtime(DateHelper.mergeDateAndTime(date.getValue(), endTime.getValue()));
+        }
         eventDutyModel.setEventType(EventType.Opera.toString());
         eventDutyModel.setEventStatus(EventStatus.Unpublished.toString());
         eventDutyModel.setConductor(conductor.getText());
-        eventDutyModel.setDefaultPoints(Double.parseDouble(points.getText()));
-        eventDutyModel.setStarttime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
-        eventDutyModel.setEndtime(DateHelper.mergeDateAndTime(date.getValue(), endTime.getValue()));
+        eventDutyModel.setLocation(eventLocation.getText());
+        if( !points.getText().isEmpty() ) eventDutyModel.setDefaultPoints(Double.parseDouble(points.getText()));
+        //TODO eventDutyByRehearsalFor and instrumentation
 
-        EventSchedule.insertOperaEventDuty(eventDutyModel);
+        EventSchedule.insertNewOperaPerformance(eventDutyModel);
 
         EventScheduleController.addEventDutyToGUI(eventDutyModel); // add event to agenda
         EventScheduleController.setDisplayedLocalDateTime(eventDutyModel.getStarttime().toLocalDateTime()); // set agenda view to week of created event
         EventScheduleController.resetSideContent(); // remove content of sidebar
         EventScheduleController.setSelectedAppointment(eventDutyModel); // select created appointment
+        // twice? sh. 111 EventSchedule invokes also this methode
+        //EventDuty.insertNewEventDuty(eventDutyModel);
     }
 
-    private void validateGUI() {
+    private boolean prevalidateGUI() {
         LocalDate today = LocalDate.now();
         LocalTime start = startTime.getValue();
         LocalTime end = endTime.getValue();
@@ -121,30 +126,22 @@ public class CreateOperaController {
         if(name.getText().isEmpty()){
             throwErrorAlertMessage("The Name is missing.");
             name.requestFocus();
-        } else if(description.getText().isEmpty()){
-            throwErrorAlertMessage("The description is missing.");
-            description.requestFocus();
+            return false;
         } else if(date.getValue() == null || date.getValue().isBefore(today) ){
             throwErrorAlertMessage("The date is not valid.");
             date.requestFocus();
+            return false;
         } else if(start == null) {
             throwErrorAlertMessage("The starttime is missing.");
-        } else if(end == null) {
-            throwErrorAlertMessage("The endtime is missing.");
-        } else if(start.isAfter(end) || start.equals(end)) {
+            return false;
+        } else if(end != null && (start.isAfter(end) || start.equals(end))) {
             throwErrorAlertMessage("The endtime is not after the starttime. ");
+            return false;
         } else if(date.getValue().equals(today) && start.isBefore(LocalTime.now())){
             throwErrorAlertMessage("The starttime must be in future. \n");
-        } else if(eventLocation.getText().isEmpty()){
-            throwErrorAlertMessage("The location is missing.");
-            eventLocation.requestFocus();
-        } else if(conductor.getText().isEmpty()){
-            throwErrorAlertMessage("The conductor is missing.");
-            conductor.requestFocus();
-        } else if(points.getText().isEmpty()){
-            throwErrorAlertMessage("The points are missing.");
-            points.requestFocus();
+            return false;
         }
+        return true;
     }
 
     private void throwErrorAlertMessage(String errormessage){

@@ -1,10 +1,11 @@
 package Domain.Models;
 
 import Domain.Entities.EventDutyEntity;
+import Domain.Enum.EventStatus;
 import Domain.Enum.EventType;
+import Utils.Validator;
 
-import javax.persistence.*;
-import java.awt.*;
+import javax.xml.bind.ValidationException;
 import java.sql.Timestamp;
 
 /**
@@ -21,10 +22,8 @@ public class EventDutyModel {
     private String conductor;
     private String location;
     private double defaultPoints;
-
-    //TODO julia
-//    private int rehearsalFor;
-//    private EventDutyEntity eventDutyByRehearsalFor;
+    private EventDutyModel eventDutyByRehearsalFor;
+    private InstrumentationModel instrumentation;
 
     public EventDutyModel() {
     }
@@ -40,6 +39,8 @@ public class EventDutyModel {
         conductor = eventDutyEntity.getConductor();
         location = eventDutyEntity.getLocation();
         defaultPoints = eventDutyEntity.getDefaultPoints();
+        eventDutyByRehearsalFor = eventDutyEntity.getEventDutyByRehearsalFor() != null ? new EventDutyModel(eventDutyEntity.getEventDutyByRehearsalFor()) : null;
+        //TODO bernd: instrumentation = eventDutyEntity.getInstrumentation();
     }
 
     public EventDutyEntity getEventDutyEntity() {
@@ -54,14 +55,33 @@ public class EventDutyModel {
         eventDutyEntity.setConductor(conductor);
         eventDutyEntity.setLocation(location);
         eventDutyEntity.setDefaultPoints(defaultPoints);
-        //TODO: setRehearsal...
-        //TODO: setInstrumentation
+        eventDutyEntity.setEventDutyByRehearsalFor(eventDutyByRehearsalFor != null ? eventDutyByRehearsalFor.getEventDutyEntity() : null);
+        //TODO bernd: setInstrumentation
         return eventDutyEntity;
     }
 
-    public boolean validate() {
+    public boolean preValidate() {
         //TODO julia
         return false;
+    }
+
+    public void validate() throws ValidationException {
+        Validator.validateMandatoryString(name, 255);
+        Validator.validateString(description, 255);
+        Validator.validateMandatoryTimestamp(starttime);
+        Validator.validateTimestampAfterToday(starttime);
+        Validator.validateMandatoryTimestamp(endtime);
+        Validator.validateTimestampAfterToday(endtime);
+        Validator.validateTimestamp1BeforeTimestamp2(starttime, endtime);
+        if(eventType == null || !EventType.contains(eventType)) {
+            throw new ValidationException("Eventtype wrong");
+        }
+        if(eventStatus == null || !EventStatus.contains(eventStatus)) {
+            throw new ValidationException("Eventstatus wrong");
+        }
+        Validator.validateString(conductor, 25);
+        Validator.validateString(location, 255);
+        Validator.validateMandatoryDouble(defaultPoints, 0, Double.MAX_VALUE);
     }
 
     public int getEventDutyId() {
@@ -142,5 +162,21 @@ public class EventDutyModel {
 
     public void setDefaultPoints(double defaultPoints) {
         this.defaultPoints = defaultPoints;
+    }
+
+    public EventDutyModel getEventDutyByRehearsalFor() {
+        return eventDutyByRehearsalFor;
+    }
+
+    public void setEventDutyByRehearsalFor(EventDutyModel eventDutyByRehearsalFor) {
+        this.eventDutyByRehearsalFor = eventDutyByRehearsalFor;
+    }
+
+    public InstrumentationModel getInstrumentation() {
+        return instrumentation;
+    }
+
+    public void setInstrumentation(InstrumentationModel instrumentation) {
+        this.instrumentation = instrumentation;
     }
 }

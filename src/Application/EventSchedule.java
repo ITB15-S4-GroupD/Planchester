@@ -1,9 +1,15 @@
 package Application;
 
+import Domain.Enum.EventStatus;
+import Domain.Enum.EventType;
 import Domain.Models.EventDutyModel;
 import Persistence.EventDuty;
+import Presentation.EventSchedule.EventScheduleController;
 import Utils.DateHelper;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,28 +24,46 @@ public class EventSchedule {
 
     public static void publish(Month month) {
     }
-
-    public static void insertOperaEventDuty(EventDutyModel eventDuty) {
-        EventDuty.insertEventDuty(eventDuty);
+  
+    public static void insertNewOperaPerformance(EventDutyModel eventDutyModel) {
+//        eventDuty.prevalidate();
+        EventDuty.insertNewEventDuty(eventDutyModel.getEventDutyEntity());
     }
 
-    public static void insertTourEventDuty(EventDuty eventDuty) {
+    public static void insertTourEventDuty(EventDutyModel eventDutyModel) {
+
+        EventDutyModel nextTourDay = null;
+        LocalDate dateStart = eventDutyModel.getStarttime().toLocalDateTime().toLocalDate();
+        LocalDate dateEnd = eventDutyModel.getEndtime().toLocalDateTime().toLocalDate();
+        LocalTime timeStart = LocalTime.of(0,0);
+        LocalTime timeEnd = LocalTime.of(23, 59);
+        LocalDate current = dateStart;
+
+        while( !current.isAfter(dateEnd) ){
+            eventDutyModel.setStarttime(DateHelper.mergeDateAndTime(current, timeStart));
+            eventDutyModel.setEndtime(DateHelper.mergeDateAndTime(current, timeEnd));
+            EventDuty.insertNewEventDuty(eventDutyModel.getEventDutyEntity());
+            EventScheduleController.addEventDutyToGUI(eventDutyModel); // add event to agenda
+            current = LocalDate.parse(current.toString()).plusDays(1);
+        }
+
+        EventScheduleController.resetSideContent(); // remove content of sidebar
+        EventScheduleController.setDisplayedLocalDateTime(eventDutyModel.getStarttime().toLocalDateTime()); // set agenda view to week of created event
+        EventScheduleController.setSelectedAppointment(eventDutyModel); // select last created appointment
+    }
+    public static void insertHofkapelleEventDuty(EventDutyModel eventDutyModel) {
+        EventDuty.insertNewEventDuty(eventDutyModel.getEventDutyEntity());
+    }
+
+    public static void insertConcertEventDuty(EventDutyModel eventDutyModel) {
+        EventDuty.insertNewEventDuty(eventDutyModel.getEventDutyEntity());
+    }
+
+    public static void store(EventDutyModel eventDuty) {
 
     }
 
-    public static void insertHofkapelleEventDuty(EventDuty eventDuty) {
-
-    }
-
-    public static void insertConcertEventDuty(EventDuty eventDuty) {
-
-    }
-
-    public static void store(EventDuty eventDuty) {
-
-    }
-
-    public static void delete(EventDuty eventDuty) {
+    public static void delete(EventDutyModel eventDuty) {
 
     }
 
