@@ -1,6 +1,7 @@
 package Domain.Entities;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * Created by Bernd on 06.04.2017.
@@ -13,10 +14,11 @@ public class BrassInstrumentationEntity {
     private int trumpet;
     private int trombone;
     private int tube;
+    private Collection<InstrumentationEntity> instrumentationsByBrassInstrumentationId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "brassInstrumentationID")
+    @Column(name = "brassInstrumentationID", nullable = false)
     public int getBrassInstrumentationId() {
         return brassInstrumentationId;
     }
@@ -26,7 +28,7 @@ public class BrassInstrumentationEntity {
     }
 
     @Basic
-    @Column(name = "horn")
+    @Column(name = "horn", nullable = false)
     public int getHorn() {
         return horn;
     }
@@ -36,7 +38,7 @@ public class BrassInstrumentationEntity {
     }
 
     @Basic
-    @Column(name = "trumpet")
+    @Column(name = "trumpet", nullable = false)
     public int getTrumpet() {
         return trumpet;
     }
@@ -46,7 +48,7 @@ public class BrassInstrumentationEntity {
     }
 
     @Basic
-    @Column(name = "trombone")
+    @Column(name = "trombone", nullable = false)
     public int getTrombone() {
         return trombone;
     }
@@ -56,7 +58,7 @@ public class BrassInstrumentationEntity {
     }
 
     @Basic
-    @Column(name = "tube")
+    @Column(name = "tube", nullable = false)
     public int getTube() {
         return tube;
     }
@@ -89,5 +91,14 @@ public class BrassInstrumentationEntity {
         result = 31 * result + trombone;
         result = 31 * result + tube;
         return result;
+    }
+
+    @OneToMany(mappedBy = "brassInstrumentationByBrassInstrumentation")
+    public Collection<InstrumentationEntity> getInstrumentationsByBrassInstrumentationId() {
+        return instrumentationsByBrassInstrumentationId;
+    }
+
+    public void setInstrumentationsByBrassInstrumentationId(Collection<InstrumentationEntity> instrumentationsByBrassInstrumentationId) {
+        this.instrumentationsByBrassInstrumentationId = instrumentationsByBrassInstrumentationId;
     }
 }

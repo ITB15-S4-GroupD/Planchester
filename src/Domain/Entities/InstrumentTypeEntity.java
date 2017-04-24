@@ -1,6 +1,7 @@
 package Domain.Entities;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * Created by Bernd on 06.04.2017.
@@ -10,10 +11,11 @@ import javax.persistence.*;
 public class InstrumentTypeEntity {
     private int instrumentTypeId;
     private String instrumentType;
+    private Collection<InstrumentEntity> instrumentsByInstrumentTypeId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "instrumentTypeID")
+    @Column(name = "instrumentTypeID", nullable = false)
     public int getInstrumentTypeId() {
         return instrumentTypeId;
     }
@@ -23,7 +25,7 @@ public class InstrumentTypeEntity {
     }
 
     @Basic
-    @Column(name = "instrumentType")
+    @Column(name = "instrumentType", nullable = false, length = 255)
     public String getInstrumentType() {
         return instrumentType;
     }
@@ -51,5 +53,14 @@ public class InstrumentTypeEntity {
         int result = instrumentTypeId;
         result = 31 * result + (instrumentType != null ? instrumentType.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "instrumentTypeByInstrumentType")
+    public Collection<InstrumentEntity> getInstrumentsByInstrumentTypeId() {
+        return instrumentsByInstrumentTypeId;
+    }
+
+    public void setInstrumentsByInstrumentTypeId(Collection<InstrumentEntity> instrumentsByInstrumentTypeId) {
+        this.instrumentsByInstrumentTypeId = instrumentsByInstrumentTypeId;
     }
 }

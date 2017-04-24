@@ -4,8 +4,10 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name="connection.url">jdbc:mysql://mysql.vlbg.org/sem4_team2</property>
-        <!--<property name="connection.url">jdbc:mysql://mysql.vlbg.org:3306/sem4_team2</property>-->
+
+        <!-- <property name="connection.url">jdbc:mysql://127.0.0.1:3306/sem4_team2</property>-->
+        <property name="connection.url">jdbc:mysql://mysql.vlbg.org:3306/sem4_team2</property>
+
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="connection.username">team2</property>
         <property name="connection.password">8fpE?2j2E6kis2~9</property>
