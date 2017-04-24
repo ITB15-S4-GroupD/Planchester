@@ -11,6 +11,7 @@
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="connection.username">team2</property>
         <property name="connection.password">8fpE?2j2E6kis2~9</property>
+        <property name="show_sql">true</property>
         <mapping class="Domain.Entities.AccountEntity"/>
         <mapping class="Domain.Entities.BrassInstrumentationEntity"/>
         <mapping class="Domain.Entities.DutyDispositionEntity"/>
