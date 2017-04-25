@@ -70,7 +70,7 @@ public class CreateHofkapelleController {
     }
 
     @FXML
-    public boolean discard() {
+    public boolean cancel() {
         //TODO implement musical works
         if(!name.getText().isEmpty() || !description.getText().isEmpty() || date.getValue() != null
                 || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty() || !points.getText().isEmpty()) {
