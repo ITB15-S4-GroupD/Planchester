@@ -55,7 +55,7 @@ public class CreateTourController {
     }
 
     @FXML
-    public boolean discard() {
+    public boolean cancel() {
         if(!name.getText().isEmpty() || !description.getText().isEmpty() || startDate.getValue() != null
                 || endDate.getValue() != null || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty() || !points.getText().isEmpty()) {
             Alert confirmationAlterMessage = new Alert(Alert.AlertType.CONFIRMATION, PlanchesterMessages.DISCARD_CHANGES, ButtonType.YES, ButtonType.NO);
