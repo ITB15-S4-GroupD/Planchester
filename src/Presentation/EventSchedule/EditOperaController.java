@@ -1,7 +1,8 @@
 package Presentation.EventSchedule;
 
-import Domain.Entities.EventDutyEntity;
-import Domain.Models.EventDutyModel;
+import Application.DTO.EventDutyDTO;
+import Domain.EventDutyModel;
+import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
@@ -31,15 +32,15 @@ public class EditOperaController {
     @FXML private TextField conductor;
     @FXML private TextField points;
 
-    private EventDutyModel initEventDutyModel; // remember init data to compare
+    private EventDutyDTO initEventDutyDTO; // remember init data to compare
     private Agenda.Appointment initAppointment; // remember init data to compare
 
     @FXML
     public void initialize() {
-        checkRequiredFields();
+        checkMandatoryFields();
 
         Agenda.Appointment appointment = EventScheduleController.getSelectedAppointment();
-        EventDutyModel eventDutyModel = EventScheduleController.getEventForAppointment(appointment);
+        EventDutyDTO eventDutyDTO = EventScheduleController.getEventForAppointment(appointment);
 
         name.setText(appointment.getSummary());
         description.setText(appointment.getDescription());
@@ -47,11 +48,11 @@ public class EditOperaController {
         startTime.setValue(appointment.getStartLocalDateTime().toLocalTime());
         endTime.setValue(appointment.getEndLocalDateTime().toLocalTime());
         eventLocation.setText(appointment.getLocation());
-        conductor.setText(eventDutyModel.getConductor());
-        points.setText((String.valueOf(eventDutyModel.getDefaultPoints())));
+        conductor.setText(eventDutyDTO.getConductor());
+        points.setText(eventDutyDTO.getPoints() != null ? String.valueOf(eventDutyDTO.getPoints()) : null);
 
         initAppointment = appointment;
-        initEventDutyModel = eventDutyModel;
+        initEventDutyDTO = eventDutyDTO;
     }
 
     @FXML
@@ -62,14 +63,14 @@ public class EditOperaController {
     @FXML
     public boolean discard() {
         // TODO: check with init data for changes
-        if(!name.getText().equals(initEventDutyModel.getName())
-                || !description.getText().equals(initEventDutyModel.getDescription())
-                || !date.getValue().equals(initEventDutyModel.getEndtime().toLocalDateTime().toLocalDate())
-                || !startTime.getValue().equals(initEventDutyModel.getStarttime().toLocalDateTime().toLocalTime())
-                || !endTime.getValue().equals(initEventDutyModel.getEndtime().toLocalDateTime().toLocalTime())
-                || !conductor.getText().equals(initEventDutyModel.getConductor())
-                || !eventLocation.getText().equals(initEventDutyModel.getLocation())
-                || Double.parseDouble(points.getText()) != initEventDutyModel.getDefaultPoints()) {
+        if(!name.getText().equals(initEventDutyDTO.getName())
+                || !description.getText().equals(initEventDutyDTO.getDescription())
+                || !date.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalDate())
+                || !startTime.getValue().equals(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalTime())
+                || !endTime.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime())
+                || !conductor.getText().equals(initEventDutyDTO.getConductor())
+                || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
+                || !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints())) {
 
             Alert confirmationAlertMessage = new Alert(Alert.AlertType.CONFIRMATION, PlanchesterMessages.DISCARD_CHANGES, ButtonType.YES, ButtonType.NO);
             confirmationAlertMessage.showAndWait();
@@ -84,14 +85,14 @@ public class EditOperaController {
         return true;
     }
 
-    private void checkRequiredFields() {
+    private void checkMandatoryFields() {
         name.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(name.getText().equals("") || name.getText() == null) {
-                    name.setStyle("-fx-control-inner-background: #ffdec9");
+                if(name.getText() == null || name.getText().isEmpty()) {
+                    name.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
                 } else {
-                    name.setStyle("-fx-control-inner-background: #ffffff");
+                    name.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
                 }
 
             }
@@ -100,9 +101,9 @@ public class EditOperaController {
             @Override
             public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
                 if(date.getValue() == null) {
-                    date.setStyle("-fx-control-inner-background: #ffdec9");
+                    date.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
                 } else {
-                    date.setStyle("-fx-control-inner-background: #ffffff");
+                    date.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
                 }
             }
         });
@@ -111,9 +112,9 @@ public class EditOperaController {
             @Override
             public void changed(ObservableValue<? extends LocalTime> observable, LocalTime oldValue, LocalTime newValue) {
                 if(startTime.getValue() == null) {
-                    startTime.setStyle("-fx-control-inner-background: #ffdec9");
+                    startTime.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
                 } else {
-                    startTime.setStyle("-fx-control-inner-background: #ffffff");
+                    startTime.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
                 }
             }
         });

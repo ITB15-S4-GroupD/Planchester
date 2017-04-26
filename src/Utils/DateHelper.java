@@ -1,10 +1,11 @@
 package Utils;
 
+import javafx.scene.control.DatePicker;
+
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by julia on 05.04.2017.
@@ -21,6 +22,9 @@ public class DateHelper {
     }
 
     public static Timestamp mergeDateAndTime(LocalDate date, LocalTime time) {
+        if(date == null || time == null) {
+            return null;
+        }
         return Timestamp.valueOf(LocalDateTime.of(date, time));
     }
 

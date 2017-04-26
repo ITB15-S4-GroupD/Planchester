@@ -1,7 +1,7 @@
 package Presentation.EventSchedule;
 
-import Domain.Models.EventDutyModel;
-import Utils.PlanchesterMessages;
+import Domain.EventDutyModel;
+import Utils.PlanchesterConstants;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
 import javafx.beans.value.ChangeListener;
@@ -35,7 +35,7 @@ public class EditConcertController {
 
     @FXML
     public void initialize() {
-        checkRequiredFields();
+        checkMandatoryFields();
     }
 
     @FXML
@@ -53,14 +53,14 @@ public class EditConcertController {
         return true;
     }
 
-    private void checkRequiredFields() {
+    private void checkMandatoryFields() {
         name.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(name.getText().equals("") || name.getText() == null) {
-                    name.setStyle("-fx-control-inner-background: #ffdec9");
+                if(name.getText() == null || name.getText().isEmpty()) {
+                    name.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
                 } else {
-                    name.setStyle("-fx-control-inner-background: #ffffff");
+                    name.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
                 }
 
             }
@@ -69,9 +69,9 @@ public class EditConcertController {
             @Override
             public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
                 if(date.getValue() == null) {
-                    date.setStyle("-fx-control-inner-background: #ffdec9");
+                    date.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
                 } else {
-                    date.setStyle("-fx-control-inner-background: #ffffff");
+                    date.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
                 }
             }
         });
@@ -80,9 +80,9 @@ public class EditConcertController {
             @Override
             public void changed(ObservableValue<? extends LocalTime> observable, LocalTime oldValue, LocalTime newValue) {
                 if(startTime.getValue() == null) {
-                    startTime.setStyle("-fx-control-inner-background: #ffdec9");
+                    startTime.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
                 } else {
-                    startTime.setStyle("-fx-control-inner-background: #ffffff");
+                    startTime.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
                 }
             }
         });

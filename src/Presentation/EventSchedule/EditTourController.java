@@ -1,6 +1,7 @@
 package Presentation.EventSchedule;
 
-import Domain.Models.EventDutyModel;
+import Domain.EventDutyModel;
+import Utils.PlanchesterConstants;
 import com.jfoenix.controls.JFXDatePicker;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -31,7 +32,7 @@ public class EditTourController {
 
     @FXML
     public void initialize() {
-        checkRequiredFields();
+        checkMandatoryFields();
     }
 
     @FXML
@@ -49,14 +50,14 @@ public class EditTourController {
         return true;
     }
 
-    private void checkRequiredFields() {
+    private void checkMandatoryFields() {
         name.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (name.getText().equals("") || name.getText() == null) {
-                    name.setStyle("-fx-control-inner-background: #ffdec9");
+                if (name.getText() == null || name.getText().isEmpty()) {
+                    name.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
                 } else {
-                    name.setStyle("-fx-control-inner-background: #ffffff");
+                    name.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
                 }
 
             }
@@ -65,9 +66,9 @@ public class EditTourController {
             @Override
             public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
                 if (startDate.getValue() == null) {
-                    startDate.setStyle("-fx-control-inner-background: #ffdec9");
+                    startDate.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
                 } else {
-                    startDate.setStyle("-fx-control-inner-background: #ffffff");
+                    startDate.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
                 }
             }
         });
@@ -76,9 +77,9 @@ public class EditTourController {
             @Override
             public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
                 if (endDate.getValue() == null) {
-                    endDate.setStyle("-fx-control-inner-background: #ffdec9");
+                    endDate.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
                 } else {
-                    endDate.setStyle("-fx-control-inner-background: #ffffff");
+                    endDate.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
                 }
             }
         });

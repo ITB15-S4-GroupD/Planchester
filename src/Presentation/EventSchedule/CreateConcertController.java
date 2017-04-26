@@ -1,10 +1,12 @@
 package Presentation.EventSchedule;
 
-import Application.EventSchedule;
-import Domain.Enum.EventStatus;
-import Domain.Enum.EventType;
-import Domain.Models.EventDutyModel;
+import Application.DTO.EventDutyDTO;
+import Application.EventScheduleManager;
+import Utils.Enum.EventStatus;
+import Utils.Enum.EventType;
+import Domain.EventDutyModel;
 import Utils.DateHelper;
+import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
@@ -32,40 +34,33 @@ public class CreateConcertController {
 
     @FXML
     public void initialize() {
-        name.setStyle("-fx-control-inner-background: #ffdec9");
-        date.setStyle("-fx-control-inner-background: #ffdec9");
-        startTime.setStyle("-fx-control-inner-background: #ffdec9");
-        checkRequiredFields();
+        initializeMandatoryFields();
     }
 
     @FXML
     private void insertNewConcertPerformance() {
-        if(!prevalidateGUI());
+        if(validate()) {
 
-        // create object
-        EventDutyModel eventDutyModel = new EventDutyModel();
-        eventDutyModel.setName(name.getText());
-        eventDutyModel.setDescription(description.getText());
-        eventDutyModel.setStarttime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
-        // If endtime is missing we assume the endtime 2 hours after begin
-        if( endTime.getValue() == null ){
-            eventDutyModel.setEndtime( DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue().plusHours(2)) );
-        }else {
-            eventDutyModel.setEndtime(DateHelper.mergeDateAndTime(date.getValue(), endTime.getValue()));
+            EventDutyDTO eventDutyDTO = new EventDutyDTO();
+            eventDutyDTO.setName(name.getText());
+            eventDutyDTO.setDescription(name.getText());
+            eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
+            eventDutyDTO.setEndTime(endTime.getValue() == null ? DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue().plusHours(2)) : DateHelper.mergeDateAndTime(date.getValue(), endTime.getValue()));
+            eventDutyDTO.setEventType(EventType.Concert);
+            eventDutyDTO.setEventStatus(EventStatus.Unpublished);
+            eventDutyDTO.setConductor(conductor.getText());
+            eventDutyDTO.setEventLocation(eventLocation.getText());
+            eventDutyDTO.setMusicalWorks(null); //TODO TIMO
+            eventDutyDTO.setPoints((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText()));
+            eventDutyDTO.setInstrumentation(null); //TODO TIMO
+            eventDutyDTO.setRehearsalFor(null); //TODO TIMO
+
+            EventScheduleManager.createConcertPerformance(eventDutyDTO);
+            EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
+            EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
+            EventScheduleController.resetSideContent(); // remove content of sidebar
+            EventScheduleController.setSelectedAppointment(eventDutyDTO); // select created appointment
         }
-        eventDutyModel.setEventType(EventType.Concert.toString());
-        eventDutyModel.setEventStatus(EventStatus.Unpublished.toString());
-        eventDutyModel.setConductor(conductor.getText());
-        eventDutyModel.setLocation(eventLocation.getText());
-        if( !points.getText().isEmpty() ) eventDutyModel.setDefaultPoints(Double.parseDouble(points.getText()));
-        //TODO eventDutyByRehearsalFor and instrumentation
-
-        EventSchedule.insertConcertEventDuty(eventDutyModel);
-
-        EventScheduleController.addEventDutyToGUI(eventDutyModel); // add event to agenda
-        EventScheduleController.setDisplayedLocalDateTime(eventDutyModel.getStarttime().toLocalDateTime()); // set agenda view to week of created event
-        EventScheduleController.resetSideContent(); // remove content of sidebar
-        EventScheduleController.setSelectedAppointment(eventDutyModel); // select created appointment
     }
 
     @FXML
@@ -85,7 +80,7 @@ public class CreateConcertController {
         return true;
     }
 
-    private boolean prevalidateGUI() {
+    private boolean validate() {
         LocalDate today = LocalDate.now();
         LocalTime start = startTime.getValue();
         LocalTime end = endTime.getValue();
@@ -100,7 +95,6 @@ public class CreateConcertController {
             return false;
         } else if(start == null) {
             throwErrorAlertMessage("The starttime is missing.");
-            startTime.requestFocus();
             return false;
         } else if(end != null && (start.isAfter(end) || start.equals(end))) {
             throwErrorAlertMessage("The endtime is not after the starttime. ");
@@ -109,6 +103,7 @@ public class CreateConcertController {
             throwErrorAlertMessage("The starttime must be in future. \n");
             return false;
         }
+        //TODO TIMO: validate musiclaWork: is mandatory!
         return true;
     }
 
@@ -118,14 +113,18 @@ public class CreateConcertController {
     }
 
 
-    private void checkRequiredFields() {
+    private void initializeMandatoryFields() {
+        name.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
+        date.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
+        startTime.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
+
         name.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(name.getText().equals("") || name.getText() == null) {
-                    name.setStyle("-fx-control-inner-background: #ffdec9");
+                if(name.getText() == null || name.getText().isEmpty()) {
+                    name.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
                 } else {
-                    name.setStyle("-fx-control-inner-background: #ffffff");
+                    name.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
                 }
             }
         });
@@ -133,9 +132,9 @@ public class CreateConcertController {
             @Override
             public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
                 if(date.getValue() == null) {
-                    date.setStyle("-fx-control-inner-background: #ffdec9");
+                    date.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
                 } else {
-                    date.setStyle("-fx-control-inner-background: #ffffff");
+                    date.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
                 }
             }
         });
@@ -144,9 +143,9 @@ public class CreateConcertController {
             @Override
             public void changed(ObservableValue<? extends LocalTime> observable, LocalTime oldValue, LocalTime newValue) {
                 if(startTime.getValue() == null) {
-                    startTime.setStyle("-fx-control-inner-background: #ffdec9");
+                    startTime.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
                 } else {
-                    startTime.setStyle("-fx-control-inner-background: #ffffff");
+                    startTime.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
                 }
             }
         });

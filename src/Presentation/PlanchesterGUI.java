@@ -1,5 +1,6 @@
 package Presentation;
 
+import Application.DatabaseSessionManager;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +11,6 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.stage.WindowEvent;
 
-import java.io.File;
 import java.net.URL;
 import java.rmi.UnexpectedException;
 
@@ -18,6 +18,8 @@ public class PlanchesterGUI {
     public static Scene scene;
 
     public void start(Stage primaryStage) throws Exception {
+        DatabaseSessionManager.beginSession();
+
         TabPane tabPane = createTabs();
 
         primaryStage.setTitle("Planchester");
@@ -25,6 +27,7 @@ public class PlanchesterGUI {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
+                DatabaseSessionManager.closeSession();
                 Platform.exit();
                 System.exit(0);
             }
@@ -38,6 +41,7 @@ public class PlanchesterGUI {
         }
         String css = url.toExternalForm();
         scene.getStylesheets().add(css);
+
         primaryStage.setScene(scene);
         primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
         primaryStage.show();

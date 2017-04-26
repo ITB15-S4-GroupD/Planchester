@@ -90,23 +90,23 @@ public class InstrumentationController {
         }
 
         private void setBackgroundStandardInstrumentation() {
-                standardFirstViolin.setStyle("-fx-control-inner-background: #eeeeee");
-                standardSecondViolin.setStyle("-fx-control-inner-background: #eeeeee");
-                standardViola.setStyle("-fx-control-inner-background: #eeeeee");
-                standardVioloncello.setStyle("-fx-control-inner-background: #eeeeee");
-                standardDoublebass.setStyle("-fx-control-inner-background: #eeeeee");
-                standardHorn.setStyle("-fx-control-inner-background: #eeeeee");
-                standardTrumpet.setStyle("-fx-control-inner-background: #eeeeee");
-                standardTrombone.setStyle("-fx-control-inner-background: #eeeeee");
-                standardTuba.setStyle("-fx-control-inner-background: #eeeeee");
-                standardFlute.setStyle("-fx-control-inner-background: #eeeeee");
-                standardOboe.setStyle("-fx-control-inner-background: #eeeeee");
-                standardClarinet.setStyle("-fx-control-inner-background: #eeeeee");
-                standardBasson.setStyle("-fx-control-inner-background: #eeeeee");
-                standardKettledrum.setStyle("-fx-control-inner-background: #eeeeee");
-                standardPercussion.setStyle("-fx-control-inner-background: #eeeeee");
-                standardHarp.setStyle("-fx-control-inner-background: #eeeeee");
-                standardDescription.setStyle("-fx-control-inner-background: #eeeeee");
-
+                String backgroundcolorGrey = "-fx-control-inner-background: #eeeeee";
+                standardFirstViolin.setStyle(backgroundcolorGrey);
+                standardSecondViolin.setStyle(backgroundcolorGrey);
+                standardViola.setStyle(backgroundcolorGrey);
+                standardVioloncello.setStyle(backgroundcolorGrey);
+                standardDoublebass.setStyle(backgroundcolorGrey);
+                standardHorn.setStyle(backgroundcolorGrey);
+                standardTrumpet.setStyle(backgroundcolorGrey);
+                standardTrombone.setStyle(backgroundcolorGrey);
+                standardTuba.setStyle(backgroundcolorGrey);
+                standardFlute.setStyle(backgroundcolorGrey);
+                standardOboe.setStyle(backgroundcolorGrey);
+                standardClarinet.setStyle(backgroundcolorGrey);
+                standardBasson.setStyle(backgroundcolorGrey);
+                standardKettledrum.setStyle(backgroundcolorGrey);
+                standardPercussion.setStyle(backgroundcolorGrey);
+                standardHarp.setStyle(backgroundcolorGrey);
+                standardDescription.setStyle(backgroundcolorGrey);
         }
 }
