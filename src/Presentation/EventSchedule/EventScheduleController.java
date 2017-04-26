@@ -240,18 +240,19 @@ public class EventScheduleController {
             String line = br.readLine();
 
             while (line != null) {
+                String setControlInnerBackground = "-fx-control-inner-background: ";
                 if(line.contains("group1")) {
-                    colorOpera = "-fx-control-inner-background: " + getColor(line) + ";";
+                    colorOpera = setControlInnerBackground + getColor(line) + ";";
                 } else if(line.contains("group2")) {
-                    colorConcert = "-fx-control-inner-background: " + getColor(line) + ";";
+                    colorConcert = setControlInnerBackground + getColor(line) + ";";
                 } else if(line.contains("group3")) {
-                    colorHofkapelle = "-fx-control-inner-background: " + getColor(line) + ";";
+                    colorHofkapelle = setControlInnerBackground + getColor(line) + ";";
                 } else if(line.contains("group4")) {
-                    colorTour = "-fx-control-inner-background: " + getColor(line) + ";";
+                    colorTour = setControlInnerBackground + getColor(line) + ";";
                 } else if(line.contains("group5")) {
-                    colorRehearsal = "-fx-control-inner-background: " + getColor(line) + ";";
+                    colorRehearsal = setControlInnerBackground + getColor(line) + ";";
                 } else if(line.contains("group6")) {
-                    colorNonMusical = "-fx-control-inner-background: " + getColor(line) + ";";
+                    colorNonMusical = setControlInnerBackground + getColor(line) + ";";
                 }
                 line = br.readLine();
             }

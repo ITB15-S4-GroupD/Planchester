@@ -20,7 +20,6 @@ public class EventDuty {
         DatabaseHelper.closeSession(session);
     }
 
-
     public static List<EventDutyModel> getAllEventDuty() {
         Session session = DatabaseHelper.beginSession();
         Query query = session.createQuery("FROM EventDutyEntity");

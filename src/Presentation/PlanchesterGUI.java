@@ -74,7 +74,6 @@ public class PlanchesterGUI {
 
         //Tabs not closeable
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-
         return tabPane;
     }
 }

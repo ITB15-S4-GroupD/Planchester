@@ -22,7 +22,6 @@ public class DateHelper {
 
     public static Timestamp mergeDateAndTime(LocalDate date, LocalTime time) {
         return Timestamp.valueOf(LocalDateTime.of(date, time));
-
     }
 
     public static Calendar getStartOfWeek(Calendar dayOfWeek) {
