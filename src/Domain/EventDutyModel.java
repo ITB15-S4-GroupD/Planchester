@@ -1,12 +1,11 @@
 package Domain;
 
-import Persistence.Entities.EventDutyEntity;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import Utils.Validator;
-
 import javax.xml.bind.ValidationException;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * Created by julia on 13.04.2017.
@@ -24,6 +23,7 @@ public class EventDutyModel {
     private Double defaultPoints;
     private Integer rehearsalFor;
     private Integer instrumentation;
+    private List<MusicalWorkModel> musicalWorks;
 
     public EventDutyModel() { }
 
@@ -140,5 +140,13 @@ public class EventDutyModel {
 
     public void setInstrumentation(Integer instrumentation) {
         this.instrumentation = instrumentation;
+    }
+
+    public List<MusicalWorkModel> getMusicalWorks() {
+        return musicalWorks;
+    }
+
+    public void setMusicalWorks(List<MusicalWorkModel> musicalWorks) {
+        this.musicalWorks = musicalWorks;
     }
 }

@@ -119,6 +119,13 @@ public class InstrumentationController {
 
         heading.setText(newHeading);
 
+        if(selectedMusicalWorks != null && !selectedMusicalWorks.isEmpty()) {
+            for(MusicalWorkDTO musicalWorkDTO : selectedMusicalWorks) {
+                tableAvailable.getItems().remove(tableAvailable.getItems().stream().filter(o -> o.equals(musicalWorkDTO.getName())).findFirst().get());
+                tableSelected.getItems().add(musicalWorkDTO.getName());
+            }
+        }
+
         tableSelected.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {

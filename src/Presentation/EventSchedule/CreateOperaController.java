@@ -29,7 +29,9 @@ import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Ina on 08.04.2017.
@@ -79,7 +81,9 @@ public class CreateOperaController {
             eventDutyDTO.setEventStatus(EventStatus.Unpublished);
             eventDutyDTO.setConductor(conductor.getText());
             eventDutyDTO.setEventLocation(eventLocation.getText());
-            eventDutyDTO.setMusicalWorks(null); //TODO TIMO
+            List<MusicalWorkDTO> selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
+            selectedMusicalWorks.add(musicalWork);
+            eventDutyDTO.setMusicalWorks(selectedMusicalWorks);
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
             eventDutyDTO.setInstrumentation(null); //TODO TIMO - timebox 2
             eventDutyDTO.setRehearsalFor(null); //TODO Julia/Christina
@@ -114,6 +118,12 @@ public class CreateOperaController {
         } else {
             InstrumentationController.newHeading = name.getText();
         }
+
+        if(musicalWork != null) {
+            InstrumentationController.selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
+            InstrumentationController.selectedMusicalWorks.add(musicalWork);
+        }
+
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("Instrumentation.fxml"));
         Scene scene = null;
@@ -129,7 +139,7 @@ public class CreateOperaController {
 
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
-                if(InstrumentationController.apply == true) {
+                if(InstrumentationController.apply) {
                     if(!InstrumentationController.selectedMusicalWorks.isEmpty()) {
                         muscialWorkTable.getItems().clear();
                         musicalWork = InstrumentationController.selectedMusicalWorks.get(0);

@@ -1,7 +1,5 @@
 package Application.DTO;
 
-import Domain.InstrumentationModel;
-
 /**
  * Created by timor on 27.04.2017.
  */
@@ -43,5 +41,4 @@ public class MusicalWorkDTO {
     public void setAlternativeInstrumentation(InstrumentationDTO instrumentation) {
         this.alternativeInstrumentation = instrumentation;
     }
-
 }
