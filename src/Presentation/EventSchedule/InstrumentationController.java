@@ -4,9 +4,11 @@ import Application.MusicalWorkAdministratonManager;
 import Domain.InstrumentationModel;
 import Utils.PlanchesterConstants;
 import com.jfoenix.controls.JFXRadioButton;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -17,11 +19,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 /**
  * Created by Christina on 21.04.2017.
  */
 public class InstrumentationController {
+        public static boolean selectMultipleMusicalWorks = true;
+        public static String newHeading;
+
+        @FXML private Label heading;
 
         @FXML private ScrollPane scrollPane;
 
@@ -80,15 +85,16 @@ public class InstrumentationController {
         @FXML private TextField eventPercussion;
         @FXML private TextArea eventDescription;
 
-        @FXML private TableColumn<?, ?> tableAvailableMusicalWorks;
-        @FXML private TableColumn<?, ?> tableSelectedMusicalWorks;
+        @FXML private TableColumn<String, String> tableAvailableMusicalWorks;
+        @FXML private TableColumn<String, String> tableSelectedMusicalWorks;
 
         @FXML private TableView<String> tableAvailable;
-        @FXML private TableView<?> tableSelected;
+        @FXML private TableView<String> tableSelected;
 
         @FXML private Button addToSelected;
         @FXML private Button removeFromSelected;
 
+        final ToggleGroup toggleGroup = new ToggleGroup();
         @FXML private JFXRadioButton radioButtonStandard;
         @FXML private JFXRadioButton radioButtonAlternative;
 
@@ -96,6 +102,31 @@ public class InstrumentationController {
         public void initialize() {
             setBackgroundStandardInstrumentation();
             getAllMusicalWorks();
+
+            radioButtonStandard.setToggleGroup(toggleGroup);
+            radioButtonAlternative.setToggleGroup(toggleGroup);
+
+            heading.setText(newHeading);
+        }
+
+        @FXML
+        private void addMusicalWorkToSelected() {
+                if(selectMultipleMusicalWorks == false) {
+                        if(tableSelected.getItems().size() > 0)
+                        {
+                                return;
+                        }
+                }
+                String selecetdItem = tableAvailable.getSelectionModel().getSelectedItem();
+                tableAvailable.getItems().remove(tableAvailable.getSelectionModel().getFocusedIndex());
+                tableSelected.getItems().add(selecetdItem);
+        }
+
+        @FXML
+        private void removeMusicalWorkFromSelected() {
+                String selecetdItem = tableSelected.getSelectionModel().getSelectedItem();
+                tableSelected.getItems().remove(tableSelected.getSelectionModel().getFocusedIndex());
+                tableAvailable.getItems().add(selecetdItem);
         }
 
         private void setBackgroundStandardInstrumentation() {
@@ -119,23 +150,10 @@ public class InstrumentationController {
         }
 
         public void getAllMusicalWorks() {
-
-
-                tableAvailable.getColumns().get(0).setCellValueFactory(cellData -> cellData.getValue());
+                tableAvailableMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+                tableSelectedMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
 
                 List<String> musicalWorks = MusicalWorkAdministratonManager.getAllMusicalWorks();
                 tableAvailable.getItems().addAll(musicalWorks);
-        }
-
-        private class CellData {
-                private String name;
-
-                private String getName() {
-                        return name;
-                }
-
-                private void setName(String s) {
-                        name = s;
-                }
         }
 }

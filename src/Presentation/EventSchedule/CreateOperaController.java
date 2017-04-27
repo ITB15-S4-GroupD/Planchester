@@ -95,6 +95,12 @@ public class CreateOperaController {
 
     @FXML
     public void editInstrumentation() {
+        InstrumentationController.selectMultipleMusicalWorks = false;
+        if(date.getValue() != null) {
+            InstrumentationController.newHeading = name.getText() + " | " + date.getValue().toString();
+        } else {
+            InstrumentationController.newHeading = name.getText();
+        }
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("Instrumentation.fxml"));
         Scene scene = null;
