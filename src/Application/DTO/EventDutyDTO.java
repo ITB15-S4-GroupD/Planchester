@@ -15,6 +15,7 @@ import java.util.List;
  * Created by julia on 26.04.2017.
  */
 public class EventDutyDTO {
+    private Integer eventDutyID;
     private String name;
     private String description;
     private Timestamp startTime;
@@ -27,6 +28,14 @@ public class EventDutyDTO {
     private Double points;
     private Integer instrumentation;
     private Integer rehearsalFor;
+
+    public Integer getEventDutyID() {
+        return eventDutyID;
+    }
+
+    public void setEventDutyID(Integer eventDutyID) {
+        this.eventDutyID = eventDutyID;
+    }
 
     public String getName() {
         return name;

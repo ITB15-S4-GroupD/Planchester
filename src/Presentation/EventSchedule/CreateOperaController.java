@@ -52,8 +52,8 @@ public class CreateOperaController {
     @FXML
     private void insertNewOperaPerformance() {
         if(validate()) {
-
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
+            eventDutyDTO.setEventDutyID(null);
             eventDutyDTO.setName(name.getText());
             eventDutyDTO.setDescription(description.getText());
             eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));

@@ -1,6 +1,11 @@
 package Presentation.EventSchedule;
 
+import Application.DTO.EventDutyDTO;
+import Application.EventScheduleManager;
 import Domain.EventDutyModel;
+import Utils.DateHelper;
+import Utils.Enum.EventStatus;
+import Utils.Enum.EventType;
 import Utils.PlanchesterConstants;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
@@ -37,13 +42,34 @@ public class EditConcertController {
 
     @FXML
     private void save() {
-        // TODO: save data
+        if(validate()) {
+            EventDutyDTO oldEventDutyDTO = EventScheduleController.staticLoadedEventsMap.get(EventScheduleController.getSelectedAppointment());
+
+            EventDutyDTO eventDutyDTO = new EventDutyDTO();
+            eventDutyDTO.setEventDutyID(oldEventDutyDTO.getEventDutyID());
+            eventDutyDTO.setName(name.getText());
+            eventDutyDTO.setDescription(name.getText());
+            eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
+            eventDutyDTO.setEndTime(endTime.getValue() == null ? DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue().plusHours(2)) : DateHelper.mergeDateAndTime(date.getValue(), endTime.getValue()));
+            eventDutyDTO.setEventType(EventType.Concert);
+            eventDutyDTO.setEventStatus(EventStatus.Unpublished);
+            eventDutyDTO.setConductor(conductor.getText());
+            eventDutyDTO.setEventLocation(eventLocation.getText());
+            eventDutyDTO.setMusicalWorks(null); //TODO TIMO
+            eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
+            eventDutyDTO.setInstrumentation(null); //TODO TIMO
+            eventDutyDTO.setRehearsalFor(null); //TODO TIMO
+
+            EventScheduleManager.updateConcertPerformance(eventDutyDTO);
+            EventScheduleController.staticLoadedEventsMap.put(EventScheduleController.getSelectedAppointment(), eventDutyDTO); //update GUI
+            EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
+            EventScheduleController.resetSideContent(); // remove content of sidebar
+            EventScheduleController.setSelectedAppointment(eventDutyDTO); // select created appointment
+        }
     }
 
     @FXML
     public boolean discard() {
-        // TODO: check with init data for changes
-
         // remove content of sidebar
         EventScheduleController.resetSideContent();
         EventScheduleController.removeSelection(initAppointment);
@@ -85,4 +111,35 @@ public class EditConcertController {
         });
     }
 
+    private boolean validate() {
+        LocalDate today = LocalDate.now();
+        LocalTime start = startTime.getValue();
+        LocalTime end = endTime.getValue();
+
+        if(name.getText().isEmpty()){
+            throwErrorAlertMessage("The Name is missing.");
+            name.requestFocus();
+            return false;
+        } else if(date.getValue() == null || date.getValue().isBefore(today) ){
+            throwErrorAlertMessage("The date is not valid.");
+            date.requestFocus();
+            return false;
+        } else if(start == null) {
+            throwErrorAlertMessage("The starttime is missing.");
+            return false;
+        } else if(end != null && (start.isAfter(end) || start.equals(end))) {
+            throwErrorAlertMessage("The endtime is not after the starttime. ");
+            return false;
+        } else if(date.getValue().equals(today) && start.isBefore(LocalTime.now())){
+            throwErrorAlertMessage("The starttime must be in future. \n");
+            return false;
+        }
+        //TODO TIMO: validate musiclaWork: is mandatory!
+        return true;
+    }
+
+    private void throwErrorAlertMessage(String errormessage){
+        Alert alert = new Alert(Alert.AlertType.ERROR, errormessage, ButtonType.OK);
+        alert.showAndWait();
+    }
 }
