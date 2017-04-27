@@ -83,11 +83,17 @@ public class EventScheduleManager {
     }
 
     public static void updateTourPerformance(EventDutyDTO eventDutyDTO) {
-
+        EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
+        //TODO JULIA / INA: eventDutyModel.validate();
+        EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
+        persistanceFacade.put(eventDutyEntity);
     }
 
     public static void updateHofkapellePerformance(EventDutyDTO eventDutyDTO) {
-
+        EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
+        //TODO JULIA / INA: eventDutyModel.validate();
+        EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
+        persistanceFacade.put(eventDutyEntity);
     }
 
 	public static void createNonMusicalPerformance(EventDutyDTO eventDutyDTO) {
@@ -146,7 +152,7 @@ public class EventScheduleManager {
         eventDutyModel.setEventStatus(eventDutyDTO.getEventStatus().toString());
         eventDutyModel.setConductor(eventDutyDTO.getConductor());
         eventDutyModel.setLocation(eventDutyDTO.getEventLocation());
-        eventDutyModel.setDefaultPoints(eventDutyDTO.getPoints() == null ? null : Double.valueOf(eventDutyDTO.getPoints()));
+        eventDutyModel.setDefaultPoints(eventDutyDTO.getPoints());
         eventDutyModel.setInstrumentation(eventDutyDTO.getInstrumentation());
         eventDutyModel.setRehearsalFor(eventDutyDTO.getRehearsalFor());
         return eventDutyModel;
@@ -182,7 +188,7 @@ public class EventScheduleManager {
         eventDutyDTO.setEventStatus(EventStatus.valueOf(eventDutyModel.getEventStatus()));
         eventDutyDTO.setConductor(eventDutyModel.getConductor());
         eventDutyDTO.setEventLocation(eventDutyModel.getLocation());
-        eventDutyDTO.setPoints(eventDutyModel.getDefaultPoints() == null ? null : Double.valueOf(eventDutyModel.getDefaultPoints()));
+        eventDutyDTO.setPoints(eventDutyModel.getDefaultPoints());
         eventDutyDTO.setInstrumentation(eventDutyModel.getInstrumentation());
         eventDutyDTO.setRehearsalFor(eventDutyModel.getRehearsalFor());
         return eventDutyDTO;
