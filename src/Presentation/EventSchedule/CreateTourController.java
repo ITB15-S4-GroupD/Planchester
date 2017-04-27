@@ -26,7 +26,6 @@ public class CreateTourController {
     @FXML private JFXDatePicker startDate;
     @FXML private JFXDatePicker endDate;
     @FXML private TextField eventLocation;
-    @FXML private ChoiceBox<String> musicalWork;
     @FXML private TextField conductor;
     @FXML private TextField points;
 

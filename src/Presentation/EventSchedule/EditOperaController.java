@@ -22,13 +22,10 @@ public class EditOperaController {
 
     @FXML private TextField name;
     @FXML private TextArea description;
-
     @FXML private JFXTimePicker startTime;
     @FXML private JFXTimePicker endTime;
     @FXML private JFXDatePicker date;
-
     @FXML private TextField eventLocation;
-    @FXML private ChoiceBox<String> musicalWork;
     @FXML private TextField conductor;
     @FXML private TextField points;
 
