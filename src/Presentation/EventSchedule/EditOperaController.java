@@ -81,7 +81,7 @@ public class EditOperaController {
             EventScheduleController.staticLoadedEventsMap.put(EventScheduleController.getSelectedAppointment(), eventDutyDTO); //update GUI
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
-            EventScheduleController.setSelectedAppointment(eventDutyDTO); // select created appointment
+//            EventScheduleController.setSelectedAppointment(eventDutyDTO); // select created appointment
         }
     }
 
@@ -97,10 +97,8 @@ public class EditOperaController {
                 || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
                 || !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints())) {
 
-            Alert confirmationAlertMessage = new Alert(Alert.AlertType.CONFIRMATION, PlanchesterMessages.DISCARD_CHANGES, ButtonType.YES, ButtonType.NO);
-            confirmationAlertMessage.showAndWait();
-
-            if (confirmationAlertMessage.getResult() == ButtonType.NO) {
+            ButtonType answer = MessageHelper.showConfirmationMessage(PlanchesterMessages.DISCARD_CHANGES);
+            if(ButtonType.NO.equals(answer)) {
                 return false;
             }
         }
