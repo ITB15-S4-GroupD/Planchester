@@ -11,6 +11,7 @@ public class DatabaseConnectionHandler {
     private final String HIBERNATE_CONFIGURARION = "hibernate.cfg.xml";
 
     private static DatabaseConnectionHandler instance = null;
+    Configuration cfg;
     private Session session;
 
     private DatabaseConnectionHandler() {
@@ -24,27 +25,22 @@ public class DatabaseConnectionHandler {
         return instance;
     }
 
-    public void beginSession() {
-        if(session == null) {
-            Configuration cfg = new Configuration();
+    public void readConfiguration() {
+        if(cfg == null) {
+            cfg = new Configuration();
             cfg.configure(HIBERNATE_CONFIGURARION);
-            SessionFactory factory = cfg.buildSessionFactory();
-            session = factory.openSession();
-        }
-    }
-
-    public void closeSession() {
-        if(session != null) {
-            session.close();
         }
     }
 
     public Session beginTransaction() {
+        SessionFactory factory = cfg.buildSessionFactory();
+        session = factory.openSession();
         session.beginTransaction();
         return session;
     }
 
     public void commitTransaction() {
         session.getTransaction().commit();
+        session.close();
     }
 }

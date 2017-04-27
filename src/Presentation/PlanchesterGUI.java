@@ -18,7 +18,7 @@ public class PlanchesterGUI {
     public static Scene scene;
 
     public void start(Stage primaryStage) throws Exception {
-        DatabaseSessionManager.beginSession();
+        DatabaseSessionManager.readConfiguration();
 
         TabPane tabPane = createTabs();
 
@@ -27,7 +27,6 @@ public class PlanchesterGUI {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
-                DatabaseSessionManager.closeSession();
                 Platform.exit();
                 System.exit(0);
             }
