@@ -6,6 +6,7 @@ import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import Domain.EventDutyModel;
+import Utils.MessageHelper;
 import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
@@ -80,31 +81,26 @@ public class CreateTourController {
         LocalDate start = startDate.getValue();
         LocalDate end = endDate.getValue();
 
+
         if(name.getText().isEmpty()){
-            throwErrorAlertMessage("The Name is missing.");
+            MessageHelper.showErrorAlertMessage("The Name is missing.");
             name.requestFocus();
             return false;
         } else if(start == null){
-            throwErrorAlertMessage("Startdate has to be set.");
+            MessageHelper.showErrorAlertMessage("Startdate has to be set.");
             startDate.requestFocus();
             return false;
         } else if(end == null ){
-            throwErrorAlertMessage("Enddate has to be set.");
+            MessageHelper.showErrorAlertMessage("Enddate has to be set.");
             endDate.requestFocus();
             return false;
         }  else if(start.isAfter(end) || start.equals(end)) {
-            throwErrorAlertMessage("Enddate has to be after the startdate.");
+            MessageHelper.showErrorAlertMessage("Enddate has to be after the startdate.");
             return false;
         }
         //TODO TIMO: validate musiclaWork: is mandatory!
         return true;
     }
-
-    private void throwErrorAlertMessage(String errormessage){
-        Alert alert = new Alert(Alert.AlertType.ERROR, errormessage, ButtonType.OK);
-        alert.showAndWait();
-    }
-
 
     private void initializeMandatoryFields() {
         name.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
