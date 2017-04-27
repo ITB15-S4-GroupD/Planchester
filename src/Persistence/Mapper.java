@@ -12,7 +12,6 @@ public abstract class Mapper<T> {
     public T get(Integer objectID) {
         Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
         T object = session.get(getEntityClass(), objectID);
-        session.evict(object);
         DatabaseConnectionHandler.getInstance().commitTransaction();
         return object;
     }
@@ -20,7 +19,6 @@ public abstract class Mapper<T> {
     public void put(T object) {
         Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
         session.saveOrUpdate(object);
-        session.evict(object);
         DatabaseConnectionHandler.getInstance().commitTransaction();
     }
 

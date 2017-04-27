@@ -61,6 +61,9 @@ public class EditOperaController {
     private void save() {
         if(validate()) {
             EventDutyDTO oldEventDutyDTO = EventScheduleController.getEventForAppointment(EventScheduleController.getSelectedAppointment());
+            EventScheduleController.staticLoadedEventsMap.remove(EventScheduleController.getSelectedAppointment());
+
+
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
             eventDutyDTO.setEventDutyID(oldEventDutyDTO.getEventDutyID());
             eventDutyDTO.setName(name.getText());
@@ -76,12 +79,13 @@ public class EditOperaController {
             eventDutyDTO.setInstrumentation(null); //TODO TIMO
             eventDutyDTO.setRehearsalFor(null); //TODO TIMO
 
-            //TODO Julia: noch nicht fertig, aber schon mal gemerged....
             EventScheduleManager.updateOperaPerformance(eventDutyDTO);
-            EventScheduleController.staticLoadedEventsMap.put(EventScheduleController.getSelectedAppointment(), eventDutyDTO); //update GUI
+
+            EventScheduleController.addEventDutyToGUI(eventDutyDTO);
+//            EventScheduleController.staticLoadedEventsMap.put(EventScheduleController.getSelectedAppointment(), eventDutyDTO); //update GUI
+            EventScheduleController.setSelectedAppointment(eventDutyDTO);
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
-//            EventScheduleController.setSelectedAppointment(eventDutyDTO); // select created appointment
         }
     }
 
