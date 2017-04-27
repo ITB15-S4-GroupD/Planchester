@@ -2,6 +2,7 @@ package Presentation.EventSchedule;
 
 import Application.DTO.EventDutyDTO;
 import Application.EventScheduleManager;
+import Domain.InstrumentationModel;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import Domain.EventDutyModel;
@@ -35,6 +36,8 @@ public class CreateOperaController {
     @FXML private TextField eventLocation;
     @FXML private TextField conductor;
     @FXML private TextField points;
+    private static int musicalWork;
+    private static InstrumentationModel instrumentationModel;
 
     @FXML
     public void initialize() {

@@ -1,5 +1,7 @@
 package Presentation.EventSchedule;
 
+import Application.MusicalWorkAdministratonManager;
+import Domain.InstrumentationModel;
 import Utils.PlanchesterConstants;
 import com.jfoenix.controls.JFXRadioButton;
 import javafx.beans.property.SimpleStringProperty;
@@ -8,7 +10,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -88,6 +95,7 @@ public class InstrumentationController {
         @FXML
         public void initialize() {
             setBackgroundStandardInstrumentation();
+            getAllMusicalWorks();
         }
 
         private void setBackgroundStandardInstrumentation() {
@@ -108,5 +116,26 @@ public class InstrumentationController {
                 standardPercussion.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
                 standardHarp.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
                 standardDescription.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        }
+
+        public void getAllMusicalWorks() {
+
+
+                tableAvailable.getColumns().get(0).setCellValueFactory(cellData -> cellData.getValue());
+
+                List<String> musicalWorks = MusicalWorkAdministratonManager.getAllMusicalWorks();
+                tableAvailable.getItems().addAll(musicalWorks);
+        }
+
+        private class CellData {
+                private String name;
+
+                private String getName() {
+                        return name;
+                }
+
+                private void setName(String s) {
+                        name = s;
+                }
         }
 }
