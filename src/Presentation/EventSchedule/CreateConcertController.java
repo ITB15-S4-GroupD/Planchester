@@ -4,7 +4,6 @@ import Application.DTO.EventDutyDTO;
 import Application.EventScheduleManager;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
-import Domain.EventDutyModel;
 import Utils.DateHelper;
 import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
@@ -42,7 +41,7 @@ public class CreateConcertController {
 
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
             eventDutyDTO.setName(name.getText());
-            eventDutyDTO.setDescription(name.getText());
+            eventDutyDTO.setDescription(description.getText());
             eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
             eventDutyDTO.setEndTime(endTime.getValue() == null ? DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue().plusHours(2)) : DateHelper.mergeDateAndTime(date.getValue(), endTime.getValue()));
             eventDutyDTO.setEventType(EventType.Concert);

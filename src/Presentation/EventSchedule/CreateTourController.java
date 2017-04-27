@@ -40,7 +40,7 @@ public class CreateTourController {
 
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
             eventDutyDTO.setName(name.getText());
-            eventDutyDTO.setDescription(name.getText());
+            eventDutyDTO.setDescription(description.getText());
             eventDutyDTO.setStartTime(Timestamp.valueOf(startDate.getValue().atStartOfDay()));
             eventDutyDTO.setEndTime(Timestamp.valueOf(endDate.getValue().atTime(23,59,59)));
             eventDutyDTO.setEventType(EventType.Tour);

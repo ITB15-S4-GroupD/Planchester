@@ -1,5 +1,6 @@
 package Presentation.EventSchedule;
 
+import Utils.PlanchesterConstants;
 import com.jfoenix.controls.JFXRadioButton;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -90,23 +91,22 @@ public class InstrumentationController {
         }
 
         private void setBackgroundStandardInstrumentation() {
-                String backgroundcolorGrey = "-fx-control-inner-background: #eeeeee";
-                standardFirstViolin.setStyle(backgroundcolorGrey);
-                standardSecondViolin.setStyle(backgroundcolorGrey);
-                standardViola.setStyle(backgroundcolorGrey);
-                standardVioloncello.setStyle(backgroundcolorGrey);
-                standardDoublebass.setStyle(backgroundcolorGrey);
-                standardHorn.setStyle(backgroundcolorGrey);
-                standardTrumpet.setStyle(backgroundcolorGrey);
-                standardTrombone.setStyle(backgroundcolorGrey);
-                standardTuba.setStyle(backgroundcolorGrey);
-                standardFlute.setStyle(backgroundcolorGrey);
-                standardOboe.setStyle(backgroundcolorGrey);
-                standardClarinet.setStyle(backgroundcolorGrey);
-                standardBasson.setStyle(backgroundcolorGrey);
-                standardKettledrum.setStyle(backgroundcolorGrey);
-                standardPercussion.setStyle(backgroundcolorGrey);
-                standardHarp.setStyle(backgroundcolorGrey);
-                standardDescription.setStyle(backgroundcolorGrey);
+                standardFirstViolin.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+                standardSecondViolin.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+                standardViola.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+                standardVioloncello.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+                standardDoublebass.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+                standardHorn.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+                standardTrumpet.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+                standardTrombone.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+                standardTuba.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+                standardFlute.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+                standardOboe.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+                standardClarinet.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+                standardBasson.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+                standardKettledrum.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+                standardPercussion.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+                standardHarp.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+                standardDescription.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
         }
 }

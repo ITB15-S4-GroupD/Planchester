@@ -321,14 +321,14 @@ public class EventScheduleController {
         addNewOpera = new MenuItem(EventType.Opera.toString());
         addNewTour = new  MenuItem(EventType.Tour.toString());
         addNewHofkapelle = new MenuItem(EventType.Hofkapelle.toString());
-        addNewRehearsal = new MenuItem(EventType.Rehearsal.toString());
+        //addNewRehearsal = new MenuItem(EventType.Rehearsal.toString());
         addNewNonMusicalEvent = new MenuItem(EventType.NonMusicalEvent.toString());
 
         addNewEvent.getItems().add(addNewConcert);
         addNewEvent.getItems().add(addNewOpera);
         addNewEvent.getItems().add(addNewTour);
         addNewEvent.getItems().add(addNewHofkapelle);
-        addNewEvent.getItems().add(addNewRehearsal);
+        //addNewEvent.getItems().add(addNewRehearsal);
         addNewEvent.getItems().add(addNewNonMusicalEvent);
     }
 
@@ -350,6 +350,9 @@ public class EventScheduleController {
                     editOpen = true;
                 } else if(EventType.Hofkapelle.equals(eventDutyDTO.getEventType())) {
                     scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditHofkapelle.fxml")));
+                    editOpen = true;
+                } else if(EventType.NonMusicalEvent.equals(eventDutyDTO.getEventType())) {
+                    scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditNonMusicalEvent.fxml")));
                     editOpen = true;
                 }
             }
@@ -416,6 +419,20 @@ public class EventScheduleController {
                         agenda.selectedAppointments().clear();
                         selectedAppointment = null;
                         scrollPane.setContent(FXMLLoader.load(getClass().getResource("CreateTour.fxml")));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        addNewNonMusicalEvent.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    if(tryResetSideContent() == null) {
+                        agenda.selectedAppointments().clear();
+                        selectedAppointment = null;
+                        scrollPane.setContent(FXMLLoader.load(getClass().getResource("CreateNonMusicalEvent.fxml")));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -64,6 +64,13 @@ public class EventScheduleManager {
         persistanceFacade.put(eventDutyEntity);
     }
 
+    public static void createNonMusicalPerformance(EventDutyDTO eventDutyDTO) {
+        EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
+        //TODO JULIA / INA: eventDutyModel.validate();
+        EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
+        persistanceFacade.put(eventDutyEntity);
+    }
+
     public static void updateConcertPerformance(EventDutyModel eventDuty) {
 
     }
@@ -185,4 +192,6 @@ public class EventScheduleManager {
         eventDutyModel.setRehearsalFor(eventDutyEntity.getRehearsalFor());
         return eventDutyModel;
     }
+
+
 }

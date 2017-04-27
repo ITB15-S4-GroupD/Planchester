@@ -22,7 +22,7 @@
       <RowConstraints maxHeight="59.333343505859375" minHeight="0.0" prefHeight="37.333343505859375" vgrow="NEVER" />
    </rowConstraints>
    <children>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="New Tour" textOrigin="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="New Tour Performance" textOrigin="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
          <font>
             <Font size="22.0" />
          </font>
