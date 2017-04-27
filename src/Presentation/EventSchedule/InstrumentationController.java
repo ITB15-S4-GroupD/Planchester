@@ -16,6 +16,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 
 import java.util.ArrayList;
@@ -28,6 +30,11 @@ import java.util.List;
 public class InstrumentationController {
     public static boolean selectMultipleMusicalWorks = true;
     public static String newHeading;
+
+    public static boolean apply = false;
+    public static List<MusicalWorkDTO> selectedMusicalWorks;
+    public static InstrumentationDTO instrumentation;
+    public static Stage stage;
 
     @FXML private Label heading;
 
@@ -126,6 +133,34 @@ public class InstrumentationController {
             }
         });
 
+    }
+
+    @FXML
+    private void apply() {
+        apply = true;
+        selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
+
+        for(String s : tableSelected.getItems()) {
+            MusicalWorkDTO musicalWorkDTO = musicalWorks.stream().filter(o -> o.getName().equals(s)).findFirst().get();
+            selectedMusicalWorks.add(musicalWorkDTO);
+        }
+
+        stage.fireEvent(
+            new WindowEvent(
+                stage,
+                WindowEvent.WINDOW_CLOSE_REQUEST
+            )
+        );
+    }
+
+    @FXML
+    private void cancel() {
+        stage.fireEvent(
+            new WindowEvent(
+                stage,
+                WindowEvent.WINDOW_CLOSE_REQUEST
+            )
+        );
     }
 
     @FXML

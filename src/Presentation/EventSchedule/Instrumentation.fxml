@@ -346,7 +346,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button mnemonicParsing="false" text="Cancel" />
+                  <Button mnemonicParsing="false" onAction="#cancel" text="Cancel" />
                </children>
             </GridPane>
             <GridPane GridPane.columnIndex="2" GridPane.rowIndex="2">
@@ -359,7 +359,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button mnemonicParsing="false" text="Apply" GridPane.columnIndex="2" />
+                  <Button fx:id="apply" mnemonicParsing="false" onAction="#apply" text="Apply" GridPane.columnIndex="2" />
                </children>
             </GridPane>
          </children>

@@ -1,6 +1,8 @@
 package Presentation.EventSchedule;
 
 import Application.DTO.EventDutyDTO;
+import Application.DTO.InstrumentationDTO;
+import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
 import Domain.InstrumentationModel;
 import Utils.Enum.EventStatus;
@@ -12,14 +14,19 @@ import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+
 import java.io.IOException;
+import java.lang.instrument.Instrumentation;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
@@ -36,12 +43,18 @@ public class CreateOperaController {
     @FXML private TextField eventLocation;
     @FXML private TextField conductor;
     @FXML private TextField points;
-    private static int musicalWork;
-    private static InstrumentationModel instrumentationModel;
+
+    @FXML private TableView<String> muscialWorkTable;
+    @FXML private TableColumn<String, String> selectedMusicalWorks;
+
+    private MusicalWorkDTO musicalWork;
+    private InstrumentationDTO instrumentation; // TODO timebox2
 
     @FXML
     public void initialize() {
         initializeMandatoryFields();
+
+        selectedMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
 
         points.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -68,8 +81,8 @@ public class CreateOperaController {
             eventDutyDTO.setEventLocation(eventLocation.getText());
             eventDutyDTO.setMusicalWorks(null); //TODO TIMO
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
-            eventDutyDTO.setInstrumentation(null); //TODO TIMO
-            eventDutyDTO.setRehearsalFor(null); //TODO TIMO
+            eventDutyDTO.setInstrumentation(null); //TODO TIMO - timebox 2
+            eventDutyDTO.setRehearsalFor(null); //TODO Julia/Christina
 
             EventScheduleManager.createOperaPerformance(eventDutyDTO);
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
@@ -113,6 +126,22 @@ public class CreateOperaController {
         stage.setTitle("Musical Work & Instrumentation");
         stage.setScene(scene);
         stage.show();
+
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                if(InstrumentationController.apply == true) {
+                    if(!InstrumentationController.selectedMusicalWorks.isEmpty()) {
+                        muscialWorkTable.getItems().clear();
+                        musicalWork = InstrumentationController.selectedMusicalWorks.get(0);
+                        muscialWorkTable.getItems().add(musicalWork.getName());
+                    }
+                    // TODO: save instrumentation
+                }
+            }
+        });
+
+        InstrumentationController.stage = stage;
+
     }
 
     private void initializeMandatoryFields() {
