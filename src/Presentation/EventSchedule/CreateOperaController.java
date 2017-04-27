@@ -56,7 +56,7 @@ public class CreateOperaController {
 
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
             eventDutyDTO.setName(name.getText());
-            eventDutyDTO.setDescription(name.getText());
+            eventDutyDTO.setDescription(description.getText());
             eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
             eventDutyDTO.setEndTime(endTime.getValue() == null ? DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue().plusHours(2)) : DateHelper.mergeDateAndTime(date.getValue(), endTime.getValue()));
             eventDutyDTO.setEventType(EventType.Opera);
