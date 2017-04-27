@@ -9,8 +9,8 @@ public class MusicalWorkDTO {
 
     private String name;
     private String composer;
-    private InstrumentationModel instrumentation;
-    private InstrumentationModel alternativeInstrumentation;
+    private InstrumentationDTO instrumentation;
+    private InstrumentationDTO alternativeInstrumentation;
 
     public String getName() {
         return name;
@@ -28,19 +28,19 @@ public class MusicalWorkDTO {
         this.composer = composer;
     }
 
-    public InstrumentationModel getInstrumentation() {
+    public InstrumentationDTO getInstrumentation() {
         return instrumentation;
     }
 
-    public void setInstrumentation(InstrumentationModel instrumentation) {
+    public void setInstrumentation(InstrumentationDTO instrumentation) {
         this.instrumentation = instrumentation;
     }
 
-    public InstrumentationModel getAlternativeInstrumentation() {
+    public InstrumentationDTO getAlternativeInstrumentation() {
         return alternativeInstrumentation;
     }
 
-    public void setAlternativeInstrumentation(InstrumentationModel instrumentation) {
+    public void setAlternativeInstrumentation(InstrumentationDTO instrumentation) {
         this.alternativeInstrumentation = instrumentation;
     }
 

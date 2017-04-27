@@ -1,5 +1,6 @@
 package Presentation.EventSchedule;
 
+import Application.DTO.MusicalWorkDTO;
 import Application.MusicalWorkAdministratonManager;
 import Domain.InstrumentationModel;
 import Utils.PlanchesterConstants;
@@ -47,7 +48,6 @@ public class InstrumentationController {
         @FXML private TextField standardPercussion;
         @FXML private TextField standardHarp;
         @FXML private TextArea standardDescription;
-
 
         @FXML private TextField alternativeFirstViolin;
         @FXML private TextField alternativeSecondViolin;
@@ -153,7 +153,10 @@ public class InstrumentationController {
                 tableAvailableMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
                 tableSelectedMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
 
-                List<String> musicalWorks = MusicalWorkAdministratonManager.getAllMusicalWorks();
-                tableAvailable.getItems().addAll(musicalWorks);
+                List<MusicalWorkDTO> musicalWorks = MusicalWorkAdministratonManager.getAllMusicalWorks();
+
+                for(MusicalWorkDTO mwDTO : musicalWorks) {
+                        tableAvailable.getItems().add(mwDTO.getName());
+                }
         }
 }
