@@ -4,10 +4,8 @@ import Application.DTO.EventDutyDTO;
 import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
-import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
-import Domain.EventDutyModel;
 import Utils.MessageHelper;
 import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
@@ -27,7 +25,6 @@ import javax.xml.bind.ValidationException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 

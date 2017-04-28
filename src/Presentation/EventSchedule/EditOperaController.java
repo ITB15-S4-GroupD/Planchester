@@ -80,6 +80,18 @@ public class EditOperaController {
 
         initAppointment = appointment;
         initEventDutyDTO = eventDutyDTO;
+
+        points.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                //^\d*\.\d{2}$
+                //"^\\d*[\\.,]?\\d{1,2}?$"
+
+                if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
+                    points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
+                }
+            }
+        });
     }
 
     @FXML
