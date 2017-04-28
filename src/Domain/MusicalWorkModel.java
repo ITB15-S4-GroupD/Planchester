@@ -4,10 +4,28 @@ package Domain;
  * Created by timor on 27.04.2017.
  */
 public class MusicalWorkModel {
+    private int id;
+    private int instrumentationId;
     private String name;
     private String composer;
     private InstrumentationModel instrumentation;
     private InstrumentationModel alternativeInstrumentation;
+
+    public int getInstrumentationId() {
+        return instrumentationId;
+    }
+
+    public void setInstrumentationId(int instrumentationId) {
+        this.instrumentationId = instrumentationId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

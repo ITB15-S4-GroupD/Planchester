@@ -1,21 +1,13 @@
 package Application;
 
-import Application.DTO.EventDutyDTO;
 import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
-import Domain.EventDutyModel;
-import Domain.InstrumentationModel;
-import Persistence.Entities.EventDutyEntity;
 import Persistence.Entities.InstrumentationEntity;
 import Persistence.Entities.MusicalWorkEntity;
-import Persistence.EventDutyRDBMapper;
-import Persistence.Mapper;
 import Persistence.MusicalWorkRDBMapper;
 import Persistence.PersistanceFacade;
 
-import java.lang.instrument.Instrumentation;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -36,6 +28,7 @@ public class MusicalWorkAdministratonManager {
 
     private static MusicalWorkDTO getMusicalWorkDTO(MusicalWorkEntity musicalWorkEntity) {
         MusicalWorkDTO musicalWorkDTO = new MusicalWorkDTO();
+        musicalWorkDTO.setId(musicalWorkEntity.getMusicalWorkId());
         musicalWorkDTO.setName(musicalWorkEntity.getName());
         musicalWorkDTO.setComposer(musicalWorkEntity.getComposer());
         musicalWorkDTO.setInstrumentation(getInstrumentationDTO(musicalWorkEntity.getInstrumentationByInstrumentationId()));

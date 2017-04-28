@@ -7,6 +7,7 @@ import Domain.InstrumentationModel;
 import Domain.MusicalWorkModel;
 import Persistence.Entities.EventDutyEntity;
 import Domain.EventDutyModel;
+import Persistence.Entities.EventDutyMusicalWorkEntity;
 import Persistence.Entities.InstrumentationEntity;
 import Persistence.Entities.MusicalWorkEntity;
 import Persistence.EventDutyRDBMapper;
@@ -41,7 +42,17 @@ public class EventScheduleManager {
         EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
         //TODO JULIA / INA: eventDutyModel.validate();
         EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
-        persistanceFacade.put(eventDutyEntity);
+        eventDutyEntity = (EventDutyEntity) persistanceFacade.put(eventDutyEntity);
+
+
+
+        // create connection between event duty and musical work
+        EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
+        eventDutyMusicalWorkEntity.setEventDuty(eventDutyEntity.getEventDutyId());
+        eventDutyMusicalWorkEntity.setMusicalWork(eventDutyDTO.getMusicalWorks().get(0).getId());
+        eventDutyMusicalWorkEntity.setEventDutyByEventDuty(eventDutyEntity);
+        eventDutyMusicalWorkEntity.setMusicalWorkByMusicalWork(getMusicalWorkEntity(getMusicalWorkModel(eventDutyDTO.getMusicalWorks().get(0))));
+        persistanceFacade.put(eventDutyMusicalWorkEntity);
     }
 
     public static void createTourPerformance(EventDutyDTO eventDutyDTO) {
@@ -142,35 +153,23 @@ public class EventScheduleManager {
         }
     }
 
-    private static EventDutyModel createEventDutyModel(EventDutyDTO eventDutyDTO) {
-        EventDutyModel eventDutyModel = new EventDutyModel();
-        eventDutyModel.setEventDutyId(eventDutyDTO.getEventDutyID());
-        eventDutyModel.setName(eventDutyDTO.getName());
-        eventDutyModel.setDescription(eventDutyDTO.getDescription());
-        eventDutyModel.setStarttime(eventDutyDTO.getStartTime());
-        eventDutyModel.setEndtime(eventDutyDTO.getEndTime());
-        eventDutyModel.setEventType(eventDutyDTO.getEventType().toString());
-        eventDutyModel.setEventStatus(eventDutyDTO.getEventStatus().toString());
-        eventDutyModel.setConductor(eventDutyDTO.getConductor());
-        eventDutyModel.setLocation(eventDutyDTO.getEventLocation());
-        eventDutyModel.setDefaultPoints(eventDutyDTO.getPoints() == null ? null : Double.valueOf(eventDutyDTO.getPoints()));
-        eventDutyModel.setInstrumentation(eventDutyDTO.getInstrumentation());
-        eventDutyModel.setRehearsalFor(eventDutyDTO.getRehearsalFor());
-        eventDutyModel.setMusicalWorks(getMusicalWorkModelList(eventDutyDTO.getMusicalWorks()));
-        return eventDutyModel;
+    private static MusicalWorkModel getMusicalWorkModel(MusicalWorkDTO musicalWorkDTO) {
+        MusicalWorkModel musicalWorkModel = new MusicalWorkModel();
+        musicalWorkModel.setName(musicalWorkDTO.getName());
+        musicalWorkModel.setComposer(musicalWorkDTO.getComposer());
+        musicalWorkModel.setId(musicalWorkDTO.getId());
+        musicalWorkModel.setInstrumentationId(musicalWorkDTO.getInstrumentationId());
+        return musicalWorkModel;
     }
 
-    private static List<MusicalWorkModel> getMusicalWorkModelList(List<MusicalWorkDTO> musicalWorks) {
-        List<MusicalWorkModel> newMusicalWorks = new ArrayList<MusicalWorkModel>();
-        for(MusicalWorkDTO musicalWork : musicalWorks) {
-            MusicalWorkModel musicalWorkModel = new MusicalWorkModel();
-            musicalWorkModel.setName(musicalWork.getName());
-            musicalWorkModel.setComposer(musicalWork.getComposer());
-            musicalWorkModel.setInstrumentation(getInstrumentationModel(musicalWork.getInstrumentation()));
-            musicalWorkModel.setAlternativeInstrumentation(getInstrumentationModel(musicalWork.getAlternativeInstrumentation()));
-            newMusicalWorks.add(musicalWorkModel);
-        }
-        return newMusicalWorks;
+
+    private static MusicalWorkEntity getMusicalWorkEntity(MusicalWorkModel musicalWorkModel) {
+        MusicalWorkEntity musicalWorkEntity = new MusicalWorkEntity();
+        musicalWorkEntity.setName(musicalWorkModel.getName());
+        musicalWorkEntity.setComposer(musicalWorkModel.getComposer());
+        musicalWorkEntity.setMusicalWorkId(musicalWorkModel.getId());
+        musicalWorkEntity.setInstrumentationId(musicalWorkModel.getInstrumentationId());
+        return musicalWorkEntity;
     }
 
     private static InstrumentationModel getInstrumentationModel(InstrumentationDTO instrumentation) {
@@ -195,6 +194,24 @@ public class EventScheduleManager {
         return instrumentationModel;
     }
 
+    private static EventDutyModel createEventDutyModel(EventDutyDTO eventDutyDTO) {
+        EventDutyModel eventDutyModel = new EventDutyModel();
+        eventDutyModel.setEventDutyId(eventDutyDTO.getEventDutyID());
+        eventDutyModel.setName(eventDutyDTO.getName());
+        eventDutyModel.setDescription(eventDutyDTO.getDescription());
+        eventDutyModel.setStarttime(eventDutyDTO.getStartTime());
+        eventDutyModel.setEndtime(eventDutyDTO.getEndTime());
+        eventDutyModel.setEventType(eventDutyDTO.getEventType().toString());
+        eventDutyModel.setEventStatus(eventDutyDTO.getEventStatus().toString());
+        eventDutyModel.setConductor(eventDutyDTO.getConductor());
+        eventDutyModel.setLocation(eventDutyDTO.getEventLocation());
+        eventDutyModel.setDefaultPoints(eventDutyDTO.getPoints() == null ? null : Double.valueOf(eventDutyDTO.getPoints()));
+        eventDutyModel.setInstrumentation(eventDutyDTO.getInstrumentation());
+        eventDutyModel.setRehearsalFor(eventDutyDTO.getRehearsalFor());
+        //eventDutyModel.setMusicalWorks(getMusicalWorkModelList(eventDutyDTO.getMusicalWorks()));
+        return eventDutyModel;
+    }
+
     private static EventDutyEntity createEventDutyEntity(EventDutyModel eventDutyModel) {
         EventDutyEntity eventDutyEntity = new EventDutyEntity();
         if(eventDutyModel.getEventDutyId() != null) {
@@ -211,35 +228,9 @@ public class EventScheduleManager {
         eventDutyEntity.setDefaultPoints(eventDutyModel.getDefaultPoints() == null ? 0.0 : Double.valueOf(eventDutyModel.getDefaultPoints()));
         eventDutyEntity.setInstrumentation(eventDutyModel.getInstrumentation());
         eventDutyEntity.setRehearsalFor(eventDutyModel.getRehearsalFor());
-
-        eventDutyEntity.setEventDutyMusicalWorksByEventDutyId();
-
-        eventDutyEntity.setEventDutiesByEventDutyId().addAll(getMusicalWorkEntityList(eventDutyModel.getMusicalWorks()));
         return eventDutyEntity;
     }
 
-    private static List<MusicalWorkEntity> getMusicalWorkEntityList(List<MusicalWorkModel> musicalWorks) {
-        List<MusicalWorkEntity> newMusicalWorks = new ArrayList<MusicalWorkEntity>();
-        for(MusicalWorkModel musicalWork : musicalWorks) {
-
-
-            MusicalWorkEntity musicalWorkEntity = new MusicalWorkEntity();
-            musicalWorkEntity.setName(musicalWork.getName());
-            musicalWorkEntity.setComposer(musicalWork.getComposer());
-            //musicalWorkEntity.setInstrumentationByInstrumentationId(getInstrumentationEntity(musicalWork.getInstrumentation()));
-            // musicalWorkEntity.setInstrumentationId(musicalWork.getInstrumentation());
-
-            newMusicalWorks.add(musicalWorkEntity);
-        }
-        return newMusicalWorks;
-    }
-
-    private static InstrumentationEntity getInstrumentationModel(InstrumentationModel instrumentation) {
-
-        InstrumentationEntity instrumentationEntity = new InstrumentationEntity();
-        // TODO: timo too much for now
-        return null;
-    }
 
     private static EventDutyDTO createEventDutyDTO (EventDutyModel eventDutyModel) {
         EventDutyDTO eventDutyDTO = new EventDutyDTO();

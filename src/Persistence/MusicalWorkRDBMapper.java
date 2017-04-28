@@ -9,10 +9,10 @@ import java.util.List;
 /**
  * Created by timor on 27.04.2017.
  */
-public class MusicalWorkRDBMapper extends Mapper<EventDutyEntity> {
+public class MusicalWorkRDBMapper extends Mapper<MusicalWorkEntity> {
     @Override
-    Class<EventDutyEntity> getEntityClass() {
-        return EventDutyEntity.class;
+    Class<MusicalWorkEntity> getEntityClass() {
+        return MusicalWorkEntity.class;
     }
 
     public static List<MusicalWorkEntity> getAllMusicalWorks() {
