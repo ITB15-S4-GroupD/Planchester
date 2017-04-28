@@ -43,7 +43,7 @@ public class EventDutyModel {
         }
         Validator.validateString(conductor, 25);
         Validator.validateString(location, 255);
-        Validator.validateMandatoryDouble(defaultPoints, 0, Double.MAX_VALUE);
+        Validator.validateDouble(defaultPoints, 0, Double.MAX_VALUE);
     }
 
     public Integer getEventDutyId() {

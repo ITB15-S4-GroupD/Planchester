@@ -17,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import jfxtras.scene.control.agenda.Agenda;
 
+import javax.xml.bind.ValidationException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -58,13 +59,16 @@ public class EditOperaController {
     }
 
     @FXML
-    private void save() {
+    private void save() throws ValidationException {
         if(validate()) {
-            EventDutyDTO oldEventDutyDTO = EventScheduleController.getEventForAppointment(EventScheduleController.getSelectedAppointment());
+            Agenda.Appointment selectedAppointment = EventScheduleController.getSelectedAppointment();
+            EventDutyDTO oldEventDutyDTO = EventScheduleController.getEventForAppointment(selectedAppointment);
+            EventScheduleController.removeSelectedAppointmentFromCalendar(selectedAppointment);
+
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
             eventDutyDTO.setEventDutyID(oldEventDutyDTO.getEventDutyID());
             eventDutyDTO.setName(name.getText());
-            eventDutyDTO.setDescription(name.getText());
+            eventDutyDTO.setDescription(description.getText());
             eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
             eventDutyDTO.setEndTime(endTime.getValue() == null ? DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue().plusHours(2)) : DateHelper.mergeDateAndTime(date.getValue(), endTime.getValue()));
             eventDutyDTO.setEventType(EventType.Opera);
@@ -76,12 +80,11 @@ public class EditOperaController {
             eventDutyDTO.setInstrumentation(null); //TODO TIMO
             eventDutyDTO.setRehearsalFor(null); //TODO TIMO
 
-            //TODO Julia: noch nicht fertig, aber schon mal gemerged....
             EventScheduleManager.updateOperaPerformance(eventDutyDTO);
-            EventScheduleController.staticLoadedEventsMap.put(EventScheduleController.getSelectedAppointment(), eventDutyDTO); //update GUI
+
+            EventScheduleController.addEventDutyToGUI(eventDutyDTO);
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
-//            EventScheduleController.setSelectedAppointment(eventDutyDTO); // select created appointment
         }
     }
 

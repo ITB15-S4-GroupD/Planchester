@@ -24,7 +24,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-
+import javax.xml.bind.ValidationException;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 import java.time.LocalDate;
@@ -61,15 +61,18 @@ public class CreateOperaController {
         points.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    points.setText(newValue.replaceAll("[^\\d]", ""));
+                //^\d*\.\d{2}$
+                //"^\\d*[\\.,]?\\d{1,2}?$"
+
+                if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
+                    points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
                 }
             }
         });
     }
 
     @FXML
-    private void insertNewOperaPerformance() {
+    private void insertNewOperaPerformance() throws ValidationException {
         if(validate()) {
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
             eventDutyDTO.setEventDutyID(null);
@@ -89,6 +92,7 @@ public class CreateOperaController {
             eventDutyDTO.setRehearsalFor(null); //TODO Julia/Christina
 
             EventScheduleManager.createOperaPerformance(eventDutyDTO);
+
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
