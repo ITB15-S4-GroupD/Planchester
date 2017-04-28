@@ -54,7 +54,7 @@ public class EventScheduleController {
     private String colorNonMusical;
     private String colorHofkapelle;
 
-    private static Agenda staticAgenda;
+    private static Agenda staticAgenda; // todo: make private
     private static Agenda.AppointmentGroup opera;
     private static Agenda.AppointmentGroup concert;
     private static Agenda.AppointmentGroup hofkapelle;
@@ -63,7 +63,7 @@ public class EventScheduleController {
     private static Agenda.AppointmentGroup nonMusicalEvent;
     private static Agenda.Appointment selectedAppointment;
 
-    public static Map<Agenda.Appointment, EventDutyDTO> staticLoadedEventsMap = new HashMap<>();
+    private static Map<Agenda.Appointment, EventDutyDTO> staticLoadedEventsMap = new HashMap<>();
     private static Map<String, String> eventWhichWasSelectedToCreate = new HashMap<>();
     private static ScrollPane staticScrollPane;
     private static boolean editOpen = false;
@@ -181,6 +181,12 @@ public class EventScheduleController {
     public static void removeSelection() {
         staticAgenda.selectedAppointments().clear();
         selectedAppointment = null;
+    }
+
+
+    public static void removeSelectedAppointmentFromCalendar(Agenda.Appointment appointment) {
+        staticLoadedEventsMap.remove(selectedAppointment);
+        staticAgenda.appointments().remove(selectedAppointment);
     }
 
     public static void addEventDutyToGUI(EventDutyDTO event) {

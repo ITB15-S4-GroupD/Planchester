@@ -59,7 +59,9 @@ public class EditConcertController {
     @FXML
     private void save() {
         if(validate()) {
-            EventDutyDTO oldEventDutyDTO = EventScheduleController.staticLoadedEventsMap.get(EventScheduleController.getSelectedAppointment());
+            Agenda.Appointment selectedAppointment = EventScheduleController.getSelectedAppointment();
+            EventDutyDTO oldEventDutyDTO = EventScheduleController.getEventForAppointment(selectedAppointment);
+            EventScheduleController.removeSelectedAppointmentFromCalendar(selectedAppointment);
 
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
             eventDutyDTO.setEventDutyID(oldEventDutyDTO.getEventDutyID());
@@ -77,10 +79,10 @@ public class EditConcertController {
             eventDutyDTO.setRehearsalFor(null); //TODO TIMO
 
             EventScheduleManager.updateConcertPerformance(eventDutyDTO);
-            EventScheduleController.staticLoadedEventsMap.put(EventScheduleController.getSelectedAppointment(), eventDutyDTO); //update GUI
+
+            EventScheduleController.addEventDutyToGUI(eventDutyDTO);
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
-            EventScheduleController.setSelectedAppointment(eventDutyDTO); // select created appointment
         }
     }
 

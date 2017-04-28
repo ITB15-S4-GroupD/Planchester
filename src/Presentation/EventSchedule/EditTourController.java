@@ -59,7 +59,9 @@ public class EditTourController {
     @FXML
     private void save() {
         if(validate()) {
-            EventDutyDTO oldEventDutyDTO = EventScheduleController.getEventForAppointment(EventScheduleController.getSelectedAppointment());
+            Agenda.Appointment selectedAppointment = EventScheduleController.getSelectedAppointment();
+            EventDutyDTO oldEventDutyDTO = EventScheduleController.getEventForAppointment(selectedAppointment);
+            EventScheduleController.removeSelectedAppointmentFromCalendar(selectedAppointment);
 
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
             eventDutyDTO.setEventDutyID(oldEventDutyDTO.getEventDutyID());
@@ -76,19 +78,16 @@ public class EditTourController {
             eventDutyDTO.setInstrumentation(null); //TODO TIMO
             eventDutyDTO.setRehearsalFor(null); //TODO TIMO
 
-            //TODO Julia: noch nicht fertig, aber schon mal gemerged....
-            EventScheduleManager.updateTourPerformance(eventDutyDTO);
-            EventScheduleController.staticLoadedEventsMap.put(EventScheduleController.getSelectedAppointment(), eventDutyDTO); //update GUI
+            EventScheduleController.addEventDutyToGUI(eventDutyDTO);
+
+            EventScheduleController.addEventDutyToGUI(eventDutyDTO);
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
-//            EventScheduleController.setSelectedAppointment(eventDutyDTO); // select created appointment
         }
     }
 
     @FXML
     public boolean discard() {
-        // TODO: check with init data for changes
-
         // remove content of sidebar
         EventScheduleController.resetSideContent();
         EventScheduleController.removeSelection(initAppointment);
