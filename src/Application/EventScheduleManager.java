@@ -262,12 +262,13 @@ public class EventScheduleManager {
         eventDutyDTO.setInstrumentation(eventDutyModel.getInstrumentation());
         eventDutyDTO.setRehearsalFor(eventDutyModel.getRehearsalFor());
 
-        List<MusicalWorkDTO> musicalWorkDTOS = new ArrayList<>();
-        for(MusicalWorkModel musicalWorkModel : eventDutyModel.getMusicalWorks()) {
-            musicalWorkDTOS.add(getMusicalWorkDTO(musicalWorkModel));
+        if(eventDutyModel.getMusicalWorks() != null) {
+            List<MusicalWorkDTO> musicalWorkDTOS = new ArrayList<>();
+            for (MusicalWorkModel musicalWorkModel : eventDutyModel.getMusicalWorks()) {
+                musicalWorkDTOS.add(getMusicalWorkDTO(musicalWorkModel));
+            }
+            eventDutyDTO.setMusicalWorks(musicalWorkDTOS);
         }
-        eventDutyDTO.setMusicalWorks(musicalWorkDTOS);
-
         return eventDutyDTO;
     }
 
@@ -286,12 +287,14 @@ public class EventScheduleManager {
         eventDutyModel.setInstrumentation(eventDutyEntity.getInstrumentation());
         eventDutyModel.setRehearsalFor(eventDutyEntity.getRehearsalFor());
 
-        List<MusicalWorkModel> musicalWorkModels = new ArrayList<>();
-        for(EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity : eventDutyEntity.getEventDutyMusicalWorksByEventDutyId()) {
-            MusicalWorkEntity musicalWorkEntity = eventDutyMusicalWorkEntity.getMusicalWorkByMusicalWork();
-            musicalWorkModels.add(getMusicalWorkModel(musicalWorkEntity));
+        if(!eventDutyEntity.getEventDutyMusicalWorksByEventDutyId().isEmpty()) {
+            List<MusicalWorkModel> musicalWorkModels = new ArrayList<>();
+            for (EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity : eventDutyEntity.getEventDutyMusicalWorksByEventDutyId()) {
+                MusicalWorkEntity musicalWorkEntity = eventDutyMusicalWorkEntity.getMusicalWorkByMusicalWork();
+                musicalWorkModels.add(getMusicalWorkModel(musicalWorkEntity));
+            }
+            eventDutyModel.setMusicalWorks(musicalWorkModels);
         }
-        eventDutyModel.setMusicalWorks(musicalWorkModels);
 
         return eventDutyModel;
     }
