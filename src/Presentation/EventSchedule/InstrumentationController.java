@@ -194,10 +194,12 @@ public class InstrumentationController {
     }
 
     private void setSelectedMusicalWork(String selecetdItem) {
-        MusicalWorkDTO musicalWorkDTO = musicalWorks.stream().filter(o -> o.getName().equals(selecetdItem)).findFirst().get();
+        if(selecetdItem != null) {
+            MusicalWorkDTO musicalWorkDTO = musicalWorks.stream().filter(o -> o.getName().equals(selecetdItem)).findFirst().get();
 
-        clearInstrumentation();
-        setStandardInstrumentation(musicalWorkDTO.getInstrumentation());
+            clearInstrumentation();
+            setStandardInstrumentation(musicalWorkDTO.getInstrumentation());
+        }
     }
 
     private void clearInstrumentation() {
