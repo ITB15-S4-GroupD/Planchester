@@ -45,6 +45,7 @@ public class CreateOperaController {
     @FXML private TextField eventLocation;
     @FXML private TextField conductor;
     @FXML private TextField points;
+    @FXML private Button editDetails;
 
     @FXML private TableView<String> muscialWorkTable;
     @FXML private TableColumn<String, String> selectedMusicalWorks;
@@ -89,7 +90,7 @@ public class CreateOperaController {
             eventDutyDTO.setMusicalWorks(selectedMusicalWorks);
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
             eventDutyDTO.setInstrumentation(null); //TODO TIMO - timebox 2
-            eventDutyDTO.setRehearsalFor(null); //TODO Julia/Christina
+            eventDutyDTO.setRehearsalFor(null); //TODO Christina
 
             EventScheduleManager.createOperaPerformance(eventDutyDTO);
 
@@ -146,16 +147,15 @@ public class CreateOperaController {
                 if(InstrumentationController.apply) {
                     if(!InstrumentationController.selectedMusicalWorks.isEmpty()) {
                         muscialWorkTable.getItems().clear();
-                        musicalWork = InstrumentationController.selectedMusicalWorks.get(0);
                         muscialWorkTable.getItems().add(musicalWork.getName());
+                        musicalWork = InstrumentationController.selectedMusicalWorks.get(0);
                     }
-                    // TODO: save instrumentation
+                    // TODO: timbox 2 save instrumentation
                 }
             }
         });
 
         InstrumentationController.stage = stage;
-
     }
 
     private void initializeMandatoryFields() {
@@ -216,10 +216,14 @@ public class CreateOperaController {
             MessageHelper.showErrorAlertMessage("The endtime is not after the starttime. ");
             return false;
         } else if(date.getValue().equals(today) && start.isBefore(LocalTime.now())){
-            MessageHelper.showErrorAlertMessage("The starttime must be in future. \n");
+            MessageHelper.showErrorAlertMessage("The starttime must be in future.");
+            date.requestFocus();
+            return false;
+        } else if(musicalWork == null){
+            MessageHelper.showErrorAlertMessage("A musical work has to be selected.");
+            editDetails.requestFocus();
             return false;
         }
-        //TODO TIMO: validate musiclaWork: is mandatory!
         return true;
     }
 }

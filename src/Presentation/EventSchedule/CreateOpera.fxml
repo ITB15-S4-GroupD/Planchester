@@ -75,7 +75,7 @@
                   </TableView>
                </children>
             </GridPane>
-            <Button mnemonicParsing="false" onMouseClicked="#editInstrumentation" text="Edit Details ..." GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Button fx:id="editDetails" mnemonicParsing="false" onMouseClicked="#editInstrumentation" text="Edit Details ..." GridPane.columnIndex="1" GridPane.rowIndex="7" />
          </children>
          <padding>
             <Insets left="10.0" right="10.0" />

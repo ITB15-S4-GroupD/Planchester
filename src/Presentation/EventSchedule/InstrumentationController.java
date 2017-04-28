@@ -173,8 +173,7 @@ public class InstrumentationController {
     @FXML
     private void addMusicalWorkToSelected() {
         if(selectMultipleMusicalWorks == false) {
-            if(tableSelected.getItems().size() > 0)
-            {
+            if(tableSelected.getItems().size() > 0) {
                 return;
             }
         }
@@ -220,7 +219,7 @@ public class InstrumentationController {
     private void setStandardInstrumentation(InstrumentationDTO instrumentation) {
         standardBasson.setText(String.valueOf(instrumentation.getBasson()));
         standardClarinet.setText(String.valueOf(instrumentation.getClarinet()));
-        standardDescription.setText(String.valueOf(instrumentation.getDescription()));
+        standardDescription.setText(instrumentation.getDescription() != null ? String.valueOf(instrumentation.getDescription()) : null);
         standardDoublebass.setText(String.valueOf(instrumentation.getDoublebass()));
         standardFirstViolin.setText(String.valueOf(instrumentation.getFirstViolin()));
         standardFlute.setText(String.valueOf(instrumentation.getFlute()));
