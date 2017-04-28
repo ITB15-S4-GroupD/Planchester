@@ -66,9 +66,9 @@
             <TextField fx:id="eventLocation" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <TextField fx:id="conductor" GridPane.columnIndex="1" GridPane.rowIndex="8" />
             <TextField fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-            <TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <TableView fx:id="musicalWorkTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
               <columns>
-                <TableColumn fx:id="muscialWorkTableConcert" prefWidth="242.0" text="Title" />
+                <TableColumn fx:id="selectedMusicalWorks" prefWidth="242.0" text="Title" />
               </columns>
             </TableView>
             <Button fx:id="btnEditDetails" mnemonicParsing="false" onAction="#editConcertInstrumentation" onMouseClicked="#editConcertInstrumentation" text="Edit Details ..." GridPane.columnIndex="1" GridPane.rowIndex="7" />

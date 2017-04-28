@@ -111,7 +111,7 @@ public class EditOperaController {
             eventDutyDTO.setInstrumentation(null); //TODO timebox 2
             eventDutyDTO.setRehearsalFor(null); //TODO christina
 
-            EventScheduleManager.updateOperaPerformance(eventDutyDTO, initEventDutyDTO);
+            EventScheduleManager.updateEventDuty(eventDutyDTO, initEventDutyDTO);
 
             EventScheduleController.addEventDutyToGUI(eventDutyDTO);
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event

@@ -43,7 +43,7 @@ public class CreateOperaController {
     @FXML private TextField points;
     @FXML private Button editDetails;
 
-    @FXML private TableView<String> musicalWorkTableOpera;
+    @FXML private TableView<String> musicalWorkTable;
     @FXML private TableColumn<String, String> selectedMusicalWorks;
 
     private MusicalWorkDTO musicalWork;
@@ -92,7 +92,7 @@ public class CreateOperaController {
             eventDutyDTO.setInstrumentation(null); //TODO TIMO - timebox 2
             eventDutyDTO.setRehearsalFor(null); //TODO Christina
 
-            EventScheduleManager.createOperaPerformance(eventDutyDTO);
+            EventScheduleManager.createEventDuty(eventDutyDTO);
 
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
@@ -146,10 +146,10 @@ public class CreateOperaController {
                 if(InstrumentationController.apply) {
                     if(!InstrumentationController.selectedMusicalWorks.isEmpty()) {
                         musicalWork = InstrumentationController.selectedMusicalWorks.get(0);
-                        musicalWorkTableOpera.getItems().clear();
-                        musicalWorkTableOpera.getItems().add(musicalWork.getName());
+                        musicalWorkTable.getItems().clear();
+                        musicalWorkTable.getItems().add(musicalWork.getName());
                     }  else {
-                        musicalWorkTableOpera.getItems().clear();
+                        musicalWorkTable.getItems().clear();
                         musicalWork = null;
                     }
                     // TODO: timbox 2 save instrumentation

@@ -68,7 +68,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TableView fx:id="musicalWorkTableOpera" prefHeight="117.0" prefWidth="193.0">
+                  <TableView fx:id="musicalWorkTable" prefHeight="117.0" prefWidth="193.0">
                      <columns>
                         <TableColumn fx:id="selectedMusicalWorks" editable="false" prefWidth="206.0" sortable="false" text="Title" />
                      </columns>

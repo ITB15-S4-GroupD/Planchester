@@ -80,7 +80,7 @@ public class EditConcertController {
             eventDutyDTO.setInstrumentation(null); //TODO TIMO
             eventDutyDTO.setRehearsalFor(null); //TODO TIMO
 
-            EventScheduleManager.updateConcertPerformance(eventDutyDTO);
+            EventScheduleManager.updateEventDuty(eventDutyDTO, initEventDutyDTO);
 
             EventScheduleController.addEventDutyToGUI(eventDutyDTO);
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event

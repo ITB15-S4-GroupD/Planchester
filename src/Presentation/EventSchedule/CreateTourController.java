@@ -1,6 +1,8 @@
 package Presentation.EventSchedule;
 
 import Application.DTO.EventDutyDTO;
+import Application.DTO.InstrumentationDTO;
+import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
@@ -10,15 +12,24 @@ import Utils.MessageHelper;
 import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import javax.xml.bind.ValidationException;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Christina on 20.04.2017.
@@ -31,11 +42,30 @@ public class CreateTourController {
     @FXML private TextField eventLocation;
     @FXML private TextField conductor;
     @FXML private TextField points;
-    @FXML private TableView<String> muscialWorkTableTour;
+
+    @FXML private TableView<String> musicalWorkTable;
+    @FXML private TableColumn<String, String> selectedMusicalWorks;
+
+    private List<MusicalWorkDTO> musicalWorks;
+    private InstrumentationDTO instrumentation; // TODO timebox2
 
     @FXML
     public void initialize() {
         initializeMandatoryFields();
+
+        selectedMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+
+        points.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                //^\d*\.\d{2}$
+                //"^\\d*[\\.,]?\\d{1,2}?$"
+
+                if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
+                    points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
+                }
+            }
+        });
     }
 
     @FXML
@@ -51,12 +81,12 @@ public class CreateTourController {
             eventDutyDTO.setEventStatus(EventStatus.Unpublished);
             eventDutyDTO.setConductor(conductor.getText());
             eventDutyDTO.setEventLocation(eventLocation.getText());
-            eventDutyDTO.setMusicalWorks(null); //TODO TIMO
+            eventDutyDTO.setMusicalWorks(musicalWorks);
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
-            eventDutyDTO.setInstrumentation(null); //TODO TIMO
-            eventDutyDTO.setRehearsalFor(null); //TODO TIMO
+            eventDutyDTO.setInstrumentation(null); //TODO timebox 2
+            eventDutyDTO.setRehearsalFor(null); //TODO christina
 
-            EventScheduleManager.createTourPerformance(eventDutyDTO);
+            EventScheduleManager.createEventDuty(eventDutyDTO);
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
@@ -67,7 +97,8 @@ public class CreateTourController {
     @FXML
     public boolean cancel() {
         if(!name.getText().isEmpty() || !description.getText().isEmpty() || startDate.getValue() != null
-                || endDate.getValue() != null || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty() || !points.getText().isEmpty()) {
+                || endDate.getValue() != null || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty()
+                || !points.getText().isEmpty() || (musicalWorks != null && !musicalWorks.isEmpty())) {
 
             ButtonType answer = MessageHelper.showConfirmationMessage(PlanchesterMessages.DISCARD_CHANGES);
             if(ButtonType.NO.equals(answer)) {
@@ -80,7 +111,52 @@ public class CreateTourController {
 
     @FXML
     public void editTourInstrumentation() {
+        InstrumentationController.selectMultipleMusicalWorks = true;
+        if(startDate.getValue() != null && endDate.getValue() != null) {
+            InstrumentationController.newHeading = name.getText() + " | " + startDate.getValue().toString() + "-" + endDate.getValue().toString();
+        } else {
+            InstrumentationController.newHeading = name.getText();
+        }
 
+        InstrumentationController.selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
+        if(musicalWorks != null && !musicalWorks.isEmpty()) {
+            for(MusicalWorkDTO musicalWorkDTO : musicalWorks) {
+                InstrumentationController.selectedMusicalWorks.add(musicalWorkDTO);
+            }
+        }
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("Instrumentation.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = new Stage();
+        stage.setTitle("Musical Work & Instrumentation");
+        stage.setScene(scene);
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                if(InstrumentationController.apply) {
+                    if(!InstrumentationController.selectedMusicalWorks.isEmpty()) {
+                        musicalWorks = InstrumentationController.selectedMusicalWorks;
+                        musicalWorkTable.getItems().clear();
+                        for(MusicalWorkDTO musicalWorkDTO : musicalWorks) {
+                            musicalWorkTable.getItems().add(musicalWorkDTO.getName());
+                        }
+                    } else {
+                        musicalWorkTable.getItems().clear();
+                        musicalWorks = null;
+                    }
+                    // TODO: timbox 2 save instrumentation
+                }
+
+            }
+        });
+        InstrumentationController.stage = stage;
+
+        stage.showAndWait();
     }
 
     private boolean validate() {

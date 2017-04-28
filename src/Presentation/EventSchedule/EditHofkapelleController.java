@@ -82,7 +82,7 @@ public class EditHofkapelleController {
                         eventDutyDTO.setInstrumentation(null); //TODO TIMO
                         eventDutyDTO.setRehearsalFor(null); //TODO TIMO
 
-                        EventScheduleManager.updateHofkapellePerformance(eventDutyDTO);
+                        EventScheduleManager.updateEventDuty(eventDutyDTO, initEventDutyDTO);
 
                         EventScheduleController.addEventDutyToGUI(eventDutyDTO);
                         EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event

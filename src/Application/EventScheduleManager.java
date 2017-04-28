@@ -30,56 +30,32 @@ public class EventScheduleManager {
     private static Calendar loadedEventsStartdate; //start of the already loaded calendar
     private static Calendar loadedEventsEnddate; //end of the already loaded calendar
 
-    public static void createConcertPerformance(EventDutyDTO eventDutyDTO) throws ValidationException {
-        EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
-        eventDutyModel.validate();
-        EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
-        persistanceFacade.put(eventDutyEntity);
-    }
-
-    public static void createOperaPerformance(EventDutyDTO eventDutyDTO) throws ValidationException {
+    public static void createEventDuty(EventDutyDTO eventDutyDTO) throws ValidationException {
         EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
         eventDutyModel.validate();
         EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
         eventDutyEntity = (EventDutyEntity) persistanceFacade.put(eventDutyEntity);
 
         // create connection between event duty and musical work
-        EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
-        eventDutyMusicalWorkEntity.setEventDuty(eventDutyEntity.getEventDutyId());
-        eventDutyMusicalWorkEntity.setMusicalWork(eventDutyDTO.getMusicalWorks().get(0).getId());
-        persistanceFacade.put(eventDutyMusicalWorkEntity);
+        if(eventDutyDTO.getMusicalWorks() != null) {
+            for(MusicalWorkDTO musicalWorkDTO : eventDutyDTO.getMusicalWorks()) {
+                if(musicalWorkDTO != null) {
+                    EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
+                    eventDutyMusicalWorkEntity.setEventDuty(eventDutyEntity.getEventDutyId());
+                    eventDutyMusicalWorkEntity.setMusicalWork(musicalWorkDTO.getId());
+                    persistanceFacade.put(eventDutyMusicalWorkEntity);
+                }
+            }
+        }
     }
 
-    public static void createTourPerformance(EventDutyDTO eventDutyDTO) throws ValidationException {
-        EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
-        eventDutyModel.validate();
-        EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
-        persistanceFacade.put(eventDutyEntity);
-
-    }
-
-    public static void createHofkapellePerformance(EventDutyDTO eventDutyDTO) throws ValidationException {
-        EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
-        eventDutyModel.validate();
-        EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
-        persistanceFacade.put(eventDutyEntity);
-    }
-
-    public static void updateConcertPerformance(EventDutyDTO eventDutyDTO) throws ValidationException {
-        EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
-        eventDutyModel.validate();
-        EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
-        persistanceFacade.put(eventDutyEntity);
-    }
-
-    public static void updateOperaPerformance(EventDutyDTO newEventDutyDTO, EventDutyDTO oldEventDutyDTO) throws ValidationException {
+    public static void updateEventDuty(EventDutyDTO newEventDutyDTO, EventDutyDTO oldEventDutyDTO) throws ValidationException {
         EventDutyModel eventDutyModel = createEventDutyModel(newEventDutyDTO);
         eventDutyModel.validate();
         EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
         persistanceFacade.put(eventDutyEntity);
 
         // check for changes in musical works
-
             // remove all musical works which did exist but now dont
             if(oldEventDutyDTO.getMusicalWorks() != null) {
                 for (MusicalWorkDTO musicalWorkDTO : oldEventDutyDTO.getMusicalWorks()) {
@@ -91,7 +67,6 @@ public class EventScheduleManager {
                     }
                 }
             }
-
             // add all new musical works which did not exist before
             if(newEventDutyDTO.getMusicalWorks() != null) {
                 for (MusicalWorkDTO musicalWorkDTO : newEventDutyDTO.getMusicalWorks()) {
@@ -105,23 +80,10 @@ public class EventScheduleManager {
             }
     }
 
-    public static void updateTourPerformance(EventDutyDTO eventDutyDTO) throws ValidationException {
-        EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
-        eventDutyModel.validate();
-        EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
-        persistanceFacade.put(eventDutyEntity);
-    }
-
-    public static void updateHofkapellePerformance(EventDutyDTO eventDutyDTO) throws ValidationException {
-        EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
-        eventDutyModel.validate();
-        EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
-        persistanceFacade.put(eventDutyEntity);
-    }
-
 	public static void createNonMusicalPerformance(EventDutyDTO eventDutyDTO) {
 		
 	}
+
     public static List<EventDutyDTO> getEventDutyListForCurrentWeek() {
         Calendar today = Calendar.getInstance();
         return getEventDutyInRange(DateHelper.getStartOfWeek(today), DateHelper.getEndOfWeek(today));
@@ -273,10 +235,14 @@ public class EventScheduleManager {
                 collection = new HashSet<>();
             }
             for (MusicalWorkModel musicalWorkModel : eventDutyModel.getMusicalWorks()) {
-                EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
-                eventDutyMusicalWorkEntity.setMusicalWork(musicalWorkModel.getId());
-                eventDutyMusicalWorkEntity.setEventDuty(eventDutyModel.getEventDutyId());
-                collection.add(eventDutyMusicalWorkEntity);
+                if(musicalWorkModel != null) {
+                    EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
+                    eventDutyMusicalWorkEntity.setMusicalWork(musicalWorkModel.getId());
+                    if(eventDutyModel.getEventDutyId() != null){
+                        eventDutyMusicalWorkEntity.setEventDuty(eventDutyModel.getEventDutyId());
+                    }
+                    collection.add(eventDutyMusicalWorkEntity);
+                }
             }
             eventDutyEntity.setEventDutyMusicalWorksByEventDutyId(collection);
         }
