@@ -50,8 +50,6 @@ public class EventScheduleManager {
         EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
         eventDutyMusicalWorkEntity.setEventDuty(eventDutyEntity.getEventDutyId());
         eventDutyMusicalWorkEntity.setMusicalWork(eventDutyDTO.getMusicalWorks().get(0).getId());
-        eventDutyMusicalWorkEntity.setEventDutyByEventDuty(eventDutyEntity);
-        eventDutyMusicalWorkEntity.setMusicalWorkByMusicalWork(getMusicalWorkEntity(getMusicalWorkModel(eventDutyDTO.getMusicalWorks().get(0))));
         persistanceFacade.put(eventDutyMusicalWorkEntity);
     }
 
