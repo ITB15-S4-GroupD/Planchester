@@ -12,56 +12,45 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
+
+import static Presentation.EventSchedule.CreateOperaController.rehearsals;
 
 /**
- * Created by Ina on 08.04.2017.
+ * Created by Christina on 28.04.2017.
  */
-public class CreateOperaController {
+public class CreateRehearsalController {
+
     @FXML private TextField name;
     @FXML private TextArea description;
+    @FXML private JFXDatePicker date;
     @FXML private JFXTimePicker startTime;
     @FXML private JFXTimePicker endTime;
-    @FXML private JFXDatePicker date;
     @FXML private TextField eventLocation;
     @FXML private TextField conductor;
     @FXML private TextField points;
 
-    @FXML private ListView<String> rehearsalView;
-    static ObservableList<EventDutyDTO> rehearsals;
 
-    @FXML
-    public void initialize() {
+
+    @FXML public void initialize() {
         initializeMandatoryFields();
-        updateRehearsalListView();
-        points.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    points.setText(newValue.replaceAll("[^\\d]", ""));
-                }
-            }
-        });
-    }
-
-    private void updateRehearsalListView() {
-        for(EventDutyDTO e : rehearsals) {
-
-        }
     }
 
     @FXML
-    private void insertNewOperaPerformance() {
+    void cancel() {
+
+    }
+
+    @FXML
+    void applyNewRehearsal() {
         if(validate()) {
 
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
@@ -73,73 +62,11 @@ public class CreateOperaController {
             eventDutyDTO.setEventStatus(EventStatus.Unpublished);
             eventDutyDTO.setConductor(conductor.getText());
             eventDutyDTO.setEventLocation(eventLocation.getText());
-            eventDutyDTO.setMusicalWorks(null); //TODO TIMO
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
-            eventDutyDTO.setInstrumentation(null); //TODO TIMO
-            eventDutyDTO.setRehearsalFor(null); //TODO TIMO
+            eventDutyDTO.setRehearsalFor(null);
 
-            EventScheduleManager.createOperaPerformance(eventDutyDTO);
-
-            EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
-            EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
-            EventScheduleController.resetSideContent(); // remove content of sidebar
-            EventScheduleController.setSelectedAppointment(eventDutyDTO); // select created appointment
+            rehearsals.add(eventDutyDTO);
         }
-    }
-
-    @FXML
-    public void addNewRehearsal() {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("CreateRehearsal.fxml"));
-        Scene scene = null;
-        try {
-            scene = new Scene(fxmlLoader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Stage stage = new Stage();
-        stage.setTitle("Add new Rehearsal");
-        stage.setScene(scene);
-        stage.show();
-
-    }
-
-    @FXML
-    public void removeRehearsal() {
-
-    }
-
-    @FXML
-    public boolean cancel() {
-        if(!name.getText().isEmpty() || !description.getText().isEmpty() || date.getValue() != null
-                || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty() || !points.getText().isEmpty()) {
-
-            Alert confirmationAlterMessage = new Alert(Alert.AlertType.CONFIRMATION, PlanchesterMessages.DISCARD_CHANGES, ButtonType.YES, ButtonType.NO);
-            confirmationAlterMessage.showAndWait();
-
-            if (confirmationAlterMessage.getResult() == ButtonType.NO) {
-                return false;
-            }
-        }
-        // remove content of sidebar
-        EventScheduleController.resetSideContent();
-        return true;
-    }
-
-    @FXML
-    public void editInstrumentation() {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("Instrumentation.fxml"));
-        Scene scene = null;
-        try {
-            scene = new Scene(fxmlLoader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Stage stage = new Stage();
-        stage.setTitle("Musical Work & Instrumentation");
-        stage.setScene(scene);
-        stage.show();
     }
 
     private void initializeMandatoryFields() {
@@ -203,7 +130,7 @@ public class CreateOperaController {
             throwErrorAlertMessage("The starttime must be in future. \n");
             return false;
         }
-        //TODO TIMO: validate musiclaWork: is mandatory!
+
         return true;
     }
 
