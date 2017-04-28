@@ -1,6 +1,8 @@
 package Persistence;
 
 import Persistence.Entities.EventDutyEntity;
+import Persistence.Entities.EventDutyMusicalWorkEntity;
+import Persistence.Entities.MusicalWorkEntity;
 
 import java.util.HashMap;
 
@@ -12,15 +14,17 @@ public class PersistanceFacade {
 
     public PersistanceFacade() {
         mappers.put(EventDutyEntity.class , new EventDutyRDBMapper());
+        mappers.put(MusicalWorkEntity.class , new MusicalWorkRDBMapper());
+        mappers.put(EventDutyMusicalWorkEntity.class, new EventDutyMusicalWorkRDBMapper());
     }
 
     public Object get(int oid, Class persistenceClass) {
         Mapper mapper = mappers.get(persistenceClass);
         return mapper.get(oid);
     }
-    public void put(Object obj) {
+    public Object put(Object obj) {
         Mapper mapper = mappers.get(obj.getClass());
-        mapper.put(obj);
+        return mapper.put(obj);
     }
 
     public void remove(int oid, Class persistenceClass) {

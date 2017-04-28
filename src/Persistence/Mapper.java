@@ -16,10 +16,11 @@ public abstract class Mapper<T> {
         return object;
     }
 
-    public void put(T object) {
+    public T put(T object) {
         Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
         session.saveOrUpdate(object);
         DatabaseConnectionHandler.getInstance().commitTransaction();
+        return object;
     }
 
     public void remove(Integer objectID) {

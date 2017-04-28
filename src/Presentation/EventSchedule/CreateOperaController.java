@@ -1,7 +1,10 @@
 package Presentation.EventSchedule;
 
 import Application.DTO.EventDutyDTO;
+import Application.DTO.InstrumentationDTO;
+import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
+import Domain.InstrumentationModel;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import Domain.EventDutyModel;
@@ -11,19 +14,24 @@ import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
+import javafx.stage.WindowEvent;
 import javax.xml.bind.ValidationException;
 import java.io.IOException;
+import java.lang.instrument.Instrumentation;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Ina on 08.04.2017.
@@ -38,9 +46,17 @@ public class CreateOperaController {
     @FXML private TextField conductor;
     @FXML private TextField points;
 
+    @FXML private TableView<String> muscialWorkTable;
+    @FXML private TableColumn<String, String> selectedMusicalWorks;
+
+    private MusicalWorkDTO musicalWork;
+    private InstrumentationDTO instrumentation; // TODO timebox2
+
     @FXML
     public void initialize() {
         initializeMandatoryFields();
+
+        selectedMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
 
         points.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -68,10 +84,12 @@ public class CreateOperaController {
             eventDutyDTO.setEventStatus(EventStatus.Unpublished);
             eventDutyDTO.setConductor(conductor.getText());
             eventDutyDTO.setEventLocation(eventLocation.getText());
-            eventDutyDTO.setMusicalWorks(null); //TODO TIMO
+            List<MusicalWorkDTO> selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
+            selectedMusicalWorks.add(musicalWork);
+            eventDutyDTO.setMusicalWorks(selectedMusicalWorks);
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
-            eventDutyDTO.setInstrumentation(null); //TODO TIMO
-            eventDutyDTO.setRehearsalFor(null); //TODO TIMO
+            eventDutyDTO.setInstrumentation(null); //TODO TIMO - timebox 2
+            eventDutyDTO.setRehearsalFor(null); //TODO Julia/Christina
 
             EventScheduleManager.createOperaPerformance(eventDutyDTO);
 
@@ -98,6 +116,18 @@ public class CreateOperaController {
 
     @FXML
     public void editInstrumentation() {
+        InstrumentationController.selectMultipleMusicalWorks = false;
+        if(date.getValue() != null) {
+            InstrumentationController.newHeading = name.getText() + " | " + date.getValue().toString();
+        } else {
+            InstrumentationController.newHeading = name.getText();
+        }
+
+        if(musicalWork != null) {
+            InstrumentationController.selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
+            InstrumentationController.selectedMusicalWorks.add(musicalWork);
+        }
+
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("Instrumentation.fxml"));
         Scene scene = null;
@@ -110,6 +140,22 @@ public class CreateOperaController {
         stage.setTitle("Musical Work & Instrumentation");
         stage.setScene(scene);
         stage.show();
+
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                if(InstrumentationController.apply) {
+                    if(!InstrumentationController.selectedMusicalWorks.isEmpty()) {
+                        muscialWorkTable.getItems().clear();
+                        musicalWork = InstrumentationController.selectedMusicalWorks.get(0);
+                        muscialWorkTable.getItems().add(musicalWork.getName());
+                    }
+                    // TODO: save instrumentation
+                }
+            }
+        });
+
+        InstrumentationController.stage = stage;
+
     }
 
     private void initializeMandatoryFields() {

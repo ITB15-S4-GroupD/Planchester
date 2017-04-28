@@ -90,7 +90,7 @@ public class EventDutyMusicalWorkEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "alternativeInstrumentation", referencedColumnName = "instrumentationID", insertable = false, updatable = false)
+    @JoinColumn(name = "alternativeInstrumentation", referencedColumnName = "instrumentationID", nullable = true, insertable = false, updatable = false)
     public InstrumentationEntity getInstrumentationByAlternativeInstrumentation() {
         return instrumentationByAlternativeInstrumentation;
     }
