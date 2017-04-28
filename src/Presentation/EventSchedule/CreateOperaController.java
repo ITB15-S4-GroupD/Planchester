@@ -71,6 +71,7 @@ public class CreateOperaController {
             eventDutyDTO.setRehearsalFor(null); //TODO TIMO
 
             EventScheduleManager.createOperaPerformance(eventDutyDTO);
+
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
