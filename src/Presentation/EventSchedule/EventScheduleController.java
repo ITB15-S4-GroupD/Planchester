@@ -448,6 +448,6 @@ public class EventScheduleController {
     }
 
     @FXML public void publishEventSchedule() {
-
+        LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
     }
 }
