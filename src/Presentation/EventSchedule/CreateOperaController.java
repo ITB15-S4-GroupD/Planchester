@@ -43,7 +43,7 @@ public class CreateOperaController {
     @FXML private TextField points;
     @FXML private Button editDetails;
 
-    @FXML private TableView<String> muscialWorkTableOpera;
+    @FXML private TableView<String> musicalWorkTableOpera;
     @FXML private TableColumn<String, String> selectedMusicalWorks;
 
     private MusicalWorkDTO musicalWork;
@@ -100,7 +100,7 @@ public class CreateOperaController {
     @FXML
     public boolean cancel() {
         if(!name.getText().isEmpty() || !description.getText().isEmpty() || date.getValue() != null
-                || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty() || !points.getText().isEmpty()) {
+                || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty() || !points.getText().isEmpty() || musicalWork != null) {
             ButtonType answer = MessageHelper.showConfirmationMessage(PlanchesterMessages.DISCARD_CHANGES);
             if(ButtonType.NO.equals(answer)) {
                 return false;
@@ -120,6 +120,7 @@ public class CreateOperaController {
             InstrumentationController.newHeading = name.getText();
         }
 
+        InstrumentationController.selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
         if(musicalWork != null) {
             InstrumentationController.selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
             InstrumentationController.selectedMusicalWorks.add(musicalWork);
@@ -136,22 +137,25 @@ public class CreateOperaController {
         Stage stage = new Stage();
         stage.setTitle("Musical Work & Instrumentation");
         stage.setScene(scene);
-        stage.show();
-
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
                 if(InstrumentationController.apply) {
                     if(!InstrumentationController.selectedMusicalWorks.isEmpty()) {
-                        muscialWorkTableOpera.getItems().clear();
-                        muscialWorkTableOpera.getItems().add(musicalWork.getName());
                         musicalWork = InstrumentationController.selectedMusicalWorks.get(0);
+                        musicalWorkTableOpera.getItems().clear();
+                        musicalWorkTableOpera.getItems().add(musicalWork.getName());
+                    }  else {
+                        musicalWorkTableOpera.getItems().clear();
+                        musicalWork = null;
                     }
                     // TODO: timbox 2 save instrumentation
                 }
+
             }
         });
-
         InstrumentationController.stage = stage;
+
+        stage.showAndWait();
     }
 
     private void initializeMandatoryFields() {

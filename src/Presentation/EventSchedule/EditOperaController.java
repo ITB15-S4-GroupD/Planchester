@@ -1,6 +1,8 @@
 package Presentation.EventSchedule;
 
 import Application.DTO.EventDutyDTO;
+import Application.DTO.InstrumentationDTO;
+import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
 import Domain.EventDutyModel;
 import Utils.DateHelper;
@@ -11,15 +13,23 @@ import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import jfxtras.scene.control.agenda.Agenda;
 
 import javax.xml.bind.ValidationException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 /**
  * Created by timorzipa on 06/04/2017.
@@ -35,7 +45,11 @@ public class EditOperaController {
     @FXML private TextField conductor;
     @FXML private TextField points;
 
-    @FXML private TableView<String> muscialWorkTableOpera;
+    @FXML private TableView<String> musicalWorkTableOpera;
+    @FXML private TableColumn<String, String> selectedMusicalWorks;
+
+    private MusicalWorkDTO musicalWork;
+    private InstrumentationDTO instrumentation; // TODO timebox2
 
     private EventDutyDTO initEventDutyDTO; // remember init data to compare
     private Agenda.Appointment initAppointment; // remember init data to compare
@@ -43,6 +57,8 @@ public class EditOperaController {
     @FXML
     public void initialize() {
         checkMandatoryFields();
+
+        selectedMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
 
         Agenda.Appointment appointment = EventScheduleController.getSelectedAppointment();
         EventDutyDTO eventDutyDTO = EventScheduleController.getEventForAppointment(appointment);
@@ -55,6 +71,11 @@ public class EditOperaController {
         eventLocation.setText(appointment.getLocation());
         conductor.setText(eventDutyDTO.getConductor());
         points.setText(eventDutyDTO.getPoints() != null ? String.valueOf(eventDutyDTO.getPoints()) : null);
+        if(eventDutyDTO.getMusicalWorks() != null && !eventDutyDTO.getMusicalWorks().isEmpty()) {
+            musicalWork = eventDutyDTO.getMusicalWorks().get(0);
+
+            musicalWorkTableOpera.getItems().add(musicalWork.getName());
+        }
 
         initAppointment = appointment;
         initEventDutyDTO = eventDutyDTO;
@@ -91,6 +112,53 @@ public class EditOperaController {
     }
 
     @FXML
+    public void editOperaInstrumentation() {
+        InstrumentationController.selectMultipleMusicalWorks = false;
+        if(date.getValue() != null) {
+            InstrumentationController.newHeading = name.getText() + " | " + date.getValue().toString();
+        } else {
+            InstrumentationController.newHeading = name.getText();
+        }
+
+        InstrumentationController.selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
+        if(musicalWork != null) {
+            InstrumentationController.selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
+            InstrumentationController.selectedMusicalWorks.add(musicalWork);
+        }
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("Instrumentation.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = new Stage();
+        stage.setTitle("Musical Work & Instrumentation");
+        stage.setScene(scene);
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                if(InstrumentationController.apply) {
+                    if(!InstrumentationController.selectedMusicalWorks.isEmpty()) {
+                        musicalWork = InstrumentationController.selectedMusicalWorks.get(0);
+                        musicalWorkTableOpera.getItems().clear();
+                        musicalWorkTableOpera.getItems().add(musicalWork.getName());
+                    }  else {
+                        musicalWorkTableOpera.getItems().clear();
+                        musicalWork = null;
+                    }
+                    // TODO: timbox 2 save instrumentation
+                }
+
+            }
+        });
+        InstrumentationController.stage = stage;
+
+        stage.showAndWait();
+    }
+
+    @FXML
     public boolean discard() {
         // TODO: check with init data for changes
         if(!name.getText().equals(initEventDutyDTO.getName())
@@ -100,7 +168,10 @@ public class EditOperaController {
                 || !endTime.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime())
                 || !conductor.getText().equals(initEventDutyDTO.getConductor())
                 || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
-                || !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints())) {
+                || !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints())
+                || (musicalWork == null && initEventDutyDTO.getMusicalWorks() != null) // musical work wurde entfernt
+                || (musicalWork != null && initEventDutyDTO.getMusicalWorks() == null) // musical work wurde hinzugefügt
+                || (musicalWork != null && initEventDutyDTO.getMusicalWorks() != null && !musicalWork.equals(initEventDutyDTO.getMusicalWorks().get(0)))) { // musical work wurde verändert
 
             ButtonType answer = MessageHelper.showConfirmationMessage(PlanchesterMessages.DISCARD_CHANGES);
             if(ButtonType.NO.equals(answer)) {
@@ -111,11 +182,6 @@ public class EditOperaController {
         EventScheduleController.resetSideContent();
         EventScheduleController.removeSelection(initAppointment);
         return true;
-    }
-
-    @FXML
-    public void editOperaInstrumentation() {
-
     }
 
     private void checkMandatoryFields() {

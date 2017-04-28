@@ -178,15 +178,19 @@ public class InstrumentationController {
             }
         }
         String selecetdItem = tableAvailable.getSelectionModel().getSelectedItem();
-        tableAvailable.getItems().remove(tableAvailable.getSelectionModel().getFocusedIndex());
-        tableSelected.getItems().add(selecetdItem);
+        if(selecetdItem != null && selecetdItem != "" ) {
+            tableAvailable.getItems().remove(tableAvailable.getSelectionModel().getFocusedIndex());
+            tableSelected.getItems().add(selecetdItem);
+        }
     }
 
     @FXML
     private void removeMusicalWorkFromSelected() {
         String selecetdItem = tableSelected.getSelectionModel().getSelectedItem();
-        tableSelected.getItems().remove(tableSelected.getSelectionModel().getFocusedIndex());
-        tableAvailable.getItems().add(selecetdItem);
+        if(selecetdItem != null && selecetdItem != "" ) {
+            tableSelected.getItems().remove(tableSelected.getSelectionModel().getFocusedIndex());
+            tableAvailable.getItems().add(selecetdItem);
+        }
     }
 
     private void setSelectedMusicalWork(String selecetdItem) {
