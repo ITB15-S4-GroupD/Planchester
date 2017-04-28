@@ -74,12 +74,10 @@ public class EditNonMusicalEventController {
 
     @FXML
     private void save() {
-        // TODO: save data
     }
 
     @FXML
     public boolean cancel() {
-        // TODO: check with init data for changes
         if(!name.getText().equals(initEventDutyDTO.getName())
                 || !description.getText().equals(initEventDutyDTO.getDescription())
                 || !date.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalDate())

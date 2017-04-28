@@ -54,7 +54,7 @@ public class EventScheduleController {
     private String colorNonMusical;
     private String colorHofkapelle;
 
-    private static Agenda staticAgenda; // todo: make private
+    private static Agenda staticAgenda;
     private static Agenda.AppointmentGroup opera;
     private static Agenda.AppointmentGroup concert;
     private static Agenda.AppointmentGroup hofkapelle;
