@@ -17,6 +17,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import jfxtras.scene.control.agenda.Agenda;
 
+import javax.xml.bind.ValidationException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -57,7 +58,7 @@ public class EditTourController {
     }
 
     @FXML
-    private void save() {
+    private void save() throws ValidationException {
         if(validate()) {
             Agenda.Appointment selectedAppointment = EventScheduleController.getSelectedAppointment();
             EventDutyDTO oldEventDutyDTO = EventScheduleController.getEventForAppointment(selectedAppointment);

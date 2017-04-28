@@ -15,6 +15,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+
+import javax.xml.bind.ValidationException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -39,7 +41,7 @@ public class CreateHofkapelleController {
     }
 
     @FXML
-    private void insertNewHofkapellePerformance() {
+    private void insertNewHofkapellePerformance() throws ValidationException {
         if(validate()) {
 
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
