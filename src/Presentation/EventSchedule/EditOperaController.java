@@ -60,14 +60,14 @@ public class EditOperaController {
     @FXML
     private void save() {
         if(validate()) {
-            EventDutyDTO oldEventDutyDTO = EventScheduleController.getEventForAppointment(EventScheduleController.getSelectedAppointment());
-            EventScheduleController.staticLoadedEventsMap.remove(EventScheduleController.getSelectedAppointment());
-
+            Agenda.Appointment selectedAppointment = EventScheduleController.getSelectedAppointment();
+            EventDutyDTO oldEventDutyDTO = EventScheduleController.getEventForAppointment(selectedAppointment);
+            EventScheduleController.removeSelectedAppointmentFromCalendar(selectedAppointment);
 
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
             eventDutyDTO.setEventDutyID(oldEventDutyDTO.getEventDutyID());
             eventDutyDTO.setName(name.getText());
-            eventDutyDTO.setDescription(name.getText());
+            eventDutyDTO.setDescription(description.getText());
             eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
             eventDutyDTO.setEndTime(endTime.getValue() == null ? DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue().plusHours(2)) : DateHelper.mergeDateAndTime(date.getValue(), endTime.getValue()));
             eventDutyDTO.setEventType(EventType.Opera);
@@ -82,8 +82,6 @@ public class EditOperaController {
             EventScheduleManager.updateOperaPerformance(eventDutyDTO);
 
             EventScheduleController.addEventDutyToGUI(eventDutyDTO);
-//            EventScheduleController.staticLoadedEventsMap.put(EventScheduleController.getSelectedAppointment(), eventDutyDTO); //update GUI
-            EventScheduleController.setSelectedAppointment(eventDutyDTO);
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
         }
