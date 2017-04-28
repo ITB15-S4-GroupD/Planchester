@@ -4,9 +4,7 @@ import Application.DTO.EventDutyDTO;
 import Application.EventScheduleManager;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
-import Domain.EventDutyModel;
 import Utils.DateHelper;
-import Utils.MessageHelper;
 import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
@@ -15,70 +13,65 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
-import javax.xml.bind.ValidationException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-
 /**
- * Created by Ina on 09.04.2017.
+ * Created by Christina on 27.04.2017.
  */
-public class CreateHofkapelleController {
+public class CreateNonMusicalEventController {
 
     @FXML private TextField name;
     @FXML private TextArea description;
+    @FXML private JFXDatePicker date;
     @FXML private JFXTimePicker startTime;
     @FXML private JFXTimePicker endTime;
-    @FXML private JFXDatePicker date;
     @FXML private TextField eventLocation;
-    @FXML private TextField conductor;
     @FXML private TextField points;
+    @FXML private Button btnCancel;
+    @FXML private Button btnSaveNewConcert;
 
-    @FXML
-    public void initialize() {
+
+
+    @FXML public void initialize() {
         initializeMandatoryFields();
     }
 
-    @FXML
-    private void insertNewHofkapellePerformance() throws ValidationException {
-        if(validate()) {
-
-            EventDutyDTO eventDutyDTO = new EventDutyDTO();
-            eventDutyDTO.setName(name.getText());
-            eventDutyDTO.setDescription(description.getText());
-            eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
-            eventDutyDTO.setEndTime(endTime.getValue() == null ? DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue().plusHours(2)) : DateHelper.mergeDateAndTime(date.getValue(), endTime.getValue()));
-            eventDutyDTO.setEventType(EventType.Hofkapelle);
-            eventDutyDTO.setEventStatus(EventStatus.Unpublished);
-            eventDutyDTO.setConductor(conductor.getText());
-            eventDutyDTO.setEventLocation(eventLocation.getText());
-            eventDutyDTO.setMusicalWorks(null); //TODO TIMO
-            eventDutyDTO.setPoints((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText()));
-            eventDutyDTO.setInstrumentation(null); //TODO TIMO
-            eventDutyDTO.setRehearsalFor(null); //TODO TIMO
-
-            EventScheduleManager.createHofkapellePerformance(eventDutyDTO);
-            EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
-            EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
-            EventScheduleController.resetSideContent(); // remove content of sidebar
-            EventScheduleController.setSelectedAppointment(eventDutyDTO); // select created appointment
-        }
-    }
-
-    @FXML
-    public boolean cancel() {
-        //TODO implement musical works
+    @FXML public boolean cancel() {
         if(!name.getText().isEmpty() || !description.getText().isEmpty() || date.getValue() != null
-                || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty() || !points.getText().isEmpty()) {
-            ButtonType answer = MessageHelper.showConfirmationMessage(PlanchesterMessages.DISCARD_CHANGES);
-            if(ButtonType.NO.equals(answer)) {
+                || !eventLocation.getText().isEmpty() || !points.getText().isEmpty()) {
+            Alert confirmationAlterMessage = new Alert(Alert.AlertType.CONFIRMATION, PlanchesterMessages.DISCARD_CHANGES, ButtonType.YES, ButtonType.NO);
+            confirmationAlterMessage.showAndWait();
+
+            if (confirmationAlterMessage.getResult() == ButtonType.NO) {
                 return false;
             }
         }
         // remove content of sidebar
         EventScheduleController.resetSideContent();
         return true;
+
+    }
+
+    @FXML
+    public void insertNewConcertPerformance() {
+        if(validate()) {
+            EventDutyDTO eventDutyDTO = new EventDutyDTO();
+            eventDutyDTO.setName(name.getText());
+            eventDutyDTO.setDescription(description.getText());
+            eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
+            eventDutyDTO.setEndTime(endTime.getValue() == null ? DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue().plusHours(2)) : DateHelper.mergeDateAndTime(date.getValue(), endTime.getValue()));
+            eventDutyDTO.setEventType(EventType.NonMusicalEvent);
+            eventDutyDTO.setEventStatus(EventStatus.Unpublished);
+            eventDutyDTO.setEventLocation(eventLocation.getText());
+            eventDutyDTO.setPoints((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText()));
+
+            EventScheduleManager.createNonMusicalPerformance(eventDutyDTO);
+            EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
+            EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
+            EventScheduleController.resetSideContent(); // remove content of sidebar
+            EventScheduleController.setSelectedAppointment(eventDutyDTO); // select created appointment
+        }
     }
 
     private boolean validate() {
@@ -87,25 +80,30 @@ public class CreateHofkapelleController {
         LocalTime end = endTime.getValue();
 
         if(name.getText().isEmpty()){
-            MessageHelper.showErrorAlertMessage("The Name is missing.");
+            throwErrorAlertMessage("The Name is missing.");
             name.requestFocus();
             return false;
         } else if(date.getValue() == null || date.getValue().isBefore(today) ){
-            MessageHelper.showErrorAlertMessage("The date is not valid.");
+            throwErrorAlertMessage("The date is not valid.");
             date.requestFocus();
             return false;
         } else if(start == null) {
-            MessageHelper.showErrorAlertMessage("The starttime is missing.");
+            throwErrorAlertMessage("The starttime is missing.");
             return false;
         } else if(end != null && (start.isAfter(end) || start.equals(end))) {
-            MessageHelper.showErrorAlertMessage("The endtime is not after the starttime. ");
+            throwErrorAlertMessage("The endtime is not after the starttime. ");
             return false;
         } else if(date.getValue().equals(today) && start.isBefore(LocalTime.now())){
-            MessageHelper.showErrorAlertMessage("The starttime must be in future. \n");
+            throwErrorAlertMessage("The starttime must be in future. \n");
             return false;
         }
-        //TODO TIMO: validate musiclaWork: is mandatory!
+
         return true;
+    }
+
+    private void throwErrorAlertMessage(String errormessage){
+        Alert alert = new Alert(Alert.AlertType.ERROR, errormessage, ButtonType.OK);
+        alert.showAndWait();
     }
 
     private void initializeMandatoryFields() {
@@ -145,4 +143,5 @@ public class CreateHofkapelleController {
             }
         });
     }
+
 }

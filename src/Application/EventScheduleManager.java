@@ -9,6 +9,7 @@ import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 
+import javax.xml.bind.ValidationException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -23,63 +24,66 @@ public class EventScheduleManager {
     private static Calendar loadedEventsStartdate; //start of the already loaded calendar
     private static Calendar loadedEventsEnddate; //end of the already loaded calendar
 
-    public static void createConcertPerformance(EventDutyDTO eventDutyDTO) {
+    public static void createConcertPerformance(EventDutyDTO eventDutyDTO) throws ValidationException {
         EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
-        //TODO JULIA / INA: eventDutyModel.validate();
+        eventDutyModel.validate();
         EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
         persistanceFacade.put(eventDutyEntity);
     }
 
-    public static void createOperaPerformance(EventDutyDTO eventDutyDTO) {
+    public static void createOperaPerformance(EventDutyDTO eventDutyDTO) throws ValidationException {
         EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
-        //TODO JULIA / INA: eventDutyModel.validate();
+        eventDutyModel.validate();
         EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
         persistanceFacade.put(eventDutyEntity);
     }
 
-    public static void createTourPerformance(EventDutyDTO eventDutyDTO) {
-        EventDutyModel nextTourDay = null;
-        LocalDate dateStart = eventDutyDTO.getStartTime().toLocalDateTime().toLocalDate();
-        LocalDate dateEnd = eventDutyDTO.getEndTime().toLocalDateTime().toLocalDate();
-        LocalTime timeStart = LocalTime.of(0,0, 0);
-        LocalTime timeEnd = LocalTime.of(23, 59, 59);
-        LocalDate current = dateStart;
-
-        //TODO JULIA / INA: eventDutyModel.validate();
+    public static void createTourPerformance(EventDutyDTO eventDutyDTO) throws ValidationException {
         EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
+        eventDutyModel.validate();
+        EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
+        persistanceFacade.put(eventDutyEntity);
 
-        //add event for each day
-        while(!current.isAfter(dateEnd)){
-            eventDutyModel.setStarttime(DateHelper.mergeDateAndTime(current, timeStart));
-            eventDutyModel.setEndtime(DateHelper.mergeDateAndTime(current, timeEnd));
-            persistanceFacade.put(createEventDutyEntity(eventDutyModel));
-            current = LocalDate.parse(current.toString()).plusDays(1);
-        }
     }
 
-    public static void createHofkapellePerformance(EventDutyDTO eventDutyDTO) {
+    public static void createHofkapellePerformance(EventDutyDTO eventDutyDTO) throws ValidationException {
         EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
-        //TODO JULIA / INA: eventDutyModel.validate();
+        eventDutyModel.validate();
         EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
         persistanceFacade.put(eventDutyEntity);
     }
 
-    public static void updateConcertPerformance(EventDutyModel eventDuty) {
-
+    public static void updateConcertPerformance(EventDutyDTO eventDutyDTO) throws ValidationException {
+        EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
+        eventDutyModel.validate();
+        EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
+        persistanceFacade.put(eventDutyEntity);
     }
 
-    public static void updateOperaPerformance(EventDutyModel eventDuty) {
-
+    public static void updateOperaPerformance(EventDutyDTO eventDutyDTO) throws ValidationException {
+        EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
+        eventDutyModel.validate();
+        EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
+        persistanceFacade.put(eventDutyEntity);
     }
 
-    public static void updateTourPerformance(EventDutyModel eventDuty) {
-
+    public static void updateTourPerformance(EventDutyDTO eventDutyDTO) throws ValidationException {
+        EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
+        eventDutyModel.validate();
+        EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
+        persistanceFacade.put(eventDutyEntity);
     }
 
-    public static void updateHofkapellePerformance(EventDutyModel eventDuty) {
-
+    public static void updateHofkapellePerformance(EventDutyDTO eventDutyDTO) throws ValidationException {
+        EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
+        eventDutyModel.validate();
+        EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
+        persistanceFacade.put(eventDutyEntity);
     }
 
+	public static void createNonMusicalPerformance(EventDutyDTO eventDutyDTO) {
+		
+	}
     public static List<EventDutyDTO> getEventDutyListForCurrentWeek() {
         Calendar today = Calendar.getInstance();
         return getEventDutyInRange(DateHelper.getStartOfWeek(today), DateHelper.getEndOfWeek(today));
@@ -124,6 +128,7 @@ public class EventScheduleManager {
 
     private static EventDutyModel createEventDutyModel(EventDutyDTO eventDutyDTO) {
         EventDutyModel eventDutyModel = new EventDutyModel();
+        eventDutyModel.setEventDutyId(eventDutyDTO.getEventDutyID());
         eventDutyModel.setName(eventDutyDTO.getName());
         eventDutyModel.setDescription(eventDutyDTO.getDescription());
         eventDutyModel.setStarttime(eventDutyDTO.getStartTime());
@@ -132,7 +137,7 @@ public class EventScheduleManager {
         eventDutyModel.setEventStatus(eventDutyDTO.getEventStatus().toString());
         eventDutyModel.setConductor(eventDutyDTO.getConductor());
         eventDutyModel.setLocation(eventDutyDTO.getEventLocation());
-        eventDutyModel.setDefaultPoints(eventDutyDTO.getPoints() == null ? null : Double.valueOf(eventDutyDTO.getPoints()));
+        eventDutyModel.setDefaultPoints(eventDutyDTO.getPoints());
         eventDutyModel.setInstrumentation(eventDutyDTO.getInstrumentation());
         eventDutyModel.setRehearsalFor(eventDutyDTO.getRehearsalFor());
         return eventDutyModel;
@@ -140,6 +145,9 @@ public class EventScheduleManager {
 
     private static EventDutyEntity createEventDutyEntity(EventDutyModel eventDutyModel) {
         EventDutyEntity eventDutyEntity = new EventDutyEntity();
+        if(eventDutyModel.getEventDutyId() != null) {
+            eventDutyEntity.setEventDutyId(eventDutyModel.getEventDutyId());
+        }
         eventDutyEntity.setName(eventDutyModel.getName());
         eventDutyEntity.setDescription(eventDutyModel.getDescription());
         eventDutyEntity.setStarttime(eventDutyModel.getStarttime());
@@ -156,6 +164,7 @@ public class EventScheduleManager {
 
     private static EventDutyDTO createEventDutyDTO (EventDutyModel eventDutyModel) {
         EventDutyDTO eventDutyDTO = new EventDutyDTO();
+        eventDutyDTO.setEventDutyID(eventDutyModel.getEventDutyId());
         eventDutyDTO.setName(eventDutyModel.getName());
         eventDutyDTO.setDescription(eventDutyModel.getDescription());
         eventDutyDTO.setStartTime(eventDutyModel.getStarttime());
@@ -164,7 +173,7 @@ public class EventScheduleManager {
         eventDutyDTO.setEventStatus(EventStatus.valueOf(eventDutyModel.getEventStatus()));
         eventDutyDTO.setConductor(eventDutyModel.getConductor());
         eventDutyDTO.setEventLocation(eventDutyModel.getLocation());
-        eventDutyDTO.setPoints(eventDutyModel.getDefaultPoints() == null ? null : Double.valueOf(eventDutyModel.getDefaultPoints()));
+        eventDutyDTO.setPoints(eventDutyModel.getDefaultPoints());
         eventDutyDTO.setInstrumentation(eventDutyModel.getInstrumentation());
         eventDutyDTO.setRehearsalFor(eventDutyModel.getRehearsalFor());
         return eventDutyDTO;
@@ -172,6 +181,7 @@ public class EventScheduleManager {
 
     private static EventDutyModel createEventDutyModel(EventDutyEntity eventDutyEntity) {
         EventDutyModel eventDutyModel = new EventDutyModel();
+        eventDutyModel.setEventDutyId(eventDutyEntity.getEventDutyId());
         eventDutyModel.setName(eventDutyEntity.getName());
         eventDutyModel.setDescription(eventDutyEntity.getDescription());
         eventDutyModel.setStarttime(eventDutyEntity.getStarttime());
@@ -185,4 +195,6 @@ public class EventScheduleManager {
         eventDutyModel.setRehearsalFor(eventDutyEntity.getRehearsalFor());
         return eventDutyModel;
     }
+
+
 }

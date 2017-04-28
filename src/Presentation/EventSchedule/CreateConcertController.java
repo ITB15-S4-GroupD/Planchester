@@ -4,8 +4,8 @@ import Application.DTO.EventDutyDTO;
 import Application.EventScheduleManager;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
-import Domain.EventDutyModel;
 import Utils.DateHelper;
+import Utils.MessageHelper;
 import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
@@ -14,6 +14,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+
+import javax.xml.bind.ValidationException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -28,7 +30,6 @@ public class CreateConcertController {
     @FXML private JFXTimePicker endTime;
     @FXML private JFXDatePicker date;
     @FXML private TextField eventLocation;
-    @FXML private ChoiceBox<String> musicalWork;
     @FXML private TextField conductor;
     @FXML private TextField points;
 
@@ -38,12 +39,12 @@ public class CreateConcertController {
     }
 
     @FXML
-    private void insertNewConcertPerformance() {
+    private void insertNewConcertPerformance() throws ValidationException {
         if(validate()) {
 
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
             eventDutyDTO.setName(name.getText());
-            eventDutyDTO.setDescription(name.getText());
+            eventDutyDTO.setDescription(description.getText());
             eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
             eventDutyDTO.setEndTime(endTime.getValue() == null ? DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue().plusHours(2)) : DateHelper.mergeDateAndTime(date.getValue(), endTime.getValue()));
             eventDutyDTO.setEventType(EventType.Concert);
@@ -68,10 +69,8 @@ public class CreateConcertController {
         //TODO implement musical works
         if(!name.getText().isEmpty() || !description.getText().isEmpty() || date.getValue() != null
                 || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty() || !points.getText().isEmpty()) {
-            Alert confirmationAlterMessage = new Alert(Alert.AlertType.CONFIRMATION, PlanchesterMessages.DISCARD_CHANGES, ButtonType.YES, ButtonType.NO);
-            confirmationAlterMessage.showAndWait();
-
-            if (confirmationAlterMessage.getResult() == ButtonType.NO) {
+            ButtonType answer = MessageHelper.showConfirmationMessage(PlanchesterMessages.DISCARD_CHANGES);
+            if(ButtonType.NO.equals(answer)) {
                 return false;
             }
         }
@@ -86,32 +85,26 @@ public class CreateConcertController {
         LocalTime end = endTime.getValue();
 
         if(name.getText().isEmpty()){
-            throwErrorAlertMessage("The Name is missing.");
+            MessageHelper.showErrorAlertMessage("The Name is missing.");
             name.requestFocus();
             return false;
         } else if(date.getValue() == null || date.getValue().isBefore(today) ){
-            throwErrorAlertMessage("The date is not valid.");
+            MessageHelper.showErrorAlertMessage("The date is not valid.");
             date.requestFocus();
             return false;
         } else if(start == null) {
-            throwErrorAlertMessage("The starttime is missing.");
+            MessageHelper.showErrorAlertMessage("The starttime is missing.");
             return false;
         } else if(end != null && (start.isAfter(end) || start.equals(end))) {
-            throwErrorAlertMessage("The endtime is not after the starttime. ");
+            MessageHelper.showErrorAlertMessage("The endtime is not after the starttime. ");
             return false;
         } else if(date.getValue().equals(today) && start.isBefore(LocalTime.now())){
-            throwErrorAlertMessage("The starttime must be in future. \n");
+            MessageHelper.showErrorAlertMessage("The starttime must be in future. \n");
             return false;
         }
         //TODO TIMO: validate musiclaWork: is mandatory!
         return true;
     }
-
-    private void throwErrorAlertMessage(String errormessage){
-        Alert alert = new Alert(Alert.AlertType.ERROR, errormessage, ButtonType.OK);
-        alert.showAndWait();
-    }
-
 
     private void initializeMandatoryFields() {
         name.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);

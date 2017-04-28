@@ -12,7 +12,7 @@ import java.sql.Timestamp;
  * Created by julia on 13.04.2017.
  */
 public class EventDutyModel {
-    private int eventDutyId;
+    private Integer eventDutyId;
     private String name;
     private String description;
     private Timestamp starttime;
@@ -43,14 +43,14 @@ public class EventDutyModel {
         }
         Validator.validateString(conductor, 25);
         Validator.validateString(location, 255);
-        Validator.validateMandatoryDouble(defaultPoints, 0, Double.MAX_VALUE);
+        Validator.validateDouble(defaultPoints, 0, Double.MAX_VALUE);
     }
 
-    public int getEventDutyId() {
+    public Integer getEventDutyId() {
         return eventDutyId;
     }
 
-    public void setEventDutyId(int eventDutyId) {
+    public void setEventDutyId(Integer eventDutyId) {
         this.eventDutyId = eventDutyId;
     }
 

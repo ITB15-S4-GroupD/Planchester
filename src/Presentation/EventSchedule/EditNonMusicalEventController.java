@@ -1,12 +1,6 @@
 package Presentation.EventSchedule;
 
 import Application.DTO.EventDutyDTO;
-import Application.EventScheduleManager;
-import Domain.EventDutyModel;
-import Utils.DateHelper;
-import Utils.Enum.EventStatus;
-import Utils.Enum.EventType;
-import Utils.MessageHelper;
 import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
@@ -17,91 +11,87 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import jfxtras.scene.control.agenda.Agenda;
 
-import javax.xml.bind.ValidationException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 /**
- * Created by timorzipa on 06/04/2017.
+ * Created by Christina on 27.04.2017.
  */
-public class EditOperaController {
+public class EditNonMusicalEventController {
 
     @FXML private TextField name;
     @FXML private TextArea description;
+    @FXML private JFXDatePicker date;
     @FXML private JFXTimePicker startTime;
     @FXML private JFXTimePicker endTime;
-    @FXML private JFXDatePicker date;
     @FXML private TextField eventLocation;
-    @FXML private TextField conductor;
     @FXML private TextField points;
+
+    @FXML private Button btnCancel;
+    @FXML private Button btnSaveNewOpera;
+    @FXML private Button btneditNonMusical;
 
     private EventDutyDTO initEventDutyDTO; // remember init data to compare
     private Agenda.Appointment initAppointment; // remember init data to compare
 
+
     @FXML
     public void initialize() {
+
         checkMandatoryFields();
 
         Agenda.Appointment appointment = EventScheduleController.getSelectedAppointment();
         EventDutyDTO eventDutyDTO = EventScheduleController.getEventForAppointment(appointment);
 
         name.setText(appointment.getSummary());
+        name.setEditable(false);
         description.setText(appointment.getDescription());
+        description.setEditable(false);
         date.setValue(appointment.getStartLocalDateTime().toLocalDate());
+        date.setEditable(false);
         startTime.setValue(appointment.getStartLocalDateTime().toLocalTime());
+        startTime.setEditable(false);
         endTime.setValue(appointment.getEndLocalDateTime().toLocalTime());
+        endTime.setEditable(false);
         eventLocation.setText(appointment.getLocation());
-        conductor.setText(eventDutyDTO.getConductor());
+        eventLocation.setEditable(false);
         points.setText(eventDutyDTO.getPoints() != null ? String.valueOf(eventDutyDTO.getPoints()) : null);
-
+        points.setEditable(false);
+        initNotEditableFields();
         initAppointment = appointment;
         initEventDutyDTO = eventDutyDTO;
     }
 
-    @FXML
-    private void save() throws ValidationException {
-        if(validate()) {
-            Agenda.Appointment selectedAppointment = EventScheduleController.getSelectedAppointment();
-            EventDutyDTO oldEventDutyDTO = EventScheduleController.getEventForAppointment(selectedAppointment);
-            EventScheduleController.removeSelectedAppointmentFromCalendar(selectedAppointment);
-
-            EventDutyDTO eventDutyDTO = new EventDutyDTO();
-            eventDutyDTO.setEventDutyID(oldEventDutyDTO.getEventDutyID());
-            eventDutyDTO.setName(name.getText());
-            eventDutyDTO.setDescription(description.getText());
-            eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
-            eventDutyDTO.setEndTime(endTime.getValue() == null ? DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue().plusHours(2)) : DateHelper.mergeDateAndTime(date.getValue(), endTime.getValue()));
-            eventDutyDTO.setEventType(EventType.Opera);
-            eventDutyDTO.setEventStatus(EventStatus.Unpublished);
-            eventDutyDTO.setConductor(conductor.getText());
-            eventDutyDTO.setEventLocation(eventLocation.getText());
-            eventDutyDTO.setMusicalWorks(null); //TODO TIMO
-            eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
-            eventDutyDTO.setInstrumentation(null); //TODO TIMO
-            eventDutyDTO.setRehearsalFor(null); //TODO TIMO
-
-            EventScheduleManager.updateOperaPerformance(eventDutyDTO);
-
-            EventScheduleController.addEventDutyToGUI(eventDutyDTO);
-            EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
-            EventScheduleController.resetSideContent(); // remove content of sidebar
-        }
+    private void initNotEditableFields() {
+        name.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        description.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        date.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        startTime.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        endTime.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        eventLocation.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        points.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
     }
 
     @FXML
-    public boolean discard() {
+    private void save() {
+        // TODO: save data
+    }
+
+    @FXML
+    public boolean cancel() {
         // TODO: check with init data for changes
         if(!name.getText().equals(initEventDutyDTO.getName())
                 || !description.getText().equals(initEventDutyDTO.getDescription())
                 || !date.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalDate())
                 || !startTime.getValue().equals(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalTime())
                 || !endTime.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime())
-                || !conductor.getText().equals(initEventDutyDTO.getConductor())
                 || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
                 || !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints())) {
 
-            ButtonType answer = MessageHelper.showConfirmationMessage(PlanchesterMessages.DISCARD_CHANGES);
-            if(ButtonType.NO.equals(answer)) {
+            Alert confirmationAlertMessage = new Alert(Alert.AlertType.CONFIRMATION, PlanchesterMessages.DISCARD_CHANGES, ButtonType.YES, ButtonType.NO);
+            confirmationAlertMessage.showAndWait();
+
+            if (confirmationAlertMessage.getResult() == ButtonType.NO) {
                 return false;
             }
         }
@@ -109,6 +99,28 @@ public class EditOperaController {
         EventScheduleController.resetSideContent();
         EventScheduleController.removeSelection(initAppointment);
         return true;
+    }
+
+    public void editNonMusical () {
+        btnCancel.setVisible(true);
+        btnSaveNewOpera.setVisible(true);
+        btneditNonMusical.setVisible(false);
+
+        name.setEditable(true);
+        description.setEditable(true);
+        date.setEditable(true);
+        startTime.setEditable(true);
+        endTime.setEditable(true);
+        eventLocation.setEditable(true);
+        points.setEditable(true);
+
+        name.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        description.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        date.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        startTime.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        endTime.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        eventLocation.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        points.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
     }
 
     private void checkMandatoryFields() {
@@ -144,32 +156,5 @@ public class EditOperaController {
                 }
             }
         });
-    }
-
-    private boolean validate() {
-        LocalDate today = LocalDate.now();
-        LocalTime start = startTime.getValue();
-        LocalTime end = endTime.getValue();
-
-        if(name.getText().isEmpty()){
-            MessageHelper.showErrorAlertMessage("The Name is missing.");
-            name.requestFocus();
-            return false;
-        } else if(date.getValue() == null || date.getValue().isBefore(today) ){
-            MessageHelper.showErrorAlertMessage("The date is not valid.");
-            date.requestFocus();
-            return false;
-        } else if(start == null) {
-            MessageHelper.showErrorAlertMessage("The starttime is missing.");
-            return false;
-        } else if(end != null && (start.isAfter(end) || start.equals(end))) {
-            MessageHelper.showErrorAlertMessage("The endtime is not after the starttime. ");
-            return false;
-        } else if(date.getValue().equals(today) && start.isBefore(LocalTime.now())){
-            MessageHelper.showErrorAlertMessage("The starttime must be in future. \n");
-            return false;
-        }
-        //TODO TIMO: validate musiclaWork: is mandatory!
-        return true;
     }
 }

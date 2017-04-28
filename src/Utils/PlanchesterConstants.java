@@ -9,4 +9,6 @@ public class PlanchesterConstants {
 
     public static final String INPUTFIELD_MANDATORY = "-fx-control-inner-background: #ffdec9";
     public static final String INPUTFIELD_VALID = "-fx-control-inner-background: #ffffff";
+    public static final String INPUTFIELD_NOTEDITABLE = "-fx-control-inner-background: #eeeeee";
+
 }
