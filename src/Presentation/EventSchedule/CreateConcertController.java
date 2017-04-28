@@ -14,6 +14,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+
+import javax.xml.bind.ValidationException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -37,7 +39,7 @@ public class CreateConcertController {
     }
 
     @FXML
-    private void insertNewConcertPerformance() {
+    private void insertNewConcertPerformance() throws ValidationException {
         if(validate()) {
 
             EventDutyDTO eventDutyDTO = new EventDutyDTO();

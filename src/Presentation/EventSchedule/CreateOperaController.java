@@ -18,6 +18,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+
+import javax.xml.bind.ValidationException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -51,7 +53,7 @@ public class CreateOperaController {
     }
 
     @FXML
-    private void insertNewOperaPerformance() {
+    private void insertNewOperaPerformance() throws ValidationException {
         if(validate()) {
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
             eventDutyDTO.setEventDutyID(null);

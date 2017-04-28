@@ -8,4 +8,5 @@ public class PlanchesterMessages {
     private PlanchesterMessages(){}
 
     public static final String DISCARD_CHANGES = "Do you really want to discard your changes?";
+    public static final String VALIDATION_FAILDED = "Validation failed";
 }
