@@ -180,10 +180,13 @@ public class CreateHofkapelleController {
             MessageHelper.showErrorAlertMessage("The endtime is not after the starttime. ");
             return false;
         } else if(date.getValue().equals(today) && start.isBefore(LocalTime.now())){
-            MessageHelper.showErrorAlertMessage("The starttime must be in future. \n");
+            MessageHelper.showErrorAlertMessage("The starttime must be in future.");
+            date.requestFocus();
+            return false;
+        } else if(musicalWorks == null || musicalWorks.isEmpty()){
+            MessageHelper.showErrorAlertMessage("A musical work has to be selected.");
             return false;
         }
-        //TODO TIMO: validate musiclaWork: is mandatory!
         return true;
     }
 

@@ -35,16 +35,25 @@ import java.util.List;
  * Created by Christina on 20.04.2017.
  */
 public class CreateTourController {
-    @FXML private TextField name;
-    @FXML private TextArea description;
-    @FXML private JFXDatePicker startDate;
-    @FXML private JFXDatePicker endDate;
-    @FXML private TextField eventLocation;
-    @FXML private TextField conductor;
-    @FXML private TextField points;
+    @FXML
+    private TextField name;
+    @FXML
+    private TextArea description;
+    @FXML
+    private JFXDatePicker startDate;
+    @FXML
+    private JFXDatePicker endDate;
+    @FXML
+    private TextField eventLocation;
+    @FXML
+    private TextField conductor;
+    @FXML
+    private TextField points;
 
-    @FXML private TableView<String> musicalWorkTable;
-    @FXML private TableColumn<String, String> selectedMusicalWorks;
+    @FXML
+    private TableView<String> musicalWorkTable;
+    @FXML
+    private TableColumn<String, String> selectedMusicalWorks;
 
     private List<MusicalWorkDTO> musicalWorks;
     private InstrumentationDTO instrumentation; // TODO timebox2
@@ -70,13 +79,13 @@ public class CreateTourController {
 
     @FXML
     private void insertNewTourPerformance() throws ValidationException {
-        if(validate()) {
+        if (validate()) {
 
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
             eventDutyDTO.setName(name.getText());
             eventDutyDTO.setDescription(description.getText());
             eventDutyDTO.setStartTime(Timestamp.valueOf(startDate.getValue().atStartOfDay()));
-            eventDutyDTO.setEndTime(Timestamp.valueOf(endDate.getValue().atTime(23,59,59)));
+            eventDutyDTO.setEndTime(Timestamp.valueOf(endDate.getValue().atTime(23, 59, 59)));
             eventDutyDTO.setEventType(EventType.Tour);
             eventDutyDTO.setEventStatus(EventStatus.Unpublished);
             eventDutyDTO.setConductor(conductor.getText());
@@ -96,12 +105,12 @@ public class CreateTourController {
 
     @FXML
     public boolean cancel() {
-        if(!name.getText().isEmpty() || !description.getText().isEmpty() || startDate.getValue() != null
+        if (!name.getText().isEmpty() || !description.getText().isEmpty() || startDate.getValue() != null
                 || endDate.getValue() != null || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty()
                 || !points.getText().isEmpty() || (musicalWorks != null && !musicalWorks.isEmpty())) {
 
             ButtonType answer = MessageHelper.showConfirmationMessage(PlanchesterMessages.DISCARD_CHANGES);
-            if(ButtonType.NO.equals(answer)) {
+            if (ButtonType.NO.equals(answer)) {
                 return false;
             }
         }
@@ -112,15 +121,15 @@ public class CreateTourController {
     @FXML
     public void editTourInstrumentation() {
         InstrumentationController.selectMultipleMusicalWorks = true;
-        if(startDate.getValue() != null && endDate.getValue() != null) {
+        if (startDate.getValue() != null && endDate.getValue() != null) {
             InstrumentationController.newHeading = name.getText() + " | " + startDate.getValue().toString() + "-" + endDate.getValue().toString();
         } else {
             InstrumentationController.newHeading = name.getText();
         }
 
         InstrumentationController.selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
-        if(musicalWorks != null && !musicalWorks.isEmpty()) {
-            for(MusicalWorkDTO musicalWorkDTO : musicalWorks) {
+        if (musicalWorks != null && !musicalWorks.isEmpty()) {
+            for (MusicalWorkDTO musicalWorkDTO : musicalWorks) {
                 InstrumentationController.selectedMusicalWorks.add(musicalWorkDTO);
             }
         }
@@ -138,11 +147,11 @@ public class CreateTourController {
         stage.setScene(scene);
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
-                if(InstrumentationController.apply) {
-                    if(!InstrumentationController.selectedMusicalWorks.isEmpty()) {
+                if (InstrumentationController.apply) {
+                    if (!InstrumentationController.selectedMusicalWorks.isEmpty()) {
                         musicalWorks = InstrumentationController.selectedMusicalWorks;
                         musicalWorkTable.getItems().clear();
-                        for(MusicalWorkDTO musicalWorkDTO : musicalWorks) {
+                        for (MusicalWorkDTO musicalWorkDTO : musicalWorks) {
                             musicalWorkTable.getItems().add(musicalWorkDTO.getName());
                         }
                     } else {
@@ -164,24 +173,25 @@ public class CreateTourController {
         LocalDate start = startDate.getValue();
         LocalDate end = endDate.getValue();
 
-
-        if(name.getText().isEmpty()){
+        if (name.getText().isEmpty()) {
             MessageHelper.showErrorAlertMessage("The Name is missing.");
             name.requestFocus();
             return false;
-        } else if(start == null){
+        } else if (start == null) {
             MessageHelper.showErrorAlertMessage("Startdate has to be set.");
             startDate.requestFocus();
             return false;
-        } else if(end == null ){
+        } else if (end == null) {
             MessageHelper.showErrorAlertMessage("Enddate has to be set.");
             endDate.requestFocus();
             return false;
-        }  else if(start.isAfter(end) || start.equals(end)) {
+        } else if (start.isAfter(end) || start.equals(end)) {
             MessageHelper.showErrorAlertMessage("Enddate has to be after the startdate.");
             return false;
+        } else if (musicalWorks == null || musicalWorks.isEmpty()) {
+            MessageHelper.showErrorAlertMessage("A musical work has to be selected.");
+            return false;
         }
-        //TODO TIMO: validate musiclaWork: is mandatory!
         return true;
     }
 
@@ -193,7 +203,7 @@ public class CreateTourController {
         name.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(name.getText() == null || name.getText().isEmpty()) {
+                if (name.getText() == null || name.getText().isEmpty()) {
                     name.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
                 } else {
                     name.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
@@ -203,7 +213,7 @@ public class CreateTourController {
         startDate.valueProperty().addListener(new ChangeListener<LocalDate>() {
             @Override
             public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
-                if(startDate.getValue() == null) {
+                if (startDate.getValue() == null) {
                     startDate.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
                 } else {
                     startDate.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
@@ -214,7 +224,7 @@ public class CreateTourController {
         endDate.valueProperty().addListener(new ChangeListener<LocalDate>() {
             @Override
             public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
-                if(endDate.getValue() == null) {
+                if (endDate.getValue() == null) {
                     endDate.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
                 } else {
                     endDate.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
