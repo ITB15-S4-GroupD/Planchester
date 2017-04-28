@@ -34,6 +34,7 @@ public class CreateHofkapelleController {
     @FXML private TextField eventLocation;
     @FXML private TextField conductor;
     @FXML private TextField points;
+    @FXML private TableView<String> musicalWorkTableHofkapelle;
 
     @FXML
     public void initialize() {
@@ -79,6 +80,11 @@ public class CreateHofkapelleController {
         // remove content of sidebar
         EventScheduleController.resetSideContent();
         return true;
+    }
+
+    @FXML
+    public void editHofkapelleInstrumentation() {
+
     }
 
     private boolean validate() {

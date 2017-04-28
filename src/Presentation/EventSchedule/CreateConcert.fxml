@@ -5,6 +5,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -13,11 +15,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane fx:id="gridNewConcert" prefHeight="506.0" prefWidth="351.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.CreateConcertController">
+<GridPane fx:id="gridNewConcert" prefHeight="506.0" prefWidth="358.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.CreateConcertController">
    <rowConstraints>
       <RowConstraints maxHeight="498.0" minHeight="34.0" prefHeight="55.0" valignment="CENTER" />
-      <RowConstraints maxHeight="482.0" minHeight="10.0" prefHeight="408.0" />
-      <RowConstraints maxHeight="163.0" minHeight="10.0" prefHeight="45.0" />
+      <RowConstraints maxHeight="482.0" minHeight="10.0" prefHeight="405.0" />
+      <RowConstraints maxHeight="163.0" minHeight="0.0" prefHeight="47.0" />
    </rowConstraints>
    <columnConstraints>
       <ColumnConstraints />
@@ -41,7 +43,8 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="69.0" minHeight="10.0" prefHeight="61.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.0" minHeight="10.0" prefHeight="19.0" valignment="TOP" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
@@ -53,22 +56,28 @@
             <Label text="Endtime" GridPane.rowIndex="4" />
             <Label text="Location" GridPane.rowIndex="5" />
             <Label text="Muscial Work" GridPane.rowIndex="6" />
-            <Label text="Conductor" GridPane.rowIndex="7" />
-            <Label text="Points" GridPane.rowIndex="8" />
+            <Label text="Conductor" GridPane.rowIndex="8" />
+            <Label text="Points" GridPane.rowIndex="9" />
             <TextField fx:id="name" prefHeight="25.0" prefWidth="199.0" GridPane.columnIndex="1" />
             <TextArea fx:id="description" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <JFXDatePicker fx:id="date" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <JFXTimePicker fx:id="startTime" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <JFXTimePicker fx:id="endTime" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <TextField fx:id="eventLocation" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <TextField fx:id="conductor" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <TextField fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <TextField fx:id="conductor" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <TextField fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+              <columns>
+                <TableColumn fx:id="muscialWorkTableConcert" prefWidth="242.0" text="Title" />
+              </columns>
+            </TableView>
+            <Button fx:id="btnEditDetails" mnemonicParsing="false" onAction="#editConcertInstrumentation" onMouseClicked="#editConcertInstrumentation" text="Edit Details ..." GridPane.columnIndex="1" GridPane.rowIndex="7" />
          </children>
          <padding>
             <Insets left="10.0" right="10.0" />
          </padding>
       </GridPane>
-      <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <GridPane prefHeight="67.0" prefWidth="359.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="174.0" />
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="184.0" minWidth="10.0" prefWidth="177.0" />

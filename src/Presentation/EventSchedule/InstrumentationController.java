@@ -173,28 +173,33 @@ public class InstrumentationController {
     @FXML
     private void addMusicalWorkToSelected() {
         if(selectMultipleMusicalWorks == false) {
-            if(tableSelected.getItems().size() > 0)
-            {
+            if(tableSelected.getItems().size() > 0) {
                 return;
             }
         }
         String selecetdItem = tableAvailable.getSelectionModel().getSelectedItem();
-        tableAvailable.getItems().remove(tableAvailable.getSelectionModel().getFocusedIndex());
-        tableSelected.getItems().add(selecetdItem);
+        if(selecetdItem != null && selecetdItem != "" ) {
+            tableAvailable.getItems().remove(tableAvailable.getSelectionModel().getFocusedIndex());
+            tableSelected.getItems().add(selecetdItem);
+        }
     }
 
     @FXML
     private void removeMusicalWorkFromSelected() {
         String selecetdItem = tableSelected.getSelectionModel().getSelectedItem();
-        tableSelected.getItems().remove(tableSelected.getSelectionModel().getFocusedIndex());
-        tableAvailable.getItems().add(selecetdItem);
+        if(selecetdItem != null && selecetdItem != "" ) {
+            tableSelected.getItems().remove(tableSelected.getSelectionModel().getFocusedIndex());
+            tableAvailable.getItems().add(selecetdItem);
+        }
     }
 
     private void setSelectedMusicalWork(String selecetdItem) {
-        MusicalWorkDTO musicalWorkDTO = musicalWorks.stream().filter(o -> o.getName().equals(selecetdItem)).findFirst().get();
+        if(selecetdItem != null) {
+            MusicalWorkDTO musicalWorkDTO = musicalWorks.stream().filter(o -> o.getName().equals(selecetdItem)).findFirst().get();
 
-        clearInstrumentation();
-        setStandardInstrumentation(musicalWorkDTO.getInstrumentation());
+            clearInstrumentation();
+            setStandardInstrumentation(musicalWorkDTO.getInstrumentation());
+        }
     }
 
     private void clearInstrumentation() {
@@ -220,7 +225,7 @@ public class InstrumentationController {
     private void setStandardInstrumentation(InstrumentationDTO instrumentation) {
         standardBasson.setText(String.valueOf(instrumentation.getBasson()));
         standardClarinet.setText(String.valueOf(instrumentation.getClarinet()));
-        standardDescription.setText(String.valueOf(instrumentation.getDescription()));
+        standardDescription.setText(instrumentation.getDescription() != null ? String.valueOf(instrumentation.getDescription()) : null);
         standardDoublebass.setText(String.valueOf(instrumentation.getDoublebass()));
         standardFirstViolin.setText(String.valueOf(instrumentation.getFirstViolin()));
         standardFlute.setText(String.valueOf(instrumentation.getFlute()));

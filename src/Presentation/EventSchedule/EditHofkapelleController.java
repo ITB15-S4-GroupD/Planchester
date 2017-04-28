@@ -14,10 +14,7 @@ import com.jfoenix.controls.JFXTimePicker;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import jfxtras.scene.control.agenda.Agenda;
 
 import javax.xml.bind.ValidationException;
@@ -37,6 +34,8 @@ public class EditHofkapelleController {
         @FXML private TextField eventLocation;
         @FXML private TextField conductor;
         @FXML private TextField points;
+        @FXML private TableView<String> muscialWorkTableHofkapelle;
+
 
         private EventDutyDTO initEventDutyDTO; // remember init data to compare
         private Agenda.Appointment initAppointment; // remember init data to compare
@@ -112,6 +111,12 @@ public class EditHofkapelleController {
                 EventScheduleController.resetSideContent();
                 EventScheduleController.removeSelection(initAppointment);
                 return true;
+        }
+
+
+        @FXML
+        public void editHofkapelleInstrumentation() {
+
         }
 
         private void checkMandatoryFields() {
