@@ -45,8 +45,11 @@ public class CreateOperaController {
         points.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    points.setText(newValue.replaceAll("[^\\d]", ""));
+                //^\d*\.\d{2}$
+                //"^\\d*[\\.,]?\\d{1,2}?$"
+
+                if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
+                    points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
                 }
             }
         });
