@@ -18,10 +18,7 @@ import Utils.Enum.EventType;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by timorzipa on 06/04/2017.
@@ -43,8 +40,6 @@ public class EventScheduleManager {
         //TODO JULIA / INA: eventDutyModel.validate();
         EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
         eventDutyEntity = (EventDutyEntity) persistanceFacade.put(eventDutyEntity);
-
-
 
         // create connection between event duty and musical work
         EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
@@ -160,6 +155,23 @@ public class EventScheduleManager {
         return musicalWorkModel;
     }
 
+    private static MusicalWorkModel getMusicalWorkModel(MusicalWorkEntity musicalWorkEntity) {
+        MusicalWorkModel musicalWorkModel = new MusicalWorkModel();
+        musicalWorkModel.setName(musicalWorkEntity.getName());
+        musicalWorkModel.setComposer(musicalWorkEntity.getComposer());
+        musicalWorkModel.setId(musicalWorkEntity.getMusicalWorkId());
+        musicalWorkModel.setInstrumentationId(musicalWorkEntity.getInstrumentationId());
+        return musicalWorkModel;
+    }
+
+    private static MusicalWorkDTO getMusicalWorkDTO(MusicalWorkModel musicalWorkModel) {
+        MusicalWorkDTO musicalWorkDTO = new MusicalWorkDTO();
+        musicalWorkDTO.setName(musicalWorkModel.getName());
+        musicalWorkDTO.setComposer(musicalWorkModel.getComposer());
+        musicalWorkDTO.setId(musicalWorkModel.getId());
+        musicalWorkDTO.setInstrumentationId(musicalWorkModel.getInstrumentationId());
+        return musicalWorkDTO;
+    }
 
     private static MusicalWorkEntity getMusicalWorkEntity(MusicalWorkModel musicalWorkModel) {
         MusicalWorkEntity musicalWorkEntity = new MusicalWorkEntity();
@@ -206,7 +218,11 @@ public class EventScheduleManager {
         eventDutyModel.setDefaultPoints(eventDutyDTO.getPoints() == null ? null : Double.valueOf(eventDutyDTO.getPoints()));
         eventDutyModel.setInstrumentation(eventDutyDTO.getInstrumentation());
         eventDutyModel.setRehearsalFor(eventDutyDTO.getRehearsalFor());
-        //eventDutyModel.setMusicalWorks(getMusicalWorkModelList(eventDutyDTO.getMusicalWorks()));
+        List<MusicalWorkModel> musicalWorkModels = new ArrayList<>();
+        for(MusicalWorkDTO musicalWorkDTO : eventDutyDTO.getMusicalWorks()) {
+            musicalWorkModels.add(getMusicalWorkModel(musicalWorkDTO));
+        }
+        eventDutyModel.setMusicalWorks(musicalWorkModels);
         return eventDutyModel;
     }
 
@@ -226,6 +242,16 @@ public class EventScheduleManager {
         eventDutyEntity.setDefaultPoints(eventDutyModel.getDefaultPoints() == null ? 0.0 : Double.valueOf(eventDutyModel.getDefaultPoints()));
         eventDutyEntity.setInstrumentation(eventDutyModel.getInstrumentation());
         eventDutyEntity.setRehearsalFor(eventDutyModel.getRehearsalFor());
+
+        Collection<EventDutyMusicalWorkEntity> collection = eventDutyEntity.getEventDutyMusicalWorksByEventDutyId();
+        for(MusicalWorkModel musicalWorkModel : eventDutyModel.getMusicalWorks()) {
+            EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
+            eventDutyMusicalWorkEntity.setMusicalWork(musicalWorkModel.getId());
+            eventDutyMusicalWorkEntity.setEventDuty(eventDutyModel.getEventDutyId());
+            collection.add(eventDutyMusicalWorkEntity);
+        }
+        eventDutyEntity.setEventDutyMusicalWorksByEventDutyId(collection);
+
         return eventDutyEntity;
     }
 
@@ -244,6 +270,13 @@ public class EventScheduleManager {
         eventDutyDTO.setPoints(eventDutyModel.getDefaultPoints() == null ? null : Double.valueOf(eventDutyModel.getDefaultPoints()));
         eventDutyDTO.setInstrumentation(eventDutyModel.getInstrumentation());
         eventDutyDTO.setRehearsalFor(eventDutyModel.getRehearsalFor());
+
+        List<MusicalWorkDTO> musicalWorkDTOS = new ArrayList<>();
+        for(MusicalWorkModel musicalWorkModel : eventDutyModel.getMusicalWorks()) {
+            musicalWorkDTOS.add(getMusicalWorkDTO(musicalWorkModel));
+        }
+        eventDutyDTO.setMusicalWorks(musicalWorkDTOS);
+
         return eventDutyDTO;
     }
 
@@ -261,6 +294,14 @@ public class EventScheduleManager {
         eventDutyModel.setDefaultPoints(eventDutyEntity.getDefaultPoints());
         eventDutyModel.setInstrumentation(eventDutyEntity.getInstrumentation());
         eventDutyModel.setRehearsalFor(eventDutyEntity.getRehearsalFor());
+
+        List<MusicalWorkModel> musicalWorkModels = new ArrayList<>();
+        for(EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity : eventDutyEntity.getEventDutyMusicalWorksByEventDutyId()) {
+            MusicalWorkEntity musicalWorkEntity = eventDutyMusicalWorkEntity.getMusicalWorkByMusicalWork();
+            musicalWorkModels.add(getMusicalWorkModel(musicalWorkEntity));
+        }
+        eventDutyModel.setMusicalWorks(musicalWorkModels);
+
         return eventDutyModel;
     }
 }
