@@ -81,9 +81,13 @@ public class CreateOperaController {
             eventDutyDTO.setEventStatus(EventStatus.Unpublished);
             eventDutyDTO.setConductor(conductor.getText());
             eventDutyDTO.setEventLocation(eventLocation.getText());
-            List<MusicalWorkDTO> selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
-            selectedMusicalWorks.add(musicalWork);
-            eventDutyDTO.setMusicalWorks(selectedMusicalWorks);
+            if(musicalWork != null) {
+                List<MusicalWorkDTO> selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
+                selectedMusicalWorks.add(musicalWork);
+                eventDutyDTO.setMusicalWorks(selectedMusicalWorks);
+            } else {
+                eventDutyDTO.setMusicalWorks(null);
+            }
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
             eventDutyDTO.setInstrumentation(null); //TODO TIMO - timebox 2
             eventDutyDTO.setRehearsalFor(null); //TODO Christina

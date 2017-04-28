@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by timorzipa on 06/04/2017.
@@ -73,8 +74,9 @@ public class EditOperaController {
         points.setText(eventDutyDTO.getPoints() != null ? String.valueOf(eventDutyDTO.getPoints()) : null);
         if(eventDutyDTO.getMusicalWorks() != null && !eventDutyDTO.getMusicalWorks().isEmpty()) {
             musicalWork = eventDutyDTO.getMusicalWorks().get(0);
-
-            musicalWorkTableOpera.getItems().add(musicalWork.getName());
+            if(musicalWork != null) {
+                musicalWorkTableOpera.getItems().add(musicalWork.getName());
+            }
         }
 
         initAppointment = appointment;
@@ -98,12 +100,18 @@ public class EditOperaController {
             eventDutyDTO.setEventStatus(EventStatus.Unpublished);
             eventDutyDTO.setConductor(conductor.getText());
             eventDutyDTO.setEventLocation(eventLocation.getText());
-            eventDutyDTO.setMusicalWorks(null); //TODO TIMO
+            if(musicalWork != null) {
+                List<MusicalWorkDTO> selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
+                selectedMusicalWorks.add(musicalWork);
+                eventDutyDTO.setMusicalWorks(selectedMusicalWorks);
+            } else {
+                eventDutyDTO.setMusicalWorks(null);
+            }
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
-            eventDutyDTO.setInstrumentation(null); //TODO TIMO
-            eventDutyDTO.setRehearsalFor(null); //TODO TIMO
+            eventDutyDTO.setInstrumentation(null); //TODO timebox 2
+            eventDutyDTO.setRehearsalFor(null); //TODO christina
 
-            EventScheduleManager.updateOperaPerformance(eventDutyDTO);
+            EventScheduleManager.updateOperaPerformance(eventDutyDTO, initEventDutyDTO);
 
             EventScheduleController.addEventDutyToGUI(eventDutyDTO);
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event

@@ -1,6 +1,7 @@
 package Persistence;
 
 import Persistence.Entities.EventDutyMusicalWorkEntity;
+import org.hibernate.Session;
 
 
 /**
@@ -12,4 +13,9 @@ public class EventDutyMusicalWorkRDBMapper extends Mapper<EventDutyMusicalWorkEn
         return EventDutyMusicalWorkEntity.class;
     }
 
+    public static void remove(EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity) {
+        Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
+        session.delete(eventDutyMusicalWorkEntity);
+        DatabaseConnectionHandler.getInstance().commitTransaction();
+    }
 }
