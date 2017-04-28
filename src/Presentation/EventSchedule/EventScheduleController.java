@@ -446,4 +446,8 @@ public class EventScheduleController {
             }
         });
     }
+
+    @FXML public void publishEventSchedule() {
+
+    }
 }
