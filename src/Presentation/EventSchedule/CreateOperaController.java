@@ -4,10 +4,8 @@ import Application.DTO.EventDutyDTO;
 import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
-import Domain.InstrumentationModel;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
-import Domain.EventDutyModel;
 import Utils.DateHelper;
 import Utils.MessageHelper;
 import Utils.PlanchesterConstants;
@@ -26,11 +24,9 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.xml.bind.ValidationException;
 import java.io.IOException;
-import java.lang.instrument.Instrumentation;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,7 +43,7 @@ public class CreateOperaController {
     @FXML private TextField points;
     @FXML private Button editDetails;
 
-    @FXML private TableView<String> muscialWorkTable;
+    @FXML private TableView<String> muscialWorkTableOpera;
     @FXML private TableColumn<String, String> selectedMusicalWorks;
 
     private MusicalWorkDTO musicalWork;
@@ -116,7 +112,7 @@ public class CreateOperaController {
     }
 
     @FXML
-    public void editInstrumentation() {
+    public void editOperaInstrumentation() {
         InstrumentationController.selectMultipleMusicalWorks = false;
         if(date.getValue() != null) {
             InstrumentationController.newHeading = name.getText() + " | " + date.getValue().toString();
@@ -146,8 +142,8 @@ public class CreateOperaController {
             public void handle(WindowEvent we) {
                 if(InstrumentationController.apply) {
                     if(!InstrumentationController.selectedMusicalWorks.isEmpty()) {
-                        muscialWorkTable.getItems().clear();
-                        muscialWorkTable.getItems().add(musicalWork.getName());
+                        muscialWorkTableOpera.getItems().clear();
+                        muscialWorkTableOpera.getItems().add(musicalWork.getName());
                         musicalWork = InstrumentationController.selectedMusicalWorks.get(0);
                     }
                     // TODO: timbox 2 save instrumentation

@@ -31,6 +31,7 @@ public class CreateTourController {
     @FXML private TextField eventLocation;
     @FXML private TextField conductor;
     @FXML private TextField points;
+    @FXML private TableView<String> muscialWorkTableTour;
 
     @FXML
     public void initialize() {
@@ -75,6 +76,11 @@ public class CreateTourController {
         }
         EventScheduleController.resetSideContent();
         return true;
+    }
+
+    @FXML
+    public void editTourInstrumentation() {
+
     }
 
     private boolean validate() {

@@ -33,6 +33,7 @@ public class EditConcertController {
     @FXML private TextField eventLocation;
     @FXML private TextField conductor;
     @FXML private TextField points;
+    @FXML private TableView<String> muscialWorkTableConcert;
 
     private Agenda.Appointment initAppointment; // remember init data to compare
     private EventDutyDTO initEventDutyDTO; // remember init data to compare
@@ -108,6 +109,12 @@ public class EditConcertController {
         EventScheduleController.resetSideContent();
         EventScheduleController.removeSelection(initAppointment);
         return true;
+    }
+
+
+    @FXML
+    public void editConcertInstrumentation() {
+
     }
 
     private void checkMandatoryFields() {

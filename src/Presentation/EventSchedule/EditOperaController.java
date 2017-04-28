@@ -35,6 +35,8 @@ public class EditOperaController {
     @FXML private TextField conductor;
     @FXML private TextField points;
 
+    @FXML private TableView<String> muscialWorkTableOpera;
+
     private EventDutyDTO initEventDutyDTO; // remember init data to compare
     private Agenda.Appointment initAppointment; // remember init data to compare
 
@@ -109,6 +111,11 @@ public class EditOperaController {
         EventScheduleController.resetSideContent();
         EventScheduleController.removeSelection(initAppointment);
         return true;
+    }
+
+    @FXML
+    public void editOperaInstrumentation() {
+
     }
 
     private void checkMandatoryFields() {

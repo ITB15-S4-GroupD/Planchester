@@ -32,6 +32,7 @@ public class CreateConcertController {
     @FXML private TextField eventLocation;
     @FXML private TextField conductor;
     @FXML private TextField points;
+    @FXML private TableView<String> muscialWorkTableConcert;
 
     @FXML
     public void initialize() {
@@ -77,6 +78,11 @@ public class CreateConcertController {
         // remove content of sidebar
         EventScheduleController.resetSideContent();
         return true;
+    }
+
+    @FXML
+    public void editConcertInstrumentation() {
+
     }
 
     private boolean validate() {

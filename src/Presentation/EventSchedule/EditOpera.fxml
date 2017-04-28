@@ -4,8 +4,9 @@
 <?import com.jfoenix.controls.JFXTimePicker?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -14,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane fx:id="gridEditOpera" prefHeight="506.0" prefWidth="351.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.EditOperaController">
+<GridPane fx:id="gridEditOpera" prefHeight="506.0" prefWidth="351.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.EditOperaController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
     </columnConstraints>
@@ -34,11 +35,12 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="56.0" minHeight="10.0" prefHeight="56.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="57.66668701171875" minHeight="10.0" prefHeight="57.66668701171875" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="39.33331298828125" minHeight="10.0" prefHeight="17.33331298828125" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="29.666656494140625" minHeight="9.66668701171875" prefHeight="29.666656494140625" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="57.66668701171875" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="53.0" minHeight="9.66668701171875" prefHeight="53.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="36.0" minHeight="9.66668701171875" prefHeight="19.0" valignment="TOP" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="37.333343505859375" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
                 <Label text="Event Name" />
@@ -48,17 +50,22 @@
                 <Label text="Endtime" GridPane.rowIndex="4" />
                 <Label text="Location" GridPane.rowIndex="5" />
                 <Label text="Musical Work" GridPane.rowIndex="6" />
-                <Label text="Conductor" GridPane.rowIndex="7" />
-                <Label text="Points" GridPane.rowIndex="8" />
+                <Label text="Conductor" GridPane.rowIndex="8" />
+                <Label text="Points" GridPane.rowIndex="9" />
                 <TextField id="name" fx:id="name" prefHeight="25.0" prefWidth="199.0" GridPane.columnIndex="1" />
                 <TextArea id="description" fx:id="description" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <JFXDatePicker id="date" fx:id="date" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 <JFXTimePicker id="start" fx:id="startTime" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                 <JFXTimePicker id="end" fx:id="endTime" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                 <TextField id="eventLocation" fx:id="eventLocation" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                <ChoiceBox id="musicalWork" fx:id="musicalWork" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                <TextField id="conductor" fx:id="conductor" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                <TextField id="points" fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                <TextField id="conductor" fx:id="conductor" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                <TextField id="points" fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <TableView fx:id="musicalWorkTableOpera" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+              <columns>
+                <TableColumn prefWidth="223.0" text="Title" />
+              </columns>
+            </TableView>
+            <Button fx:id="btnEditDetails" mnemonicParsing="false" onAction="#editOperaInstrumentation" text="Edit Details ..." GridPane.columnIndex="1" GridPane.rowIndex="7" />
             </children>
             <padding>
                 <Insets left="10.0" right="10.0" />
@@ -78,7 +85,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-                <Button id="discard" fx:id="btnDiscard" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#discard" prefHeight="25.0" prefWidth="80.0" text="Discard" />
+                <Button id="discard" fx:id="btnDiscard" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#discard" prefHeight="25.0" prefWidth="80.0" text="Cancel" />
                 <Button fx:id="btnSaveNewOpera" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#save" prefHeight="25.0" prefWidth="80.0" text="Save" GridPane.columnIndex="1" />
          </children>
       </GridPane>
