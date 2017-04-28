@@ -17,12 +17,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
-import static Presentation.EventSchedule.CreateOperaController.rehearsals;
 
 /**
  * Created by Christina on 28.04.2017.
@@ -38,6 +39,9 @@ public class CreateRehearsalController {
     @FXML private TextField conductor;
     @FXML private TextField points;
 
+    public static boolean apply = false;
+    public static Stage stage;
+    public static EventDutyDTO eventDutyDTO;
 
 
     @FXML public void initialize() {
@@ -46,14 +50,14 @@ public class CreateRehearsalController {
 
     @FXML
     void cancel() {
-
+        stage.fireEvent( new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
     }
 
     @FXML
     void applyNewRehearsal() {
         if(validate()) {
 
-            EventDutyDTO eventDutyDTO = new EventDutyDTO();
+            eventDutyDTO = new EventDutyDTO();
             eventDutyDTO.setName(name.getText());
             eventDutyDTO.setDescription(name.getText());
             eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
@@ -65,7 +69,10 @@ public class CreateRehearsalController {
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
             eventDutyDTO.setRehearsalFor(null);
 
-            rehearsals.add(eventDutyDTO);
+            apply = true;
+            stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+
+
         }
     }
 

@@ -15,17 +15,22 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import javax.xml.bind.ValidationException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.List;
+
+
 
 /**
  * Created by Ina on 08.04.2017.
@@ -40,13 +45,16 @@ public class CreateOperaController {
     @FXML private TextField conductor;
     @FXML private TextField points;
 
-    @FXML private ListView<String> rehearsalView;
-    static ObservableList<EventDutyDTO> rehearsals;
+    public static List<EventDutyDTO> rehearsalList;
+    @FXML private TableView<String> rehearsalTableView;
+    @FXML private TableColumn<String, String> rehearsalTableColumn;
+
+
 
     @FXML
     public void initialize() {
         initializeMandatoryFields();
-        updateRehearsalListView();
+
         points.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -60,11 +68,6 @@ public class CreateOperaController {
         });
     }
 
-    private void updateRehearsalListView() {
-        for(EventDutyDTO e : rehearsals) {
-
-        }
-    }
 
     @FXML
     private void insertNewOperaPerformance() throws ValidationException {
@@ -107,6 +110,20 @@ public class CreateOperaController {
         stage.setTitle("Add new Rehearsal");
         stage.setScene(scene);
         stage.show();
+
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                if(CreateRehearsalController.apply) {
+                    rehearsalList.add(CreateRehearsalController.eventDutyDTO);
+                    rehearsalTableView.getItems().clear();
+                    for(EventDutyDTO e : rehearsalList) {
+                        rehearsalTableView.getItems().add(e.getName() + e.getStartTime().toString());
+                    }
+                }
+            }
+        });
+
+        CreateRehearsalController.stage = stage;
 
     }
 
