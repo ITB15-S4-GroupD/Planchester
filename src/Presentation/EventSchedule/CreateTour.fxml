@@ -64,9 +64,9 @@
             <TextField fx:id="conductor" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <TextField fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="8" />
             <JFXDatePicker fx:id="endDate" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TableView fx:id="muscialWorkTableTour" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+            <TableView fx:id="musicalWorkTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
               <columns>
-                <TableColumn prefWidth="238.0" text="Title" />
+                <TableColumn fx:id="selectedMusicalWorks" prefWidth="238.0" text="Title" />
               </columns>
             </TableView>
             <Button fx:id="btnEditDetails" mnemonicParsing="false" onAction="#editTourInstrumentation" text="Edit Details ..." GridPane.columnIndex="1" GridPane.rowIndex="6" />

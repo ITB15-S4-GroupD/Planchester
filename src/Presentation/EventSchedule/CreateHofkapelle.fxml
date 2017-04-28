@@ -70,7 +70,7 @@
             <TextField fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="9" />
             <TableView fx:id="muscialWorkTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
               <columns>
-                <TableColumn fx:id="musicalWorkTableHofkapelle" prefWidth="238.0" text="Title" />
+                <TableColumn fx:id="selectedMusicalWorks" prefWidth="238.0" text="Title" />
               </columns>
             </TableView>
             <Button fx:id="btnEditDetails" mnemonicParsing="false" onAction="#editHofkapelleInstrumentation" onMouseClicked="#editHofkapelleInstrumentation" text="Edit Details ..." GridPane.columnIndex="1" GridPane.rowIndex="7" />

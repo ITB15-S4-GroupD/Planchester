@@ -4,7 +4,6 @@ import Application.DTO.EventDutyDTO;
 import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
-import Domain.EventDutyModel;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
@@ -46,7 +45,7 @@ public class EditOperaController {
     @FXML private TextField conductor;
     @FXML private TextField points;
 
-    @FXML private TableView<String> musicalWorkTableOpera;
+    @FXML private TableView<String> musicalWorkTable;
     @FXML private TableColumn<String, String> selectedMusicalWorks;
 
     private MusicalWorkDTO musicalWork;
@@ -75,7 +74,7 @@ public class EditOperaController {
         if(eventDutyDTO.getMusicalWorks() != null && !eventDutyDTO.getMusicalWorks().isEmpty()) {
             musicalWork = eventDutyDTO.getMusicalWorks().get(0);
             if(musicalWork != null) {
-                musicalWorkTableOpera.getItems().add(musicalWork.getName());
+                musicalWorkTable.getItems().add(musicalWork.getName());
             }
         }
 
@@ -111,7 +110,7 @@ public class EditOperaController {
             eventDutyDTO.setInstrumentation(null); //TODO timebox 2
             eventDutyDTO.setRehearsalFor(null); //TODO christina
 
-            EventScheduleManager.updateOperaPerformance(eventDutyDTO, initEventDutyDTO);
+            EventScheduleManager.updateEventDuty(eventDutyDTO, initEventDutyDTO);
 
             EventScheduleController.addEventDutyToGUI(eventDutyDTO);
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
@@ -150,10 +149,10 @@ public class EditOperaController {
                 if(InstrumentationController.apply) {
                     if(!InstrumentationController.selectedMusicalWorks.isEmpty()) {
                         musicalWork = InstrumentationController.selectedMusicalWorks.get(0);
-                        musicalWorkTableOpera.getItems().clear();
-                        musicalWorkTableOpera.getItems().add(musicalWork.getName());
+                        musicalWorkTable.getItems().clear();
+                        musicalWorkTable.getItems().add(musicalWork.getName());
                     }  else {
-                        musicalWorkTableOpera.getItems().clear();
+                        musicalWorkTable.getItems().clear();
                         musicalWork = null;
                     }
                     // TODO: timbox 2 save instrumentation
@@ -247,10 +246,13 @@ public class EditOperaController {
             MessageHelper.showErrorAlertMessage("The endtime is not after the starttime. ");
             return false;
         } else if(date.getValue().equals(today) && start.isBefore(LocalTime.now())){
-            MessageHelper.showErrorAlertMessage("The starttime must be in future. \n");
+            MessageHelper.showErrorAlertMessage("The starttime must be in future.");
+            date.requestFocus();
+            return false;
+        } else if(musicalWork == null){
+            MessageHelper.showErrorAlertMessage("A musical work has to be selected.");
             return false;
         }
-        //TODO TIMO: validate musiclaWork: is mandatory!
         return true;
     }
 }
