@@ -26,4 +26,17 @@ public class EventDutyRDBMapper extends Mapper<EventDutyEntity> {
         DatabaseConnectionHandler.getInstance().commitTransaction();
         return list;
     }
+
+    public static List<EventDutyEntity> getAllEventDutiesInRange(Calendar start, Calendar end) {
+        Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
+
+        List<EventDutyEntity> list = session.createQuery("FROM EventDutyEntity " +
+                "WHERE (starttime <= '"
+                + DateHelper.convertCalendarToTimestamp(end)
+                + "' AND endtime >= '"
+                + DateHelper.convertCalendarToTimestamp(start)
+                + "')").list();
+        DatabaseConnectionHandler.getInstance().commitTransaction();
+        return list;
+    }
 }

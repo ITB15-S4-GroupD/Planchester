@@ -1,6 +1,7 @@
 package Persistence;
 
 import Persistence.Entities.EventDutyEntity;
+import Persistence.Entities.InstrumentEntity;
 
 import java.util.HashMap;
 
@@ -12,6 +13,7 @@ public class PersistanceFacade {
 
     public PersistanceFacade() {
         mappers.put(EventDutyEntity.class , new EventDutyRDBMapper());
+        mappers.put(InstrumentEntity.class, new InstrumentationRDBMapper());
     }
 
     public Object get(int oid, Class persistenceClass) {

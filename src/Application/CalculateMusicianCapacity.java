@@ -4,21 +4,23 @@ import Domain.EventDutyModel;
 import Persistence.DatabaseConnectionHandler;
 import Persistence.Entities.EventDutyEntity;
 import Persistence.EventDutyRDBMapper;
-import Utils.DateHelper;
 import org.hibernate.Session;
 
+import java.time.Month;
+import java.time.Year;
 import java.util.*;
 
 /**
- * Created by Scapegoat on 4/24/2017.
+ * Created by Garvin u. Malena on 4/24/2017.
  *
  * @Project Planchester
  */
 public class CalculateMusicianCapacity {
 
-    public HashMap<String, Integer> checkCapacity(Calendar start, Calendar end) {
-        List<Integer> allEvents = getAllEventsDuring(start, end);
-        HashMap<String, Integer> maxInstrumentation = getInstrumentation(allEvents);
+    public HashMap<String, Integer> checkCapacityInRange(Calendar eventstart, Calendar eventend) {
+
+        List<EventDutyModel> allEvents = getAllEventsDuring(eventstart, eventend);
+        HashMap<String, Integer> maxInstrumentation = getInstrumentationByMusicalWorks(allEvents);
         HashMap<String, Integer> allMusicians = getAllMusicians();
 
         String key;
@@ -74,96 +76,6 @@ public class CalculateMusicianCapacity {
             availableMusicians.put(currentPart, maxPartPlayers);
         }
         return availableMusicians;
-    }
-
-    private HashMap<String, Integer> getInstrumentation(List<Integer> eventsIDs) {
-        HashMap<String, Integer> instrumentation = new HashMap<>();
-        instrumentation.put("flute", 0);
-        instrumentation.put("oboe", 0);
-        instrumentation.put("clarinet", 0);
-        instrumentation.put("bassoon", 0);
-        instrumentation.put("horn", 0);
-        instrumentation.put("trumpet", 0);
-        instrumentation.put("trombone", 0);
-        instrumentation.put("tube", 0);
-        instrumentation.put("violin1", 0);
-        instrumentation.put("violin2", 0);
-        instrumentation.put("viola", 0);
-        instrumentation.put("violincello", 0);
-        instrumentation.put("doublebass", 0);
-        instrumentation.put("kettledrum", 0);
-        instrumentation.put("percussion", 0);
-        instrumentation.put("harp", 0);
-
-        // List<MusicalWork> musicalWorks;
-        for (Integer eventID : eventsIDs) {
-            //musicalWorks = e.getMusicalWork();//bzw getMusicalWorkID
-            //for (MusicalWork m : musicalWorks) {
-            List<Integer> ID = getInstrumentationID(eventID);
-
-            for (Integer id : ID) {
-
-                HashMap<String, Integer> wood = getAmountWoodInstrumentation(id);
-                if (instrumentation.get("flute") < wood.get("flute"))
-                    instrumentation.put("flute", wood.get("flute"));
-                if (instrumentation.get("oboe") < wood.get("oboe")) instrumentation.put("oboe", wood.get("oboe"));
-                if (instrumentation.get("clarinet") < wood.get("clarinet"))
-                    instrumentation.put("clarinet", wood.get("clarinet"));
-                if (instrumentation.get("bassoon") < wood.get("bassoon"))
-                    instrumentation.put("bassoon", wood.get("bassoon"));
-
-                HashMap<String, Integer> string = getAmountStringInstrumentation(id);
-                if (instrumentation.get("violin1") < wood.get("violin1"))
-                    instrumentation.put("violin1", wood.get("violin1"));
-                if (instrumentation.get("violin2") < wood.get("violin2"))
-                    instrumentation.put("violin2", wood.get("violin2"));
-                if (instrumentation.get("viola") < wood.get("viola"))
-                    instrumentation.put("viola", wood.get("viola"));
-                if (instrumentation.get("violincello") < wood.get("violincello"))
-                    instrumentation.put("violincello", wood.get("violincello"));
-                if (instrumentation.get("doublebass") < wood.get("doublebass"))
-                    instrumentation.put("doublebass", wood.get("doublebass"));
-
-                HashMap<String, Integer> percussion = getAmountPercussionInstrumentation(id);
-                if (instrumentation.get("kettledrum") < wood.get("kettledrum"))
-                    instrumentation.put("kettledrum", wood.get("kettledrum"));
-                if (instrumentation.get("percussion") < wood.get("percussion"))
-                    instrumentation.put("percussion", wood.get("percussion"));
-                if (instrumentation.get("harp") < wood.get("harp")) instrumentation.put("harp", wood.get("harp"));
-
-                HashMap<String, Integer> brass = getAmountBrassInstrumentation(id);
-                if (instrumentation.get("horn") < wood.get("horn")) instrumentation.put("horn", wood.get("horn"));
-                if (instrumentation.get("trumpet") < wood.get("trumpet"))
-                    instrumentation.put("trumpet", wood.get("trumpet"));
-                if (instrumentation.get("trombone") < wood.get("trombone"))
-                    instrumentation.put("trombone", wood.get("trombone"));
-                if (instrumentation.get("tube") < wood.get("tube")) instrumentation.put("tube", wood.get("tube"));
-            }
-        }
-        return instrumentation;
-    }
-
-    private List<Integer> getInstrumentationID(int eventID) {
-        List<Integer> ID = null;
-
-
-        Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
-        List<Integer> alternative = session.createQuery("SELECT alternativeInstrumentation FROM EventDutyMusicalWorkEntity WHERE eventDuty=" + eventID).list();
-
-        List<Integer> list = session.createQuery("SELECT musicalWork FROM EventDutyMusicalWorkEntity WHERE eventDuty=" + eventID + " AND alternativeInstrumentation=null").list();
-
-        for (Integer integer : list) {
-            List<Integer> add = session.createQuery("SELECT instrumentationId FROM MusicalWorkEntity WHERE musicalWorkId=" + list).list();
-            ID.addAll(add);
-
-        }
-
-
-        ID.addAll(alternative);
-
-        DatabaseConnectionHandler.getInstance().commitTransaction();
-
-        return ID;
     }
 
     private HashMap<String, Integer> getAmountWoodInstrumentation(int ID) {
@@ -223,30 +135,120 @@ public class CalculateMusicianCapacity {
         return bras;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private List<Integer> getAllEventsDuring(Calendar start, Calendar end) {
-        Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
-        List<Integer> list = session.createQuery("Select eventDutyId FROM EventDutyEntity WHERE starttime < '"
-                + DateHelper.convertCalendarToTimestamp(start)
-                + "' AND endtime > '"
-                + DateHelper.convertCalendarToTimestamp(end)
-                + "' OR (starttime >= '"
-                + DateHelper.convertCalendarToTimestamp(start)
-                + "' AND starttime <= '"
-                + DateHelper.convertCalendarToTimestamp(end)
-                + "')OR (endtime >= '"
-                + DateHelper.convertCalendarToTimestamp(start)
-                + "' AND endtime <= '"
-                + DateHelper.convertCalendarToTimestamp(end)
-                + "')").list();
-/*
-        List<EventDutyModel> eventList = new ArrayList<EventDutyModel>();
-        for (Object obj : list) {
-            EventDutyEntity eventDutyEntity = (EventDutyEntity) obj;
-            eventList.add(new EventDutyModel());
+    private HashMap<String, Integer> getInstrumentationByMusicalWorks(List<EventDutyModel> eventDutyModelList) {
+        HashMap<String, Integer> instrumentation = new HashMap<String, Integer>();
+        instrumentation.put("violin1", 0);
+        instrumentation.put("violin2", 0);
+        instrumentation.put("viola", 0);
+        instrumentation.put("violincello", 0);
+        instrumentation.put("doublebass", 0);
+        instrumentation.put("oboe", 0);
+        instrumentation.put("flute", 0);
+        instrumentation.put("clarinet", 0);
+        instrumentation.put("bassoon", 0);
+        instrumentation.put("horn", 0);
+        instrumentation.put("trumpet", 0);
+        instrumentation.put("trombone", 0);
+        instrumentation.put("tube", 0);
+        instrumentation.put("kettledrum", 0);
+        instrumentation.put("percussion", 0);
+        instrumentation.put("harp", 0);
+
+        // List<MusicalWork> musicalWorks;
+        for (EventDutyModel eventDuty : eventDutyModelList) {
+            List<Integer> ID = getInstrumentationByMusicalWorks(eventDuty);
+
+            for (Integer id : ID) {
+
+                HashMap<String, Integer> wood = getAmountWoodInstrumentation(id);
+                if (instrumentation.get("flute") < wood.get("flute"))
+                    instrumentation.put("flute", wood.get("flute"));
+                if (instrumentation.get("oboe") < wood.get("oboe")) instrumentation.put("oboe", wood.get("oboe"));
+                if (instrumentation.get("clarinet") < wood.get("clarinet"))
+                    instrumentation.put("clarinet", wood.get("clarinet"));
+                if (instrumentation.get("bassoon") < wood.get("bassoon"))
+                    instrumentation.put("bassoon", wood.get("bassoon"));
+
+                HashMap<String, Integer> string = getAmountStringInstrumentation(id);
+                if (instrumentation.get("violin1") < wood.get("violin1"))
+                    instrumentation.put("violin1", wood.get("violin1"));
+                if (instrumentation.get("violin2") < wood.get("violin2"))
+                    instrumentation.put("violin2", wood.get("violin2"));
+                if (instrumentation.get("viola") < wood.get("viola"))
+                    instrumentation.put("viola", wood.get("viola"));
+                if (instrumentation.get("violincello") < wood.get("violincello"))
+                    instrumentation.put("violincello", wood.get("violincello"));
+                if (instrumentation.get("doublebass") < wood.get("doublebass"))
+                    instrumentation.put("doublebass", wood.get("doublebass"));
+
+                HashMap<String, Integer> percussion = getAmountPercussionInstrumentation(id);
+                if (instrumentation.get("kettledrum") < wood.get("kettledrum"))
+                    instrumentation.put("kettledrum", wood.get("kettledrum"));
+                if (instrumentation.get("percussion") < wood.get("percussion"))
+                    instrumentation.put("percussion", wood.get("percussion"));
+                if (instrumentation.get("harp") < wood.get("harp")) instrumentation.put("harp", wood.get("harp"));
+
+                HashMap<String, Integer> brass = getAmountBrassInstrumentation(id);
+                if (instrumentation.get("horn") < wood.get("horn")) instrumentation.put("horn", wood.get("horn"));
+                if (instrumentation.get("trumpet") < wood.get("trumpet"))
+                    instrumentation.put("trumpet", wood.get("trumpet"));
+                if (instrumentation.get("trombone") < wood.get("trombone"))
+                    instrumentation.put("trombone", wood.get("trombone"));
+                if (instrumentation.get("tube") < wood.get("tube")) instrumentation.put("tube", wood.get("tube"));
+            }
         }
-*/
+        return instrumentation;
+    }
+
+    private List<Integer> getInstrumentationByMusicalWorks(EventDutyModel eventDutyModel) {
+        List<Integer> ids = null;
+
+        Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
+        //List<Integer> alternative = session.createQuery("SELECT alternativeInstrumentation FROM EventDutyMusicalWorkEntity WHERE eventDuty=" + eventID).list();
+
+//        List<Integer> list = session.createQuery("SELECT musicalWork FROM EventDutyMusicalWorkEntity WHERE eventDuty=" + eventID + " AND alternativeInstrumentation=null").list();
+//
+//        for (Integer integer : list) {
+//            List<Integer> add = session.createQuery("SELECT instrumentationId FROM MusicalWorkEntity WHERE musicalWorkId=" + list).list();
+//            ids.addAll(add);
+//
+//        }
+
+
+//        ids.addAll(alternative);
+
         DatabaseConnectionHandler.getInstance().commitTransaction();
-        return list;
+
+        return ids;
+    }
+
+    private List<EventDutyModel> getAllEventsDuring(Calendar eventstart, Calendar eventend) {
+        List<EventDutyEntity> eventDuties = EventDutyRDBMapper.getAllEventDutiesInRange(eventstart, eventend);
+
+        List<EventDutyModel> eventDutyModelList = new ArrayList<EventDutyModel>();
+        for(EventDutyEntity eventDutyEntity : eventDuties) {
+            eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
+        }
+        DatabaseConnectionHandler.getInstance().commitTransaction();
+        return eventDutyModelList;
+    }
+
+    private static EventDutyModel createEventDutyModel(EventDutyEntity eventDutyEntity) {
+        EventDutyModel eventDutyModel = new EventDutyModel();
+        eventDutyModel.setEventDutyId(eventDutyEntity.getEventDutyId());
+        eventDutyModel.setName(eventDutyEntity.getName());
+        eventDutyModel.setDescription(eventDutyEntity.getDescription());
+        eventDutyModel.setStarttime(eventDutyEntity.getStarttime());
+        eventDutyModel.setEndtime(eventDutyEntity.getEndtime());
+        eventDutyModel.setEventType(eventDutyEntity.getEventType().toString());
+        eventDutyModel.setEventStatus(eventDutyEntity.getEventStatus().toString());
+        eventDutyModel.setConductor(eventDutyEntity.getConductor());
+        eventDutyModel.setLocation(eventDutyEntity.getLocation());
+        eventDutyModel.setDefaultPoints(eventDutyEntity.getDefaultPoints());
+        eventDutyModel.setInstrumentation(eventDutyEntity.getInstrumentation());
+        eventDutyModel.setRehearsalFor(eventDutyEntity.getRehearsalFor());
+        return eventDutyModel;
     }
 }
