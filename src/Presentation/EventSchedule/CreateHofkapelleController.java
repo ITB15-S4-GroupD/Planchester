@@ -1,6 +1,8 @@
 package Presentation.EventSchedule;
 
 import Application.DTO.EventDutyDTO;
+import Application.DTO.InstrumentationDTO;
+import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
@@ -27,6 +29,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -44,20 +47,41 @@ public class CreateHofkapelleController {
     @FXML private TextField conductor;
     @FXML private TextField points;
 
+
     public static List<EventDutyDTO> rehearsalList;
     @FXML private TableView<String> rehearsalTableView;
     @FXML private TableColumn<String, String> rehearsalTableColumn;
+
+    @FXML private TableView<String> musicalWorkTable;
+    @FXML private TableColumn<String, String> selectedMusicalWorks;
+
+    private List<MusicalWorkDTO> musicalWorks;
+    private InstrumentationDTO instrumentation; // TODO timebox2
+
 
     @FXML
     public void initialize() {
         rehearsalList = new LinkedList<>();
         initializeMandatoryFields();
+
+        selectedMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+
+        points.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                //^\d*\.\d{2}$
+                //"^\\d*[\\.,]?\\d{1,2}?$"
+
+                if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
+                    points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
+                }
+            }
+        });
     }
 
     @FXML
     private void insertNewHofkapellePerformance() throws ValidationException {
         if(validate()) {
-
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
             eventDutyDTO.setName(name.getText());
             eventDutyDTO.setDescription(description.getText());
@@ -67,17 +91,17 @@ public class CreateHofkapelleController {
             eventDutyDTO.setEventStatus(EventStatus.Unpublished);
             eventDutyDTO.setConductor(conductor.getText());
             eventDutyDTO.setEventLocation(eventLocation.getText());
-            eventDutyDTO.setMusicalWorks(null); //TODO TIMO
+            eventDutyDTO.setMusicalWorks(musicalWorks);
             eventDutyDTO.setPoints((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText()));
-            eventDutyDTO.setInstrumentation(null); //TODO TIMO
-            eventDutyDTO.setRehearsalFor(null); //TODO TIMO
+            eventDutyDTO.setInstrumentation(null); //TODO timebox 2
+            eventDutyDTO.setRehearsalFor(null); //TODO christina
 
-            EventScheduleManager.createHofkapellePerformance(eventDutyDTO);
+            EventScheduleManager.createEventDuty(eventDutyDTO);
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
 
             for(EventDutyDTO eventD : rehearsalList){
                 eventD.setRehearsalFor(eventDutyDTO.getEventDutyID());
-                EventScheduleManager.createRehearsalPerformance(eventD);
+                EventScheduleManager.createEventDuty(eventD);
                 EventScheduleController.addEventDutyToGUI(eventD);
             }
 
@@ -91,9 +115,8 @@ public class CreateHofkapelleController {
 
     @FXML
     public boolean cancel() {
-        //TODO implement musical works
         if(!name.getText().isEmpty() || !description.getText().isEmpty() || date.getValue() != null
-                || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty() || !points.getText().isEmpty()) {
+                || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty() || !points.getText().isEmpty() || (musicalWorks != null && !musicalWorks.isEmpty())) {
             ButtonType answer = MessageHelper.showConfirmationMessage(PlanchesterMessages.DISCARD_CHANGES);
             if(ButtonType.NO.equals(answer)) {
                 return false;
@@ -104,6 +127,57 @@ public class CreateHofkapelleController {
         return true;
     }
 
+   @FXML
+    public void editHofkapelleInstrumentation() {
+        InstrumentationController.selectMultipleMusicalWorks = true;
+        if(date.getValue() != null) {
+            InstrumentationController.newHeading = name.getText() + " | " + date.getValue().toString();
+        } else {
+            InstrumentationController.newHeading = name.getText();
+        }
+
+        InstrumentationController.selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
+        if(musicalWorks != null && !musicalWorks.isEmpty()) {
+            for(MusicalWorkDTO musicalWorkDTO : musicalWorks) {
+                InstrumentationController.selectedMusicalWorks.add(musicalWorkDTO);
+            }
+        }
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("Instrumentation.fxml"));
+
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = new Stage();
+        stage.setTitle("Musical Work & Instrumentation");
+        stage.setScene(scene);
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                if(InstrumentationController.apply) {
+                    if(!InstrumentationController.selectedMusicalWorks.isEmpty()) {
+                        musicalWorks = InstrumentationController.selectedMusicalWorks;
+                        musicalWorkTable.getItems().clear();
+                        for(MusicalWorkDTO musicalWorkDTO : musicalWorks) {
+                            musicalWorkTable.getItems().add(musicalWorkDTO.getName());
+                        }
+                    }  else {
+                        musicalWorkTable.getItems().clear();
+                        musicalWorks = null;
+                    }
+                    // TODO: timbox 2 save instrumentation
+                }
+
+            }
+        });
+        InstrumentationController.stage = stage;
+
+        stage.showAndWait();
+    }
+  
     @FXML
     public void addNewRehearsal() {
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -133,7 +207,7 @@ public class CreateHofkapelleController {
             }
         });
         CreateRehearsalController.stage = stage;
-    }
+}
 
     @FXML
     public void removeRehearsal() {
@@ -151,7 +225,7 @@ public class CreateHofkapelleController {
             rehearsalTableView.getItems().add(rehearsalToAdd);
         }
     }
-
+  
     private boolean validate() {
         LocalDate today = LocalDate.now();
         LocalTime start = startTime.getValue();
@@ -172,10 +246,13 @@ public class CreateHofkapelleController {
             MessageHelper.showErrorAlertMessage("The endtime is not after the starttime. ");
             return false;
         } else if(date.getValue().equals(today) && start.isBefore(LocalTime.now())){
-            MessageHelper.showErrorAlertMessage("The starttime must be in future. \n");
+            MessageHelper.showErrorAlertMessage("The starttime must be in future.");
+            date.requestFocus();
+            return false;
+        } else if(musicalWorks == null || musicalWorks.isEmpty()){
+            MessageHelper.showErrorAlertMessage("A musical work has to be selected.");
             return false;
         }
-        //TODO TIMO: validate musiclaWork: is mandatory!
         return true;
     }
 

@@ -1,9 +1,9 @@
-package Domain;
+package Application.DTO;
 
 /**
- * Created by julia on 21.04.2017.
+ * Created by timor on 27.04.2017.
  */
-public class InstrumentationModel {
+public class InstrumentationDTO {
     private int FirstViolin;
     private int SecondViolin;
     private int Viola;

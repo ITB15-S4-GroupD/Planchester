@@ -54,7 +54,7 @@ public class EventScheduleController {
     private String colorNonMusical;
     private String colorHofkapelle;
 
-    private static Agenda staticAgenda; // todo: make private
+    private static Agenda staticAgenda;
     private static Agenda.AppointmentGroup opera;
     private static Agenda.AppointmentGroup concert;
     private static Agenda.AppointmentGroup hofkapelle;
@@ -64,18 +64,8 @@ public class EventScheduleController {
     private static Agenda.Appointment selectedAppointment;
 
     private static Map<Agenda.Appointment, EventDutyDTO> staticLoadedEventsMap = new HashMap<>();
-    private static Map<String, String> eventWhichWasSelectedToCreate = new HashMap<>();
     private static ScrollPane staticScrollPane;
     private static boolean editOpen = false;
-
-    static {
-//        eventWhichWasSelectedToCreate.put(EventType.Opera.toString(),"CreateOpera.fxml");
-//        eventWhichWasSelectedToCreate.put(EventType.Concert.toString(),"CreateConcert.fxml");
-//        eventWhichWasSelectedToCreate.put(EventType.Tour.toString(),"CreateTour.fxml");
-//        eventWhichWasSelectedToCreate.put(EventType.Hofkapelle.toString(),"CreateHofkapelle.fxml");
-//        eventWhichWasSelectedToCreate.put(EventType.Rehearsal.toString(),"CreateRehearsal.fxml");
-//        eventWhichWasSelectedToCreate.put(EventType.NonMusicalEvent.toString(),"CreateNonMusical.fxml");
-    }
 
     @FXML
     public void initialize() {
@@ -445,5 +435,9 @@ public class EventScheduleController {
                 }
             }
         });
+    }
+
+    @FXML public void publishEventSchedule() {
+        LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
     }
 }

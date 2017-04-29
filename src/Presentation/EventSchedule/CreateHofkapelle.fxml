@@ -43,7 +43,8 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="69.0" minHeight="10.0" prefHeight="69.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="37.0" minHeight="10.0" prefHeight="15.0" valignment="TOP" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
@@ -58,16 +59,22 @@
             <Label text="Endtime" GridPane.rowIndex="4" />
             <Label text="Location" GridPane.rowIndex="5" />
             <Label text="Muscial Work" GridPane.rowIndex="6" />
-            <Label text="Conductor" GridPane.rowIndex="7" />
-            <Label text="Points" GridPane.rowIndex="8" />
+            <Label text="Conductor" GridPane.rowIndex="8" />
+            <Label text="Points" GridPane.rowIndex="9" />
             <TextField fx:id="name" prefHeight="25.0" prefWidth="199.0" GridPane.columnIndex="1" />
             <TextArea fx:id="description" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <JFXDatePicker fx:id="date" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <JFXTimePicker fx:id="startTime" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <JFXTimePicker fx:id="endTime" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <TextField fx:id="eventLocation" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <TextField fx:id="conductor" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <TextField fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <TextField fx:id="conductor" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <TextField fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <TableView fx:id="muscialWorkTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+              <columns>
+                <TableColumn fx:id="selectedMusicalWorks" prefWidth="238.0" text="Title" />
+              </columns>
+            </TableView>
+            <Button fx:id="btnEditDetails" mnemonicParsing="false" onAction="#editHofkapelleInstrumentation" onMouseClicked="#editHofkapelleInstrumentation" text="Edit Details ..." GridPane.columnIndex="1" GridPane.rowIndex="7" />
          </children>
       </GridPane>
       <GridPane GridPane.rowIndex="3">

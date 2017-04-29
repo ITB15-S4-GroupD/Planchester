@@ -1,6 +1,8 @@
 package Presentation.EventSchedule;
 
 import Application.DTO.EventDutyDTO;
+import Application.DTO.InstrumentationDTO;
+import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
@@ -26,6 +28,7 @@ import javax.xml.bind.ValidationException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,9 +45,17 @@ public class EditConcertController {
     @FXML private TextField conductor;
     @FXML private TextField points;
 
+
     public static List<EventDutyDTO> rehearsalList;
     @FXML private TableView<String> rehearsalTableView;
     @FXML private TableColumn<String, String> rehearsalTableColumn;
+
+    @FXML private TableView<String> musicalWorkTable;
+    @FXML private TableColumn<String, String> selectedMusicalWorks;
+
+    private List<MusicalWorkDTO> musicalWorks;
+    private InstrumentationDTO instrumentation; // TODO timebox2
+
 
     private Agenda.Appointment initAppointment; // remember init data to compare
     private EventDutyDTO initEventDutyDTO; // remember init data to compare
@@ -56,6 +67,8 @@ public class EditConcertController {
 
         checkMandatoryFields();
 
+        selectedMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+
         Agenda.Appointment appointment = EventScheduleController.getSelectedAppointment();
         EventDutyDTO eventDutyDTO = EventScheduleController.getEventForAppointment(appointment);
 
@@ -66,10 +79,30 @@ public class EditConcertController {
         endTime.setValue(appointment.getEndLocalDateTime().toLocalTime());
         eventLocation.setText(appointment.getLocation());
         conductor.setText(eventDutyDTO.getConductor());
+
         points.setText(eventDutyDTO.getPoints() != null ? String.valueOf(eventDutyDTO.getPoints()) : null);
+        if(eventDutyDTO.getMusicalWorks() != null && !eventDutyDTO.getMusicalWorks().isEmpty()) {
+            musicalWorks = new ArrayList<>();
+            for(MusicalWorkDTO musicalWorkDTO : eventDutyDTO.getMusicalWorks()) {
+                musicalWorks.add(musicalWorkDTO);
+                musicalWorkTable.getItems().add(musicalWorkDTO.getName());
+            }
+        }
 
         initAppointment = appointment;
         initEventDutyDTO = eventDutyDTO;
+
+        points.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                //^\d*\.\d{2}$
+                //"^\\d*[\\.,]?\\d{1,2}?$"
+
+                if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
+                    points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
+                }
+            }
+        });
     }
 
     @FXML
@@ -89,13 +122,14 @@ public class EditConcertController {
             eventDutyDTO.setEventStatus(EventStatus.Unpublished);
             eventDutyDTO.setConductor(conductor.getText());
             eventDutyDTO.setEventLocation(eventLocation.getText());
-            eventDutyDTO.setMusicalWorks(null); //TODO TIMO
+            eventDutyDTO.setMusicalWorks(musicalWorks);
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
-            eventDutyDTO.setInstrumentation(null); //TODO TIMO
-            eventDutyDTO.setRehearsalFor(null); //TODO TIMO
+            eventDutyDTO.setInstrumentation(null); //TODO timebox 2
+            eventDutyDTO.setRehearsalFor(null); //TODO christina
 
-            EventScheduleManager.updateConcertPerformance(eventDutyDTO);
+            EventScheduleManager.updateEventDuty(eventDutyDTO, initEventDutyDTO);
             //TODO UPDATE REHEARSALS : Christina
+
             EventScheduleController.addEventDutyToGUI(eventDutyDTO);
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
@@ -135,7 +169,6 @@ public class EditConcertController {
 
     @FXML
     public boolean discard() {
-        // TODO: check with init data for changes
         if(!name.getText().equals(initEventDutyDTO.getName())
                 || !description.getText().equals(initEventDutyDTO.getDescription())
                 || !date.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalDate())
@@ -143,7 +176,10 @@ public class EditConcertController {
                 || !endTime.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime())
                 || !conductor.getText().equals(initEventDutyDTO.getConductor())
                 || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
-                || !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints())) {
+                || !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints())
+                || (musicalWorks == null && initEventDutyDTO.getMusicalWorks() != null) // musical work wurde entfernt
+                || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() == null) // musical work wurde hinzugefügt
+                || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() != null && !musicalWorks.equals(initEventDutyDTO.getMusicalWorks()))) { // musical work wurde verändert
 
             ButtonType answer = MessageHelper.showConfirmationMessage(PlanchesterMessages.DISCARD_CHANGES);
             if(ButtonType.NO.equals(answer)) {
@@ -154,6 +190,57 @@ public class EditConcertController {
         EventScheduleController.resetSideContent();
         EventScheduleController.removeSelection(initAppointment);
         return true;
+    }
+
+
+    @FXML
+    public void editConcertInstrumentation() {
+        InstrumentationController.selectMultipleMusicalWorks = true;
+        if(date.getValue() != null) {
+            InstrumentationController.newHeading = name.getText() + " | " + date.getValue().toString();
+        } else {
+            InstrumentationController.newHeading = name.getText();
+        }
+
+        InstrumentationController.selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
+        if(musicalWorks != null && !musicalWorks.isEmpty()) {
+            for(MusicalWorkDTO musicalWorkDTO : musicalWorks) {
+                InstrumentationController.selectedMusicalWorks.add(musicalWorkDTO);
+            }
+        }
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("Instrumentation.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = new Stage();
+        stage.setTitle("Musical Work & Instrumentation");
+        stage.setScene(scene);
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                if(InstrumentationController.apply) {
+                    if(!InstrumentationController.selectedMusicalWorks.isEmpty()) {
+                        musicalWorks = InstrumentationController.selectedMusicalWorks;
+                        musicalWorkTable.getItems().clear();
+                        for(MusicalWorkDTO musicalWorkDTO : musicalWorks) {
+                            musicalWorkTable.getItems().add(musicalWorkDTO.getName());
+                        }
+                    }  else {
+                        musicalWorkTable.getItems().clear();
+                        musicalWorks = null;
+                    }
+                    // TODO: timbox 2 save instrumentation
+                }
+
+            }
+        });
+        InstrumentationController.stage = stage;
+
+        stage.showAndWait();
     }
 
     private void checkMandatoryFields() {
@@ -211,10 +298,13 @@ public class EditConcertController {
             MessageHelper.showErrorAlertMessage("The endtime is not after the starttime. ");
             return false;
         } else if(date.getValue().equals(today) && start.isBefore(LocalTime.now())){
-            MessageHelper.showErrorAlertMessage("The starttime must be in future. \n");
+            MessageHelper.showErrorAlertMessage("The starttime must be in future.");
+            date.requestFocus();
+            return false;
+        } else if(musicalWorks == null || musicalWorks.isEmpty()){
+            MessageHelper.showErrorAlertMessage("A musical work has to be selected.");
             return false;
         }
-        //TODO TIMO: validate musiclaWork: is mandatory!
         return true;
     }
 }

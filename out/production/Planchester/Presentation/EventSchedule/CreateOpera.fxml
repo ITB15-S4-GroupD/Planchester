@@ -69,14 +69,14 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TableView prefHeight="117.0" prefWidth="193.0">
+                  <TableView fx:id="musicalWorkTable" prefHeight="117.0" prefWidth="193.0">
                      <columns>
-                        <TableColumn editable="false" prefWidth="206.0" sortable="false" text="Title" />
+                        <TableColumn fx:id="selectedMusicalWorks" editable="false" prefWidth="206.0" sortable="false" text="Title" />
                      </columns>
                   </TableView>
                </children>
             </GridPane>
-            <Button mnemonicParsing="false" onMouseClicked="#editInstrumentation" text="Edit Details ..." GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Button fx:id="btnEditDetails" mnemonicParsing="false" onAction="#editOperaInstrumentation" text="Edit Details ..." GridPane.columnIndex="1" GridPane.rowIndex="7" />
          </children>
          <padding>
             <Insets left="10.0" right="10.0" />

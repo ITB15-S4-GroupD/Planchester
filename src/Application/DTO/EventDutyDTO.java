@@ -24,7 +24,7 @@ public class EventDutyDTO {
     private Enum<EventStatus> eventStatus;
     private String conductor;
     private String eventLocation;
-    private List<String> musicalWorks;
+    private List<MusicalWorkDTO> musicalWorks;
     private Double points;
     private Integer instrumentation;
     private Integer rehearsalFor;
@@ -93,11 +93,11 @@ public class EventDutyDTO {
         this.eventLocation = eventLocation;
     }
 
-    public List<String> getMusicalWorks() {
+    public List<MusicalWorkDTO> getMusicalWorks() {
         return musicalWorks;
     }
 
-    public void setMusicalWorks(List<String> musicalWorks) {
+    public void setMusicalWorks(List<MusicalWorkDTO> musicalWorks) {
         this.musicalWorks = musicalWorks;
     }
 

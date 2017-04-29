@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="767.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.InstrumentationController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="767.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.InstrumentationController">
    <children>
       <GridPane alignment="CENTER" layoutY="1.0" prefHeight="679.0" prefWidth="769.0">
         <columnConstraints>
@@ -254,11 +254,11 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button fx:id="addToSelected" mnemonicParsing="false" text="&gt;">
+                        <Button fx:id="addToSelected" mnemonicParsing="false" onAction="#addMusicalWorkToSelected" text="&gt;">
                            <GridPane.margin>
                               <Insets bottom="10.0" />
                            </GridPane.margin></Button>
-                        <Button fx:id="removeFromSelected" mnemonicParsing="false" text="&lt;" GridPane.rowIndex="1">
+                        <Button fx:id="removeFromSelected" mnemonicParsing="false" onAction="#removeMusicalWorkFromSelected" text="&lt;" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets top="10.0" />
                            </GridPane.margin></Button>
@@ -292,7 +292,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <JFXRadioButton fx:id="radioButtonStandard" prefHeight="17.0" prefWidth="30.0" text=" " GridPane.columnIndex="1" />
+                        <JFXRadioButton fx:id="radioButtonStandard" prefHeight="17.0" prefWidth="30.0" selected="true" text=" " GridPane.columnIndex="1" />
                         <JFXRadioButton fx:id="radioButtonAlternative" text=" " GridPane.columnIndex="2" />
                      </children>
                   </GridPane>
@@ -329,7 +329,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label text="EventName &amp; EventDate">
+                  <Label fx:id="heading" text="EventName &amp; EventDate">
                      <font>
                         <Font size="22.0" />
                      </font>
@@ -346,7 +346,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button mnemonicParsing="false" text="Cancel" />
+                  <Button mnemonicParsing="false" onAction="#cancel" text="Cancel" />
                </children>
             </GridPane>
             <GridPane GridPane.columnIndex="2" GridPane.rowIndex="2">
@@ -359,7 +359,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button mnemonicParsing="false" text="Apply" GridPane.columnIndex="2" />
+                  <Button fx:id="apply" mnemonicParsing="false" onAction="#apply" text="Apply" GridPane.columnIndex="2" />
                </children>
             </GridPane>
          </children>

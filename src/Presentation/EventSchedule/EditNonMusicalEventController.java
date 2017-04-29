@@ -37,7 +37,6 @@ public class EditNonMusicalEventController {
 
     @FXML
     public void initialize() {
-
         checkMandatoryFields();
 
         Agenda.Appointment appointment = EventScheduleController.getSelectedAppointment();
@@ -60,6 +59,18 @@ public class EditNonMusicalEventController {
         initNotEditableFields();
         initAppointment = appointment;
         initEventDutyDTO = eventDutyDTO;
+
+        points.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                //^\d*\.\d{2}$
+                //"^\\d*[\\.,]?\\d{1,2}?$"
+
+                if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
+                    points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
+                }
+            }
+        });
     }
 
     private void initNotEditableFields() {
@@ -74,12 +85,10 @@ public class EditNonMusicalEventController {
 
     @FXML
     private void save() {
-        // TODO: save data
     }
 
     @FXML
     public boolean cancel() {
-        // TODO: check with init data for changes
         if(!name.getText().equals(initEventDutyDTO.getName())
                 || !description.getText().equals(initEventDutyDTO.getDescription())
                 || !date.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalDate())
