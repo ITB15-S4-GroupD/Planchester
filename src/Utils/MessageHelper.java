@@ -3,6 +3,9 @@ package Utils;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by julia on 27.04.2017.
  */
@@ -22,7 +25,21 @@ public class MessageHelper {
         alert.getButtonTypes().add(ButtonType.YES);
         alert.getButtonTypes().add(ButtonType.NO);
         alert.showAndWait();
-
         return alert.getResult();
+    }
+
+
+    public static void showWarningMusicianCapacityMessage(HashMap<String, Integer> musicanCapacityMap) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Planchester Warning");
+
+        StringBuilder warning = new StringBuilder();
+        warning.append("There are not enough musicians available on this date:\n");
+
+        for (Map.Entry<String, Integer> musicianCapacity : musicanCapacityMap.entrySet()) {
+            warning.append(musicianCapacity.getKey() + ": " + musicianCapacity.getValue()+  " is / are missing. ");
+        }
+        alert.setHeaderText(warning.toString());
+        alert.showAndWait();
     }
 }

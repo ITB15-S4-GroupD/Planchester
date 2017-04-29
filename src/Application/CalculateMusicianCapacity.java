@@ -4,7 +4,6 @@ import Domain.EventDutyModel;
 import Domain.MusicalWorkModel;
 import Persistence.*;
 import Persistence.Entities.*;
-import org.hibernate.Session;
 
 import java.util.*;
 
@@ -15,16 +14,16 @@ import java.util.*;
  */
 public class CalculateMusicianCapacity {
 
-    PersistanceFacade persistanceFacade = new PersistanceFacade();
-    HashMap<String, Integer> difference = new HashMap<>();
+    private static PersistanceFacade persistanceFacade = new PersistanceFacade();
+    private static HashMap<String, Integer> difference = new HashMap<>();
 
-    public HashMap<String, Integer> checkCapacityInRange(Calendar eventstart, Calendar eventend) {
+    public static HashMap<String, Integer> checkCapacityInRange(Calendar eventstart, Calendar eventend) {
         List<EventDutyModel> allEvents = getAllEventsDuring(eventstart, eventend);
         HashMap<String, Integer> maxInstrumentation = getInstrumentationByMusicalWorks(allEvents);
         HashMap<String, Integer> allMusicians = getAllMusicians();
 
         String key;
-        difference = allMusicians;
+
         for (Map.Entry<String, Integer> neededInstrumentAmount : allMusicians.entrySet()) {
             if (maxInstrumentation.entrySet().contains(neededInstrumentAmount.getKey())) {
                 if (maxInstrumentation.get(neededInstrumentAmount.getKey()) < neededInstrumentAmount.getValue()) {
@@ -37,7 +36,7 @@ public class CalculateMusicianCapacity {
         return difference;
     }
 
-    private HashMap<String, Integer> getAllMusicians() {
+    private static HashMap<String, Integer> getAllMusicians() {
         LinkedList<String> instruments = new LinkedList<>();
         instruments.addFirst("flute");
         instruments.add("violin1");
@@ -59,7 +58,6 @@ public class CalculateMusicianCapacity {
         int maxPartPlayers;
         int partID;
 
-        Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
         HashMap<String, Integer> availableMusicians = null;
         for (String currentPart : instruments) {
             List<Integer> amount = MusicianPartRDBMapper.getCountedMusicians(currentPart);
@@ -74,9 +72,7 @@ public class CalculateMusicianCapacity {
         return availableMusicians;
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    private HashMap<String, Integer> getInstrumentationByMusicalWorks(List<EventDutyModel> events) {
+    private static HashMap<String, Integer> getInstrumentationByMusicalWorks(List<EventDutyModel> events) {
         //Alernative Insturmentation can be ignored (this is not in the 1. timebox...)
         HashMap<String, Integer> instrumentation = new HashMap<String, Integer>();
         instrumentation.put("violin1", 0);
@@ -141,7 +137,7 @@ public class CalculateMusicianCapacity {
         return instrumentation;
     }
 
-    private List<Integer> getInstrumentationIDsForMusicalWorks(EventDutyModel eventDutyModel) {
+    private static List<Integer> getInstrumentationIDsForMusicalWorks(EventDutyModel eventDutyModel) {
         List<Integer> ids = null;
         List<Integer> musicalWorks = EventDutyMusicalWorkRDBMapper.getAllMusicalWorkIDsByEventID(eventDutyModel.getEventDutyId());
         for (Integer musicalWorkID : musicalWorks) {
@@ -150,18 +146,17 @@ public class CalculateMusicianCapacity {
         return ids;
     }
 
-    private List<EventDutyModel> getAllEventsDuring(Calendar eventstart, Calendar eventend) {
+    private static List<EventDutyModel> getAllEventsDuring(Calendar eventstart, Calendar eventend) {
         List<EventDutyEntity> eventDuties = EventDutyRDBMapper.getAllEventDutiesInRange(eventstart, eventend);
 
         List<EventDutyModel> eventDutyModelList = new ArrayList<EventDutyModel>();
         for(EventDutyEntity eventDutyEntity : eventDuties) {
             eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
         }
-        DatabaseConnectionHandler.getInstance().commitTransaction();
         return eventDutyModelList;
     }
 
-    private HashMap<String, Integer> getAmountWoodInstrumentation(int instrumentationIDs) {
+    private static HashMap<String, Integer> getAmountWoodInstrumentation(int instrumentationIDs) {
         HashMap<String, Integer> instrumentationMap = new HashMap<>();
         WoodInstrumentationEntity woodInstrumentationEntity = (WoodInstrumentationEntity) persistanceFacade.get(instrumentationIDs, WoodInstrumentationEntity.class);
         instrumentationMap.put("flute", woodInstrumentationEntity.getFlute());
@@ -171,7 +166,7 @@ public class CalculateMusicianCapacity {
         return instrumentationMap;
     }
 
-    private HashMap<String, Integer> getAmountStringInstrumentation(int instrumentationIDs) {
+    private static HashMap<String, Integer> getAmountStringInstrumentation(int instrumentationIDs) {
         HashMap<String, Integer> instrumentationMap = new HashMap<>();
         StringInstrumentationEntity stringInstrumentationEntity = (StringInstrumentationEntity) persistanceFacade.get(instrumentationIDs, StringInstrumentationEntity.class);
         instrumentationMap.put("violin1", stringInstrumentationEntity.getViolin1());
@@ -182,7 +177,7 @@ public class CalculateMusicianCapacity {
         return instrumentationMap;
     }
 
-    private HashMap<String, Integer> getAmountPercussionInstrumentation(int instrumentationIDs) {
+    private static HashMap<String, Integer> getAmountPercussionInstrumentation(int instrumentationIDs) {
         HashMap<String, Integer> instrumentationMap = new HashMap<>();
         PercussionInstrumentationEntity percussionInstrumentationEntity = (PercussionInstrumentationEntity) persistanceFacade.get(instrumentationIDs, PercussionInstrumentationEntity.class);
         instrumentationMap.put("kettledrum", percussionInstrumentationEntity.getKettledrum());
@@ -191,7 +186,7 @@ public class CalculateMusicianCapacity {
         return instrumentationMap;
     }
 
-    private HashMap<String, Integer> getAmountBrassInstrumentation(int instrumentationIDs) {
+    private static HashMap<String, Integer> getAmountBrassInstrumentation(int instrumentationIDs) {
         HashMap<String, Integer> instrumentationMap = new HashMap<>();
         BrassInstrumentationEntity brassInstrumentationEntity = (BrassInstrumentationEntity) persistanceFacade.get(instrumentationIDs, BrassInstrumentationEntity.class);
         instrumentationMap.put("horn", brassInstrumentationEntity.getHorn());
