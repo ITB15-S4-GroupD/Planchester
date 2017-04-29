@@ -60,7 +60,6 @@ public class CreateOperaController {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 //^\d*\.\d{2}$
                 //"^\\d*[\\.,]?\\d{1,2}?$"
-
                 if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
                     points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
                 }
@@ -81,6 +80,7 @@ public class CreateOperaController {
             eventDutyDTO.setEventStatus(EventStatus.Unpublished);
             eventDutyDTO.setConductor(conductor.getText());
             eventDutyDTO.setEventLocation(eventLocation.getText());
+
             if(musicalWork != null) {
                 List<MusicalWorkDTO> selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
                 selectedMusicalWorks.add(musicalWork);
@@ -88,8 +88,9 @@ public class CreateOperaController {
             } else {
                 eventDutyDTO.setMusicalWorks(null);
             }
+
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
-            eventDutyDTO.setInstrumentation(null); //TODO TIMO - timebox 2
+            eventDutyDTO.setInstrumentation(null); //alternative instrumentation is not in the first timebox
             eventDutyDTO.setRehearsalFor(null); //TODO Christina
 
             EventScheduleManager.createEventDuty(eventDutyDTO);

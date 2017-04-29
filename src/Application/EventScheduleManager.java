@@ -27,6 +27,7 @@ import java.util.*;
  */
 public class EventScheduleManager {
     private static PersistanceFacade persistanceFacade = new PersistanceFacade();
+
     private static Calendar loadedEventsStartdate; //start of the already loaded calendar
     private static Calendar loadedEventsEnddate; //end of the already loaded calendar
 
@@ -40,10 +41,7 @@ public class EventScheduleManager {
         if(eventDutyDTO.getMusicalWorks() != null) {
             for(MusicalWorkDTO musicalWorkDTO : eventDutyDTO.getMusicalWorks()) {
                 if(musicalWorkDTO != null) {
-                    EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
-                    eventDutyMusicalWorkEntity.setEventDuty(eventDutyEntity.getEventDutyId());
-                    eventDutyMusicalWorkEntity.setMusicalWork(musicalWorkDTO.getId());
-                    persistanceFacade.put(eventDutyMusicalWorkEntity);
+                    createEventDutyMusicalWorks(eventDutyEntity, musicalWorkDTO);
                 }
             }
         }
@@ -56,31 +54,25 @@ public class EventScheduleManager {
         persistanceFacade.put(eventDutyEntity);
 
         // check for changes in musical works
-            // remove all musical works which did exist but now dont
-            if(oldEventDutyDTO.getMusicalWorks() != null) {
-                for (MusicalWorkDTO musicalWorkDTO : oldEventDutyDTO.getMusicalWorks()) {
-                    if (newEventDutyDTO.getMusicalWorks() == null || !newEventDutyDTO.getMusicalWorks().contains(musicalWorkDTO)) {
-                        EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
-                        eventDutyMusicalWorkEntity.setEventDuty(eventDutyEntity.getEventDutyId());
-                        eventDutyMusicalWorkEntity.setMusicalWork(musicalWorkDTO.getId());
-                        EventDutyMusicalWorkRDBMapper.remove(eventDutyMusicalWorkEntity);
-                    }
+        // remove all musical works which did exist but now don't
+        if(oldEventDutyDTO.getMusicalWorks() != null) {
+            for (MusicalWorkDTO musicalWorkDTO : oldEventDutyDTO.getMusicalWorks()) {
+                if (newEventDutyDTO.getMusicalWorks() == null || !newEventDutyDTO.getMusicalWorks().contains(musicalWorkDTO)) {
+                    removeEventDutyMusicalWorks(eventDutyEntity, musicalWorkDTO);
                 }
             }
-            // add all new musical works which did not exist before
-            if(newEventDutyDTO.getMusicalWorks() != null) {
-                for (MusicalWorkDTO musicalWorkDTO : newEventDutyDTO.getMusicalWorks()) {
-                    if ( musicalWorkDTO != null && (oldEventDutyDTO.getMusicalWorks() == null || !oldEventDutyDTO.getMusicalWorks().contains(musicalWorkDTO)) ) {
-                        EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
-                        eventDutyMusicalWorkEntity.setEventDuty(eventDutyEntity.getEventDutyId());
-                        eventDutyMusicalWorkEntity.setMusicalWork(musicalWorkDTO.getId());
-                        persistanceFacade.put(eventDutyMusicalWorkEntity);
-                    }
+        }
+        // add all new musical works which did not exist before
+        if(newEventDutyDTO.getMusicalWorks() != null) {
+            for (MusicalWorkDTO musicalWorkDTO : newEventDutyDTO.getMusicalWorks()) {
+                if ( musicalWorkDTO != null && (oldEventDutyDTO.getMusicalWorks() == null || !oldEventDutyDTO.getMusicalWorks().contains(musicalWorkDTO)) ) {
+                    createEventDutyMusicalWorks(eventDutyEntity, musicalWorkDTO);
                 }
             }
+        }
     }
 
-	public static void createNonMusicalPerformance(EventDutyDTO eventDutyDTO) {
+    public static void createNonMusicalPerformance(EventDutyDTO eventDutyDTO) {
 		
 	}
 
@@ -126,6 +118,21 @@ public class EventScheduleManager {
         }
     }
 
+    private static void removeEventDutyMusicalWorks(EventDutyEntity eventDutyEntity, MusicalWorkDTO musicalWorkDTO) {
+        EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
+        eventDutyMusicalWorkEntity.setEventDuty(eventDutyEntity.getEventDutyId());
+        eventDutyMusicalWorkEntity.setMusicalWork(musicalWorkDTO.getId());
+        EventDutyMusicalWorkRDBMapper.remove(eventDutyMusicalWorkEntity);
+    }
+
+    private static void createEventDutyMusicalWorks(EventDutyEntity eventDutyEntity, MusicalWorkDTO musicalWorkDTO) {
+        EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
+        eventDutyMusicalWorkEntity.setEventDuty(eventDutyEntity.getEventDutyId());
+        eventDutyMusicalWorkEntity.setMusicalWork(musicalWorkDTO.getId());
+        persistanceFacade.put(eventDutyMusicalWorkEntity);
+    }
+
+    //Mapper
     private static MusicalWorkModel getMusicalWorkModel(MusicalWorkDTO musicalWorkDTO) {
         MusicalWorkModel musicalWorkModel = new MusicalWorkModel();
         musicalWorkModel.setName(musicalWorkDTO.getName());
@@ -249,7 +256,6 @@ public class EventScheduleManager {
 
         return eventDutyEntity;
     }
-
 
     private static EventDutyDTO createEventDutyDTO (EventDutyModel eventDutyModel) {
         EventDutyDTO eventDutyDTO = new EventDutyDTO();
