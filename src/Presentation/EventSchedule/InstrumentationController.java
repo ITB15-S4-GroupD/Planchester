@@ -3,7 +3,6 @@ package Presentation.EventSchedule;
 import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
 import Application.MusicalWorkAdministratonManager;
-import Domain.InstrumentationModel;
 import Utils.PlanchesterConstants;
 import com.jfoenix.controls.JFXRadioButton;
 import javafx.beans.property.ReadOnlyStringWrapper;

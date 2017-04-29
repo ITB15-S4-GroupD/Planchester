@@ -37,7 +37,6 @@ public class EventScheduleManager {
         EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
         eventDutyEntity = (EventDutyEntity) persistanceFacade.put(eventDutyEntity);
 
-
         // create connection between event duty and musical work
         if(eventDutyDTO.getMusicalWorks() != null) {
             for(MusicalWorkDTO musicalWorkDTO : eventDutyDTO.getMusicalWorks()) {
@@ -91,7 +90,9 @@ public class EventScheduleManager {
                 loadedEventsStartdate.compareTo(startdayOfWeek) <= 0 && loadedEventsEnddate.compareTo(enddayOfWeek) >= 0) {
             return new ArrayList<EventDutyDTO>();
         }
-        List<EventDutyEntity> eventDuties = EventDutyRDBMapper.getEventDutyInRange(startdayOfWeek, enddayOfWeek);
+
+        EventDutyRDBMapper rdbMapper = (EventDutyRDBMapper) persistanceFacade.getMapper(EventDutyEntity.class);
+        List<EventDutyEntity> eventDuties = rdbMapper.getEventDutyInRange(startdayOfWeek, enddayOfWeek);
 
         List<EventDutyModel> eventDutyModelList = new ArrayList<EventDutyModel>();
         for(EventDutyEntity eventDutyEntity : eventDuties) {

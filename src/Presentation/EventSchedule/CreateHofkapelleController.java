@@ -55,6 +55,7 @@ public class CreateHofkapelleController {
     @FXML private TableView<String> musicalWorkTable;
     @FXML private TableColumn<String, String> selectedMusicalWorks;
 
+    private MusicalWorkDTO musicalWork;
     private List<MusicalWorkDTO> musicalWorks;
     private InstrumentationDTO instrumentation; // TODO timebox2
 
@@ -91,12 +92,21 @@ public class CreateHofkapelleController {
             eventDutyDTO.setEventStatus(EventStatus.Unpublished);
             eventDutyDTO.setConductor(conductor.getText());
             eventDutyDTO.setEventLocation(eventLocation.getText());
-            eventDutyDTO.setMusicalWorks(musicalWorks);
+
+            if(musicalWork != null) {
+                List<MusicalWorkDTO> selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
+                selectedMusicalWorks.add(musicalWork);
+                eventDutyDTO.setMusicalWorks(selectedMusicalWorks);
+            } else {
+                eventDutyDTO.setMusicalWorks(null);
+            }
+
             eventDutyDTO.setPoints((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText()));
             eventDutyDTO.setInstrumentation(null); //TODO timebox 2
             eventDutyDTO.setRehearsalFor(null); //TODO christina
 
             EventScheduleManager.createEventDuty(eventDutyDTO);
+
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
 
             for(EventDutyDTO eventD : rehearsalList){

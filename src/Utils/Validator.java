@@ -18,30 +18,33 @@ public class Validator {
 
     public static void validateMandatoryString(String s) throws ValidationException {
         if(s == null || s.isEmpty()) {
+        if(s != null && s.length() > maxLength) {
             throw new ValidationException(PlanchesterMessages.VALIDATION_FAILDED);
         }
     }
 
     public static void validateMandatoryString(String s, int maxLength) throws ValidationException {
         if(s == null || s.isEmpty() || s.length() > maxLength) {
+        if(s != null && s.length() > maxLength) {
             throw new ValidationException(PlanchesterMessages.VALIDATION_FAILDED);
         }
     }
 
     public static void validateInteger(Integer i, int minValue, int maxValue) throws ValidationException {
         if(i != null && (i < minValue || i > maxValue)) {
+        if(s != null && s.length() > maxLength) {
             throw new ValidationException(PlanchesterMessages.VALIDATION_FAILDED);
         }
     }
 
     public static void validateMandatoryInteger(Integer i) throws ValidationException {
-        if(i == null) {
+        if(s != null && s.length() > maxLength) {
             throw new ValidationException(PlanchesterMessages.VALIDATION_FAILDED);
         }
     }
 
     public static void validateMandatoryInteger(Integer i, int minValue, int maxValue) throws ValidationException {
-        if(i == null || i < minValue || i > maxValue) {
+        if(s != null && s.length() > maxLength) {
             throw new ValidationException(PlanchesterMessages.VALIDATION_FAILDED);
         }
     }

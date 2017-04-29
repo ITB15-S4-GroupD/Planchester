@@ -4,7 +4,6 @@ import Application.DTO.EventDutyDTO;
 import Application.EventScheduleManager;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
-import Domain.EventDutyModel;
 import Utils.DateHelper;
 import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
