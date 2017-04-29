@@ -12,37 +12,37 @@ public class Validator {
 
     public static void validateString(String s, int maxLength) throws ValidationException {
         if(s != null && s.length() > maxLength) {
-            throw new ValidationException("Eventstatus wrong");
+            throw new ValidationException("Validation faild");
         }
     }
 
     public static void validateMandatoryString(String s) throws ValidationException {
         if(s == null || s.isEmpty()) {
-            throw new ValidationException("Eventstatus wrong");
+            throw new ValidationException("Validation faild");
         }
     }
 
     public static void validateMandatoryString(String s, int maxLength) throws ValidationException {
         if(s == null || s.isEmpty() || s.length() > maxLength) {
-            throw new ValidationException("Eventstatus wrong");
+            throw new ValidationException("Validation faild");
         }
     }
 
     public static void validateInteger(Integer i, int minValue, int maxValue) throws ValidationException {
         if(i != null && (i < minValue || i > maxValue)) {
-            throw new ValidationException("Eventstatus wrong");
+            throw new ValidationException("Validation faild");
         }
     }
 
     public static void validateMandatoryInteger(Integer i) throws ValidationException {
         if(i == null) {
-            throw new ValidationException("Eventstatus wrong");
+            throw new ValidationException("Validation faild");
         }
     }
 
     public static void validateMandatoryInteger(Integer i, int minValue, int maxValue) throws ValidationException {
         if(i == null || i < minValue || i > maxValue) {
-            throw new ValidationException("Eventstatus wrong");
+            throw new ValidationException("Validation faild");
         }
     }
 
