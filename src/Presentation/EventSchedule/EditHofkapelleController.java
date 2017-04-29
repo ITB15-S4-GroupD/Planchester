@@ -83,7 +83,7 @@ public class EditHofkapelleController {
                 endTime.setValue(appointment.getEndLocalDateTime().toLocalTime());
                 eventLocation.setText(appointment.getLocation());
                 conductor.setText(eventDutyDTO.getConductor());
-                points.setText(eventDutyDTO.getPoints() != null ? String.valueOf(eventDutyDTO.getPoints()) : null);
+                points.setText(eventDutyDTO.getPoints() != null ? String.valueOf(eventDutyDTO.getPoints()) : "0.0");
 
                 if(eventDutyDTO.getMusicalWorks() != null && !eventDutyDTO.getMusicalWorks().isEmpty()) {
                         musicalWorks = new ArrayList<>();
@@ -201,6 +201,7 @@ public class EditHofkapelleController {
 
         @FXML
         public boolean cancel() {
+            String pointRef = (initEventDutyDTO.getPoints() != null)? String.valueOf(initEventDutyDTO.getPoints()) : "0.0";
                 if(!name.getText().equals(initEventDutyDTO.getName())
                         || !description.getText().equals(initEventDutyDTO.getDescription())
                         || !date.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalDate())
@@ -208,7 +209,7 @@ public class EditHofkapelleController {
                         || !endTime.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime())
                         || !conductor.getText().equals(initEventDutyDTO.getConductor())
                         || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
-                        || !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints())
+                        || !points.getText().equals(pointRef)
                         || (musicalWorks == null && initEventDutyDTO.getMusicalWorks() != null) // musical work wurde entfernt
                         || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() == null) // musical work wurde hinzugefügt
                         || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() != null && !musicalWorks.equals(initEventDutyDTO.getMusicalWorks()))) { // musical work wurde verändert
