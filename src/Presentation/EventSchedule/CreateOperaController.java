@@ -103,9 +103,6 @@ public class CreateOperaController {
             eventDutyDTO.setInstrumentation(null); //alternative instrumentation is not in the first timebox
             eventDutyDTO.setRehearsalFor(null); //TODO Christina
 
-
-            EventScheduleManager.createOperaPerformance(eventDutyDTO);
-
             EventScheduleManager.createEventDuty(eventDutyDTO);
 
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
