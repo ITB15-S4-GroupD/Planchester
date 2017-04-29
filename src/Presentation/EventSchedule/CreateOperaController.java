@@ -153,7 +153,7 @@ public class CreateOperaController {
                         musicalWorkTable.getItems().clear();
                         musicalWork = null;
                     }
-                    // TODO: timbox 2 save instrumentation
+                    // save alternative instrumentation not in 1. timebox
                 }
 
             }
