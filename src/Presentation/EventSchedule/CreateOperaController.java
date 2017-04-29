@@ -27,7 +27,11 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+
+
 
 /**
  * Created by Ina on 08.04.2017.
@@ -49,12 +53,17 @@ public class CreateOperaController {
     private MusicalWorkDTO musicalWork;
     private InstrumentationDTO instrumentation; // TODO timebox2
 
+    public static List<EventDutyDTO> rehearsalList;
+    @FXML private TableView<String> rehearsalTableView;
+    @FXML private TableColumn<String, String> rehearsalTableColumn;
+
+
+
     @FXML
     public void initialize() {
         initializeMandatoryFields();
-
+        rehearsalList = new LinkedList<>();
         selectedMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
-
         points.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -66,6 +75,7 @@ public class CreateOperaController {
             }
         });
     }
+
 
     @FXML
     private void insertNewOperaPerformance() throws ValidationException {
@@ -93,15 +103,28 @@ public class CreateOperaController {
             eventDutyDTO.setInstrumentation(null); //alternative instrumentation is not in the first timebox
             eventDutyDTO.setRehearsalFor(null); //TODO Christina
 
+
+            EventScheduleManager.createOperaPerformance(eventDutyDTO);
+
             EventScheduleManager.createEventDuty(eventDutyDTO);
 
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
+
+            for(EventDutyDTO eventD : rehearsalList){
+                eventD.setRehearsalFor(eventDutyDTO.getEventDutyID());
+                EventScheduleManager.createEventDuty(eventD);
+                EventScheduleController.addEventDutyToGUI(eventD);
+            }
+
+            rehearsalList.clear();
+
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
             EventScheduleController.setSelectedAppointment(eventDutyDTO); // select created appointment
         }
     }
 
+    
     @FXML
     public boolean cancel() {
         if(!name.getText().isEmpty() || !description.getText().isEmpty() || date.getValue() != null
@@ -161,6 +184,56 @@ public class CreateOperaController {
         InstrumentationController.stage = stage;
 
         stage.showAndWait();
+    }
+  
+    @FXML
+    public void addNewRehearsal() {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("CreateRehearsal.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = new Stage();
+        stage.setTitle("Add new Rehearsal");
+        stage.setScene(scene);
+        stage.show();
+
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                if(CreateRehearsalController.apply) {
+                    rehearsalList.add(CreateRehearsalController.eventDutyDTO);
+                    rehearsalTableView.getItems().clear();
+                    rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+                    for(EventDutyDTO e : rehearsalList) {
+                        String rehearsalToAdd = e.getName();
+                        rehearsalTableView.getItems().add(rehearsalToAdd);
+                    }
+                }
+            }
+        });
+
+        CreateRehearsalController.stage = stage;
+
+    }
+
+    @FXML
+    public void removeRehearsal() {
+        String rehearsalToRemove = rehearsalTableView.getSelectionModel().getSelectedItem();
+        for(EventDutyDTO eventDutyDTO : rehearsalList) {
+            if(eventDutyDTO.getName().equals(rehearsalToRemove)) {
+                rehearsalList.remove(eventDutyDTO);
+                break;
+            }
+        }
+        rehearsalTableView.getItems().remove(rehearsalTableView.getSelectionModel().getFocusedIndex());
+        rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+        for(EventDutyDTO e : rehearsalList) {
+            String rehearsalToAdd = e.getName();
+            rehearsalTableView.getItems().add(rehearsalToAdd);
+        }
     }
 
     private void initializeMandatoryFields() {

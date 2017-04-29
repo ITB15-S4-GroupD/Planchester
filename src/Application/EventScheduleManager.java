@@ -37,6 +37,7 @@ public class EventScheduleManager {
         EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
         eventDutyEntity = (EventDutyEntity) persistanceFacade.put(eventDutyEntity);
 
+
         // create connection between event duty and musical work
         if(eventDutyDTO.getMusicalWorks() != null) {
             for(MusicalWorkDTO musicalWorkDTO : eventDutyDTO.getMusicalWorks()) {
