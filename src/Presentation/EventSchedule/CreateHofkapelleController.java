@@ -28,6 +28,7 @@ import javax.xml.bind.ValidationException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +47,11 @@ public class CreateHofkapelleController {
     @FXML private TextField conductor;
     @FXML private TextField points;
 
+
+    public static List<EventDutyDTO> rehearsalList;
+    @FXML private TableView<String> rehearsalTableView;
+    @FXML private TableColumn<String, String> rehearsalTableColumn;
+
     @FXML private TableView<String> musicalWorkTable;
     @FXML private TableColumn<String, String> selectedMusicalWorks;
 
@@ -53,8 +59,10 @@ public class CreateHofkapelleController {
     private List<MusicalWorkDTO> musicalWorks;
     private InstrumentationDTO instrumentation; // TODO timebox2
 
+
     @FXML
     public void initialize() {
+        rehearsalList = new LinkedList<>();
         initializeMandatoryFields();
 
         selectedMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
@@ -100,6 +108,15 @@ public class CreateHofkapelleController {
             EventScheduleManager.createEventDuty(eventDutyDTO);
 
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
+
+            for(EventDutyDTO eventD : rehearsalList){
+                eventD.setRehearsalFor(eventDutyDTO.getEventDutyID());
+                EventScheduleManager.createEventDuty(eventD);
+                EventScheduleController.addEventDutyToGUI(eventD);
+            }
+
+            rehearsalList.clear();
+
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
             EventScheduleController.setSelectedAppointment(eventDutyDTO); // select created appointment
@@ -120,7 +137,7 @@ public class CreateHofkapelleController {
         return true;
     }
 
-    @FXML
+   @FXML
     public void editHofkapelleInstrumentation() {
         InstrumentationController.selectMultipleMusicalWorks = true;
         if(date.getValue() != null) {
@@ -138,6 +155,7 @@ public class CreateHofkapelleController {
 
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("Instrumentation.fxml"));
+
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load());
@@ -169,7 +187,55 @@ public class CreateHofkapelleController {
 
         stage.showAndWait();
     }
+  
+    @FXML
+    public void addNewRehearsal() {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("CreateRehearsal.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = new Stage();
+        stage.setTitle("Add new Rehearsal");
+        stage.setScene(scene);
+        stage.show();
 
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                if(CreateRehearsalController.apply) {
+                    rehearsalList.add(CreateRehearsalController.eventDutyDTO);
+                    rehearsalTableView.getItems().clear();
+                    rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+                    for(EventDutyDTO e : rehearsalList) {
+                        String rehearsalToAdd = e.getName();
+                        rehearsalTableView.getItems().add(rehearsalToAdd);
+                    }
+                }
+            }
+        });
+        CreateRehearsalController.stage = stage;
+}
+
+    @FXML
+    public void removeRehearsal() {
+        String rehearsalToRemove = rehearsalTableView.getSelectionModel().getSelectedItem();
+        for(EventDutyDTO eventDutyDTO : rehearsalList) {
+            if(eventDutyDTO.getName().equals(rehearsalToRemove)) {
+                rehearsalList.remove(eventDutyDTO);
+                break;
+            }
+        }
+        rehearsalTableView.getItems().remove(rehearsalTableView.getSelectionModel().getFocusedIndex());
+        rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+        for(EventDutyDTO e : rehearsalList) {
+            String rehearsalToAdd = e.getName();
+            rehearsalTableView.getItems().add(rehearsalToAdd);
+        }
+    }
+  
     private boolean validate() {
         LocalDate today = LocalDate.now();
         LocalTime start = startTime.getValue();
