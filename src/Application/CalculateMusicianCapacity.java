@@ -16,24 +16,29 @@ import java.util.*;
  */
 public class CalculateMusicianCapacity {
 
-    public boolean checkCapacity(Calendar start, Calendar end) {
+    public HashMap<String, Integer> checkCapacity(Calendar start, Calendar end) {
         List<Integer> allEvents = getAllEventsDuring(start, end);
         HashMap<String, Integer> maxInstrumentation = getInstrumentation(allEvents);
         HashMap<String, Integer> allMusicians = getAllMusicians();
 
         String key;
-        HashMap<String, Integer> difference = new HashMap<>();
+        HashMap<String, Integer> difference = allMusicians;
 
         for (Map.Entry<String, Integer> data : allMusicians.entrySet()) {
             if (maxInstrumentation.entrySet().contains(data.getKey())) {
-                if (maxInstrumentation.get(data.getKey()) > data.getValue()) {
-                    return false;
+                /**
+                 if (maxInstrumentation.get(data.getKey()) > data.getValue()) {
+                 return false;
+                 }*/
+
+                if (maxInstrumentation.get(data.getKey()) < data.getValue()) {
+                    return null;
+                } else {
+                    difference.put(data.getKey(), (data.getValue() - maxInstrumentation.get(data.getValue())));
                 }
             }
-
         }
-
-        return true;
+        return difference;
     }
 
     private HashMap<String, Integer> getAllMusicians() {
@@ -99,7 +104,8 @@ public class CalculateMusicianCapacity {
             for (Integer id : ID) {
 
                 HashMap<String, Integer> wood = getAmountWoodInstrumentation(id);
-                if (instrumentation.get("flute") < wood.get("flute")) instrumentation.put("flute", wood.get("flute"));
+                if (instrumentation.get("flute") < wood.get("flute"))
+                    instrumentation.put("flute", wood.get("flute"));
                 if (instrumentation.get("oboe") < wood.get("oboe")) instrumentation.put("oboe", wood.get("oboe"));
                 if (instrumentation.get("clarinet") < wood.get("clarinet"))
                     instrumentation.put("clarinet", wood.get("clarinet"));
@@ -111,7 +117,8 @@ public class CalculateMusicianCapacity {
                     instrumentation.put("violin1", wood.get("violin1"));
                 if (instrumentation.get("violin2") < wood.get("violin2"))
                     instrumentation.put("violin2", wood.get("violin2"));
-                if (instrumentation.get("viola") < wood.get("viola")) instrumentation.put("viola", wood.get("viola"));
+                if (instrumentation.get("viola") < wood.get("viola"))
+                    instrumentation.put("viola", wood.get("viola"));
                 if (instrumentation.get("violincello") < wood.get("violincello"))
                     instrumentation.put("violincello", wood.get("violincello"));
                 if (instrumentation.get("doublebass") < wood.get("doublebass"))
