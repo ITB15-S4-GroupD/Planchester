@@ -5,6 +5,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -18,9 +20,10 @@
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
    <rowConstraints>
-      <RowConstraints maxHeight="94.66667175292969" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="443.99999237060547" minHeight="10.0" prefHeight="423.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="59.333343505859375" minHeight="0.0" prefHeight="37.333343505859375" vgrow="NEVER" />
+      <RowConstraints maxHeight="94.66667175292969" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="443.99999237060547" minHeight="10.0" prefHeight="338.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="443.99999237060547" minHeight="10.0" prefHeight="86.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="59.333343505859375" minHeight="0.0" prefHeight="53.0" vgrow="NEVER" />
    </rowConstraints>
    <children>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="New Hofkapelle Performance" textOrigin="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
@@ -67,7 +70,7 @@
             <TextField fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="8" />
          </children>
       </GridPane>
-      <GridPane GridPane.rowIndex="2">
+      <GridPane GridPane.rowIndex="3">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -79,6 +82,40 @@
             <Button id="discard" fx:id="btnCancel" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="80.0" text="Cancel" />
             <Button fx:id="btnSaveNewHofkapelle" mnemonicParsing="false" onAction="#insertNewHofkapellePerformance" prefHeight="25.0" prefWidth="80.0" text="Save" GridPane.columnIndex="1" />
          </children>
+      </GridPane>
+      <GridPane GridPane.rowIndex="2">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="112.0" minWidth="10.0" prefWidth="98.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="182.0" minWidth="10.0" prefWidth="164.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.0" minWidth="10.0" prefWidth="74.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TableView fx:id="rehearsalTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+              <columns>
+                <TableColumn fx:id="rehearsalTableColumn" prefWidth="181.0" text="Rehearsal(s)" />
+              </columns>
+            </TableView>
+            <Label text="Rehearsal(s)" />
+            <GridPane GridPane.columnIndex="2">
+              <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button fx:id="btnAddNewReahearsal" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#addNewRehearsal" prefWidth="59.0" text="Add" />
+                  <Button fx:id="bntRemoveRehearsal" mnemonicParsing="false" onAction="#removeRehearsal" text="Remove" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+         </children>
+         <GridPane.margin>
+            <Insets left="10.0" right="10.0" />
+         </GridPane.margin>
       </GridPane>
    </children>
 </GridPane>

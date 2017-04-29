@@ -10,14 +10,23 @@ import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import javax.xml.bind.ValidationException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Christina on 20.04.2017.
@@ -33,8 +42,13 @@ public class CreateConcertController {
     @FXML private TextField conductor;
     @FXML private TextField points;
 
+    public static List<EventDutyDTO> rehearsalList;
+    @FXML private TableView<String> rehearsalTableView;
+    @FXML private TableColumn<String, String> rehearsalTableColumn;
+
     @FXML
     public void initialize() {
+        rehearsalList = new LinkedList<>();
         initializeMandatoryFields();
     }
 
@@ -58,6 +72,15 @@ public class CreateConcertController {
 
             EventScheduleManager.createConcertPerformance(eventDutyDTO);
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
+
+            for(EventDutyDTO eventD : rehearsalList){
+                eventD.setRehearsalFor(eventDutyDTO.getEventDutyID());
+                EventScheduleManager.createRehearsalPerformance(eventD);
+                EventScheduleController.addEventDutyToGUI(eventD);
+            }
+
+            rehearsalList.clear();
+
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
             EventScheduleController.setSelectedAppointment(eventDutyDTO); // select created appointment
@@ -77,6 +100,54 @@ public class CreateConcertController {
         // remove content of sidebar
         EventScheduleController.resetSideContent();
         return true;
+    }
+
+    @FXML
+    public void addNewRehearsal() {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("CreateRehearsal.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = new Stage();
+        stage.setTitle("Add new Rehearsal");
+        stage.setScene(scene);
+        stage.show();
+
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                if(CreateRehearsalController.apply) {
+                    rehearsalList.add(CreateRehearsalController.eventDutyDTO);
+                    rehearsalTableView.getItems().clear();
+                    rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+                    for(EventDutyDTO e : rehearsalList) {
+                        String rehearsalToAdd = e.getName();
+                        rehearsalTableView.getItems().add(rehearsalToAdd);
+                    }
+                }
+            }
+        });
+        CreateRehearsalController.stage = stage;
+    }
+
+    @FXML
+    public void removeRehearsal() {
+        String rehearsalToRemove = rehearsalTableView.getSelectionModel().getSelectedItem();
+        for(EventDutyDTO eventDutyDTO : rehearsalList) {
+            if(eventDutyDTO.getName().equals(rehearsalToRemove)) {
+                rehearsalList.remove(eventDutyDTO);
+                break;
+            }
+        }
+        rehearsalTableView.getItems().remove(rehearsalTableView.getSelectionModel().getFocusedIndex());
+        rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+        for(EventDutyDTO e : rehearsalList) {
+            String rehearsalToAdd = e.getName();
+            rehearsalTableView.getItems().add(rehearsalToAdd);
+        }
     }
 
     private boolean validate() {

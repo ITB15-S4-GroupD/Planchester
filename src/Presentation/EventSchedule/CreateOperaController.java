@@ -11,6 +11,7 @@ import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -27,7 +28,9 @@ import javax.xml.bind.ValidationException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -54,6 +57,8 @@ public class CreateOperaController {
     @FXML
     public void initialize() {
         initializeMandatoryFields();
+
+        rehearsalList = new LinkedList<>();
 
         points.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -88,8 +93,16 @@ public class CreateOperaController {
             eventDutyDTO.setRehearsalFor(null); //TODO TIMO
 
             EventScheduleManager.createOperaPerformance(eventDutyDTO);
-
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
+
+            for(EventDutyDTO eventD : rehearsalList){
+                eventD.setRehearsalFor(eventDutyDTO.getEventDutyID());
+                EventScheduleManager.createRehearsalPerformance(eventD);
+                EventScheduleController.addEventDutyToGUI(eventD);
+            }
+
+            rehearsalList.clear();
+
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
             EventScheduleController.setSelectedAppointment(eventDutyDTO); // select created appointment
@@ -116,8 +129,10 @@ public class CreateOperaController {
                 if(CreateRehearsalController.apply) {
                     rehearsalList.add(CreateRehearsalController.eventDutyDTO);
                     rehearsalTableView.getItems().clear();
+                    rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
                     for(EventDutyDTO e : rehearsalList) {
-                        rehearsalTableView.getItems().add(e.getName() + e.getStartTime().toString());
+                        String rehearsalToAdd = e.getName();
+                        rehearsalTableView.getItems().add(rehearsalToAdd);
                     }
                 }
             }
@@ -129,7 +144,19 @@ public class CreateOperaController {
 
     @FXML
     public void removeRehearsal() {
-
+        String rehearsalToRemove = rehearsalTableView.getSelectionModel().getSelectedItem();
+        for(EventDutyDTO eventDutyDTO : rehearsalList) {
+            if(eventDutyDTO.getName().equals(rehearsalToRemove)) {
+                rehearsalList.remove(eventDutyDTO);
+                break;
+            }
+        }
+        rehearsalTableView.getItems().remove(rehearsalTableView.getSelectionModel().getFocusedIndex());
+        rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+        for(EventDutyDTO e : rehearsalList) {
+            String rehearsalToAdd = e.getName();
+            rehearsalTableView.getItems().add(rehearsalToAdd);
+        }
     }
 
     @FXML

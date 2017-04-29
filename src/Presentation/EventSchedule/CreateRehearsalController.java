@@ -45,6 +45,7 @@ public class CreateRehearsalController {
 
 
     @FXML public void initialize() {
+        stage = new Stage();
         initializeMandatoryFields();
     }
 
@@ -59,10 +60,10 @@ public class CreateRehearsalController {
 
             eventDutyDTO = new EventDutyDTO();
             eventDutyDTO.setName(name.getText());
-            eventDutyDTO.setDescription(name.getText());
+            eventDutyDTO.setDescription(description.getText());
             eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
             eventDutyDTO.setEndTime(endTime.getValue() == null ? DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue().plusHours(2)) : DateHelper.mergeDateAndTime(date.getValue(), endTime.getValue()));
-            eventDutyDTO.setEventType(EventType.Opera);
+            eventDutyDTO.setEventType(EventType.Rehearsal);
             eventDutyDTO.setEventStatus(EventStatus.Unpublished);
             eventDutyDTO.setConductor(conductor.getText());
             eventDutyDTO.setEventLocation(eventLocation.getText());
@@ -71,8 +72,6 @@ public class CreateRehearsalController {
 
             apply = true;
             stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
-
-
         }
     }
 

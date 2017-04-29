@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -13,14 +15,15 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane fx:id="gridEditTour" prefHeight="506.0" prefWidth="351.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.EditTourController">
+<GridPane fx:id="gridEditTour" prefHeight="575.0" prefWidth="348.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.EditTourController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints maxHeight="94.66667175292969" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="443.99999237060547" minHeight="10.0" prefHeight="430.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="59.333343505859375" minHeight="10.0" prefHeight="37.333343505859375" vgrow="NEVER" />
+        <RowConstraints maxHeight="94.66667175292969" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="486.0" minHeight="10.0" prefHeight="411.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="484.0" minHeight="10.0" prefHeight="74.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="59.333343505859375" minHeight="10.0" prefHeight="42.0" vgrow="NEVER" />
     </rowConstraints>
     <children>
         <GridPane fx:id="gridNewEventData" prefHeight="338.0" prefWidth="314.0" GridPane.rowIndex="1">
@@ -65,7 +68,7 @@
                 <Font size="22.0" />
             </font>
         </Text>
-      <GridPane GridPane.rowIndex="2">
+      <GridPane GridPane.rowIndex="3">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -77,6 +80,40 @@
                 <Button fx:id="btnSaveNewOpera" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#save" prefHeight="25.0" prefWidth="80.0" text="Save" GridPane.columnIndex="1" />
                 <Button id="discard" fx:id="btnDiscard" mnemonicParsing="false" onAction="#discard" prefHeight="25.0" prefWidth="80.0" text="Discard" />
          </children>
+      </GridPane>
+      <GridPane GridPane.rowIndex="2">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="111.0" minWidth="10.0" prefWidth="104.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="213.0" minWidth="10.0" prefWidth="155.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="10.0" prefWidth="71.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TableView fx:id="rehearsalTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+              <columns>
+                <TableColumn fx:id="rehearsalTableColumn" prefWidth="152.0" text="Rehearsal(s)" />
+              </columns>
+            </TableView>
+            <Label text="Rehearsal(s)" />
+            <GridPane GridPane.columnIndex="2">
+              <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button fx:id="btnAddRehearsal" minWidth="59.0" mnemonicParsing="false" onAction="#addNewRehearsal" text="Add" />
+                  <Button mnemonicParsing="false" text="Remove" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+         </children>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
       </GridPane>
     </children>
 </GridPane>

@@ -53,6 +53,13 @@ public class EventScheduleManager {
         persistanceFacade.put(eventDutyEntity);
     }
 
+    public static void createRehearsalPerformance(EventDutyDTO eventDutyDTO) throws ValidationException {
+        EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
+        eventDutyModel.validate();
+        EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
+        persistanceFacade.put(eventDutyEntity);
+    }
+
     public static void updateConcertPerformance(EventDutyDTO eventDutyDTO) throws ValidationException {
         EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
         eventDutyModel.validate();

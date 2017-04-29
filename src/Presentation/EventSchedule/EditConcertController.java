@@ -10,15 +10,23 @@ import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import jfxtras.scene.control.agenda.Agenda;
 
 import javax.xml.bind.ValidationException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 /**
  * Created by Christina on 20.04.2017.
@@ -34,11 +42,18 @@ public class EditConcertController {
     @FXML private TextField conductor;
     @FXML private TextField points;
 
+    public static List<EventDutyDTO> rehearsalList;
+    @FXML private TableView<String> rehearsalTableView;
+    @FXML private TableColumn<String, String> rehearsalTableColumn;
+
     private Agenda.Appointment initAppointment; // remember init data to compare
     private EventDutyDTO initEventDutyDTO; // remember init data to compare
 
     @FXML
     public void initialize() {
+
+        //TODO GET LIST OF REHEARSALS : Christina
+
         checkMandatoryFields();
 
         Agenda.Appointment appointment = EventScheduleController.getSelectedAppointment();
@@ -80,11 +95,42 @@ public class EditConcertController {
             eventDutyDTO.setRehearsalFor(null); //TODO TIMO
 
             EventScheduleManager.updateConcertPerformance(eventDutyDTO);
-
+            //TODO UPDATE REHEARSALS : Christina
             EventScheduleController.addEventDutyToGUI(eventDutyDTO);
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
         }
+    }
+
+    @FXML
+    public void addNewRehearsal() {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("CreateRehearsal.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = new Stage();
+        stage.setTitle("Add new Rehearsal");
+        stage.setScene(scene);
+        stage.show();
+
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                if(CreateRehearsalController.apply) {
+                    rehearsalList.add(CreateRehearsalController.eventDutyDTO);
+                    rehearsalTableView.getItems().clear();
+                    rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+                    for(EventDutyDTO e : rehearsalList) {
+                        String rehearsalToAdd = e.getName();
+                        rehearsalTableView.getItems().add(rehearsalToAdd);
+                    }
+                }
+            }
+        });
+        CreateRehearsalController.stage = stage;
     }
 
     @FXML
