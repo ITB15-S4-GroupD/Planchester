@@ -39,7 +39,7 @@ public class CreateTourController {
     @FXML private JFXDatePicker startDate;
     @FXML private JFXDatePicker endDate;
     @FXML private TextField eventLocation;
-    @FXMLprivate TextField conductor;
+    @FXML private TextField conductor;
     @FXML private TextField points;
 
     @FXML private TableView<String> musicalWorkTable;

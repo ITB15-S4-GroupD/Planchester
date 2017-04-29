@@ -59,6 +59,13 @@ public class EditOperaController {
     private EventDutyDTO initEventDutyDTO; // remember init data to compare
     private Agenda.Appointment initAppointment; // remember init data to compare
 
+    @FXML private Button btnCancelEvent;
+    @FXML private Button btnSaveEvent;
+    @FXML private Button btnEditEvent;
+    @FXML private Button btnEditDetails;
+    @FXML private Button btnAddRehearsal;
+    @FXML private Button btnRemoveRehearsal;
+
     @FXML
     public void initialize() {
         //TODO GET LIST OF REHEARSALS : Christina
@@ -84,6 +91,7 @@ public class EditOperaController {
             }
         }
 
+        initNotEditableFields();
         initAppointment = appointment;
         initEventDutyDTO = eventDutyDTO;
 
@@ -98,6 +106,34 @@ public class EditOperaController {
                 }
             }
         });
+    }
+
+    private void initNotEditableFields() {
+        btnEditEvent.setVisible(true);
+        btnCancelEvent.setVisible(false);
+        btnSaveEvent.setVisible(false);
+        btnEditDetails.setVisible(false);
+        btnAddRehearsal.setVisible(false);
+        btnRemoveRehearsal.setVisible(false);
+
+        name.setEditable(false);
+        description.setEditable(false);
+        date.setEditable(false);
+        startTime.setEditable(false);
+        endTime.setEditable(false);
+        eventLocation.setEditable(false);
+        conductor.setEditable(false);
+        points.setEditable(false);
+
+
+        name.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        description.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        date.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        startTime.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        endTime.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        eventLocation.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        points.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        conductor.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
     }
 
     @FXML
@@ -186,7 +222,7 @@ public class EditOperaController {
     }
 
     @FXML
-    public boolean discard() {
+    public boolean cancel() {
         // TODO: check with init data for changes
         if(!name.getText().equals(initEventDutyDTO.getName())
                 || !description.getText().equals(initEventDutyDTO.getDescription())
@@ -240,6 +276,33 @@ public class EditOperaController {
             }
         });
         CreateRehearsalController.stage = stage;
+    }
+
+    public void editEvent () {
+        btnCancelEvent.setVisible(true);
+        btnSaveEvent.setVisible(true);
+        btnEditEvent.setVisible(false);
+        btnEditDetails.setVisible(true);
+        btnAddRehearsal.setVisible(true);
+        btnRemoveRehearsal.setVisible(true);
+
+        name.setEditable(true);
+        description.setEditable(true);
+        date.setEditable(true);
+        startTime.setEditable(true);
+        endTime.setEditable(true);
+        eventLocation.setEditable(true);
+        points.setEditable(true);
+        conductor.setEditable(true);
+
+        name.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        description.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        date.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        startTime.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        endTime.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        eventLocation.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        points.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        conductor.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
     }
 
     private void checkMandatoryFields() {

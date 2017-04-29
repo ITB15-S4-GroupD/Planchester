@@ -104,8 +104,6 @@ public class CreateOperaController {
             eventDutyDTO.setRehearsalFor(null); //TODO Christina
 
 
-            EventScheduleManager.createOperaPerformance(eventDutyDTO);
-
             EventScheduleManager.createEventDuty(eventDutyDTO);
 
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda

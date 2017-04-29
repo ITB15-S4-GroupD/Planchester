@@ -27,9 +27,9 @@ public class EditNonMusicalEventController {
     @FXML private TextField eventLocation;
     @FXML private TextField points;
 
-    @FXML private Button btnCancel;
-    @FXML private Button btnSaveNewOpera;
-    @FXML private Button btneditNonMusical;
+    @FXML private Button btnCancelEvent;
+    @FXML private Button btnSaveEvent;
+    @FXML private Button btnEditEvent;
 
     private EventDutyDTO initEventDutyDTO; // remember init data to compare
     private Agenda.Appointment initAppointment; // remember init data to compare
@@ -43,19 +43,13 @@ public class EditNonMusicalEventController {
         EventDutyDTO eventDutyDTO = EventScheduleController.getEventForAppointment(appointment);
 
         name.setText(appointment.getSummary());
-        name.setEditable(false);
         description.setText(appointment.getDescription());
-        description.setEditable(false);
         date.setValue(appointment.getStartLocalDateTime().toLocalDate());
-        date.setEditable(false);
         startTime.setValue(appointment.getStartLocalDateTime().toLocalTime());
-        startTime.setEditable(false);
         endTime.setValue(appointment.getEndLocalDateTime().toLocalTime());
-        endTime.setEditable(false);
         eventLocation.setText(appointment.getLocation());
-        eventLocation.setEditable(false);
         points.setText(eventDutyDTO.getPoints() != null ? String.valueOf(eventDutyDTO.getPoints()) : null);
-        points.setEditable(false);
+
         initNotEditableFields();
         initAppointment = appointment;
         initEventDutyDTO = eventDutyDTO;
@@ -74,6 +68,18 @@ public class EditNonMusicalEventController {
     }
 
     private void initNotEditableFields() {
+        btnEditEvent.setVisible(true);
+        btnCancelEvent.setVisible(false);
+        btnSaveEvent.setVisible(false);
+
+        name.setEditable(false);
+        description.setEditable(false);
+        date.setEditable(false);
+        startTime.setEditable(false);
+        endTime.setEditable(false);
+        eventLocation.setEditable(false);
+        points.setEditable(false);
+
         name.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
         description.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
         date.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
@@ -110,10 +116,10 @@ public class EditNonMusicalEventController {
         return true;
     }
 
-    public void editNonMusical () {
-        btnCancel.setVisible(true);
-        btnSaveNewOpera.setVisible(true);
-        btneditNonMusical.setVisible(false);
+    public void editEvent () {
+        btnCancelEvent.setVisible(true);
+        btnSaveEvent.setVisible(true);
+        btnEditEvent.setVisible(false);
 
         name.setEditable(true);
         description.setEditable(true);

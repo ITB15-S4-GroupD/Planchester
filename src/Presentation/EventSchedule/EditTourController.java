@@ -59,6 +59,13 @@ public class EditTourController {
     private EventDutyDTO initEventDutyDTO; // remember init data to compare
     private Agenda.Appointment initAppointment; // remember init data to compare
 
+    @FXML private Button btnCancelEvent;
+    @FXML private Button btnSaveEvent;
+    @FXML private Button btnEditEvent;
+    @FXML private Button btnEditDetails;
+    @FXML private Button btnAddRehearsal;
+    @FXML private Button btnRemoveRehearsal;
+
     @FXML
     public void initialize() {
         //TODO GET LIST OF REHEARSALS : Christina
@@ -85,6 +92,8 @@ public class EditTourController {
             }
         }
 
+        initNotEditableFields();
+
         initAppointment = appointment;
         initEventDutyDTO = eventDutyDTO;
 
@@ -100,6 +109,33 @@ public class EditTourController {
             }
         });
     }
+
+    @FXML
+    private void initNotEditableFields() {
+        btnEditEvent.setVisible(true);
+        btnCancelEvent.setVisible(false);
+        btnSaveEvent.setVisible(false);
+        btnEditDetails.setVisible(false);
+        btnAddRehearsal.setVisible(false);
+        btnRemoveRehearsal.setVisible(false);
+
+        name.setEditable(false);
+        description.setEditable(false);
+        startDate.setEditable(false);
+        endDate.setEditable(false);
+        eventLocation.setEditable(false);
+        conductor.setEditable(false);
+        points.setEditable(false);
+
+        name.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        description.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        startDate.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        endDate.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        eventLocation.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        points.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        conductor.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+    }
+
 
     @FXML
     public void addNewRehearsal() {
@@ -165,7 +201,7 @@ public class EditTourController {
     }
 
     @FXML
-    public boolean discard() {
+    public boolean cancel() {
         if(!name.getText().equals(initEventDutyDTO.getName())
                 || !description.getText().equals(initEventDutyDTO.getDescription())
                 || !startDate.getValue().equals(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalDate())
@@ -187,6 +223,33 @@ public class EditTourController {
         EventScheduleController.removeSelection(initAppointment);
         return true;
     }
+
+    @FXML
+    public void editEvent () {
+        btnCancelEvent.setVisible(true);
+        btnSaveEvent.setVisible(true);
+        btnEditEvent.setVisible(false);
+        btnEditDetails.setVisible(true);
+        btnAddRehearsal.setVisible(true);
+        btnRemoveRehearsal.setVisible(true);
+
+        name.setEditable(true);
+        description.setEditable(true);
+        startDate.setEditable(true);
+        endDate.setEditable(true);
+        eventLocation.setEditable(true);
+        points.setEditable(true);
+        conductor.setEditable(true);
+
+        name.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        description.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        startDate.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        endDate.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        eventLocation.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        points.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        conductor.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+    }
+
 
     @FXML
     public void editTourInstrumentation() {

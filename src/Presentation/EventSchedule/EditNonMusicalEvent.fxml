@@ -72,9 +72,9 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-                <Button id="discard" fx:id="btnCancel" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="80.0" text="Cancel" visible="false" />
-                <Button fx:id="btnSaveNewOpera" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#save" prefHeight="25.0" prefWidth="80.0" text="Save" visible="false" GridPane.columnIndex="2" />
-            <Button fx:id="btneditNonMusical" mnemonicParsing="false" onAction="#editNonMusical" prefHeight="25.0" prefWidth="80.0" text="Edit" GridPane.columnIndex="1" />
+                <Button id="discard" fx:id="btnCancelEvent" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="80.0" text="Cancel" visible="false" />
+                <Button fx:id="btnSaveEvent" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#save" prefHeight="25.0" prefWidth="80.0" text="Save" visible="false" GridPane.columnIndex="2" />
+            <Button fx:id="btnEditEvent" mnemonicParsing="false" onAction="#editEvent" prefHeight="25.0" prefWidth="80.0" text="Edit" GridPane.columnIndex="1" />
          </children>
       </GridPane>
     </children>

@@ -15,13 +15,12 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<GridPane fx:id="gridEditConcert" prefHeight="631.0" prefWidth="356.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.EditConcertController">
+<GridPane fx:id="gridEditConcert" prefHeight="670.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.EditConcertController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints maxHeight="94.66667175292969" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="55.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="492.0" minHeight="10.0" prefHeight="431.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="492.0" minHeight="10.0" prefHeight="103.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="59.333343505859375" minHeight="10.0" prefHeight="41.0" vgrow="NEVER" />
@@ -29,26 +28,21 @@
     <children>
         <GridPane fx:id="gridNewEventData" prefHeight="338.0" prefWidth="314.0" GridPane.rowIndex="1">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="153.33331298828125" minWidth="10.0" prefWidth="91.33331298828125" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="223.66668701171875" minWidth="10.0" prefWidth="223.66668701171875" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="110.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="223.66668701171875" />
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="39.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="42.0" vgrow="SOMETIMES" />
 
-                <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="68.0" minHeight="10.0" prefHeight="68.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="57.66668701171875" minHeight="10.0" prefHeight="57.66668701171875" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="39.33331298828125" minHeight="10.0" prefHeight="17.33331298828125" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="29.666656494140625" minHeight="9.66668701171875" prefHeight="29.666656494140625" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="68.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="66.0" minHeight="10.0" prefHeight="42.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="86.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="65.0" minHeight="9.66668701171875" prefHeight="65.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="56.0" minHeight="10.0" prefHeight="56.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="57.66668701171875" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="73.0" minHeight="9.66668701171875" prefHeight="67.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="29.666656494140625" minHeight="10.0" prefHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="37.333343505859375" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="56.0" minHeight="10.0" prefHeight="44.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="57.66668701171875" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
                 <Label text="Event Name" />
@@ -70,7 +64,7 @@
                 <TextField id="points" fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="9" />
             <TableView fx:id="musicalWorkTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
               <columns>
-                <TableColumn fx:id="selectedMusicalWorks" prefWidth="223.0" text="Title" />
+                <TableColumn fx:id="selectedMusicalWorks" prefWidth="249.0" text="Title" />
               </columns>
             </TableView>
             <Button fx:id="btnEditDetails" mnemonicParsing="false" onAction="#editConcertInstrumentation" text="Edit Details ..." GridPane.columnIndex="1" GridPane.rowIndex="7" />
@@ -87,19 +81,21 @@
       <GridPane GridPane.rowIndex="3">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-                <Button fx:id="btnSaveNewOpera" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#save" prefHeight="25.0" prefWidth="80.0" text="Save" GridPane.columnIndex="1" />
-                <Button id="discard" fx:id="btnDiscard" mnemonicParsing="false" onAction="#discard" prefHeight="25.0" prefWidth="80.0" text="Cancel" />
+                <Button fx:id="btnSaveEvent" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#save" prefHeight="25.0" prefWidth="80.0" text="Save" GridPane.columnIndex="2" />
+                <Button id="discard" fx:id="btnCancelEvent" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="80.0" text="Cancel" />
+            <Button fx:id="btnEditEvent" mnemonicParsing="false" onAction="#editEvent" prefWidth="80.0" text="Edit" GridPane.columnIndex="1" />
          </children>
       </GridPane>
       <GridPane GridPane.rowIndex="2">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="135.0" minWidth="10.0" prefWidth="113.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="110.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="193.0" minWidth="10.0" prefWidth="159.0" />
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="112.0" minWidth="10.0" prefWidth="65.0" />
         </columnConstraints>
@@ -114,7 +110,7 @@
             </Label>
             <TableView fx:id="rehearsalTableView" prefHeight="105.0" prefWidth="158.0" GridPane.columnIndex="1">
               <columns>
-                <TableColumn fx:id="rehearsalTableColumn" prefWidth="158.0" text="Rehearsal(s)" />
+                <TableColumn fx:id="rehearsalTableColumn" prefWidth="171.0" text="Rehearsal(s)" />
               </columns>
             </TableView>
             <GridPane GridPane.columnIndex="2">
@@ -126,8 +122,8 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="btnAddRehearsal" minWidth="59.0" mnemonicParsing="false" onAction="#addNewRehearsal" text="Add" />
-                  <Button mnemonicParsing="false" text="Remove" GridPane.rowIndex="1" />
+                  <Button fx:id="btnAddRehearsal" minWidth="59.0" mnemonicParsing="false" onAction="#addNewRehearsal" text="Add ..." />
+                  <Button fx:id="btnRemoveRehearsal" mnemonicParsing="false" text="Remove" GridPane.rowIndex="1" />
                </children>
             </GridPane>
          </children>
