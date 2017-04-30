@@ -82,7 +82,7 @@ public class EditTourController {
         endDate.setValue(appointment.getEndLocalDateTime().toLocalDate());
         eventLocation.setText(appointment.getLocation());
         conductor.setText(eventDutyDTO.getConductor());
-        points.setText(eventDutyDTO.getPoints() != null ? String.valueOf(eventDutyDTO.getPoints()) : null);
+        points.setText(eventDutyDTO.getPoints() != null ? String.valueOf(eventDutyDTO.getPoints()) : "0.0");
 
         if(eventDutyDTO.getMusicalWorks() != null && !eventDutyDTO.getMusicalWorks().isEmpty()) {
             musicalWorks = new ArrayList<>();
@@ -202,13 +202,14 @@ public class EditTourController {
 
     @FXML
     public boolean cancel() {
+        String pointRef = (initEventDutyDTO.getPoints() != null)? String.valueOf(initEventDutyDTO.getPoints()) : "0.0";
         if(!name.getText().equals(initEventDutyDTO.getName())
                 || !description.getText().equals(initEventDutyDTO.getDescription())
                 || !startDate.getValue().equals(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalDate())
                 || !endDate.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalDate())
                 || !conductor.getText().equals(initEventDutyDTO.getConductor())
                 || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
-                || (!points.getText().isEmpty() && !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints()))
+                || !points.getText().equals(pointRef)
                 || (musicalWorks == null && initEventDutyDTO.getMusicalWorks() != null) // musical work wurde entfernt
                 || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() == null) // musical work wurde hinzugefügt
                 || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() != null && !musicalWorks.equals(initEventDutyDTO.getMusicalWorks()))) { // musical work wurde verändert
