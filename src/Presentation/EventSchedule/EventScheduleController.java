@@ -350,6 +350,9 @@ public class EventScheduleController {
                 } else if(EventType.NonMusicalEvent.equals(eventDutyDTO.getEventType())) {
                     scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditNonMusicalEvent.fxml")));
                     editOpen = true;
+                } else if(EventType.Rehearsal.equals(eventDutyDTO.getEventType())) {
+                    scrollPane.setContent(FXMLLoader.load(getClass().getResource("EditRehearsal.fxml")));
+                    editOpen = true;
                 }
             }
         } catch (IOException e) {

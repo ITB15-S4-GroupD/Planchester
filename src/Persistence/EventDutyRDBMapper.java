@@ -3,7 +3,9 @@ package Persistence;
 import Persistence.Entities.EventDutyEntity;
 import Utils.DateHelper;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 
@@ -36,6 +38,22 @@ public class EventDutyRDBMapper extends Mapper<EventDutyEntity> {
                 + "' AND endtime >= '"
                 + DateHelper.convertCalendarToTimestamp(start)
                 + "')").list();
+        DatabaseConnectionHandler.getInstance().commitTransaction();
+        return list;
+    }
+
+    public static List<EventDutyEntity> getEventDutyByDetails (String eventDutyName, Timestamp eventDutyStarttime) {
+        Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
+        List<EventDutyEntity> list = session.createQuery("FROM EventDutyEntity WHERE (name = '"
+                + eventDutyName + "' AND starttime = '"
+                + eventDutyStarttime + "')" ).list();
+        DatabaseConnectionHandler.getInstance().commitTransaction();
+        return list;
+    }
+
+    public List<EventDutyEntity> getAllRehearsalsOfEventDuty(Integer eventDutyID) {
+        Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
+        List<EventDutyEntity> list = session.createQuery("FROM EventDutyEntity WHERE (rehearsalFor = " + eventDutyID + ";)").list();
         DatabaseConnectionHandler.getInstance().commitTransaction();
         return list;
     }

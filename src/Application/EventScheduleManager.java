@@ -310,4 +310,29 @@ public class EventScheduleManager {
 
         return eventDutyModel;
     }
+
+    public static EventDutyDTO getEventDutyByDetails(EventDutyDTO eventDutyDTO) {
+        EventDutyRDBMapper rdbMapper = (EventDutyRDBMapper) persistanceFacade.getMapper(EventDutyEntity.class);
+        List<EventDutyEntity> eventDuties = rdbMapper.getEventDutyByDetails(eventDutyDTO.getName(), eventDutyDTO.getStartTime());
+        EventDutyModel eventDutyModel =  createEventDutyModel(eventDuties.get(0));
+        EventDutyDTO eventDutyDTO1 = createEventDutyDTO(eventDutyModel);
+        return eventDutyDTO1;
+    }
+
+    public static List<EventDutyDTO> getAllRehearsalsOfEventDuty(EventDutyDTO eventDutyDTO) {
+        EventDutyRDBMapper rdbMapper = (EventDutyRDBMapper) persistanceFacade.getMapper(EventDutyEntity.class);
+        List<EventDutyEntity> eventDuties = rdbMapper.getAllRehearsalsOfEventDuty(eventDutyDTO.getEventDutyID());
+
+        List<EventDutyModel> eventDutyModelList = new ArrayList<EventDutyModel>();
+        for(EventDutyEntity eventDutyEntity : eventDuties) {
+            eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
+        }
+        List<EventDutyDTO> eventDutyDTOList = new ArrayList<EventDutyDTO>();
+        for(EventDutyModel eventDutyModel : eventDutyModelList) {
+            eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
+        }
+
+        return eventDutyDTOList;
+
+    }
 }

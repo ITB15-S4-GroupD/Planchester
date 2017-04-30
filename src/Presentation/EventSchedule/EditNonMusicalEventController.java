@@ -90,7 +90,8 @@ public class EditNonMusicalEventController {
     }
 
     @FXML
-    private void save() {
+    public void save() {
+        //TODO NEXT TIMEBOX
     }
 
     @FXML
