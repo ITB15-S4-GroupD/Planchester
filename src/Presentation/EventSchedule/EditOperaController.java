@@ -93,7 +93,7 @@ public class EditOperaController {
         endTime.setValue(appointment.getEndLocalDateTime().toLocalTime());
         eventLocation.setText(appointment.getLocation());
         conductor.setText(eventDutyDTO.getConductor());
-        points.setText(eventDutyDTO.getPoints() != null ? String.valueOf(eventDutyDTO.getPoints()) : null);
+        points.setText(eventDutyDTO.getPoints() != null ? String.valueOf(eventDutyDTO.getPoints()) : "0.0");
         if(eventDutyDTO.getMusicalWorks() != null && !eventDutyDTO.getMusicalWorks().isEmpty()) {
             musicalWork = eventDutyDTO.getMusicalWorks().get(0);
             if(musicalWork != null) {
@@ -188,7 +188,6 @@ public class EditOperaController {
         for(EventDutyDTO rehearsalFromNew : newRehearsalList) {
             if(rehearsalFromNew.getEventDutyID() == null) {
                 rehearsalFromNew.setRehearsalFor(eventDutyDTO.getEventDutyID());
-                rehearsalFromNew.setPoints(0.0);
                 EventScheduleManager.createEventDuty(rehearsalFromNew);
                 EventScheduleController.addEventDutyToGUI(rehearsalFromNew);
             }
@@ -246,6 +245,8 @@ public class EditOperaController {
 
     @FXML
     public boolean cancel() {
+        // TODO: check with init data for changes
+        String pointRef = (initEventDutyDTO.getPoints() != null)? String.valueOf(initEventDutyDTO.getPoints()) : "0.0";
         if(!name.getText().equals(initEventDutyDTO.getName())
                 || !description.getText().equals(initEventDutyDTO.getDescription())
                 || !date.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalDate())
@@ -253,12 +254,10 @@ public class EditOperaController {
                 || !endTime.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime())
                 || !conductor.getText().equals(initEventDutyDTO.getConductor())
                 || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
-                || (initEventDutyDTO.getPoints() == null && !points.getText().isEmpty()) // points added
-                || (initEventDutyDTO.getPoints() != null && points.getText().isEmpty()) // points removed
-                || (initEventDutyDTO.getPoints() != null && !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints()))// points changed
-                || (musicalWork == null && initEventDutyDTO.getMusicalWorks() != null) // musical work removed
-                || (musicalWork != null && initEventDutyDTO.getMusicalWorks() == null) // musical work added
-                || (musicalWork != null && initEventDutyDTO.getMusicalWorks() != null && !musicalWork.equals(initEventDutyDTO.getMusicalWorks().get(0)))) { // musical work changed
+                || !points.getText().equals(pointRef)
+                || (musicalWork == null && initEventDutyDTO.getMusicalWorks() != null) // musical work wurde entfernt
+                || (musicalWork != null && initEventDutyDTO.getMusicalWorks() == null) // musical work wurde hinzugefügt
+                || (musicalWork != null && initEventDutyDTO.getMusicalWorks() != null && !musicalWork.equals(initEventDutyDTO.getMusicalWorks().get(0)))) { // musical work wurde verändert
 
             ButtonType answer = MessageHelper.showConfirmationMessage(PlanchesterMessages.DISCARD_CHANGES);
             if(ButtonType.NO.equals(answer)) {
