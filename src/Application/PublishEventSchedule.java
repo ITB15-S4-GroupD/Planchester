@@ -9,9 +9,6 @@ import java.util.Calendar;
  */
 public class PublishEventSchedule {
     /*
-
-
-
 		        List list = session.createQuery("FROM EventDutyEntity WHERE MONTH(starttime) = '"
                 + month
                 + "' AND YEAR(starttime) = '"

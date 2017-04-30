@@ -17,16 +17,16 @@ public class MusicianPartRDBMapper extends Mapper<MusicianPartEntity> {
         return MusicianPartEntity.class;
     }
 
-    public static List<Integer> getCountedMusicians(String instrumentFilter) {
+    public static Integer getCountedMusicians(String instrumentFilter) {
         Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
-        List list = session.createQuery("select count(*) " +
+        Long count = (Long) session.createQuery("select count(*) " +
                 "from MusicianPartEntity a " +
                 "join PartEntity b on a.part = b.partId " +
                 "join PartTypeEntity c ON b.partType = c.partTypeId " +
                 "where c.partType like '"
                 + instrumentFilter
-                + "'").list();
+                + "'").getSingleResult();
         DatabaseConnectionHandler.getInstance().commitTransaction();
-        return list;
+        return ((Number) count).intValue();
     }
 }

@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by Bernd on 06.04.2017.
  */
 @Entity
-@Table(name = "MusicianPartRDBMapper", schema = "sem4_team2", catalog = "")
+@Table(name = "Musician_Part", schema = "sem4_team2", catalog = "")
 @IdClass(MusicianPartEntityPK.class)
 public class MusicianPartEntity {
     private int musician;

@@ -19,8 +19,6 @@ import Utils.Enum.EventType;
 import Utils.MessageHelper;
 
 import javax.xml.bind.ValidationException;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.*;
 
 /**
@@ -46,10 +44,10 @@ public class EventScheduleManager {
                 }
             }
         }
-//        HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(DateHelper.convertTimestampToCalendar(eventDutyModel.getStarttime()), DateHelper.convertTimestampToCalendar(eventDutyModel.getStarttime()));
-//        if(!musicanCapacityMap.isEmpty()) {
-//            MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap);
-//        }
+        HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(DateHelper.convertTimestampToCalendar(eventDutyModel.getStarttime()), DateHelper.convertTimestampToCalendar(eventDutyModel.getStarttime()));
+        if(!musicanCapacityMap.isEmpty()) {
+            MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap);
+        }
     }
 
     public static void updateEventDuty(EventDutyDTO newEventDutyDTO, EventDutyDTO oldEventDutyDTO) throws ValidationException {
