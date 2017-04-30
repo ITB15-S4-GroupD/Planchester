@@ -208,7 +208,7 @@ public class EditHofkapelleController {
                         || !endTime.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime())
                         || !conductor.getText().equals(initEventDutyDTO.getConductor())
                         || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
-                        || !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints())
+                        || (!points.getText().isEmpty() && !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints()))
                         || (musicalWorks == null && initEventDutyDTO.getMusicalWorks() != null) // musical work wurde entfernt
                         || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() == null) // musical work wurde hinzugefügt
                         || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() != null && !musicalWorks.equals(initEventDutyDTO.getMusicalWorks()))) { // musical work wurde verändert

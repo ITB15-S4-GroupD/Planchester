@@ -34,10 +34,10 @@ public class MessageHelper {
         alert.setTitle("Planchester Warning");
 
         StringBuilder warning = new StringBuilder();
-        warning.append("There are not enough musicians available on this date:\n");
+        warning.append("There are not enough musicians available on this date. Following instruments are missing:\n");
 
         for (Map.Entry<String, Integer> musicianCapacity : musicanCapacityMap.entrySet()) {
-            warning.append(musicianCapacity.getKey() + ": " + musicianCapacity.getValue()+  " is / are missing. ");
+            warning.append(musicianCapacity.getKey() + ": " + musicianCapacity.getValue() + "\n");
         }
         alert.setHeaderText(warning.toString());
         alert.showAndWait();

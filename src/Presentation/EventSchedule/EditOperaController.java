@@ -231,7 +231,7 @@ public class EditOperaController {
                 || !endTime.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime())
                 || !conductor.getText().equals(initEventDutyDTO.getConductor())
                 || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
-                || !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints())
+                || (!points.getText().isEmpty() && !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints()))
                 || (musicalWork == null && initEventDutyDTO.getMusicalWorks() != null) // musical work wurde entfernt
                 || (musicalWork != null && initEventDutyDTO.getMusicalWorks() == null) // musical work wurde hinzugefügt
                 || (musicalWork != null && initEventDutyDTO.getMusicalWorks() != null && !musicalWork.equals(initEventDutyDTO.getMusicalWorks().get(0)))) { // musical work wurde verändert
