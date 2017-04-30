@@ -53,7 +53,7 @@ public class EventDutyRDBMapper extends Mapper<EventDutyEntity> {
 
     public List<EventDutyEntity> getAllRehearsalsOfEventDuty(Integer eventDutyID) {
         Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
-        List<EventDutyEntity> list = session.createQuery("FROM EventDutyEntity WHERE (rehearsalFor = " + eventDutyID + ";)").list();
+        List<EventDutyEntity> list = session.createQuery("FROM EventDutyEntity WHERE (rehearsalFor = " + eventDutyID + ")").list();
         DatabaseConnectionHandler.getInstance().commitTransaction();
         return list;
     }

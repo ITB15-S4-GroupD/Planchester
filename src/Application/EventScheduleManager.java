@@ -88,17 +88,17 @@ public class EventScheduleManager {
     private static List<EventDutyDTO> getEventDutyInRange(Calendar startdayOfWeek, Calendar enddayOfWeek) {
         if(loadedEventsStartdate != null && loadedEventsEnddate != null &&
                 loadedEventsStartdate.compareTo(startdayOfWeek) <= 0 && loadedEventsEnddate.compareTo(enddayOfWeek) >= 0) {
-            return new ArrayList<EventDutyDTO>();
+            return new ArrayList<>();
         }
 
         EventDutyRDBMapper rdbMapper = (EventDutyRDBMapper) persistanceFacade.getMapper(EventDutyEntity.class);
         List<EventDutyEntity> eventDuties = rdbMapper.getEventDutyInRange(startdayOfWeek, enddayOfWeek);
 
-        List<EventDutyModel> eventDutyModelList = new ArrayList<EventDutyModel>();
+        List<EventDutyModel> eventDutyModelList = new ArrayList<>();
         for(EventDutyEntity eventDutyEntity : eventDuties) {
             eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
         }
-        List<EventDutyDTO> eventDutyDTOList = new ArrayList<EventDutyDTO>();
+        List<EventDutyDTO> eventDutyDTOList = new ArrayList<>();
         for(EventDutyModel eventDutyModel : eventDutyModelList) {
             eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
         }
