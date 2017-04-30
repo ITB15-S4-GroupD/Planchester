@@ -231,7 +231,9 @@ public class EditConcertController {
                 || !endTime.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime())
                 || !conductor.getText().equals(initEventDutyDTO.getConductor())
                 || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
-                || !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints())
+                || (initEventDutyDTO.getPoints() == null && !points.getText().isEmpty()) // points added
+                || (initEventDutyDTO.getPoints() != null && points.getText().isEmpty()) // points removed
+                || (initEventDutyDTO.getPoints() != null && !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints()))// points changed
                 || (musicalWorks == null && initEventDutyDTO.getMusicalWorks() != null) // musical work wurde entfernt
                 || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() == null) // musical work wurde hinzugefügt
                 || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() != null && !musicalWorks.equals(initEventDutyDTO.getMusicalWorks()))) { // musical work wurde verändert

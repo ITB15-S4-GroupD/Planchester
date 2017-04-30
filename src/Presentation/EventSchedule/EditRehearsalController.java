@@ -147,7 +147,9 @@ public class EditRehearsalController {
                 || !endTime.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime())
                 || !conductor.getText().equals(initEventDutyDTO.getConductor())
                 || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
-                || !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints())) {
+                || (initEventDutyDTO.getPoints() == null && !points.getText().isEmpty()) // points added
+                || (initEventDutyDTO.getPoints() != null && points.getText().isEmpty()) // points removed
+                || (initEventDutyDTO.getPoints() != null && !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints()))){// points changed {
 
             ButtonType answer = MessageHelper.showConfirmationMessage(PlanchesterMessages.DISCARD_CHANGES);
             if(ButtonType.NO.equals(answer)) {

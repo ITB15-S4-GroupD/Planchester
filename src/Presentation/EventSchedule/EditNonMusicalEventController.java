@@ -102,7 +102,9 @@ public class EditNonMusicalEventController {
                 || !startTime.getValue().equals(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalTime())
                 || !endTime.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime())
                 || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
-                || !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints())) {
+                || (initEventDutyDTO.getPoints() == null && !points.getText().isEmpty()) // points added
+                || (initEventDutyDTO.getPoints() != null && points.getText().isEmpty()) // points removed
+                || (initEventDutyDTO.getPoints() != null && !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints()))){// points changed {
 
             Alert confirmationAlertMessage = new Alert(Alert.AlertType.CONFIRMATION, PlanchesterMessages.DISCARD_CHANGES, ButtonType.YES, ButtonType.NO);
             confirmationAlertMessage.showAndWait();
