@@ -45,7 +45,8 @@ public class EditOperaController {
     @FXML private TextField conductor;
     @FXML private TextField points;
 
-    public static List<EventDutyDTO> rehearsalList;
+    public static List<EventDutyDTO> actualRehearsalList;
+    public static List<EventDutyDTO> newRehearsalList;
     @FXML private TableView<String> rehearsalTableView;
     @FXML private TableColumn<String, String> rehearsalTableColumn;
 
@@ -68,13 +69,22 @@ public class EditOperaController {
 
     @FXML
     public void initialize() {
-        //TODO GET LIST OF REHEARSALS : Christina
+
         checkMandatoryFields();
 
         selectedMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
 
         Agenda.Appointment appointment = EventScheduleController.getSelectedAppointment();
         EventDutyDTO eventDutyDTO = EventScheduleController.getEventForAppointment(appointment);
+
+        actualRehearsalList = EventScheduleManager.getAllRehearsalsOfEventDuty(eventDutyDTO);
+        newRehearsalList = actualRehearsalList;
+        rehearsalTableView.getItems().clear();
+        rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+        for(EventDutyDTO e : newRehearsalList) {
+            String rehearsalToAdd = e.getName();
+            rehearsalTableView.getItems().add(rehearsalToAdd);
+        }
 
         name.setText(appointment.getSummary());
         description.setText(appointment.getDescription());
@@ -125,7 +135,6 @@ public class EditOperaController {
         conductor.setEditable(false);
         points.setEditable(false);
 
-
         name.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
         description.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
         date.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
@@ -137,7 +146,7 @@ public class EditOperaController {
     }
 
     @FXML
-    private void save() throws ValidationException {
+    public void save() throws ValidationException {
         if(validate()) {
             Agenda.Appointment selectedAppointment = EventScheduleController.getSelectedAppointment();
             EventDutyDTO oldEventDutyDTO = EventScheduleController.getEventForAppointment(selectedAppointment);
@@ -162,16 +171,29 @@ public class EditOperaController {
             }
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
             eventDutyDTO.setInstrumentation(null); //TODO timebox 2
-            eventDutyDTO.setRehearsalFor(null); //TODO christina
+            eventDutyDTO.setRehearsalFor(null);
 
-           
             EventScheduleManager.updateEventDuty(eventDutyDTO, initEventDutyDTO);
-            //TODO UPDATE REHEARSALS : Christina
+
+            //Add added Rehearsal to EventDuty
+            updateRehearsal(eventDutyDTO);
 
             EventScheduleController.addEventDutyToGUI(eventDutyDTO);
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
         }
+    }
+
+    private void updateRehearsal(EventDutyDTO eventDutyDTO) throws ValidationException {
+        for(EventDutyDTO rehearsalFromNew : newRehearsalList) {
+            if(rehearsalFromNew.getEventDutyID() == null) {
+                rehearsalFromNew.setRehearsalFor(eventDutyDTO.getEventDutyID());
+                EventScheduleManager.createEventDuty(rehearsalFromNew);
+                EventScheduleController.addEventDutyToGUI(rehearsalFromNew);
+            }
+        }
+        actualRehearsalList.clear();
+        newRehearsalList.clear();
     }
 
     @FXML
@@ -266,10 +288,10 @@ public class EditOperaController {
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
                 if(CreateRehearsalController.apply) {
-                    rehearsalList.add(CreateRehearsalController.eventDutyDTO);
+                    newRehearsalList.add(CreateRehearsalController.eventDutyDTO);
                     rehearsalTableView.getItems().clear();
                     rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
-                    for(EventDutyDTO e : rehearsalList) {
+                    for(EventDutyDTO e : newRehearsalList) {
                         String rehearsalToAdd = e.getName();
                         rehearsalTableView.getItems().add(rehearsalToAdd);
                     }
@@ -279,6 +301,7 @@ public class EditOperaController {
         CreateRehearsalController.stage = stage;
     }
 
+    @FXML
     public void editEvent () {
         btnCancelEvent.setVisible(true);
         btnSaveEvent.setVisible(true);

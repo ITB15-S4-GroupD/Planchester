@@ -46,7 +46,8 @@ public class EditHofkapelleController {
         @FXML private TextField conductor;
         @FXML private TextField points;
 
-        public static List<EventDutyDTO> rehearsalList;
+        public static List<EventDutyDTO> actualRehearsalList;
+        public static List<EventDutyDTO> newRehearsalList;
         @FXML private TableView<String> rehearsalTableView;
         @FXML private TableColumn<String, String> rehearsalTableColumn;
 
@@ -68,13 +69,22 @@ public class EditHofkapelleController {
 
         @FXML
         public void initialize() {
-                //TODO GET LIST OF REHEARSALS : Christina
+
                 checkMandatoryFields();
 
                 selectedMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
 
                 Agenda.Appointment appointment = EventScheduleController.getSelectedAppointment();
                 EventDutyDTO eventDutyDTO = EventScheduleController.getEventForAppointment(appointment);
+
+                actualRehearsalList = EventScheduleManager.getAllRehearsalsOfEventDuty(eventDutyDTO);
+                newRehearsalList = actualRehearsalList;
+                rehearsalTableView.getItems().clear();
+                rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+                for(EventDutyDTO e : newRehearsalList) {
+                        String rehearsalToAdd = e.getName();
+                        rehearsalTableView.getItems().add(rehearsalToAdd);
+                }
 
                 name.setText(appointment.getSummary());
                 description.setText(appointment.getDescription());
@@ -138,7 +148,7 @@ public class EditHofkapelleController {
         }
 
         @FXML
-        private void save() throws ValidationException {
+        public void save() throws ValidationException {
                 if(validate()) {
                         Agenda.Appointment selectedAppointment = EventScheduleController.getSelectedAppointment();
                         EventDutyDTO oldEventDutyDTO = EventScheduleController.getEventForAppointment(selectedAppointment);
@@ -160,12 +170,26 @@ public class EditHofkapelleController {
                         eventDutyDTO.setRehearsalFor(null); //TODO christina
 
                         EventScheduleManager.updateEventDuty(eventDutyDTO, initEventDutyDTO);
-                        //TODO UPDATE REHEARSALS : Christina
+
+                        //Add added Rehearsal to EventDuty
+                        updateRehearsal(eventDutyDTO);
 
                         EventScheduleController.addEventDutyToGUI(eventDutyDTO);
                         EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
                         EventScheduleController.resetSideContent(); // remove content of sidebar
                 }
+        }
+
+        private void updateRehearsal(EventDutyDTO eventDutyDTO) throws ValidationException {
+                for(EventDutyDTO rehearsalFromNew : newRehearsalList) {
+                        if(rehearsalFromNew.getEventDutyID() == null) {
+                                rehearsalFromNew.setRehearsalFor(eventDutyDTO.getEventDutyID());
+                                EventScheduleManager.createEventDuty(rehearsalFromNew);
+                                EventScheduleController.addEventDutyToGUI(rehearsalFromNew);
+                        }
+                }
+                actualRehearsalList.clear();
+                newRehearsalList.clear();
         }
 
         @FXML
@@ -186,10 +210,10 @@ public class EditHofkapelleController {
                 stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                         public void handle(WindowEvent we) {
                                 if(CreateRehearsalController.apply) {
-                                        rehearsalList.add(CreateRehearsalController.eventDutyDTO);
+                                        newRehearsalList.add(CreateRehearsalController.eventDutyDTO);
                                         rehearsalTableView.getItems().clear();
                                         rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
-                                        for(EventDutyDTO e : rehearsalList) {
+                                        for(EventDutyDTO e : newRehearsalList) {
                                                 String rehearsalToAdd = e.getName();
                                                 rehearsalTableView.getItems().add(rehearsalToAdd);
                                         }
@@ -365,7 +389,8 @@ public class EditHofkapelleController {
                         MessageHelper.showErrorAlertMessage("A musical work has to be selected.");
                         return false;
                 }
-                return true;}
+                return true;
+        }
 }
 
 
