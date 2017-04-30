@@ -48,7 +48,7 @@ public class EditNonMusicalEventController {
         startTime.setValue(appointment.getStartLocalDateTime().toLocalTime());
         endTime.setValue(appointment.getEndLocalDateTime().toLocalTime());
         eventLocation.setText(appointment.getLocation());
-        points.setText(eventDutyDTO.getPoints() != null ? String.valueOf(eventDutyDTO.getPoints()) : null);
+        points.setText(eventDutyDTO.getPoints() != null ? String.valueOf(eventDutyDTO.getPoints()) : "0.0");
 
         initNotEditableFields();
         initAppointment = appointment;
@@ -96,13 +96,14 @@ public class EditNonMusicalEventController {
 
     @FXML
     public boolean cancel() {
+        String pointRef = (initEventDutyDTO.getPoints() != null)? String.valueOf(initEventDutyDTO.getPoints()) : "0.0";
         if(!name.getText().equals(initEventDutyDTO.getName())
                 || !description.getText().equals(initEventDutyDTO.getDescription())
                 || !date.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalDate())
                 || !startTime.getValue().equals(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalTime())
-                || !endTime.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime())
+                || !points.getText().equals(pointRef)
                 || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
-                || !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints())) {
+                || !points.getText().equals(pointRef)) {
 
             Alert confirmationAlertMessage = new Alert(Alert.AlertType.CONFIRMATION, PlanchesterMessages.DISCARD_CHANGES, ButtonType.YES, ButtonType.NO);
             confirmationAlertMessage.showAndWait();

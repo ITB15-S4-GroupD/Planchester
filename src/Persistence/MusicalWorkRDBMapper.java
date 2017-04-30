@@ -21,4 +21,12 @@ public class MusicalWorkRDBMapper extends Mapper<MusicalWorkEntity> {
         DatabaseConnectionHandler.getInstance().commitTransaction();
         return list;
     }
+
+
+    public static List<Integer> getInstrumentationIDByMusicalWorkID(Integer musicalWorkID) {
+        Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
+        List<Integer> list = session.createQuery("SELECT instrumentationId FROM MusicalWorkEntity WHERE musicalWorkId=" + musicalWorkID).list();
+        DatabaseConnectionHandler.getInstance().commitTransaction();
+        return list;
+    }
 }

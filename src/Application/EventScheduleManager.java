@@ -16,10 +16,9 @@ import Persistence.PersistanceFacade;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
+import Utils.MessageHelper;
 
 import javax.xml.bind.ValidationException;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.*;
 
 /**
@@ -44,6 +43,10 @@ public class EventScheduleManager {
                     createEventDutyMusicalWorks(eventDutyEntity, musicalWorkDTO);
                 }
             }
+        }
+        HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(DateHelper.convertTimestampToCalendar(eventDutyModel.getStarttime()), DateHelper.convertTimestampToCalendar(eventDutyModel.getStarttime()));
+        if(!musicanCapacityMap.isEmpty()) {
+            MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap);
         }
     }
 
