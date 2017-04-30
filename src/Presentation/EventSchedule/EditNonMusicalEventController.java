@@ -100,7 +100,7 @@ public class EditNonMusicalEventController {
                 || !description.getText().equals(initEventDutyDTO.getDescription())
                 || !date.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalDate())
                 || !startTime.getValue().equals(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalTime())
-                || (!points.getText().isEmpty() && !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints()))
+                || !points.getText().equals(pointRef)
                 || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
                 || !points.getText().equals(pointRef)) {
 
