@@ -59,15 +59,12 @@ public class CreateTourController {
 
         selectedMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
 
-        points.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                //^\d*\.\d{2}$
-                //"^\\d*[\\.,]?\\d{1,2}?$"
+        points.textProperty().addListener((observable, oldValue, newValue) -> {
+            //^\d*\.\d{2}$
+            //"^\\d*[\\.,]?\\d{1,2}?$"
 
-                if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
-                    points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
-                }
+            if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
+                points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
             }
         });
     }
@@ -88,7 +85,7 @@ public class CreateTourController {
             eventDutyDTO.setMusicalWorks(musicalWorks);
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
             eventDutyDTO.setInstrumentation(null); //TODO timebox 2
-            eventDutyDTO.setRehearsalFor(null); //TODO christina
+            eventDutyDTO.setRehearsalFor(null);
 
             EventScheduleManager.createEventDuty(eventDutyDTO);
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
@@ -132,7 +129,7 @@ public class CreateTourController {
             InstrumentationController.newHeading = name.getText();
         }
 
-        InstrumentationController.selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
+        InstrumentationController.selectedMusicalWorks = new ArrayList<>();
         if (musicalWorks != null && !musicalWorks.isEmpty()) {
             for (MusicalWorkDTO musicalWorkDTO : musicalWorks) {
                 InstrumentationController.selectedMusicalWorks.add(musicalWorkDTO);
@@ -150,23 +147,21 @@ public class CreateTourController {
         Stage stage = new Stage();
         stage.setTitle("Musical Work & Instrumentation");
         stage.setScene(scene);
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            public void handle(WindowEvent we) {
-                if (InstrumentationController.apply) {
-                    if (!InstrumentationController.selectedMusicalWorks.isEmpty()) {
-                        musicalWorks = InstrumentationController.selectedMusicalWorks;
-                        musicalWorkTable.getItems().clear();
-                        for (MusicalWorkDTO musicalWorkDTO : musicalWorks) {
-                            musicalWorkTable.getItems().add(musicalWorkDTO.getName());
-                        }
-                    } else {
-                        musicalWorkTable.getItems().clear();
-                        musicalWorks = null;
+        stage.setOnCloseRequest(we -> {
+            if (InstrumentationController.apply) {
+                if (!InstrumentationController.selectedMusicalWorks.isEmpty()) {
+                    musicalWorks = InstrumentationController.selectedMusicalWorks;
+                    musicalWorkTable.getItems().clear();
+                    for (MusicalWorkDTO musicalWorkDTO : musicalWorks) {
+                        musicalWorkTable.getItems().add(musicalWorkDTO.getName());
                     }
-                    // TODO: timbox 2 save instrumentation
+                } else {
+                    musicalWorkTable.getItems().clear();
+                    musicalWorks = null;
                 }
-
+                // TODO: timbox 2 save instrumentation
             }
+
         });
         InstrumentationController.stage = stage;
         stage.showAndWait();
@@ -187,16 +182,14 @@ public class CreateTourController {
         stage.setScene(scene);
         stage.show();
 
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            public void handle(WindowEvent we) {
-                if(CreateRehearsalController.apply) {
-                    rehearsalList.add(CreateRehearsalController.eventDutyDTO);
-                    rehearsalTableView.getItems().clear();
-                    rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
-                    for(EventDutyDTO e : rehearsalList) {
-                        String rehearsalToAdd = e.getName();
-                        rehearsalTableView.getItems().add(rehearsalToAdd);
-                    }
+        stage.setOnCloseRequest(we -> {
+            if(CreateRehearsalController.apply) {
+                rehearsalList.add(CreateRehearsalController.eventDutyDTO);
+                rehearsalTableView.getItems().clear();
+                rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+                for(EventDutyDTO e : rehearsalList) {
+                    String rehearsalToAdd = e.getName();
+                    rehearsalTableView.getItems().add(rehearsalToAdd);
                 }
             }
         });
@@ -254,35 +247,26 @@ public class CreateTourController {
         startDate.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
         endDate.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
 
-        name.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (name.getText() == null || name.getText().isEmpty()) {
-                    name.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-                } else {
-                    name.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
-                }
+        name.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (name.getText() == null || name.getText().isEmpty()) {
+                name.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
+            } else {
+                name.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
             }
         });
-        startDate.valueProperty().addListener(new ChangeListener<LocalDate>() {
-            @Override
-            public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
-                if (startDate.getValue() == null) {
-                    startDate.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-                } else {
-                    startDate.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
-                }
+        startDate.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (startDate.getValue() == null) {
+                startDate.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
+            } else {
+                startDate.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
             }
         });
 
-        endDate.valueProperty().addListener(new ChangeListener<LocalDate>() {
-            @Override
-            public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
-                if (endDate.getValue() == null) {
-                    endDate.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-                } else {
-                    endDate.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
-                }
+        endDate.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (endDate.getValue() == null) {
+                endDate.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
+            } else {
+                endDate.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
             }
         });
     }

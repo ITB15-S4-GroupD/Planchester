@@ -125,26 +125,16 @@ public class InstrumentationController {
             }
         }
 
-        tableSelected.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                setSelectedMusicalWork(tableSelected.getSelectionModel().getSelectedItem());
-            }
-        });
+        tableSelected.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setSelectedMusicalWork(tableSelected.getSelectionModel().getSelectedItem()));
 
-        tableAvailable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                setSelectedMusicalWork(tableAvailable.getSelectionModel().getSelectedItem());
-            }
-        });
+        tableAvailable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setSelectedMusicalWork(tableAvailable.getSelectionModel().getSelectedItem()));
 
     }
 
     @FXML
     private void apply() {
         apply = true;
-        selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
+        selectedMusicalWorks = new ArrayList<>();
 
         for(String s : tableSelected.getItems()) {
             MusicalWorkDTO musicalWorkDTO = musicalWorks.stream().filter(o -> o.getName().equals(s)).findFirst().get();

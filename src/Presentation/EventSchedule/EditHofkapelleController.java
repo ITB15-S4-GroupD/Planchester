@@ -107,15 +107,12 @@ public class EditHofkapelleController {
                 initAppointment = appointment;
                 initEventDutyDTO = eventDutyDTO;
 
-                points.textProperty().addListener(new ChangeListener<String>() {
-                        @Override
-                        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                                //^\d*\.\d{2}$
-                                //"^\\d*[\\.,]?\\d{1,2}?$"
+                points.textProperty().addListener((observable, oldValue, newValue) -> {
+                        //^\d*\.\d{2}$
+                        //"^\\d*[\\.,]?\\d{1,2}?$"
 
-                                if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
-                                        points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
-                                }
+                        if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
+                                points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
                         }
                 });
         }
@@ -167,7 +164,7 @@ public class EditHofkapelleController {
                         eventDutyDTO.setMusicalWorks(musicalWorks);
                         eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
                         eventDutyDTO.setInstrumentation(null); //TODO timebox 2
-                        eventDutyDTO.setRehearsalFor(null); //TODO christina
+                        eventDutyDTO.setRehearsalFor(null);
 
                         EventScheduleManager.updateEventDuty(eventDutyDTO, initEventDutyDTO);
 
@@ -207,16 +204,14 @@ public class EditHofkapelleController {
                 stage.setScene(scene);
                 stage.show();
 
-                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                        public void handle(WindowEvent we) {
-                                if(CreateRehearsalController.apply) {
-                                        newRehearsalList.add(CreateRehearsalController.eventDutyDTO);
-                                        rehearsalTableView.getItems().clear();
-                                        rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
-                                        for(EventDutyDTO e : newRehearsalList) {
-                                                String rehearsalToAdd = e.getName();
-                                                rehearsalTableView.getItems().add(rehearsalToAdd);
-                                        }
+                stage.setOnCloseRequest(we -> {
+                        if(CreateRehearsalController.apply) {
+                                newRehearsalList.add(CreateRehearsalController.eventDutyDTO);
+                                rehearsalTableView.getItems().clear();
+                                rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+                                for(EventDutyDTO e : newRehearsalList) {
+                                        String rehearsalToAdd = e.getName();
+                                        rehearsalTableView.getItems().add(rehearsalToAdd);
                                 }
                         }
                 });
@@ -234,9 +229,9 @@ public class EditHofkapelleController {
                         || !conductor.getText().equals(initEventDutyDTO.getConductor())
                         || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
                         || !points.getText().equals(pointRef)
-                        || (musicalWorks == null && initEventDutyDTO.getMusicalWorks() != null) // musical work wurde entfernt
-                        || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() == null) // musical work wurde hinzugefügt
-                        || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() != null && !musicalWorks.equals(initEventDutyDTO.getMusicalWorks()))) { // musical work wurde verändert
+                        || (musicalWorks == null && initEventDutyDTO.getMusicalWorks() != null) // musical work removed
+                        || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() == null) // musical work added
+                        || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() != null && !musicalWorks.equals(initEventDutyDTO.getMusicalWorks()))) { // musical work changed
 
                         ButtonType answer = MessageHelper.showConfirmationMessage(PlanchesterMessages.DISCARD_CHANGES);
                         if(ButtonType.NO.equals(answer)) {
@@ -287,7 +282,7 @@ public class EditHofkapelleController {
                         InstrumentationController.newHeading = name.getText();
                 }
 
-                InstrumentationController.selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
+                InstrumentationController.selectedMusicalWorks = new ArrayList<>();
                 if(musicalWorks != null && !musicalWorks.isEmpty()) {
                         for(MusicalWorkDTO musicalWorkDTO : musicalWorks) {
                                 InstrumentationController.selectedMusicalWorks.add(musicalWorkDTO);
@@ -305,23 +300,21 @@ public class EditHofkapelleController {
                 Stage stage = new Stage();
                 stage.setTitle("Musical Work & Instrumentation");
                 stage.setScene(scene);
-                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                        public void handle(WindowEvent we) {
-                                if(InstrumentationController.apply) {
-                                        if(!InstrumentationController.selectedMusicalWorks.isEmpty()) {
-                                                musicalWorks = InstrumentationController.selectedMusicalWorks;
-                                                musicalWorkTable.getItems().clear();
-                                                for(MusicalWorkDTO musicalWorkDTO : musicalWorks) {
-                                                        musicalWorkTable.getItems().add(musicalWorkDTO.getName());
-                                                }
-                                        }  else {
-                                                musicalWorkTable.getItems().clear();
-                                                musicalWorks = null;
+                stage.setOnCloseRequest(we -> {
+                        if(InstrumentationController.apply) {
+                                if(!InstrumentationController.selectedMusicalWorks.isEmpty()) {
+                                        musicalWorks = InstrumentationController.selectedMusicalWorks;
+                                        musicalWorkTable.getItems().clear();
+                                        for(MusicalWorkDTO musicalWorkDTO : musicalWorks) {
+                                                musicalWorkTable.getItems().add(musicalWorkDTO.getName());
                                         }
-                                        // TODO: timbox 2 save instrumentation
+                                }  else {
+                                        musicalWorkTable.getItems().clear();
+                                        musicalWorks = null;
                                 }
-
+                                // TODO: timbox 2 save instrumentation
                         }
+
                 });
                 InstrumentationController.stage = stage;
 
@@ -329,36 +322,27 @@ public class EditHofkapelleController {
         }
 
         private void checkMandatoryFields() {
-                name.textProperty().addListener(new ChangeListener<String>() {
-                        @Override
-                        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                                if(name.getText() == null || name.getText().isEmpty()) {
-                                        name.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-                                } else {
-                                        name.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
-                                }
-
+                name.textProperty().addListener((observable, oldValue, newValue) -> {
+                        if(name.getText() == null || name.getText().isEmpty()) {
+                                name.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
+                        } else {
+                                name.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
                         }
+
                 });
-                date.valueProperty().addListener(new ChangeListener<LocalDate>() {
-                        @Override
-                        public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
-                                if(date.getValue() == null) {
-                                        date.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-                                } else {
-                                        date.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
-                                }
+                date.valueProperty().addListener((observable, oldValue, newValue) -> {
+                        if(date.getValue() == null) {
+                                date.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
+                        } else {
+                                date.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
                         }
                 });
 
-                startTime.valueProperty().addListener(new ChangeListener<LocalTime>() {
-                        @Override
-                        public void changed(ObservableValue<? extends LocalTime> observable, LocalTime oldValue, LocalTime newValue) {
-                                if(startTime.getValue() == null) {
-                                        startTime.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-                                } else {
-                                        startTime.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
-                                }
+                startTime.valueProperty().addListener((observable, oldValue, newValue) -> {
+                        if(startTime.getValue() == null) {
+                                startTime.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
+                        } else {
+                                startTime.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
                         }
                 });
         }
@@ -392,5 +376,3 @@ public class EditHofkapelleController {
                 return true;
         }
 }
-
-

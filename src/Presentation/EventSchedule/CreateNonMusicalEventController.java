@@ -36,15 +36,12 @@ public class CreateNonMusicalEventController {
     @FXML public void initialize() {
         initializeMandatoryFields();
 
-        points.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                //^\d*\.\d{2}$
-                //"^\\d*[\\.,]?\\d{1,2}?$"
+        points.textProperty().addListener((observable, oldValue, newValue) -> {
+            //^\d*\.\d{2}$
+            //"^\\d*[\\.,]?\\d{1,2}?$"
 
-                if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
-                    points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
-                }
+            if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
+                points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
             }
         });
     }
@@ -123,37 +120,27 @@ public class CreateNonMusicalEventController {
         date.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
         startTime.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
 
-        name.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(name.getText() == null || name.getText().isEmpty()) {
-                    name.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-                } else {
-                    name.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
-                }
+        name.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(name.getText() == null || name.getText().isEmpty()) {
+                name.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
+            } else {
+                name.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
             }
         });
-        date.valueProperty().addListener(new ChangeListener<LocalDate>() {
-            @Override
-            public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
-                if(date.getValue() == null) {
-                    date.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-                } else {
-                    date.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
-                }
+        date.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if(date.getValue() == null) {
+                date.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
+            } else {
+                date.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
             }
         });
 
-        startTime.valueProperty().addListener(new ChangeListener<LocalTime>() {
-            @Override
-            public void changed(ObservableValue<? extends LocalTime> observable, LocalTime oldValue, LocalTime newValue) {
-                if(startTime.getValue() == null) {
-                    startTime.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-                } else {
-                    startTime.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
-                }
+        startTime.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if(startTime.getValue() == null) {
+                startTime.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
+            } else {
+                startTime.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
             }
         });
     }
-
 }
