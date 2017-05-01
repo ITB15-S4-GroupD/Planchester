@@ -19,8 +19,6 @@ import Utils.Enum.EventType;
 import Utils.MessageHelper;
 
 import javax.xml.bind.ValidationException;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.*;
 
 /**
@@ -46,10 +44,10 @@ public class EventScheduleManager {
                 }
             }
         }
-//        HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(DateHelper.convertTimestampToCalendar(eventDutyModel.getStarttime()), DateHelper.convertTimestampToCalendar(eventDutyModel.getStarttime()));
-//        if(!musicanCapacityMap.isEmpty()) {
-//            MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap);
-//        }
+        HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(DateHelper.convertTimestampToCalendar(eventDutyModel.getStarttime()), DateHelper.convertTimestampToCalendar(eventDutyModel.getStarttime()));
+        if(!musicanCapacityMap.isEmpty()) {
+            MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap);
+        }
     }
 
     public static void updateEventDuty(EventDutyDTO newEventDutyDTO, EventDutyDTO oldEventDutyDTO) throws ValidationException {
@@ -93,17 +91,17 @@ public class EventScheduleManager {
     private static List<EventDutyDTO> getEventDutyInRange(Calendar startdayOfWeek, Calendar enddayOfWeek) {
         if(loadedEventsStartdate != null && loadedEventsEnddate != null &&
                 loadedEventsStartdate.compareTo(startdayOfWeek) <= 0 && loadedEventsEnddate.compareTo(enddayOfWeek) >= 0) {
-            return new ArrayList<EventDutyDTO>();
+            return new ArrayList<>();
         }
 
         EventDutyRDBMapper rdbMapper = (EventDutyRDBMapper) persistanceFacade.getMapper(EventDutyEntity.class);
         List<EventDutyEntity> eventDuties = rdbMapper.getEventDutyInRange(startdayOfWeek, enddayOfWeek);
 
-        List<EventDutyModel> eventDutyModelList = new ArrayList<EventDutyModel>();
+        List<EventDutyModel> eventDutyModelList = new ArrayList<>();
         for(EventDutyEntity eventDutyEntity : eventDuties) {
             eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
         }
-        List<EventDutyDTO> eventDutyDTOList = new ArrayList<EventDutyDTO>();
+        List<EventDutyDTO> eventDutyDTOList = new ArrayList<>();
         for(EventDutyModel eventDutyModel : eventDutyModelList) {
             eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
         }
@@ -314,5 +312,30 @@ public class EventScheduleManager {
         }
 
         return eventDutyModel;
+    }
+
+    public static EventDutyDTO getEventDutyByDetails(EventDutyDTO eventDutyDTO) {
+        EventDutyRDBMapper rdbMapper = (EventDutyRDBMapper) persistanceFacade.getMapper(EventDutyEntity.class);
+        List<EventDutyEntity> eventDuties = rdbMapper.getEventDutyByDetails(eventDutyDTO.getName(), eventDutyDTO.getStartTime());
+        EventDutyModel eventDutyModel =  createEventDutyModel(eventDuties.get(0));
+        EventDutyDTO eventDutyDTO1 = createEventDutyDTO(eventDutyModel);
+        return eventDutyDTO1;
+    }
+
+    public static List<EventDutyDTO> getAllRehearsalsOfEventDuty(EventDutyDTO eventDutyDTO) {
+        EventDutyRDBMapper rdbMapper = (EventDutyRDBMapper) persistanceFacade.getMapper(EventDutyEntity.class);
+        List<EventDutyEntity> eventDuties = rdbMapper.getAllRehearsalsOfEventDuty(eventDutyDTO.getEventDutyID());
+
+        List<EventDutyModel> eventDutyModelList = new ArrayList<EventDutyModel>();
+        for(EventDutyEntity eventDutyEntity : eventDuties) {
+            eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
+        }
+        List<EventDutyDTO> eventDutyDTOList = new ArrayList<EventDutyDTO>();
+        for(EventDutyModel eventDutyModel : eventDutyModelList) {
+            eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
+        }
+
+        return eventDutyDTOList;
+
     }
 }
