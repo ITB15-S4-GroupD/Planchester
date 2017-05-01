@@ -4,11 +4,16 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.Year;
 import java.util.*;
+
+import Application.DTO.EventDutyDTO;
+import Application.DTO.MusicalWorkDTO;
 import Domain.EventDutyModel;
 import Domain.MusicalWorkModel;
 import Persistence.Entities.*;
 import Persistence.EventDutyRDBMapper;
 import Persistence.Entities.EventDutyEntity;
+import Utils.Enum.EventStatus;
+import Utils.Enum.EventType;
 import Utils.MessageHelper;
 import Utils.Validator;
 import javax.xml.bind.ValidationException;
@@ -20,36 +25,35 @@ public class PublishEventSchedule {
 
     public static void publish(Year year, Month month) {
         //Calculate first and last day of month; note that Month starts with 0
-        EventDutyModel eventDM;
-        LocalDateTime start = LocalDateTime.of(year.getValue(), month.getValue()+1, 1, 0,0,0);
-        Calendar firstOfMonth = Calendar.getInstance();
-        firstOfMonth.set(year.getValue(), month.getValue(), 1);
-        firstOfMonth.set(Calendar.HOUR_OF_DAY, 0);
-        firstOfMonth.set(Calendar.MINUTE, 0);
-        firstOfMonth.set(Calendar.SECOND, 0);
-        Calendar lastOfMonth = Calendar.getInstance();
-        lastOfMonth.set(year.getValue(), month.getValue(), start.toLocalDate().lengthOfMonth());
-        lastOfMonth.set(Calendar.HOUR_OF_DAY, 23);
-        lastOfMonth.set(Calendar.MINUTE, 59);
-        lastOfMonth.set(Calendar.SECOND, 59);
+        EventDutyModel eventDutyModel;
 
-        List<EventDutyEntity> dutiesInRange = EventDutyRDBMapper.getEventDutyInRange(firstOfMonth, lastOfMonth);
+        Calendar firstOfMonth = Calendar.getInstance();
+        firstOfMonth.set(year.getValue(), month.getValue()-1, 1);
+
+        Calendar firstNextMoneth = Calendar.getInstance();
+        firstNextMoneth.set(year.getValue(), month.getValue(), 1);
+
+        List<EventDutyEntity> dutiesInRange = EventDutyRDBMapper.getEventDutyInRange(firstOfMonth, firstNextMoneth);
 
         for(EventDutyEntity evt : dutiesInRange){
-            eventDM = createEventDutyModel(evt);
-            try{ eventDM.validate(); }catch (ValidationException val){
+            eventDutyModel = createEventDutyModel(evt);
+            try{ eventDutyModel.validate(); }catch (ValidationException val){
                 MessageHelper.showErrorAlertMessage("Please complete duty " + evt.getEventType() + ", " + evt.getStarttime() +
                                                     "\n" + val.getMessage() );
                 return;
             }
 
             if(!hardValid(evt))return;
+
+            eventDutyModel.setEventStatus(EventStatus.Unpublished.toString());
+            try {
+                EventScheduleManager.updateEventDuty(createEventDutyDTO(eventDutyModel),createEventDutyDTO(eventDutyModel));
+            } catch (ValidationException e) {
+                e.printStackTrace();
+            }
         }
 
-        //Lade alle Termine in diesem Monat
-
-        //für alle Termine in diesem Monat: gehe jeden Termin einzeln in einer for-Schleife durch und schaue ob alle Felder außer die nullable Felder natürlich, gesetzt sind
-        //falls bei einem Termin ein feld nicht gesetzt ist: return warnung
+        MessageHelper.showInformationMessage("All events of the month " + month.toString().toLowerCase() + " have been published");
     }
 
     private static boolean hardValid(EventDutyEntity duty){
@@ -101,6 +105,40 @@ public class PublishEventSchedule {
             eventDutyModel.setMusicalWorks(musicalWorkModels);
         }
         return eventDutyModel;
+    }
+
+    private static EventDutyDTO createEventDutyDTO (EventDutyModel eventDutyModel) {
+        EventDutyDTO eventDutyDTO = new EventDutyDTO();
+        eventDutyDTO.setEventDutyID(eventDutyModel.getEventDutyId());
+        eventDutyDTO.setName(eventDutyModel.getName());
+        eventDutyDTO.setDescription(eventDutyModel.getDescription());
+        eventDutyDTO.setStartTime(eventDutyModel.getStarttime());
+        eventDutyDTO.setEndTime(eventDutyModel.getEndtime());
+        eventDutyDTO.setEventType(EventType.valueOf(eventDutyModel.getEventType()));
+        eventDutyDTO.setEventStatus(EventStatus.valueOf(eventDutyModel.getEventStatus()));
+        eventDutyDTO.setConductor(eventDutyModel.getConductor());
+        eventDutyDTO.setEventLocation(eventDutyModel.getLocation());
+        eventDutyDTO.setPoints(eventDutyModel.getDefaultPoints());
+        eventDutyDTO.setInstrumentation(eventDutyModel.getInstrumentation());
+        eventDutyDTO.setRehearsalFor(eventDutyModel.getRehearsalFor());
+
+        if(eventDutyModel.getMusicalWorks() != null) {
+            List<MusicalWorkDTO> musicalWorkDTOS = new ArrayList<>();
+            for (MusicalWorkModel musicalWorkModel : eventDutyModel.getMusicalWorks()) {
+                musicalWorkDTOS.add(getMusicalWorkDTO(musicalWorkModel));
+            }
+            eventDutyDTO.setMusicalWorks(musicalWorkDTOS);
+        }
+        return eventDutyDTO;
+    }
+
+    private static MusicalWorkDTO getMusicalWorkDTO(MusicalWorkModel musicalWorkModel) {
+        MusicalWorkDTO musicalWorkDTO = new MusicalWorkDTO();
+        musicalWorkDTO.setName(musicalWorkModel.getName());
+        musicalWorkDTO.setComposer(musicalWorkModel.getComposer());
+        musicalWorkDTO.setId(musicalWorkModel.getId());
+        musicalWorkDTO.setInstrumentationId(musicalWorkModel.getInstrumentationId());
+        return musicalWorkDTO;
     }
 
     private static MusicalWorkModel getMusicalWorkModel(MusicalWorkEntity musicalWorkEntity) {

@@ -27,6 +27,15 @@ public class MessageHelper {
         return alert.getResult();
     }
 
+    public static void showInformationMessage(String informationMessage) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Planchester Message");
+        alert.setHeaderText(informationMessage);
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().add(ButtonType.OK);
+        alert.showAndWait();
+    }
+
     public static void showWarningMusicianCapacityMessage(HashMap<String, Integer> musicanCapacityMap) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Planchester Warning");
