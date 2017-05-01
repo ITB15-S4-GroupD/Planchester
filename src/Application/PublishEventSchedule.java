@@ -1,10 +1,8 @@
 package Application;
 
-import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.Year;
 import java.util.*;
-
 import Application.DTO.EventDutyDTO;
 import Application.DTO.MusicalWorkDTO;
 import Domain.EventDutyModel;
@@ -45,7 +43,7 @@ public class PublishEventSchedule {
 
             if(!hardValid(evt))return;
 
-            eventDutyModel.setEventStatus(EventStatus.Unpublished.toString());
+            eventDutyModel.setEventStatus(EventStatus.Published.toString());
             try {
                 EventScheduleManager.updateEventDuty(createEventDutyDTO(eventDutyModel),createEventDutyDTO(eventDutyModel));
             } catch (ValidationException e) {
