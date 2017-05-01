@@ -69,7 +69,7 @@
             <TextField fx:id="eventLocation" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <TextField fx:id="conductor" GridPane.columnIndex="1" GridPane.rowIndex="8" />
             <TextField fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-            <TableView fx:id="muscialWorkTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <TableView fx:id="musicalWorkTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
               <columns>
                 <TableColumn fx:id="selectedMusicalWorks" prefWidth="249.0" text="Title" />
               </columns>

@@ -323,18 +323,21 @@ public class EventScheduleManager {
     }
 
     public static List<EventDutyDTO> getAllRehearsalsOfEventDuty(EventDutyDTO eventDutyDTO) {
-        EventDutyRDBMapper rdbMapper = (EventDutyRDBMapper) persistanceFacade.getMapper(EventDutyEntity.class);
-        List<EventDutyEntity> eventDuties = rdbMapper.getAllRehearsalsOfEventDuty(eventDutyDTO.getEventDutyID());
+        if(eventDutyDTO.getEventDutyID() != null) {
+            EventDutyRDBMapper rdbMapper = (EventDutyRDBMapper) persistanceFacade.getMapper(EventDutyEntity.class);
+            List<EventDutyEntity> eventDuties = rdbMapper.getAllRehearsalsOfEventDuty(eventDutyDTO.getEventDutyID());
 
-        List<EventDutyModel> eventDutyModelList = new ArrayList<EventDutyModel>();
-        for(EventDutyEntity eventDutyEntity : eventDuties) {
-            eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
-        }
-        List<EventDutyDTO> eventDutyDTOList = new ArrayList<EventDutyDTO>();
-        for(EventDutyModel eventDutyModel : eventDutyModelList) {
-            eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
-        }
+            List<EventDutyModel> eventDutyModelList = new ArrayList<>();
+            for (EventDutyEntity eventDutyEntity : eventDuties) {
+                eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
+            }
+            List<EventDutyDTO> eventDutyDTOList = new ArrayList<>();
+            for (EventDutyModel eventDutyModel : eventDutyModelList) {
+                eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
+            }
 
-        return eventDutyDTOList;
+            return eventDutyDTOList;
+        }
+        return new ArrayList<>();
     }
 }

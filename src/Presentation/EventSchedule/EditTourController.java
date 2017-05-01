@@ -277,7 +277,7 @@ public class EditTourController {
             InstrumentationController.newHeading = name.getText();
         }
 
-        InstrumentationController.selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
+        InstrumentationController.selectedMusicalWorks = new ArrayList<>();
         if (musicalWorks != null && !musicalWorks.isEmpty()) {
             for (MusicalWorkDTO musicalWorkDTO : musicalWorks) {
                 InstrumentationController.selectedMusicalWorks.add(musicalWorkDTO);
