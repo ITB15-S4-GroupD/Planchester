@@ -1,28 +1,18 @@
 package Presentation.EventSchedule;
 
 import Application.DTO.EventDutyDTO;
-import Application.EventScheduleManager;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import Utils.DateHelper;
 import Utils.PlanchesterConstants;
-import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
-
 
 /**
  * Created by Christina on 28.04.2017.

@@ -2,7 +2,6 @@ package Utils;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +26,6 @@ public class MessageHelper {
         alert.showAndWait();
         return alert.getResult();
     }
-
 
     public static void showWarningMusicianCapacityMessage(HashMap<String, Integer> musicanCapacityMap) {
         Alert alert = new Alert(Alert.AlertType.WARNING);

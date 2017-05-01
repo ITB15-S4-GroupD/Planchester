@@ -13,7 +13,6 @@ import Utils.MessageHelper;
 import Utils.Validator;
 import javax.xml.bind.ValidationException;
 
-
 /**
  * Created by julia on 28.04.2017.
  */
@@ -78,10 +77,8 @@ public class PublishEventSchedule {
         return true;
     }
 
-
     //If the methode createEventDutyModel in EventScheduleManager was protected duplicating code here would not be necessary.
     private static EventDutyModel createEventDutyModel(EventDutyEntity ede){
-
         EventDutyModel eventDutyModel = new EventDutyModel();
         eventDutyModel.setEventDutyId(ede.getEventDutyId());
         eventDutyModel.setName(ede.getName());

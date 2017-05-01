@@ -1,7 +1,6 @@
 package Presentation.EventSchedule;
 
 import Application.DTO.EventDutyDTO;
-import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
@@ -11,8 +10,6 @@ import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -23,8 +20,6 @@ import jfxtras.scene.control.agenda.Agenda;
 import javax.xml.bind.ValidationException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Christina on 29.04.2017.

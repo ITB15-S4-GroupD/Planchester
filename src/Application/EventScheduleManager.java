@@ -336,6 +336,5 @@ public class EventScheduleManager {
         }
 
         return eventDutyDTOList;
-
     }
 }

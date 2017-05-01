@@ -5,14 +5,9 @@ import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import jfxtras.scene.control.agenda.Agenda;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 /**
  * Created by Christina on 27.04.2017.

@@ -1,7 +1,6 @@
 package Utils;
 
 import javax.xml.bind.ValidationException;
-import java.security.DomainCombiner;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -100,7 +99,4 @@ public class Validator {
             throw new ValidationException(PlanchesterMessages.VALIDATION_POINTS_FAILDED);
         }
     }
-
-
-
 }
