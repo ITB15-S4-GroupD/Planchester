@@ -82,4 +82,25 @@ public class Validator {
             throw new ValidationException(PlanchesterMessages.VALIDATION_FAILDED);
         }
     }
+
+    public static void validatePublishLocation(String location) throws ValidationException {
+        if(location == null || location.isEmpty()){
+            throw new ValidationException(PlanchesterMessages.VALIDATION_LOCATION_FAILDED);
+        }
+    }
+
+    public static void validatePublishConductor(String conductor) throws ValidationException {
+        if(conductor == null || conductor.isEmpty()){
+            throw new ValidationException(PlanchesterMessages.VALIDATION_CONDUCTOR_FAILDED);
+        }
+    }
+
+    public static void validatePublishPoints(Double points) throws ValidationException {
+        if(points == null || points.equals(Double.valueOf(0.0))){
+            throw new ValidationException(PlanchesterMessages.VALIDATION_POINTS_FAILDED);
+        }
+    }
+
+
+
 }
