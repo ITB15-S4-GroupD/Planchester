@@ -1,7 +1,6 @@
 package Utils;
 
 import javax.xml.bind.ValidationException;
-import java.security.DomainCombiner;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -80,6 +79,24 @@ public class Validator {
     public static void validateTimestamp1BeforeTimestamp2(Timestamp timestamp1, Timestamp timestamp2) throws ValidationException {
         if(timestamp1 != null && timestamp2 != null && timestamp1.after(timestamp2)) {
             throw new ValidationException(PlanchesterMessages.VALIDATION_FAILDED);
+        }
+    }
+
+    public static void validatePublishLocation(String location) throws ValidationException {
+        if(location == null || location.isEmpty()){
+            throw new ValidationException(PlanchesterMessages.VALIDATION_LOCATION_FAILDED);
+        }
+    }
+
+    public static void validatePublishConductor(String conductor) throws ValidationException {
+        if(conductor == null || conductor.isEmpty()){
+            throw new ValidationException(PlanchesterMessages.VALIDATION_CONDUCTOR_FAILDED);
+        }
+    }
+
+    public static void validatePublishPoints(Double points) throws ValidationException {
+        if(points == null || points.equals(Double.valueOf(0.0))){
+            throw new ValidationException(PlanchesterMessages.VALIDATION_POINTS_FAILDED);
         }
     }
 }

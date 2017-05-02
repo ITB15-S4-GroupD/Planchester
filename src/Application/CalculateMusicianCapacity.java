@@ -4,7 +4,6 @@ import Domain.EventDutyModel;
 import Domain.MusicalWorkModel;
 import Persistence.*;
 import Persistence.Entities.*;
-
 import java.util.*;
 
 /**
@@ -15,7 +14,7 @@ import java.util.*;
 public class CalculateMusicianCapacity {
 
     private static PersistanceFacade persistanceFacade = new PersistanceFacade();
-    private static HashMap<String, Integer> difference = new HashMap<String, Integer>();
+    private static HashMap<String, Integer> difference = new HashMap<>();
 
     public static HashMap<String, Integer> checkCapacityInRange(Calendar eventstart, Calendar eventend) {
         List<EventDutyModel> allEvents = getAllEventsDuring(eventstart, eventend);
@@ -36,7 +35,7 @@ public class CalculateMusicianCapacity {
     }
 
     private static HashMap<String, Integer> getAllMusicians() {
-        LinkedList<String> instruments = new LinkedList<String>();
+        LinkedList<String> instruments = new LinkedList<>();
         instruments.addFirst("flute");
         instruments.add("violin1");
         instruments.add("violin2");
@@ -55,7 +54,7 @@ public class CalculateMusicianCapacity {
         instruments.addLast("percussion");
 
         int maxPartPlayers = 0;
-        HashMap<String, Integer> availableMusicians = new HashMap<String, Integer>();
+        HashMap<String, Integer> availableMusicians = new HashMap<>();
         for (String currentPart : instruments) {
             Integer amount = MusicianPartRDBMapper.getCountedMusicians(currentPart);
             availableMusicians.put(currentPart, amount);
@@ -157,7 +156,7 @@ public class CalculateMusicianCapacity {
     }
 
     private static List<Integer> getInstrumentationIDsForMusicalWorks(EventDutyModel eventDutyModel) {
-        List<Integer> ids = new ArrayList<Integer>();
+        List<Integer> ids = new ArrayList<>();
         List<Integer> musicalWorks = EventDutyMusicalWorkRDBMapper.getAllMusicalWorkIDsByEventID(eventDutyModel.getEventDutyId());
         for (Integer musicalWorkID : musicalWorks) {
             List<Integer> instrumentationIDs = MusicalWorkRDBMapper.getInstrumentationIDByMusicalWorkID(musicalWorkID);
@@ -169,7 +168,7 @@ public class CalculateMusicianCapacity {
     private static List<EventDutyModel> getAllEventsDuring(Calendar eventstart, Calendar eventend) {
         List<EventDutyEntity> eventDuties = EventDutyRDBMapper.getAllEventDutiesInRange(eventstart, eventend);
 
-        List<EventDutyModel> eventDutyModelList = new ArrayList<EventDutyModel>();
+        List<EventDutyModel> eventDutyModelList = new ArrayList<>();
         for(EventDutyEntity eventDutyEntity : eventDuties) {
             eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
         }

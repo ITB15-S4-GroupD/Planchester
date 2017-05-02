@@ -2,13 +2,7 @@ package Application.DTO;
 
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
-import com.jfoenix.controls.JFXDatePicker;
-import com.jfoenix.controls.JFXTimePicker;
-import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
-
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 /**

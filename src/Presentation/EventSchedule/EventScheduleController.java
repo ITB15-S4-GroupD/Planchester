@@ -2,6 +2,7 @@ package Presentation.EventSchedule;
 
 import Application.DTO.EventDutyDTO;
 import Application.EventScheduleManager;
+import Application.PublishEventSchedule;
 import Utils.Enum.EventType;
 import Presentation.PlanchesterGUI;
 import Utils.DateHelper;
@@ -20,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -442,5 +444,6 @@ public class EventScheduleController {
 
     @FXML public void publishEventSchedule() {
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
+        PublishEventSchedule.publish(Year.of(displayedDate.getYear()),displayedDate.getMonth());
     }
 }

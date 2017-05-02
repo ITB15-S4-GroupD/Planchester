@@ -1,7 +1,6 @@
 package Presentation.EventSchedule;
 
 import Application.DTO.EventDutyDTO;
-import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
@@ -11,8 +10,6 @@ import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -23,13 +20,11 @@ import jfxtras.scene.control.agenda.Agenda;
 import javax.xml.bind.ValidationException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Christina on 29.04.2017.
  */
-public class EditRehearsalController {
+public class EditRehearsalController extends EditController {
 
     @FXML private TextField name;
     @FXML private TextArea description;
@@ -47,12 +42,11 @@ public class EditRehearsalController {
     @FXML private Button btnCancelEvent;
     @FXML private Button btnEditEvent;
 
-
-
+    @Override
     @FXML
     public void initialize() {
         //TODO GET LIST OF REHEARSALS : Christina
-        checkMandatoryFields();
+        super.checkMandatoryFields();
 
         Agenda.Appointment appointment = EventScheduleController.getSelectedAppointment();
         EventDutyDTO eventDutyDTO = EventScheduleController.getEventForAppointment(appointment);
@@ -70,15 +64,12 @@ public class EditRehearsalController {
         initAppointment = appointment;
         initEventDutyDTO = eventDutyDTO;
 
-        points.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                //^\d*\.\d{2}$
-                //"^\\d*[\\.,]?\\d{1,2}?$"
+        points.textProperty().addListener((observable, oldValue, newValue) -> {
+            //^\d*\.\d{2}$
+            //"^\\d*[\\.,]?\\d{1,2}?$"
 
-                if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
-                    points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
-                }
+            if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
+                points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
             }
         });
     }
@@ -108,6 +99,7 @@ public class EditRehearsalController {
         conductor.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
     }
 
+    @Override
     @FXML
     public void save() throws ValidationException {
         if(validate()) {
@@ -138,6 +130,7 @@ public class EditRehearsalController {
         }
     }
 
+    @Override
     @FXML
     public boolean cancel() {
         if(!name.getText().equals(initEventDutyDTO.getName())
@@ -162,6 +155,7 @@ public class EditRehearsalController {
         return true;
     }
 
+    @Override
     @FXML
     public void editEvent () {
         btnCancelEvent.setVisible(true);
@@ -185,41 +179,6 @@ public class EditRehearsalController {
         eventLocation.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
         points.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
         conductor.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
-    }
-
-    private void checkMandatoryFields() {
-        name.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(name.getText() == null || name.getText().isEmpty()) {
-                    name.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-                } else {
-                    name.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
-                }
-
-            }
-        });
-        date.valueProperty().addListener(new ChangeListener<LocalDate>() {
-            @Override
-            public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
-                if(date.getValue() == null) {
-                    date.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-                } else {
-                    date.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
-                }
-            }
-        });
-
-        startTime.valueProperty().addListener(new ChangeListener<LocalTime>() {
-            @Override
-            public void changed(ObservableValue<? extends LocalTime> observable, LocalTime oldValue, LocalTime newValue) {
-                if(startTime.getValue() == null) {
-                    startTime.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-                } else {
-                    startTime.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
-                }
-            }
-        });
     }
 
     private boolean validate() {
@@ -248,6 +207,4 @@ public class EditRehearsalController {
         }
         return true;
     }
-
-
 }
