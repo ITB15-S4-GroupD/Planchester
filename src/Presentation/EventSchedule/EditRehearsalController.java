@@ -24,7 +24,7 @@ import java.time.LocalTime;
 /**
  * Created by Christina on 29.04.2017.
  */
-public class EditRehearsalController {
+public class EditRehearsalController extends EditController {
 
     @FXML private TextField name;
     @FXML private TextArea description;
@@ -42,12 +42,11 @@ public class EditRehearsalController {
     @FXML private Button btnCancelEvent;
     @FXML private Button btnEditEvent;
 
-
-
+    @Override
     @FXML
     public void initialize() {
         //TODO GET LIST OF REHEARSALS : Christina
-        checkMandatoryFields();
+        super.checkMandatoryFields();
 
         Agenda.Appointment appointment = EventScheduleController.getSelectedAppointment();
         EventDutyDTO eventDutyDTO = EventScheduleController.getEventForAppointment(appointment);
@@ -100,6 +99,7 @@ public class EditRehearsalController {
         conductor.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
     }
 
+    @Override
     @FXML
     public void save() throws ValidationException {
         if(validate()) {
@@ -130,6 +130,7 @@ public class EditRehearsalController {
         }
     }
 
+    @Override
     @FXML
     public boolean cancel() {
         if(!name.getText().equals(initEventDutyDTO.getName())
@@ -154,6 +155,7 @@ public class EditRehearsalController {
         return true;
     }
 
+    @Override
     @FXML
     public void editEvent () {
         btnCancelEvent.setVisible(true);
@@ -177,32 +179,6 @@ public class EditRehearsalController {
         eventLocation.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
         points.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
         conductor.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
-    }
-
-    private void checkMandatoryFields() {
-        name.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(name.getText() == null || name.getText().isEmpty()) {
-                name.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-            } else {
-                name.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
-            }
-
-        });
-        date.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if(date.getValue() == null) {
-                date.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-            } else {
-                date.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
-            }
-        });
-
-        startTime.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if(startTime.getValue() == null) {
-                startTime.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-            } else {
-                startTime.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
-            }
-        });
     }
 
     private boolean validate() {

@@ -82,13 +82,13 @@ public class CreateTourController {
             eventDutyDTO.setInstrumentation(null); //TODO timebox 2
             eventDutyDTO.setRehearsalFor(null);
 
-            eventDutyDTO = EventScheduleManager.createEventDuty(eventDutyDTO);
+            eventDutyDTO =EventScheduleManager.createEventDuty(eventDutyDTO);
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
             EventDutyDTO eventDutyDTO1 = EventScheduleManager.getEventDutyByDetails(eventDutyDTO);
 
             for(EventDutyDTO eventD : rehearsalList){
                 eventD.setRehearsalFor(eventDutyDTO1.getEventDutyID());
-                eventD = EventScheduleManager.createEventDuty(eventD);
+                EventScheduleManager.createEventDuty(eventD);
                 EventScheduleController.addEventDutyToGUI(eventD);
             }
 
@@ -161,7 +161,7 @@ public class CreateTourController {
         InstrumentationController.stage = stage;
         stage.showAndWait();
     }
-    
+
    @FXML
     public void addNewRehearsal() {
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -211,7 +211,6 @@ public class CreateTourController {
     }
 
     private boolean validate() {
-        LocalDate today = LocalDate.now();
         LocalDate start = startDate.getValue();
         LocalDate end = endDate.getValue();
 
