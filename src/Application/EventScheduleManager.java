@@ -126,14 +126,14 @@ public class EventScheduleManager {
         }
     }
 
-    private static void removeEventDutyMusicalWorks(EventDutyEntity eventDutyEntity, MusicalWorkDTO musicalWorkDTO) {
+    public static void removeEventDutyMusicalWorks(EventDutyEntity eventDutyEntity, MusicalWorkDTO musicalWorkDTO) {
         EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
         eventDutyMusicalWorkEntity.setEventDuty(eventDutyEntity.getEventDutyId());
         eventDutyMusicalWorkEntity.setMusicalWork(musicalWorkDTO.getId());
         EventDutyMusicalWorkRDBMapper.remove(eventDutyMusicalWorkEntity);
     }
 
-    private static void createEventDutyMusicalWorks(EventDutyEntity eventDutyEntity, MusicalWorkDTO musicalWorkDTO) {
+    public static void createEventDutyMusicalWorks(EventDutyEntity eventDutyEntity, MusicalWorkDTO musicalWorkDTO) {
         EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
         eventDutyMusicalWorkEntity.setEventDuty(eventDutyEntity.getEventDutyId());
         eventDutyMusicalWorkEntity.setMusicalWork(musicalWorkDTO.getId());
@@ -141,7 +141,7 @@ public class EventScheduleManager {
     }
 
     //Mapper
-    private static MusicalWorkModel getMusicalWorkModel(MusicalWorkDTO musicalWorkDTO) {
+    public static MusicalWorkModel getMusicalWorkModel(MusicalWorkDTO musicalWorkDTO) {
         MusicalWorkModel musicalWorkModel = new MusicalWorkModel();
         musicalWorkModel.setName(musicalWorkDTO.getName());
         musicalWorkModel.setComposer(musicalWorkDTO.getComposer());
@@ -150,7 +150,7 @@ public class EventScheduleManager {
         return musicalWorkModel;
     }
 
-    private static MusicalWorkModel getMusicalWorkModel(MusicalWorkEntity musicalWorkEntity) {
+    public static MusicalWorkModel getMusicalWorkModel(MusicalWorkEntity musicalWorkEntity) {
         MusicalWorkModel musicalWorkModel = new MusicalWorkModel();
         musicalWorkModel.setName(musicalWorkEntity.getName());
         musicalWorkModel.setComposer(musicalWorkEntity.getComposer());
@@ -159,7 +159,7 @@ public class EventScheduleManager {
         return musicalWorkModel;
     }
 
-    private static MusicalWorkDTO getMusicalWorkDTO(MusicalWorkModel musicalWorkModel) {
+    public static MusicalWorkDTO getMusicalWorkDTO(MusicalWorkModel musicalWorkModel) {
         MusicalWorkDTO musicalWorkDTO = new MusicalWorkDTO();
         musicalWorkDTO.setName(musicalWorkModel.getName());
         musicalWorkDTO.setComposer(musicalWorkModel.getComposer());
@@ -168,7 +168,7 @@ public class EventScheduleManager {
         return musicalWorkDTO;
     }
 
-    private static MusicalWorkEntity getMusicalWorkEntity(MusicalWorkModel musicalWorkModel) {
+    public static MusicalWorkEntity getMusicalWorkEntity(MusicalWorkModel musicalWorkModel) {
         MusicalWorkEntity musicalWorkEntity = new MusicalWorkEntity();
         musicalWorkEntity.setName(musicalWorkModel.getName());
         musicalWorkEntity.setComposer(musicalWorkModel.getComposer());
@@ -177,7 +177,7 @@ public class EventScheduleManager {
         return musicalWorkEntity;
     }
 
-    private static InstrumentationModel getInstrumentationModel(InstrumentationDTO instrumentation) {
+    public static InstrumentationModel getInstrumentationModel(InstrumentationDTO instrumentation) {
         InstrumentationModel instrumentationModel = new InstrumentationModel();
         instrumentationModel.setBasson(instrumentation.getBasson());
         instrumentationModel.setClarinet(instrumentation.getClarinet());
@@ -199,7 +199,7 @@ public class EventScheduleManager {
         return instrumentationModel;
     }
 
-    private static EventDutyModel createEventDutyModel(EventDutyDTO eventDutyDTO) {
+    public static EventDutyModel createEventDutyModel(EventDutyDTO eventDutyDTO) {
         EventDutyModel eventDutyModel = new EventDutyModel();
         eventDutyModel.setEventDutyId(eventDutyDTO.getEventDutyID());
         eventDutyModel.setName(eventDutyDTO.getName());
@@ -225,7 +225,7 @@ public class EventScheduleManager {
         return eventDutyModel;
     }
 
-    private static EventDutyEntity createEventDutyEntity(EventDutyModel eventDutyModel) {
+    public static EventDutyEntity createEventDutyEntity(EventDutyModel eventDutyModel) {
         EventDutyEntity eventDutyEntity = new EventDutyEntity();
         if(eventDutyModel.getEventDutyId() != null) {
             eventDutyEntity.setEventDutyId(eventDutyModel.getEventDutyId());
@@ -265,7 +265,7 @@ public class EventScheduleManager {
         return eventDutyEntity;
     }
 
-    private static EventDutyDTO createEventDutyDTO (EventDutyModel eventDutyModel) {
+    public static EventDutyDTO createEventDutyDTO (EventDutyModel eventDutyModel) {
         EventDutyDTO eventDutyDTO = new EventDutyDTO();
         eventDutyDTO.setEventDutyID(eventDutyModel.getEventDutyId());
         eventDutyDTO.setName(eventDutyModel.getName());
@@ -290,7 +290,7 @@ public class EventScheduleManager {
         return eventDutyDTO;
     }
 
-    private static EventDutyModel createEventDutyModel(EventDutyEntity eventDutyEntity) {
+    public static EventDutyModel createEventDutyModel(EventDutyEntity eventDutyEntity) {
         EventDutyModel eventDutyModel = new EventDutyModel();
         eventDutyModel.setEventDutyId(eventDutyEntity.getEventDutyId());
         eventDutyModel.setName(eventDutyEntity.getName());
