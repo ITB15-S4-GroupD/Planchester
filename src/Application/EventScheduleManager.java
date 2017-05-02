@@ -30,7 +30,7 @@ public class EventScheduleManager {
     private static Calendar loadedEventsStartdate; //start of the already loaded calendar
     private static Calendar loadedEventsEnddate; //end of the already loaded calendar
 
-    public static void createEventDuty(EventDutyDTO eventDutyDTO) throws ValidationException {
+    public static EventDutyDTO createEventDuty(EventDutyDTO eventDutyDTO) throws ValidationException {
         EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
         eventDutyModel.validate();
         EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
@@ -48,6 +48,9 @@ public class EventScheduleManager {
         if(!musicanCapacityMap.isEmpty()) {
             MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap);
         }
+
+        eventDutyDTO.setEventDutyID(eventDutyEntity.getEventDutyId());
+        return eventDutyDTO;
     }
 
     public static void updateEventDuty(EventDutyDTO newEventDutyDTO, EventDutyDTO oldEventDutyDTO) throws ValidationException {
@@ -75,8 +78,8 @@ public class EventScheduleManager {
         }
     }
 
-    public static void createNonMusicalPerformance(EventDutyDTO eventDutyDTO) {
-		
+    public static EventDutyDTO createNonMusicalPerformance(EventDutyDTO eventDutyDTO) {
+		return null;
 	}
 
     public static List<EventDutyDTO> getEventDutyListForCurrentWeek() {

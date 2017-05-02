@@ -102,13 +102,13 @@ public class CreateHofkapelleController {
             eventDutyDTO.setInstrumentation(null); //TODO timebox 2
             eventDutyDTO.setRehearsalFor(null);
 
-            EventScheduleManager.createEventDuty(eventDutyDTO);
+            eventDutyDTO = EventScheduleManager.createEventDuty(eventDutyDTO);
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
             EventDutyDTO eventDutyDTO1 = EventScheduleManager.getEventDutyByDetails(eventDutyDTO);
 
             for(EventDutyDTO eventD : rehearsalList){
                 eventD.setRehearsalFor(eventDutyDTO1.getEventDutyID());
-                EventScheduleManager.createEventDuty(eventD);
+                eventD = EventScheduleManager.createEventDuty(eventD);
                 EventScheduleController.addEventDutyToGUI(eventD);
             }
 

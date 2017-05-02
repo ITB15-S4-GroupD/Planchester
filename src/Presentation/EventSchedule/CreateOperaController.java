@@ -98,15 +98,15 @@ public class CreateOperaController {
 
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
             eventDutyDTO.setInstrumentation(null); //alternative instrumentation is not in the first timebox
-            eventDutyDTO.setRehearsalFor(null); //TODO Christina
+            eventDutyDTO.setRehearsalFor(null);
 
-            EventScheduleManager.createEventDuty(eventDutyDTO);
+            eventDutyDTO = EventScheduleManager.createEventDuty(eventDutyDTO);
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
             EventDutyDTO eventDutyDTO1 = EventScheduleManager.getEventDutyByDetails(eventDutyDTO);
 
             for(EventDutyDTO eventD : rehearsalList){
                 eventD.setRehearsalFor(eventDutyDTO1.getEventDutyID());
-                EventScheduleManager.createEventDuty(eventD);
+                eventD = EventScheduleManager.createEventDuty(eventD);
                 EventScheduleController.addEventDutyToGUI(eventD);
             }
 

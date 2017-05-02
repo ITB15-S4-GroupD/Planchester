@@ -75,7 +75,7 @@ public class CreateNonMusicalEventController {
             eventDutyDTO.setEventLocation(eventLocation.getText());
             eventDutyDTO.setPoints((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText()));
 
-            EventScheduleManager.createNonMusicalPerformance(eventDutyDTO);
+            eventDutyDTO = EventScheduleManager.createNonMusicalPerformance(eventDutyDTO);
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
