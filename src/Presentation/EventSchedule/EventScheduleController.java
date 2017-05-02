@@ -220,7 +220,7 @@ public class EventScheduleController {
 
     public static void setSelectedAppointment(EventDutyDTO eventDutyDTO) {
         for (Map.Entry<Agenda.Appointment, EventDutyDTO> entry : staticLoadedEventsMap.entrySet()) {
-            if (Objects.equals(eventDutyDTO, entry.getValue())) {
+            if (eventDutyDTO.getEventDutyID() == entry.getValue().getEventDutyID()) {
                 staticAgenda.selectedAppointments().clear();
                 staticAgenda.selectedAppointments().add(entry.getKey());
             }
@@ -444,6 +444,9 @@ public class EventScheduleController {
 
     @FXML public void publishEventSchedule() {
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
-        PublishEventSchedule.publish(Year.of(displayedDate.getYear()),displayedDate.getMonth());
+        EventDutyDTO eventDutyDTO = PublishEventSchedule.publish(Year.of(displayedDate.getYear()),displayedDate.getMonth());
+        if(eventDutyDTO != null) {
+            setSelectedAppointment(eventDutyDTO);
+        }
     }
 }

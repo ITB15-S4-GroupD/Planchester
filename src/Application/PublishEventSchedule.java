@@ -10,6 +10,7 @@ import Domain.MusicalWorkModel;
 import Persistence.Entities.*;
 import Persistence.EventDutyRDBMapper;
 import Persistence.Entities.EventDutyEntity;
+import Presentation.EventSchedule.EventScheduleController;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import Utils.MessageHelper;
@@ -21,7 +22,7 @@ import javax.xml.bind.ValidationException;
  */
 public class PublishEventSchedule {
 
-    public static void publish(Year year, Month month) {
+    public static EventDutyDTO publish(Year year, Month month) {
         //Calculate first and last day of month; note that Month starts with 0
         EventDutyModel eventDutyModel;
 
@@ -34,24 +35,25 @@ public class PublishEventSchedule {
         List<EventDutyEntity> dutiesInRange = EventDutyRDBMapper.getEventDutyInRange(firstOfMonth, firstNextMoneth);
 
         for(EventDutyEntity evt : dutiesInRange){
-            eventDutyModel = createEventDutyModel(evt);
+            eventDutyModel = EventScheduleManager.createEventDutyModel(evt);
             try{ eventDutyModel.validate(); }catch (ValidationException val){
                 MessageHelper.showErrorAlertMessage("Please complete duty " + evt.getEventType() + ", " + evt.getStarttime() +
                                                     "\n" + val.getMessage() );
-                return;
+                return EventScheduleManager.createEventDutyDTO(eventDutyModel);
             }
 
-            if(!hardValid(evt))return;
+            if(!hardValid(evt))EventScheduleManager.createEventDutyDTO(eventDutyModel);
 
             eventDutyModel.setEventStatus(EventStatus.Published.toString());
             try {
-                EventScheduleManager.updateEventDuty(createEventDutyDTO(eventDutyModel),createEventDutyDTO(eventDutyModel));
+                EventScheduleManager.updateEventDuty(EventScheduleManager.createEventDutyDTO(eventDutyModel),EventScheduleManager.createEventDutyDTO(eventDutyModel));
             } catch (ValidationException e) {
                 e.printStackTrace();
             }
         }
 
         MessageHelper.showInformationMessage("All events of the month " + month.toString().toLowerCase() + " have been published");
+        return null;
     }
 
     private static boolean hardValid(EventDutyEntity duty){
@@ -77,74 +79,5 @@ public class PublishEventSchedule {
             }
         }
         return true;
-    }
-
-    //If the methode createEventDutyModel in EventScheduleManager was protected duplicating code here would not be necessary.
-    private static EventDutyModel createEventDutyModel(EventDutyEntity ede){
-        EventDutyModel eventDutyModel = new EventDutyModel();
-        eventDutyModel.setEventDutyId(ede.getEventDutyId());
-        eventDutyModel.setName(ede.getName());
-        eventDutyModel.setDescription(ede.getDescription());
-        eventDutyModel.setStarttime(ede.getStarttime());
-        eventDutyModel.setEndtime(ede.getEndtime());
-        eventDutyModel.setEventType(ede.getEventType().toString());
-        eventDutyModel.setEventStatus(ede.getEventStatus().toString());
-        eventDutyModel.setConductor(ede.getConductor());
-        eventDutyModel.setLocation(ede.getLocation());
-        eventDutyModel.setDefaultPoints(ede.getDefaultPoints());
-        eventDutyModel.setInstrumentation(ede.getInstrumentation());
-        eventDutyModel.setRehearsalFor(ede.getRehearsalFor());
-        if(!ede.getEventDutyMusicalWorksByEventDutyId().isEmpty()) {
-            List<MusicalWorkModel> musicalWorkModels = new ArrayList<>();
-            for (EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity : ede.getEventDutyMusicalWorksByEventDutyId()) {
-                MusicalWorkEntity musicalWorkEntity = eventDutyMusicalWorkEntity.getMusicalWorkByMusicalWork();
-                musicalWorkModels.add(getMusicalWorkModel(musicalWorkEntity));
-            }
-            eventDutyModel.setMusicalWorks(musicalWorkModels);
-        }
-        return eventDutyModel;
-    }
-
-    private static EventDutyDTO createEventDutyDTO (EventDutyModel eventDutyModel) {
-        EventDutyDTO eventDutyDTO = new EventDutyDTO();
-        eventDutyDTO.setEventDutyID(eventDutyModel.getEventDutyId());
-        eventDutyDTO.setName(eventDutyModel.getName());
-        eventDutyDTO.setDescription(eventDutyModel.getDescription());
-        eventDutyDTO.setStartTime(eventDutyModel.getStarttime());
-        eventDutyDTO.setEndTime(eventDutyModel.getEndtime());
-        eventDutyDTO.setEventType(EventType.valueOf(eventDutyModel.getEventType()));
-        eventDutyDTO.setEventStatus(EventStatus.valueOf(eventDutyModel.getEventStatus()));
-        eventDutyDTO.setConductor(eventDutyModel.getConductor());
-        eventDutyDTO.setEventLocation(eventDutyModel.getLocation());
-        eventDutyDTO.setPoints(eventDutyModel.getDefaultPoints());
-        eventDutyDTO.setInstrumentation(eventDutyModel.getInstrumentation());
-        eventDutyDTO.setRehearsalFor(eventDutyModel.getRehearsalFor());
-
-        if(eventDutyModel.getMusicalWorks() != null) {
-            List<MusicalWorkDTO> musicalWorkDTOS = new ArrayList<>();
-            for (MusicalWorkModel musicalWorkModel : eventDutyModel.getMusicalWorks()) {
-                musicalWorkDTOS.add(getMusicalWorkDTO(musicalWorkModel));
-            }
-            eventDutyDTO.setMusicalWorks(musicalWorkDTOS);
-        }
-        return eventDutyDTO;
-    }
-
-    private static MusicalWorkDTO getMusicalWorkDTO(MusicalWorkModel musicalWorkModel) {
-        MusicalWorkDTO musicalWorkDTO = new MusicalWorkDTO();
-        musicalWorkDTO.setName(musicalWorkModel.getName());
-        musicalWorkDTO.setComposer(musicalWorkModel.getComposer());
-        musicalWorkDTO.setId(musicalWorkModel.getId());
-        musicalWorkDTO.setInstrumentationId(musicalWorkModel.getInstrumentationId());
-        return musicalWorkDTO;
-    }
-
-    private static MusicalWorkModel getMusicalWorkModel(MusicalWorkEntity musicalWorkEntity) {
-        MusicalWorkModel musicalWorkModel = new MusicalWorkModel();
-        musicalWorkModel.setName(musicalWorkEntity.getName());
-        musicalWorkModel.setComposer(musicalWorkEntity.getComposer());
-        musicalWorkModel.setId(musicalWorkEntity.getMusicalWorkId());
-        musicalWorkModel.setInstrumentationId(musicalWorkEntity.getInstrumentationId());
-        return musicalWorkModel;
     }
 }
