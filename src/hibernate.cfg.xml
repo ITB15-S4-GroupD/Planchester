@@ -5,12 +5,14 @@
 <hibernate-configuration>
     <session-factory>
         <!--<property name="connection.url">jdbc:mysql://127.0.0.1:3306/sem4_team2</property>-->
-        <property name="connection.url">jdbc:mysql://mysql.vlbg.org:3306/sem4_team2</property>
+        <property name="connection.url">jdbc:mysql://127.0.0.1:3306/planchester</property>
+        <!--<property name="connection.url">jdbc:mysql://mysql.vlbg.org:3306/sem4_team2</property>-->
         <!--<property name="connection.url">jdbc:mysql://rzipas.ddns.net:3306/planchester</property>-->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <!--<property name="connection.username">root</property>-->
-        <property name="connection.username">team2</property>
-        <property name="connection.password">8fpE?2j2E6kis2~9</property>
+        <property name="connection.username">root</property>
+        <!--<property name="connection.username">team2</property>-->
+        <!--<property name="connection.password">8fpE?2j2E6kis2~9</property>-->
+        <property name="connection.password">passwort</property>
         <property name="show_sql">true</property>
         <mapping class="Persistence.Entities.AccountEntity"/>
         <mapping class="Persistence.Entities.BrassInstrumentationEntity"/>
