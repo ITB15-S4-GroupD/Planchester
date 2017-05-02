@@ -2,14 +2,12 @@ package Presentation;
 
 import Application.DatabaseSessionManager;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
-import javafx.stage.WindowEvent;
 
 import java.net.URL;
 import java.rmi.UnexpectedException;
@@ -21,15 +19,11 @@ public class PlanchesterGUI {
         DatabaseSessionManager.readConfiguration();
 
         TabPane tabPane = createTabs();
-
         primaryStage.setTitle("Planchester");
         primaryStage.setMaximized(true);
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent t) {
-                Platform.exit();
-                System.exit(0);
-            }
+        primaryStage.setOnCloseRequest(t -> {
+            Platform.exit();
+            System.exit(0);
         });
 
         // set and show scene

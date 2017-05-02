@@ -73,7 +73,7 @@
                 <TableColumn fx:id="selectedMusicalWorks" prefWidth="253.0" text="Title" />
               </columns>
             </TableView>
-            <Button fx:id="btnEditDetails" mnemonicParsing="false" onAction="#editConcertInstrumentation" onMouseClicked="#editConcertInstrumentation" text="Edit Details ..." GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Button fx:id="btnEditDetails" mnemonicParsing="false" onAction="#editInstrumentation" text="Edit Details ..." GridPane.columnIndex="1" GridPane.rowIndex="7" />
          </children>
          <padding>
             <Insets left="10.0" right="10.0" />
@@ -89,7 +89,7 @@
         </rowConstraints>
          <children>
             <Button id="discard" fx:id="btnCancel" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="80.0" text="Cancel" />
-            <Button fx:id="btnSaveNewConcert" mnemonicParsing="false" onAction="#insertNewConcertPerformance" prefHeight="25.0" prefWidth="80.0" text="Save" GridPane.columnIndex="1" />
+            <Button fx:id="btnSaveNewConcert" mnemonicParsing="false" onAction="#insertEventDuty" prefHeight="25.0" prefWidth="80.0" text="Save" GridPane.columnIndex="1" />
          </children>
       </GridPane>
       <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">

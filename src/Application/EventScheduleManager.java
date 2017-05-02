@@ -30,7 +30,7 @@ public class EventScheduleManager {
     private static Calendar loadedEventsStartdate; //start of the already loaded calendar
     private static Calendar loadedEventsEnddate; //end of the already loaded calendar
 
-    public static void createEventDuty(EventDutyDTO eventDutyDTO) throws ValidationException {
+    public static EventDutyDTO createEventDuty(EventDutyDTO eventDutyDTO) throws ValidationException {
         EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
         eventDutyModel.validate();
         EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
@@ -48,6 +48,9 @@ public class EventScheduleManager {
         if(!musicanCapacityMap.isEmpty()) {
             MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap);
         }
+
+        eventDutyDTO.setEventDutyID(eventDutyEntity.getEventDutyId());
+        return eventDutyDTO;
     }
 
     public static void updateEventDuty(EventDutyDTO newEventDutyDTO, EventDutyDTO oldEventDutyDTO) throws ValidationException {
@@ -75,8 +78,8 @@ public class EventScheduleManager {
         }
     }
 
-    public static void createNonMusicalPerformance(EventDutyDTO eventDutyDTO) {
-		
+    public static EventDutyDTO createNonMusicalPerformance(EventDutyDTO eventDutyDTO) {
+		return null;
 	}
 
     public static List<EventDutyDTO> getEventDutyListForCurrentWeek() {
@@ -323,19 +326,21 @@ public class EventScheduleManager {
     }
 
     public static List<EventDutyDTO> getAllRehearsalsOfEventDuty(EventDutyDTO eventDutyDTO) {
-        EventDutyRDBMapper rdbMapper = (EventDutyRDBMapper) persistanceFacade.getMapper(EventDutyEntity.class);
-        List<EventDutyEntity> eventDuties = rdbMapper.getAllRehearsalsOfEventDuty(eventDutyDTO.getEventDutyID());
+        if(eventDutyDTO.getEventDutyID() != null) {
+            EventDutyRDBMapper rdbMapper = (EventDutyRDBMapper) persistanceFacade.getMapper(EventDutyEntity.class);
+            List<EventDutyEntity> eventDuties = rdbMapper.getAllRehearsalsOfEventDuty(eventDutyDTO.getEventDutyID());
 
-        List<EventDutyModel> eventDutyModelList = new ArrayList<EventDutyModel>();
-        for(EventDutyEntity eventDutyEntity : eventDuties) {
-            eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
+            List<EventDutyModel> eventDutyModelList = new ArrayList<>();
+            for (EventDutyEntity eventDutyEntity : eventDuties) {
+                eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
+            }
+            List<EventDutyDTO> eventDutyDTOList = new ArrayList<>();
+            for (EventDutyModel eventDutyModel : eventDutyModelList) {
+                eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
+            }
+
+            return eventDutyDTOList;
         }
-        List<EventDutyDTO> eventDutyDTOList = new ArrayList<EventDutyDTO>();
-        for(EventDutyModel eventDutyModel : eventDutyModelList) {
-            eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
-        }
-
-        return eventDutyDTOList;
-
+        return new ArrayList<>();
     }
 }

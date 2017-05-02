@@ -76,7 +76,7 @@
                   </TableView>
                </children>
             </GridPane>
-            <Button fx:id="btnEditDetails" mnemonicParsing="false" onAction="#editOperaInstrumentation" text="Edit Details ..." GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Button fx:id="btnEditDetails" mnemonicParsing="false" onAction="#editInstrumentation" text="Edit Details ..." GridPane.columnIndex="1" GridPane.rowIndex="7" />
          </children>
          <padding>
             <Insets left="10.0" right="10.0" />
@@ -96,7 +96,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-          <Button fx:id="btnSaveNewOpera" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#insertNewOperaPerformance" prefHeight="25.0" prefWidth="80.0" text="Save" GridPane.columnIndex="1" />
+          <Button fx:id="btnSaveNewOpera" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#insertEventDuty" prefHeight="25.0" prefWidth="80.0" text="Save" GridPane.columnIndex="1" />
             <Button id="discard" fx:id="btnCancel" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="80.0" text="Cancel" />
          </children>
       </GridPane>

@@ -6,21 +6,11 @@ import Application.MusicalWorkAdministratonManager;
 import Utils.PlanchesterConstants;
 import com.jfoenix.controls.JFXRadioButton;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.util.Callback;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -125,26 +115,16 @@ public class InstrumentationController {
             }
         }
 
-        tableSelected.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                setSelectedMusicalWork(tableSelected.getSelectionModel().getSelectedItem());
-            }
-        });
+        tableSelected.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setSelectedMusicalWork(tableSelected.getSelectionModel().getSelectedItem()));
 
-        tableAvailable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                setSelectedMusicalWork(tableAvailable.getSelectionModel().getSelectedItem());
-            }
-        });
+        tableAvailable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setSelectedMusicalWork(tableAvailable.getSelectionModel().getSelectedItem()));
 
     }
 
     @FXML
     private void apply() {
         apply = true;
-        selectedMusicalWorks = new ArrayList<MusicalWorkDTO>();
+        selectedMusicalWorks = new ArrayList<>();
 
         for(String s : tableSelected.getItems()) {
             MusicalWorkDTO musicalWorkDTO = musicalWorks.stream().filter(o -> o.getName().equals(s)).findFirst().get();
