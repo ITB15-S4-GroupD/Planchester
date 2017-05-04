@@ -87,7 +87,6 @@ public class EditController {
         endTime.setValue(eventDutyDTO.getEndTime().toLocalDateTime().toLocalTime());
         eventLocation.setText(eventDutyDTO.getEventLocation());
         conductor.setText(eventDutyDTO.getConductor());
-
         points.setText(eventDutyDTO.getPoints() != null ? String.valueOf(eventDutyDTO.getPoints()) : null);
         if(eventDutyDTO.getMusicalWorks() != null && !eventDutyDTO.getMusicalWorks().isEmpty()) {
             musicalWorks = new ArrayList<>();

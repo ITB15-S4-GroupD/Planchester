@@ -82,14 +82,13 @@ public class EditTourController {
             rehearsalTableView.getItems().add(rehearsalToAdd);
         }
 
-        name.setText(appointment.getSummary());
-        description.setText(appointment.getDescription());
-        startDate.setValue(appointment.getStartLocalDateTime().toLocalDate());
-        endDate.setValue(appointment.getEndLocalDateTime().toLocalDate());
-        eventLocation.setText(appointment.getLocation());
+        name.setText(eventDutyDTO.getName());
+        description.setText(eventDutyDTO.getDescription());
+        startDate.setValue(eventDutyDTO.getStartTime().toLocalDateTime().toLocalDate());
+        endDate.setValue(eventDutyDTO.getStartTime().toLocalDateTime().toLocalDate());
+        eventLocation.setText(eventDutyDTO.getEventLocation());
         conductor.setText(eventDutyDTO.getConductor());
         points.setText(eventDutyDTO.getPoints() != null ? String.valueOf(eventDutyDTO.getPoints()) : "0.0");
-
         if(eventDutyDTO.getMusicalWorks() != null && !eventDutyDTO.getMusicalWorks().isEmpty()) {
             musicalWorks = new ArrayList<>();
             for(MusicalWorkDTO musicalWorkDTO : eventDutyDTO.getMusicalWorks()) {

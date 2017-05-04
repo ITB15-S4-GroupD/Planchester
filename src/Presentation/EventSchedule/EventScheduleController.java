@@ -184,7 +184,6 @@ public class EventScheduleController {
 
     public static void addEventDutyToGUI(EventDutyDTO event) {
         Agenda.Appointment appointment = new Agenda.AppointmentImpl();
-        appointment.setSummary(event.getName());
         appointment.setDescription(event.getDescription());
         appointment.setLocation(event.getEventLocation());
         appointment.setStartTime(DateHelper.convertTimestampToCalendar(event.getStartTime()));
@@ -199,7 +198,6 @@ public class EventScheduleController {
         } else if(EventType.Tour.equals(event.getEventType())) {
             appointment.setAppointmentGroup(tour);
             appointment.setWholeDay(true);
-            appointment.setSummary(event.getName() + "\nTour");
         } else if(EventType.Rehearsal.equals(event.getEventType())) {
             appointment.setAppointmentGroup(rehearsal);
             appointment.setSummary(event.getName() + "\nRehearsal");

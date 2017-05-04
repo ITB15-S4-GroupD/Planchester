@@ -18,6 +18,8 @@ public class PlanchesterGUI {
     public void start(Stage primaryStage) throws Exception {
         DatabaseSessionManager.readConfiguration();
 
+
+
         TabPane tabPane = createTabs();
         primaryStage.setTitle("Planchester");
         primaryStage.setMaximized(true);
