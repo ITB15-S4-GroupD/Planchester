@@ -5,6 +5,7 @@ import Persistence.AccountRDBMapper;
 import Persistence.Entities.AccountEntity;
 import Utils.MessageHelper;
 import javafx.fxml.FXML;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -15,7 +16,7 @@ import javafx.stage.WindowEvent;
 public class LoginController {
 
     @FXML private TextField username;
-    @FXML private TextField password;
+    @FXML private PasswordField password;
     public static AccountEntity loggedInUser;
     public static Stage stage;
 
