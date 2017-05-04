@@ -80,7 +80,7 @@ public class PlanchesterGUI {
         eventSchedule.setContent(FXMLLoader.load(getClass().getResource("EventSchedule/EventSchedule.fxml")));
         tabPane.getTabs().add(eventSchedule);
 
-        if(accountRole == AccountRole.Manager.toString() || accountRole == AccountRole.Administrator.toString()) {
+        if(accountRole.equals(AccountRole.Manager.toString()) || accountRole.equals(AccountRole.Administrator.toString())) {
             Tab musicalWorks = new Tab();
             musicalWorks.setText("Musical Works");
             tabPane.getTabs().add(musicalWorks);
