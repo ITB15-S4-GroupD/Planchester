@@ -1,6 +1,7 @@
 package Presentation;
 
 import Application.DatabaseSessionManager;
+import Utils.Enum.AccountRole;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -66,32 +67,35 @@ public class PlanchesterGUI {
     }
 
     private TabPane createTabs() throws java.io.IOException {
+        String accountRole = LoginController.loggedInUser.getAccountRole();
+
         TabPane tabPane = new TabPane();
+
         Tab dutyRoster = new Tab();
         dutyRoster.setText("Duty Roster");
+        tabPane.getTabs().add(dutyRoster);
 
         Tab eventSchedule = new Tab();
         eventSchedule.setText("Event Schedule");
         eventSchedule.setContent(FXMLLoader.load(getClass().getResource("EventSchedule/EventSchedule.fxml")));
+        tabPane.getTabs().add(eventSchedule);
 
-        Tab musicalWorks = new Tab();
-        musicalWorks.setText("Musical Works");
+        if(accountRole == AccountRole.Manager.toString() || accountRole == AccountRole.Administrator.toString()) {
+            Tab musicalWorks = new Tab();
+            musicalWorks.setText("Musical Works");
+            tabPane.getTabs().add(musicalWorks);
 
-        Tab instruments = new Tab();
-        instruments.setText("Instruments");
+            Tab instruments = new Tab();
+            instruments.setText("Instruments");
+            tabPane.getTabs().add(instruments);
 
-        Tab userAdministration = new Tab();
-        userAdministration.setText("User Administration");
+            Tab userAdministration = new Tab();
+            userAdministration.setText("User Administration");
+            tabPane.getTabs().add(userAdministration);
+        }
 
         Tab support = new Tab();
         support.setText("Support");
-
-        // add Tabs
-        tabPane.getTabs().add(dutyRoster);
-        tabPane.getTabs().add(eventSchedule);
-        tabPane.getTabs().add(musicalWorks);
-        tabPane.getTabs().add(instruments);
-        tabPane.getTabs().add(userAdministration);
         tabPane.getTabs().add(support);
 
         //Tabs not closeable
