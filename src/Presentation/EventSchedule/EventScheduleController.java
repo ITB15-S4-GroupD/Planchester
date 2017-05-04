@@ -16,6 +16,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import jfxtras.scene.control.agenda.Agenda;
+import org.omg.CORBA.Environment;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -183,7 +184,6 @@ public class EventScheduleController {
 
     public static void addEventDutyToGUI(EventDutyDTO event) {
         Agenda.Appointment appointment = new Agenda.AppointmentImpl();
-        appointment.setSummary(event.getName());
         appointment.setDescription(event.getDescription());
         appointment.setLocation(event.getEventLocation());
         appointment.setStartTime(DateHelper.convertTimestampToCalendar(event.getStartTime()));
@@ -191,17 +191,22 @@ public class EventScheduleController {
 
         if(EventType.Opera.equals(event.getEventType())) {
             appointment.setAppointmentGroup(opera);
+            appointment.setSummary(event.getName() + "\nOpera");
         } else if(EventType.Concert.equals(event.getEventType())) {
             appointment.setAppointmentGroup(concert);
+            appointment.setSummary(event.getName() + "\nConcert");
         } else if(EventType.Tour.equals(event.getEventType())) {
             appointment.setAppointmentGroup(tour);
             appointment.setWholeDay(true);
         } else if(EventType.Rehearsal.equals(event.getEventType())) {
             appointment.setAppointmentGroup(rehearsal);
+            appointment.setSummary(event.getName() + "\nRehearsal");
         } else if(EventType.Hofkapelle.equals(event.getEventType())) {
             appointment.setAppointmentGroup(hofkapelle);
+            appointment.setSummary(event.getName() + "\nHofkapelle");
         } else if(EventType.NonMusicalEvent.equals(event.getEventType())) {
             appointment.setAppointmentGroup(nonMusicalEvent);
+            appointment.setSummary(event.getName() + "\nNonMusicalEvent");
         }
         staticLoadedEventsMap.put(appointment, event);
         staticAgenda.appointments().add(appointment);
@@ -383,6 +388,7 @@ public class EventScheduleController {
                 }
             }
         });
+
         addNewConcert.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -397,6 +403,7 @@ public class EventScheduleController {
                 }
             }
         });
+
         addNewHofkapelle.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -426,6 +433,7 @@ public class EventScheduleController {
                 }
             }
         });
+
         addNewNonMusicalEvent.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
