@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
@@ -18,8 +19,30 @@ public class PlanchesterGUI {
     public void start(Stage primaryStage) throws Exception {
         DatabaseSessionManager.readConfiguration();
 
+        primaryStage.setTitle("Planchester Login");
+        scene = new Scene(FXMLLoader.load(getClass().getResource("Login.fxml")));
+        primaryStage.setScene(scene);
+        primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
+        primaryStage.show();
 
+        primaryStage.setOnCloseRequest(t -> {
+            if(LoginController.loggedInUser != null) {
+                try {
+                    showPlanchesterGUI(primaryStage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
 
+        LoginController.stage = primaryStage;
+    }
+
+    private void showPlanchesterGUI(Stage primaryStage) throws Exception {
+        primaryStage = new Stage();
         TabPane tabPane = createTabs();
         primaryStage.setTitle("Planchester");
         primaryStage.setMaximized(true);
