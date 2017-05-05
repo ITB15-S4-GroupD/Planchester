@@ -68,10 +68,10 @@ public class EditController {
 
         selectedMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
 
-        Agenda.Appointment appointment = EventScheduleController.getSelectedAppointment();
-        EventDutyDTO eventDutyDTO = EventScheduleController.getEventForAppointment(appointment);
+        initAppointment = EventScheduleController.getSelectedAppointment();
+        initEventDutyDTO = EventScheduleController.getEventForAppointment(initAppointment);
 
-        actualRehearsalList = EventScheduleManager.getAllRehearsalsOfEventDuty(eventDutyDTO);
+        actualRehearsalList = EventScheduleManager.getAllRehearsalsOfEventDuty(initEventDutyDTO);
         newRehearsalList = actualRehearsalList;
         rehearsalTableView.getItems().clear();
         rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
@@ -80,24 +80,22 @@ public class EditController {
             rehearsalTableView.getItems().add(rehearsalToAdd);
         }
 
-        name.setText(eventDutyDTO.getName());
-        description.setText(eventDutyDTO.getDescription());
-        date.setValue(eventDutyDTO.getStartTime().toLocalDateTime().toLocalDate());
-        startTime.setValue(eventDutyDTO.getStartTime().toLocalDateTime().toLocalTime());
-        endTime.setValue(eventDutyDTO.getEndTime().toLocalDateTime().toLocalTime());
-        eventLocation.setText(eventDutyDTO.getEventLocation());
-        conductor.setText(eventDutyDTO.getConductor());
-        points.setText(eventDutyDTO.getPoints() != null ? String.valueOf(eventDutyDTO.getPoints()) : null);
-        if(eventDutyDTO.getMusicalWorks() != null && !eventDutyDTO.getMusicalWorks().isEmpty()) {
+        name.setText(initEventDutyDTO.getName());
+        description.setText(initEventDutyDTO.getDescription());
+        date.setValue(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalDate());
+        startTime.setValue(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalTime());
+        endTime.setValue(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime());
+        eventLocation.setText(initEventDutyDTO.getEventLocation());
+        conductor.setText(initEventDutyDTO.getConductor());
+        points.setText(initEventDutyDTO.getPoints() != null ? String.valueOf(initEventDutyDTO.getPoints()) : null);
+        if(initEventDutyDTO.getMusicalWorks() != null && !initEventDutyDTO.getMusicalWorks().isEmpty()) {
             musicalWorks = new ArrayList<>();
-            for(MusicalWorkDTO musicalWorkDTO : eventDutyDTO.getMusicalWorks()) {
+            for(MusicalWorkDTO musicalWorkDTO : initEventDutyDTO.getMusicalWorks()) {
                 musicalWorks.add(musicalWorkDTO);
                 musicalWorkTable.getItems().add(musicalWorkDTO.getName());
             }
         }
         initNotEditableFields();
-        initAppointment = appointment;
-        initEventDutyDTO = eventDutyDTO;
 
         points.textProperty().addListener((observable, oldValue, newValue) -> {
             //^\d*\.\d{2}$
@@ -110,7 +108,11 @@ public class EditController {
     }
 
     private void initNotEditableFields() {
-        btnEditEvent.setVisible(true);
+        if(!initEventDutyDTO.getEventStatus().equals(EventStatus.Unpublished)) {
+            btnEditEvent.setVisible(false);
+        } else {
+            btnEditEvent.setVisible(true);
+        }
         btnCancelEvent.setVisible(false);
         btnSaveEvent.setVisible(false);
         btnEditDetails.setVisible(false);
