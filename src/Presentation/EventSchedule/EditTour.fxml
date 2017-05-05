@@ -52,7 +52,7 @@
                 <Label text="Points" GridPane.rowIndex="8" />
                 <TextField id="name" fx:id="name" prefHeight="25.0" prefWidth="199.0" GridPane.columnIndex="1" />
                 <TextArea id="description" fx:id="description" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <JFXDatePicker id="date" fx:id="startDate" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <JFXDatePicker id="date" fx:id="date" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 <TextField id="eventLocation" fx:id="eventLocation" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                 <TextField id="conductor" fx:id="conductor" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                 <TextField id="points" fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="8" />
@@ -62,7 +62,7 @@
                 <TableColumn fx:id="selectedMusicalWorks" prefWidth="249.0" text="Title" />
               </columns>
             </TableView>
-            <Button fx:id="btnEditDetails" mnemonicParsing="false" onAction="#editTourInstrumentation" text="Edit Details ..." GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <Button fx:id="btnEditDetails" mnemonicParsing="false" onAction="#editInstrumentation" text="Edit Details ..." GridPane.columnIndex="1" GridPane.rowIndex="6" />
             </children>
             <padding>
                 <Insets left="10.0" right="10.0" />

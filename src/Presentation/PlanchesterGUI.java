@@ -16,7 +16,7 @@ public class PlanchesterGUI {
     public static Scene scene;
 
     public void start(Stage primaryStage) throws Exception {
-        DatabaseSessionManager.readConfiguration();
+        DatabaseSessionManager.beginSession();
 
         primaryStage.setTitle("Planchester Login");
         scene = new Scene(FXMLLoader.load(getClass().getResource("Login.fxml")));
@@ -32,6 +32,7 @@ public class PlanchesterGUI {
                     e.printStackTrace();
                 }
             } else {
+                DatabaseSessionManager.closeSession();
                 Platform.exit();
                 System.exit(0);
             }
@@ -46,6 +47,7 @@ public class PlanchesterGUI {
         primaryStage.setTitle("Planchester");
         primaryStage.setMaximized(true);
         primaryStage.setOnCloseRequest(t -> {
+            DatabaseSessionManager.closeSession();
             Platform.exit();
             System.exit(0);
         });
