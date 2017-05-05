@@ -60,17 +60,17 @@
             <Label text="Points" GridPane.rowIndex="8" />
             <TextField fx:id="name" prefHeight="25.0" prefWidth="199.0" GridPane.columnIndex="1" />
             <TextArea fx:id="description" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <JFXDatePicker fx:id="startDate" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <JFXDatePicker fx:id="date" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+             <JFXDatePicker fx:id="endDate" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="eventLocation" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <TextField fx:id="conductor" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <TextField fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-            <JFXDatePicker fx:id="endDate" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TableView fx:id="musicalWorkTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
               <columns>
                 <TableColumn fx:id="selectedMusicalWorks" prefWidth="249.0" text="Title" />
               </columns>
             </TableView>
-            <Button fx:id="btnEditDetails" mnemonicParsing="false" onAction="#editTourInstrumentation" text="Edit Details ..." GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <Button fx:id="btnEditDetails" mnemonicParsing="false" onAction="#editInstrumentation" text="Edit Details ..." GridPane.columnIndex="1" GridPane.rowIndex="6" />
          </children>
       </GridPane>
       <GridPane prefHeight="57.0" prefWidth="353.0" GridPane.rowIndex="3">
@@ -83,7 +83,7 @@
         </rowConstraints>
          <children>
             <Button id="discard" fx:id="btnCancel" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="80.0" text="Cancel" />
-            <Button fx:id="btnSaveNewTour" mnemonicParsing="false" onAction="#insertNewTourPerformance" prefHeight="25.0" prefWidth="80.0" text="Save" GridPane.columnIndex="1" />
+            <Button fx:id="btnSaveNewTour" mnemonicParsing="false" onAction="#insertEventDuty" prefHeight="25.0" prefWidth="80.0" text="Save" GridPane.columnIndex="1" />
          </children>
       </GridPane>
       <GridPane GridPane.rowIndex="2">

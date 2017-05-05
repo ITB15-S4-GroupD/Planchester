@@ -13,6 +13,7 @@ public class DatabaseConnectionHandler {
     private static DatabaseConnectionHandler instance = null;
     Configuration cfg;
     private Session session;
+    SessionFactory factory;
 
     private DatabaseConnectionHandler() {
         // Exists only to defeat instantiation.
@@ -29,12 +30,17 @@ public class DatabaseConnectionHandler {
         if(cfg == null) {
             cfg = new Configuration();
             cfg.configure(HIBERNATE_CONFIGURARION);
+            //openSession();
         }
     }
 
-    public Session beginTransaction() {
-        SessionFactory factory = cfg.buildSessionFactory();
+    private void openSession() {
+        factory = cfg.buildSessionFactory();
         session = factory.openSession();
+    }
+
+    public Session beginTransaction() {
+        openSession();
         session.beginTransaction();
         return session;
     }
@@ -42,5 +48,9 @@ public class DatabaseConnectionHandler {
     public void commitTransaction() {
         session.getTransaction().commit();
         session.close();
+    }
+
+    public void closeSession() {
+        //session.close();
     }
 }
