@@ -457,4 +457,16 @@ public class EventScheduleController {
             setSelectedAppointment(eventDutyDTO);
         }
     }
+
+    @FXML public void refresh() {
+        staticLoadedEventsMap.clear();
+        agenda.appointments().clear();
+        EventScheduleManager.loadedEventsEnddate = null;
+        EventScheduleManager.loadedEventsStartdate = null;
+
+        List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForWeek(agenda.getDisplayedCalendar());
+        for(EventDutyDTO event : events) {
+            addEventDutyToGUI(event);
+        }
+    }
 }

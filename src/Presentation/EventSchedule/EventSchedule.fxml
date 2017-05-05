@@ -43,8 +43,8 @@
             <GridPane maxWidth="1.7976931348623157E308" GridPane.rowIndex="2">
               <columnConstraints>
                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="470.0" minWidth="10.0" prefWidth="470.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="309.0" minWidth="10.0" prefWidth="219.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="411.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="309.0" minWidth="10.0" prefWidth="177.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="453.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -71,18 +71,18 @@
                         <Button fx:id="btnOpenNewDuty" mnemonicParsing="false" onMouseClicked="#showActualWeekClicked" prefHeight="30.0" prefWidth="150.0" text="Current Week" GridPane.columnIndex="3" />
                      </children>
                   </GridPane>
-                  <GridPane prefHeight="30.0" GridPane.columnIndex="2">
+                  <GridPane prefHeight="30.0" prefWidth="415.0" GridPane.columnIndex="2">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="0.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="206.0" minWidth="8.0" prefWidth="8.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="209.0" minWidth="10.0" prefWidth="203.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="206.0" minWidth="8.0" prefWidth="77.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="209.0" minWidth="10.0" prefWidth="163.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="176.0" minWidth="0.0" prefWidth="160.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <MenuButton fx:id="addNewEvent" alignment="CENTER_RIGHT" mnemonicParsing="false" text="Add new Event" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+                        <MenuButton fx:id="addNewEvent" alignment="CENTER_RIGHT" mnemonicParsing="false" prefHeight="30.0" text="Add new Event" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
                            <graphic>
                               <ImageView disable="true" fitHeight="23.0" fitWidth="26.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" smooth="false">
                                  <image>
@@ -91,7 +91,8 @@
                               </ImageView>
                            </graphic>
                         </MenuButton>
-                        <Button fx:id="btnPublishEventSchedule" mnemonicParsing="false" onAction="#publishEventSchedule" prefHeight="31.0" prefWidth="150.0" text="Publish Event Schedule" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
+                        <Button fx:id="btnPublishEventSchedule" mnemonicParsing="false" onAction="#publishEventSchedule" prefHeight="30.0" prefWidth="163.0" text="Publish Event Schedule" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
+                        <Button mnemonicParsing="false" onAction="#refresh" prefHeight="30.0" text="Refresh" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
                      </children>
                   </GridPane>
                </children>
