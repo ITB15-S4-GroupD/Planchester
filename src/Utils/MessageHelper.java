@@ -53,7 +53,7 @@ public class MessageHelper {
     public static ButtonType showLogoutUserMessage() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Planchester Logout Warning");
-        alert.setHeaderText("Are you sure?");
+        alert.setHeaderText("Are you sure that you want to log out?");
         alert.getButtonTypes().clear();
         alert.getButtonTypes().add(new ButtonType("Change User"));
         alert.getButtonTypes().add(new ButtonType("Close Planchester"));

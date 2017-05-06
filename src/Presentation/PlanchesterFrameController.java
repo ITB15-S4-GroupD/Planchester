@@ -1,7 +1,11 @@
 package Presentation;
 
+import Application.DatabaseSessionManager;
+import Application.EventScheduleManager;
+import Presentation.EventSchedule.EventScheduleController;
 import Utils.Enum.AccountRole;
 import Utils.MessageHelper;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -48,15 +52,17 @@ public class PlanchesterFrameController {
 
     @FXML
     public void logoutUser() {
-        //TODO: check if unsaved changed are existing TIMO
-        ButtonType buttonType = MessageHelper.showLogoutUserMessage();
-        if(buttonType.getText().equals("Cancel")){
-           //do nothing
-        } else if(buttonType.getText().equals("Change User")){
-
-        } else if(buttonType.getText().equals("Close Planchester")){
-
+        if(EventScheduleController.tryResetSideContent() == null) {
+            ButtonType buttonType = MessageHelper.showLogoutUserMessage();
+            if (buttonType.getText().equals("Cancel")) {
+                //do nothing
+            } else if (buttonType.getText().equals("Change User")) {
+                PlanchesterGUI.showLogin();
+            } else if (buttonType.getText().equals("Close Planchester")) {
+                DatabaseSessionManager.closeSession();
+                Platform.exit();
+                System.exit(0);
+            }
         }
-
     }
 }

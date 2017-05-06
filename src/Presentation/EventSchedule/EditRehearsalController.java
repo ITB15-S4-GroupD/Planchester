@@ -44,7 +44,7 @@ public class EditRehearsalController extends EditController {
 
     @Override
     @FXML
-    public void initialize() {
+    protected void initialize() {
         //TODO GET LIST OF REHEARSALS : Christina
         super.checkMandatoryFields();
 
@@ -72,7 +72,7 @@ public class EditRehearsalController extends EditController {
         });
     }
 
-    private void initNotEditableFields() {
+    protected void initNotEditableFields() {
         if(!initEventDutyDTO.getEventStatus().equals(EventStatus.Unpublished)) {
             btnEditEvent.setVisible(false);
         } else {
@@ -103,7 +103,7 @@ public class EditRehearsalController extends EditController {
 
     @Override
     @FXML
-    public void save() throws ValidationException {
+    protected void save() throws ValidationException {
         if(validate()) {
             Agenda.Appointment selectedAppointment = EventScheduleController.getSelectedAppointment();
             EventDutyDTO oldEventDutyDTO = EventScheduleController.getEventForAppointment(selectedAppointment);
@@ -134,7 +134,7 @@ public class EditRehearsalController extends EditController {
 
     @Override
     @FXML
-    public boolean cancel() {
+    protected boolean cancel() {
         if(!name.getText().equals(initEventDutyDTO.getName())
                 || !description.getText().equals(initEventDutyDTO.getDescription())
                 || !date.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalDate())
@@ -159,7 +159,7 @@ public class EditRehearsalController extends EditController {
 
     @Override
     @FXML
-    public void editEvent () {
+    protected void editEvent () {
         btnCancelEvent.setVisible(true);
         btnSaveEvent.setVisible(true);
         btnEditEvent.setVisible(false);
@@ -183,7 +183,7 @@ public class EditRehearsalController extends EditController {
         conductor.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
     }
 
-    private boolean validate() {
+    protected boolean validate() {
         LocalDate today = LocalDate.now();
         LocalTime start = startTime.getValue();
         LocalTime end = endTime.getValue();
