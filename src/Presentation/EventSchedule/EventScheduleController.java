@@ -460,14 +460,18 @@ public class EventScheduleController {
     }
 
     @FXML public void refresh() {
-        staticLoadedEventsMap.clear();
-        agenda.appointments().clear();
-        EventScheduleManager.loadedEventsEnddate = null;
-        EventScheduleManager.loadedEventsStartdate = null;
+        removeAllData();
 
         List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForWeek(agenda.getDisplayedCalendar());
         for(EventDutyDTO event : events) {
             addEventDutyToGUI(event);
         }
+    }
+
+    public static void removeAllData() {
+        staticLoadedEventsMap.clear();
+        staticAgenda.appointments().clear();
+        EventScheduleManager.loadedEventsEnddate = null;
+        EventScheduleManager.loadedEventsStartdate = null;
     }
 }

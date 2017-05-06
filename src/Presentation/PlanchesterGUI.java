@@ -1,19 +1,25 @@
 package Presentation;
 
 import Application.DatabaseSessionManager;
+import Application.EventScheduleManager;
+import Presentation.EventSchedule.EventScheduleController;
 import Utils.Enum.AccountRole;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
+
+import java.io.IOException;
 import java.net.URL;
 import java.rmi.UnexpectedException;
 
 public class PlanchesterGUI {
     public static Scene scene;
+    protected static Stage primaryStage;
 
     public void start(Stage primaryStage) throws Exception {
         DatabaseSessionManager.beginSession();
@@ -24,10 +30,16 @@ public class PlanchesterGUI {
         primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
         primaryStage.show();
 
+        checkLogin(primaryStage);
+
+        this.primaryStage = primaryStage;
+    }
+
+    private static void checkLogin(Stage primaryStage) {
         primaryStage.setOnCloseRequest(t -> {
             if(LoginController.loggedInUser != null) {
                 try {
-                    showPlanchesterGUI(primaryStage);
+                    showPlanchesterGUI();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -38,68 +50,52 @@ public class PlanchesterGUI {
             }
         });
 
-        LoginController.stage = primaryStage;
     }
 
-    private void showPlanchesterGUI(Stage primaryStage) throws Exception {
-        primaryStage = new Stage();
-        TabPane tabPane = createTabs();
-        primaryStage.setTitle("Planchester");
-        primaryStage.setMaximized(true);
-        primaryStage.setOnCloseRequest(t -> {
-            DatabaseSessionManager.closeSession();
-            Platform.exit();
-            System.exit(0);
-        });
+    public static void showLogin() {
+        try {
+            // reset all loaded data
+            EventScheduleController.removeAllData();
 
-        // set and show scene
-        scene = new Scene(tabPane, 1200, 900, Color.WHITE);
-        URL url = this.getClass().getResource("CSS/stylesheet.css");
-        if (url == null) {
-            throw new UnexpectedException("CSS Resource not found. Aborting.");
+            primaryStage.close();
+            primaryStage = new Stage();
+            primaryStage.setTitle("Planchester Login");
+            scene = new Scene(FXMLLoader.load(PlanchesterGUI.class.getResource("Login.fxml")));
+            primaryStage.setScene(scene);
+            primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
+            primaryStage.show();
+            checkLogin(primaryStage);
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
-        String css = url.toExternalForm();
-        scene.getStylesheets().add(css);
-
-        primaryStage.setScene(scene);
-        primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
-        primaryStage.show();
     }
 
-    private TabPane createTabs() throws java.io.IOException {
-        String accountRole = LoginController.loggedInUser.getAccountRole();
+    private static void showPlanchesterGUI() {
+        try {
+            primaryStage = new Stage();
+            primaryStage.setTitle("Planchester");
+            primaryStage.setMaximized(true);
+            primaryStage.setOnCloseRequest(t -> {
+                DatabaseSessionManager.closeSession();
+                Platform.exit();
+                System.exit(0);
+            });
 
-        TabPane tabPane = new TabPane();
+            scene = new Scene(FXMLLoader.load(PlanchesterGUI.class.getResource("PlanchesterFrame.fxml")));
 
-        Tab dutyRoster = new Tab();
-        dutyRoster.setText("Duty Roster");
-        tabPane.getTabs().add(dutyRoster);
+            URL url = PlanchesterGUI.class.getResource("CSS/stylesheet.css");
+            if (url == null) {
+                throw new UnexpectedException("CSS Resource not found. Aborting.");
+            }
+            String css = url.toExternalForm();
+            scene.getStylesheets().add(css);
 
-        Tab eventSchedule = new Tab();
-        eventSchedule.setText("Event Schedule");
-        eventSchedule.setContent(FXMLLoader.load(getClass().getResource("EventSchedule/EventSchedule.fxml")));
-        tabPane.getTabs().add(eventSchedule);
-
-        if(accountRole.equals(AccountRole.Manager.toString()) || accountRole.equals(AccountRole.Administrator.toString())) {
-            Tab musicalWorks = new Tab();
-            musicalWorks.setText("Musical Works");
-            tabPane.getTabs().add(musicalWorks);
-
-            Tab instruments = new Tab();
-            instruments.setText("Instruments");
-            tabPane.getTabs().add(instruments);
-
-            Tab userAdministration = new Tab();
-            userAdministration.setText("User Administration");
-            tabPane.getTabs().add(userAdministration);
-        }
-
-        Tab support = new Tab();
-        support.setText("Support");
-        tabPane.getTabs().add(support);
-
-        //Tabs not closeable
-        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        return tabPane;
+            primaryStage.setScene(scene);
+            primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
+            primaryStage.show();
+        } catch (IOException exception) {
+                exception.printStackTrace();
+            }
     }
 }
