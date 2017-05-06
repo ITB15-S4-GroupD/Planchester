@@ -1,5 +1,6 @@
 package Presentation.EventSchedule;
 
+import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
 import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
@@ -107,6 +108,7 @@ public class EditController {
                 points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", " "));
             }
         });
+        btnEditEvent.setVisible(AccountAdministrationManager.getUserRestrain().isVisibleEditEvent());
     }
 
     private void initNotEditableFields() {

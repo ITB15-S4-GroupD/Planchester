@@ -1,6 +1,8 @@
 package Presentation;
 
+import Application.AccountAdministrationManager;
 import Application.DatabaseSessionManager;
+import Application.UserAdministrationManager;
 import Utils.Enum.AccountRole;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +15,8 @@ import javafx.scene.image.Image;
 
 import java.net.URL;
 import java.rmi.UnexpectedException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlanchesterGUI {
     public static Scene scene;
@@ -27,9 +31,10 @@ public class PlanchesterGUI {
         primaryStage.show();
 
         primaryStage.setOnCloseRequest(t -> {
-            if(LoginController.loggedInUser != null) {
+            if(AccountAdministrationManager.getLoggedInAccount() != null) {
                 try {
                     showPlanchesterGUI(primaryStage);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -40,12 +45,14 @@ public class PlanchesterGUI {
         });
 
         LoginController.stage = primaryStage;
+
     }
 
     private void showPlanchesterGUI(Stage primaryStage) throws Exception {
         primaryStage = new Stage();
         TabPane tabPane = createTabs();
-        primaryStage.setTitle("Planchester");
+        tabPane.setId("MainTabPane");
+        primaryStage.setTitle("Planchester - Logged in: " + AccountAdministrationManager.getLoggedInName());
         primaryStage.setMaximized(true);
         primaryStage.setOnCloseRequest(t -> {
             Platform.exit();
@@ -67,36 +74,42 @@ public class PlanchesterGUI {
     }
 
     private TabPane createTabs() throws java.io.IOException {
-        String accountRole = LoginController.loggedInUser.getAccountRole();
 
         TabPane tabPane = new TabPane();
+        List<Tab> tabList = new ArrayList<>();
 
         Tab dutyRoster = new Tab();
+        dutyRoster.setId("TbDutyRoster");
         dutyRoster.setText("Duty Roster");
-        tabPane.getTabs().add(dutyRoster);
+        tabList.add(dutyRoster);
 
         Tab eventSchedule = new Tab();
+        eventSchedule.setId("TbEventSchedule");
         eventSchedule.setText("Event Schedule");
         eventSchedule.setContent(FXMLLoader.load(getClass().getResource("EventSchedule/EventSchedule.fxml")));
-        tabPane.getTabs().add(eventSchedule);
+        tabList.add(eventSchedule);
 
-        if(accountRole.equals(AccountRole.Manager.toString()) || accountRole.equals(AccountRole.Administrator.toString())) {
             Tab musicalWorks = new Tab();
+            musicalWorks.setId("TbMusicalWorks");
             musicalWorks.setText("Musical Works");
-            tabPane.getTabs().add(musicalWorks);
+            tabList.add(musicalWorks);
 
             Tab instruments = new Tab();
+            instruments.setId("TbInstruments");
             instruments.setText("Instruments");
-            tabPane.getTabs().add(instruments);
+            tabList.add(instruments);
 
             Tab userAdministration = new Tab();
+            userAdministration.setId("TbUserAdministration");
             userAdministration.setText("User Administration");
-            tabPane.getTabs().add(userAdministration);
-        }
+            tabList.add(userAdministration);
 
         Tab support = new Tab();
+        support.setId("TbSupport");
         support.setText("Support");
-        tabPane.getTabs().add(support);
+        tabList.add(support);
+
+        tabPane.getTabs().addAll(AccountAdministrationManager.getUserRestrain().constrainMainTabs(tabList));
 
         //Tabs not closeable
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
