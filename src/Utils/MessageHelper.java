@@ -49,4 +49,16 @@ public class MessageHelper {
         alert.setHeaderText(warning.toString());
         alert.showAndWait();
     }
+
+    public static ButtonType showLogoutUserMessage() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Planchester Logout Warning");
+        alert.setHeaderText("Are you sure?");
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().add(new ButtonType("Change User"));
+        alert.getButtonTypes().add(new ButtonType("Close Planchester"));
+        alert.getButtonTypes().add(new ButtonType("Cancel"));
+        alert.showAndWait();
+        return alert.getResult();
+    }
 }
