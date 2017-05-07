@@ -77,6 +77,11 @@ System.out.println("PermissionObject calls on PermissionRestrain-Object of Class
     }
 
     @Override
+    public String FitTitleOnEventDetails(String text) {
+        return userRestrain.FitTitleOnEventDetails(text);
+    }
+
+    @Override
     public void constrainMusicalWorks() {
         userRestrain.constrainMusicalWorks();
     }

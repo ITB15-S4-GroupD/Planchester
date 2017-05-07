@@ -309,7 +309,7 @@ public class EventScheduleController {
         setColorKeyMap();
 
         //put events to calendar
-        List<EventDutyDTO> events = AccountAdministrationManager.getUserRestrain().constrainViewableEventsForEventSchedule(EventScheduleManager.getEventDutyListForCurrentWeek());
+        List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForCurrentWeek();
         for(EventDutyDTO event : events) {
             addEventDutyToGUI(event);
         }

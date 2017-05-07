@@ -46,6 +46,11 @@ public final class AdministratorRestrain implements PermissionRestrain {
     }
 
     @Override
+    public String FitTitleOnEventDetails(String text) {
+        return "Edit " + text;
+    }
+
+    @Override
     public void constrainDutyRoster() {
     }
 

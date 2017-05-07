@@ -63,6 +63,11 @@ public final class OrchestralFacilityManagerRestrain implements PermissionRestra
     }
 
     @Override
+    public String FitTitleOnEventDetails(String text) {
+        return "Details " + text;
+    }
+
+    @Override
     public void constrainDutyRoster() {
     }
 

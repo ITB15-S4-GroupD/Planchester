@@ -18,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import jfxtras.scene.control.agenda.Agenda;
 
@@ -62,6 +63,7 @@ public class EditController {
     @FXML private Button btnEditDetails;
     @FXML private Button btnAddRehearsal;
     @FXML private Button btnRemoveRehearsal;
+    @FXML private Text txtTitle;
 
     @FXML
     public void initialize() {
@@ -109,6 +111,7 @@ public class EditController {
             }
         });
         btnEditEvent.setVisible(AccountAdministrationManager.getUserRestrain().isVisibleEditEvent());
+        txtTitle.setText(AccountAdministrationManager.getUserRestrain().FitTitleOnEventDetails(txtTitle.getText()));
     }
 
     private void initNotEditableFields() {

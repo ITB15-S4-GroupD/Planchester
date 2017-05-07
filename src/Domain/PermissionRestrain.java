@@ -21,6 +21,7 @@ public interface PermissionRestrain {
     public boolean isVisibleButtonPublishEvents();
     public boolean isVisibleMenuAddNewEvent();
     public boolean isVisibleEditEvent();
+    public String FitTitleOnEventDetails(String text);
     public void constrainMusicalWorks();
     public void constrainInstruments();
     public void constrainUserAdministration();

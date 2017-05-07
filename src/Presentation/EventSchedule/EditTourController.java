@@ -1,5 +1,6 @@
 package Presentation.EventSchedule;
 
+import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
 import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
@@ -18,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import jfxtras.scene.control.agenda.Agenda;
 
@@ -45,6 +47,7 @@ public class EditTourController {
     public static List<EventDutyDTO> newRehearsalList;
     @FXML private TableView<String> rehearsalTableView;
     @FXML private TableColumn<String, String> rehearsalTableColumn;
+    @FXML private Text txtTitle;
 
     @FXML private TableView<String> musicalWorkTable;
     @FXML private TableColumn<String, String> selectedMusicalWorks;
@@ -113,6 +116,8 @@ public class EditTourController {
                 }
             }
         });
+        btnEditEvent.setVisible(AccountAdministrationManager.getUserRestrain().isVisibleEditEvent());
+        txtTitle.setText(AccountAdministrationManager.getUserRestrain().FitTitleOnEventDetails(txtTitle.getText()));
     }
 
     private void initNotEditableFields() {
