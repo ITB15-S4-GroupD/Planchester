@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>Presentation</OriginalElement>
+  <nodes>
+    <node x="1471.0" y="3910.0">Presentation.PlanchesterGUI</node>
+    <node x="2786.0" y="0.0">Presentation.EventSchedule.EditHofkapelleController</node>
+    <node x="517.0" y="3910.0">Presentation.EventSchedule.CreateRehearsalController</node>
+    <node x="1845.0" y="0.0">Presentation.EventSchedule.EventScheduleController</node>
+    <node x="2688.0" y="2855.0">Presentation.EventSchedule.CreateConcertController</node>
+    <node x="3265.0" y="2855.0">Presentation.EventSchedule.CreateTourController</node>
+    <node x="3543.0" y="0.0">Presentation.EventSchedule.EditOperaController</node>
+    <node x="1494.0" y="2855.0">Presentation.EventSchedule.CreateOperaController</node>
+    <node x="1014.0" y="3910.0">Presentation.EventSchedule.CreateNonMusicalEventController</node>
+    <node x="0.0" y="0.0">Presentation.EventSchedule.InstrumentationController</node>
+    <node x="0.0" y="3910.0">Presentation.EventSchedule.EditNonMusicalEventController</node>
+    <node x="2091.0" y="2855.0">Presentation.EventSchedule.CreateHofkapelleController</node>
+    <node x="757.0" y="2855.0">Presentation.EventSchedule.EditTourController</node>
+    <node x="3822.0" y="2855.0">Presentation.EventSchedule.EditRehearsalController</node>
+    <node x="0.0" y="2855.0">Presentation.EventSchedule.EditConcertController</node>
+  </nodes>
+  <notes />
+  <edges />
+  <settings layout="Hierarchic Group" zoom="0.577354260089686" x="1509.0" y="3451.0213592233013" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
