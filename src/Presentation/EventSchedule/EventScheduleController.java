@@ -198,6 +198,7 @@ public class EventScheduleController {
         } else if(EventType.Tour.equals(event.getEventType())) {
             appointment.setAppointmentGroup(tour);
             appointment.setWholeDay(true);
+            appointment.setSummary(event.getName());
         } else if(EventType.Rehearsal.equals(event.getEventType())) {
             appointment.setAppointmentGroup(rehearsal);
             appointment.setSummary(event.getName() + "\nRehearsal");
@@ -456,5 +457,21 @@ public class EventScheduleController {
         if(eventDutyDTO != null) {
             setSelectedAppointment(eventDutyDTO);
         }
+    }
+
+    @FXML public void refresh() {
+        removeAllData();
+
+        List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForWeek(agenda.getDisplayedCalendar());
+        for(EventDutyDTO event : events) {
+            addEventDutyToGUI(event);
+        }
+    }
+
+    public static void removeAllData() {
+        staticLoadedEventsMap.clear();
+        staticAgenda.appointments().clear();
+        EventScheduleManager.loadedEventsEnddate = null;
+        EventScheduleManager.loadedEventsStartdate = null;
     }
 }
