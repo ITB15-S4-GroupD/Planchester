@@ -17,6 +17,8 @@ public class LoginController {
 
     @FXML private TextField username;
     @FXML private PasswordField password;
+    //public static AccountEntity loggedInUser;
+    public static Stage stage;
     public static AccountEntity loggedInUser;
 
     @FXML
@@ -26,10 +28,11 @@ public class LoginController {
 
     @FXML
     private void login() {
-        loggedInUser = AccountAdministrationManager.getAccount(username.getText(), password.getText());
+        AccountEntity loggedInUser = AccountAdministrationManager.getAccount(username.getText(), password.getText());
         if(loggedInUser == null) {
             MessageHelper.showErrorAlertMessage("Wrong username or password");
         } else {
+            AccountAdministrationManager.setLoggedInUser(loggedInUser);
             PlanchesterGUI.primaryStage.fireEvent(
                  new WindowEvent(
                     PlanchesterGUI.primaryStage,
