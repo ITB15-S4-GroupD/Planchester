@@ -42,7 +42,6 @@ public class MessageHelper {
 
         StringBuilder warning = new StringBuilder();
         warning.append("There are not enough musicians available on this date. Following instruments are missing:\n");
-
         for (Map.Entry<String, Integer> musicianCapacity : musicanCapacityMap.entrySet()) {
             warning.append(musicianCapacity.getKey() + ": " + musicianCapacity.getValue() + "\n");
         }
@@ -51,8 +50,8 @@ public class MessageHelper {
     }
 
     public static ButtonType showLogoutUserMessage() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Planchester Logout Warning");
+        Alert alert = new Alert(Alert.AlertType.NONE);
+        alert.setTitle("Planchester Logout");
         alert.setHeaderText("Are you sure that you want to log out?");
         alert.getButtonTypes().clear();
         alert.getButtonTypes().add(new ButtonType("Change User"));

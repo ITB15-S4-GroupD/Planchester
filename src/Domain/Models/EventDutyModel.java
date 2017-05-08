@@ -1,5 +1,6 @@
-package Domain;
+package Domain.Models;
 
+import Domain.Interfaces.IEventDuty;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import Utils.Validator;
@@ -10,14 +11,14 @@ import java.util.List;
 /**
  * Created by julia on 13.04.2017.
  */
-public class EventDutyModel {
+public class EventDutyModel implements IEventDuty {
     private Integer eventDutyId;
     private String name;
     private String description;
-    private Timestamp starttime;
-    private Timestamp endtime;
-    private String eventType;
-    private String eventStatus;
+    private Timestamp startTime;
+    private Timestamp endTime;
+    private EventType eventType;
+    private EventStatus eventStatus;
     private String conductor;
     private String location;
     private Double defaultPoints;
@@ -30,15 +31,15 @@ public class EventDutyModel {
     public void validate() throws ValidationException {
         Validator.validateMandatoryString(name, 255);
         Validator.validateString(description, 255);
-        Validator.validateMandatoryTimestamp(starttime);
-        Validator.validateTimestampAfterToday(starttime);
-        Validator.validateMandatoryTimestamp(endtime);
-        Validator.validateTimestampAfterToday(endtime);
-        Validator.validateTimestamp1BeforeTimestamp2(starttime, endtime);
-        if(eventType == null || !EventType.contains(eventType)) {
+        Validator.validateMandatoryTimestamp(startTime);
+        Validator.validateTimestampAfterToday(startTime);
+        Validator.validateMandatoryTimestamp(endTime);
+        Validator.validateTimestampAfterToday(endTime);
+        Validator.validateTimestamp1BeforeTimestamp2(startTime, endTime);
+        if(eventType == null || !EventType.contains(eventType.toString())) {
             throw new ValidationException("Eventtype wrong");
         }
-        if(eventStatus == null || !EventStatus.contains(eventStatus)) {
+        if(eventStatus == null || !EventStatus.contains(eventStatus.toString())) {
             throw new ValidationException("Eventstatus wrong");
         }
         Validator.validateString(conductor, 25);
@@ -70,35 +71,35 @@ public class EventDutyModel {
         this.description = description;
     }
 
-    public Timestamp getStarttime() {
-        return starttime;
+    public Timestamp getStartTime() {
+        return startTime;
     }
 
-    public void setStarttime(Timestamp starttime) {
-        this.starttime = starttime;
+    public void setStartTime(Timestamp startTime) {
+        this.startTime = startTime;
     }
 
-    public Timestamp getEndtime() {
-        return endtime;
+    public Timestamp getEndTime() {
+        return endTime;
     }
 
-    public void setEndtime(Timestamp endtime) {
-        this.endtime = (endtime == null ? Timestamp.valueOf(starttime.toLocalDateTime().plusHours(2)) : endtime);
+    public void setEndTime(Timestamp endTime) {
+        this.endTime = (endTime == null ? Timestamp.valueOf(startTime.toLocalDateTime().plusHours(2)) : endTime);
     }
 
-    public String getEventType() {
+    public EventType getEventType() {
         return eventType;
     }
 
-    public void setEventType(String eventType) {
+    public void setEventType(EventType eventType) {
         this.eventType = eventType;
     }
 
-    public String getEventStatus() {
+    public EventStatus getEventStatus() {
         return eventStatus;
     }
 
-    public void setEventStatus(String eventStatus) {
+    public void setEventStatus(EventStatus eventStatus) {
         this.eventStatus = eventStatus;
     }
 
@@ -118,11 +119,11 @@ public class EventDutyModel {
         this.location = location;
     }
 
-    public Double getDefaultPoints() {
+    public Double getPoints() {
         return defaultPoints;
     }
 
-    public void setDefaultPoints(Double defaultPoints) {
+    public void setPoints(Double defaultPoints) {
         this.defaultPoints = defaultPoints;
     }
 

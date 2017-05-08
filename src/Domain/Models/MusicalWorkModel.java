@@ -1,4 +1,4 @@
-package Domain;
+package Domain.Models;
 
 /**
  * Created by timor on 27.04.2017.

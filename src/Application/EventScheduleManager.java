@@ -3,15 +3,12 @@ package Application;
 import Application.DTO.EventDutyDTO;
 import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
-import Domain.InstrumentationModel;
-import Domain.MusicalWorkModel;
+import Domain.Models.InstrumentationModel;
+import Domain.Models.MusicalWorkModel;
 import Persistence.Entities.EventDutyEntity;
-import Domain.EventDutyModel;
+import Domain.Models.EventDutyModel;
 import Persistence.Entities.EventDutyMusicalWorkEntity;
-import Persistence.Entities.InstrumentationEntity;
 import Persistence.Entities.MusicalWorkEntity;
-import Persistence.EventDutyMusicalWorkRDBMapper;
-import Persistence.EventDutyRDBMapper;
 import Persistence.PersistanceFacade;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
@@ -21,11 +18,14 @@ import Utils.MessageHelper;
 import javax.xml.bind.ValidationException;
 import java.util.*;
 
+import static Utils.DateHelper.convertCalendarToTimestamp;
+
 /**
  * Created by timorzipa on 06/04/2017.
  */
 public class EventScheduleManager {
-    private static PersistanceFacade persistanceFacade = new PersistanceFacade();
+    private static PersistanceFacade<EventDutyEntity> eventDutyEntityPersistanceFacade = new PersistanceFacade(EventDutyEntity.class);
+    private static PersistanceFacade<EventDutyMusicalWorkEntity> eventDutyMusicalWorkEntityPersistanceFacade = new PersistanceFacade(EventDutyMusicalWorkEntity.class);
 
     public static Calendar loadedEventsStartdate; //start of the already loaded calendar
     public static Calendar loadedEventsEnddate; //end of the already loaded calendar
@@ -34,7 +34,7 @@ public class EventScheduleManager {
         EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
         eventDutyModel.validate();
         EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
-        eventDutyEntity = (EventDutyEntity) persistanceFacade.put(eventDutyEntity);
+        eventDutyEntity = eventDutyEntityPersistanceFacade.put(eventDutyEntity);
 
         // create connection between event duty and musical work
         if(eventDutyDTO.getMusicalWorks() != null) {
@@ -44,20 +44,30 @@ public class EventScheduleManager {
                 }
             }
         }
-        HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(DateHelper.convertTimestampToCalendar(eventDutyModel.getStarttime()), DateHelper.convertTimestampToCalendar(eventDutyModel.getStarttime()));
+
+        /*
+        HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()), DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()));
         if(!musicanCapacityMap.isEmpty()) {
             MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap);
         }
+        */
 
-        eventDutyDTO.setEventDutyID(eventDutyEntity.getEventDutyId());
+        eventDutyDTO.setEventDutyId(eventDutyEntity.getEventDutyId());
         return eventDutyDTO;
     }
 
     public static void updateEventDuty(EventDutyDTO newEventDutyDTO, EventDutyDTO oldEventDutyDTO) throws ValidationException {
         EventDutyModel eventDutyModel = createEventDutyModel(newEventDutyDTO);
         eventDutyModel.validate();
-        EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
-        persistanceFacade.put(eventDutyEntity);
+        EventDutyEntity eventDutyEntity = eventDutyEntityPersistanceFacade.get(eventDutyModel.getEventDutyId());
+        eventDutyEntityPersistanceFacade.put(eventDutyEntity);
+
+        /*
+        HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()), DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()));
+        if(!musicanCapacityMap.isEmpty()) {
+            MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap);
+        }
+        */
 
         // check for changes in musical works
         // remove all musical works which did exist but now don't
@@ -91,14 +101,32 @@ public class EventScheduleManager {
         return getEventDutyInRange(DateHelper.getStartOfWeek(cal), DateHelper.getEndOfWeek(cal));
     }
 
+    public static List<EventDutyDTO> getAllRehearsalsOfEventDuty(EventDutyDTO eventDutyDTO) {
+        if(eventDutyDTO.getEventDutyId() != null) {
+            List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p -> p.getRehearsalFor() == eventDutyDTO.getEventDutyId());
+
+            List<EventDutyModel> eventDutyModelList = new ArrayList<>();
+            for (EventDutyEntity eventDutyEntity : eventDuties) {
+                eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
+            }
+            List<EventDutyDTO> eventDutyDTOList = new ArrayList<>();
+            for (EventDutyModel eventDutyModel : eventDutyModelList) {
+                eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
+            }
+
+            return AccountAdministrationManager.getInstance().getUserPermissions().getViewableEventsForEventSchedule(eventDutyDTOList);
+        }
+        return new ArrayList<>();
+    }
+
     private static List<EventDutyDTO> getEventDutyInRange(Calendar startdayOfWeek, Calendar enddayOfWeek) {
         if(loadedEventsStartdate != null && loadedEventsEnddate != null &&
                 loadedEventsStartdate.compareTo(startdayOfWeek) <= 0 && loadedEventsEnddate.compareTo(enddayOfWeek) >= 0) {
             return new ArrayList<>();
         }
 
-        EventDutyRDBMapper rdbMapper = (EventDutyRDBMapper) persistanceFacade.getMapper(EventDutyEntity.class);
-        List<EventDutyEntity> eventDuties = rdbMapper.getEventDutyInRange(startdayOfWeek, enddayOfWeek);
+        List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p -> p.getStarttime().after(convertCalendarToTimestamp(startdayOfWeek))
+                && p.getStarttime().before(convertCalendarToTimestamp(enddayOfWeek)));
 
         List<EventDutyModel> eventDutyModelList = new ArrayList<>();
         for(EventDutyEntity eventDutyEntity : eventDuties) {
@@ -110,7 +138,7 @@ public class EventScheduleManager {
         }
         setLoadedEventsStartAndEnddate(startdayOfWeek, enddayOfWeek);
 
-        return AccountAdministrationManager.getUserRestrain().constrainViewableEventsForEventSchedule(eventDutyDTOList);
+        return AccountAdministrationManager.getInstance().getUserPermissions().getViewableEventsForEventSchedule(eventDutyDTOList);
     }
 
     private static void setLoadedEventsStartAndEnddate(Calendar start, Calendar end) {
@@ -131,14 +159,14 @@ public class EventScheduleManager {
         EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
         eventDutyMusicalWorkEntity.setEventDuty(eventDutyEntity.getEventDutyId());
         eventDutyMusicalWorkEntity.setMusicalWork(musicalWorkDTO.getId());
-        EventDutyMusicalWorkRDBMapper.remove(eventDutyMusicalWorkEntity);
+        eventDutyMusicalWorkEntityPersistanceFacade.remove(eventDutyMusicalWorkEntity);
     }
 
     public static void createEventDutyMusicalWorks(EventDutyEntity eventDutyEntity, MusicalWorkDTO musicalWorkDTO) {
         EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
         eventDutyMusicalWorkEntity.setEventDuty(eventDutyEntity.getEventDutyId());
         eventDutyMusicalWorkEntity.setMusicalWork(musicalWorkDTO.getId());
-        persistanceFacade.put(eventDutyMusicalWorkEntity);
+        eventDutyMusicalWorkEntityPersistanceFacade.put(eventDutyMusicalWorkEntity);
     }
 
     //Mapper
@@ -202,16 +230,16 @@ public class EventScheduleManager {
 
     public static EventDutyModel createEventDutyModel(EventDutyDTO eventDutyDTO) {
         EventDutyModel eventDutyModel = new EventDutyModel();
-        eventDutyModel.setEventDutyId(eventDutyDTO.getEventDutyID());
+        eventDutyModel.setEventDutyId(eventDutyDTO.getEventDutyId());
         eventDutyModel.setName(eventDutyDTO.getName());
         eventDutyModel.setDescription(eventDutyDTO.getDescription());
-        eventDutyModel.setStarttime(eventDutyDTO.getStartTime());
-        eventDutyModel.setEndtime(eventDutyDTO.getEndTime());
-        eventDutyModel.setEventType(eventDutyDTO.getEventType().toString());
-        eventDutyModel.setEventStatus(eventDutyDTO.getEventStatus().toString());
+        eventDutyModel.setStartTime(eventDutyDTO.getStartTime());
+        eventDutyModel.setEndTime(eventDutyDTO.getEndTime());
+        eventDutyModel.setEventType(eventDutyDTO.getEventType());
+        eventDutyModel.setEventStatus(eventDutyDTO.getEventStatus());
         eventDutyModel.setConductor(eventDutyDTO.getConductor());
-        eventDutyModel.setLocation(eventDutyDTO.getEventLocation());
-        eventDutyModel.setDefaultPoints(eventDutyDTO.getPoints());
+        eventDutyModel.setLocation(eventDutyDTO.getLocation());
+        eventDutyModel.setPoints(eventDutyDTO.getPoints());
         eventDutyModel.setInstrumentation(eventDutyDTO.getInstrumentation());
         eventDutyModel.setRehearsalFor(eventDutyDTO.getRehearsalFor());
         if(eventDutyDTO.getMusicalWorks() != null && !eventDutyDTO.getMusicalWorks().isEmpty()) {
@@ -233,13 +261,13 @@ public class EventScheduleManager {
         }
         eventDutyEntity.setName(eventDutyModel.getName());
         eventDutyEntity.setDescription(eventDutyModel.getDescription());
-        eventDutyEntity.setStarttime(eventDutyModel.getStarttime());
-        eventDutyEntity.setEndtime(eventDutyModel.getEndtime());
-        eventDutyEntity.setEventType(eventDutyModel.getEventType());
-        eventDutyEntity.setEventStatus(eventDutyModel.getEventStatus());
+        eventDutyEntity.setStarttime(eventDutyModel.getStartTime());
+        eventDutyEntity.setEndtime(eventDutyModel.getEndTime());
+        eventDutyEntity.setEventType(eventDutyModel.getEventType().toString());
+        eventDutyEntity.setEventStatus(eventDutyModel.getEventStatus().toString());
         eventDutyEntity.setConductor(eventDutyModel.getConductor());
         eventDutyEntity.setLocation(eventDutyModel.getLocation());
-        eventDutyEntity.setDefaultPoints(eventDutyModel.getDefaultPoints() == null ? 0.0 : Double.valueOf(eventDutyModel.getDefaultPoints()));
+        eventDutyEntity.setDefaultPoints(eventDutyModel.getPoints() == null ? 0.0 : Double.valueOf(eventDutyModel.getPoints()));
         eventDutyEntity.setInstrumentation(eventDutyModel.getInstrumentation());
         eventDutyEntity.setRehearsalFor(eventDutyModel.getRehearsalFor());
 
@@ -268,16 +296,16 @@ public class EventScheduleManager {
 
     public static EventDutyDTO createEventDutyDTO (EventDutyModel eventDutyModel) {
         EventDutyDTO eventDutyDTO = new EventDutyDTO();
-        eventDutyDTO.setEventDutyID(eventDutyModel.getEventDutyId());
+        eventDutyDTO.setEventDutyId(eventDutyModel.getEventDutyId());
         eventDutyDTO.setName(eventDutyModel.getName());
         eventDutyDTO.setDescription(eventDutyModel.getDescription());
-        eventDutyDTO.setStartTime(eventDutyModel.getStarttime());
-        eventDutyDTO.setEndTime(eventDutyModel.getEndtime());
-        eventDutyDTO.setEventType(EventType.valueOf(eventDutyModel.getEventType()));
-        eventDutyDTO.setEventStatus(EventStatus.valueOf(eventDutyModel.getEventStatus()));
+        eventDutyDTO.setStartTime(eventDutyModel.getStartTime());
+        eventDutyDTO.setEndTime(eventDutyModel.getEndTime());
+        eventDutyDTO.setEventType(EventType.valueOf(eventDutyModel.getEventType().toString()));
+        eventDutyDTO.setEventStatus(EventStatus.valueOf(eventDutyModel.getEventStatus().toString()));
         eventDutyDTO.setConductor(eventDutyModel.getConductor());
-        eventDutyDTO.setEventLocation(eventDutyModel.getLocation());
-        eventDutyDTO.setPoints(eventDutyModel.getDefaultPoints());
+        eventDutyDTO.setLocation(eventDutyModel.getLocation());
+        eventDutyDTO.setPoints(eventDutyModel.getPoints());
         eventDutyDTO.setInstrumentation(eventDutyModel.getInstrumentation());
         eventDutyDTO.setRehearsalFor(eventDutyModel.getRehearsalFor());
 
@@ -296,17 +324,17 @@ public class EventScheduleManager {
         eventDutyModel.setEventDutyId(eventDutyEntity.getEventDutyId());
         eventDutyModel.setName(eventDutyEntity.getName());
         eventDutyModel.setDescription(eventDutyEntity.getDescription());
-        eventDutyModel.setStarttime(eventDutyEntity.getStarttime());
-        eventDutyModel.setEndtime(eventDutyEntity.getEndtime());
-        eventDutyModel.setEventType(eventDutyEntity.getEventType().toString());
-        eventDutyModel.setEventStatus(eventDutyEntity.getEventStatus().toString());
+        eventDutyModel.setStartTime(eventDutyEntity.getStarttime());
+        eventDutyModel.setEndTime(eventDutyEntity.getEndtime());
+        eventDutyModel.setEventType(EventType.valueOf(eventDutyEntity.getEventType()));
+        eventDutyModel.setEventStatus(EventStatus.valueOf(eventDutyEntity.getEventStatus()));
         eventDutyModel.setConductor(eventDutyEntity.getConductor());
         eventDutyModel.setLocation(eventDutyEntity.getLocation());
-        eventDutyModel.setDefaultPoints(eventDutyEntity.getDefaultPoints());
+        eventDutyModel.setPoints(eventDutyEntity.getDefaultPoints());
         eventDutyModel.setInstrumentation(eventDutyEntity.getInstrumentation());
         eventDutyModel.setRehearsalFor(eventDutyEntity.getRehearsalFor());
 
-        if(!eventDutyEntity.getEventDutyMusicalWorksByEventDutyId().isEmpty()) {
+        if(eventDutyEntity.getEventDutyMusicalWorksByEventDutyId() != null && !eventDutyEntity.getEventDutyMusicalWorksByEventDutyId().isEmpty()) {
             List<MusicalWorkModel> musicalWorkModels = new ArrayList<>();
             for (EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity : eventDutyEntity.getEventDutyMusicalWorksByEventDutyId()) {
                 MusicalWorkEntity musicalWorkEntity = eventDutyMusicalWorkEntity.getMusicalWorkByMusicalWork();
@@ -316,32 +344,5 @@ public class EventScheduleManager {
         }
 
         return eventDutyModel;
-    }
-
-    public static EventDutyDTO getEventDutyByDetails(EventDutyDTO eventDutyDTO) {
-        EventDutyRDBMapper rdbMapper = (EventDutyRDBMapper) persistanceFacade.getMapper(EventDutyEntity.class);
-        List<EventDutyEntity> eventDuties = rdbMapper.getEventDutyByDetails(eventDutyDTO.getName(), eventDutyDTO.getStartTime());
-        EventDutyModel eventDutyModel =  createEventDutyModel(eventDuties.get(0));
-        EventDutyDTO eventDutyDTO1 = createEventDutyDTO(eventDutyModel);
-        return eventDutyDTO1;
-    }
-
-    public static List<EventDutyDTO> getAllRehearsalsOfEventDuty(EventDutyDTO eventDutyDTO) {
-        if(eventDutyDTO.getEventDutyID() != null) {
-            EventDutyRDBMapper rdbMapper = (EventDutyRDBMapper) persistanceFacade.getMapper(EventDutyEntity.class);
-            List<EventDutyEntity> eventDuties = rdbMapper.getAllRehearsalsOfEventDuty(eventDutyDTO.getEventDutyID());
-
-            List<EventDutyModel> eventDutyModelList = new ArrayList<>();
-            for (EventDutyEntity eventDutyEntity : eventDuties) {
-                eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
-            }
-            List<EventDutyDTO> eventDutyDTOList = new ArrayList<>();
-            for (EventDutyModel eventDutyModel : eventDutyModelList) {
-                eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
-            }
-
-            return AccountAdministrationManager.getUserRestrain().constrainViewableEventsForEventSchedule(eventDutyDTOList);
-        }
-        return new ArrayList<>();
     }
 }

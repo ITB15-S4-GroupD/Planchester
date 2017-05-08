@@ -5,9 +5,9 @@ import Application.DTO.EventDutyDTO;
 import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
+import Domain.Models.Permission;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
-import Utils.Enum.EventType;
 import Utils.MessageHelper;
 import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
@@ -88,7 +88,7 @@ public class EditController {
         date.setValue(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalDate());
         startTime.setValue(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalTime());
         endTime.setValue(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime());
-        eventLocation.setText(initEventDutyDTO.getEventLocation());
+        eventLocation.setText(initEventDutyDTO.getLocation());
         conductor.setText(initEventDutyDTO.getConductor());
         points.setText(initEventDutyDTO.getPoints() != null ? String.valueOf(initEventDutyDTO.getPoints()) : null);
         if(initEventDutyDTO.getMusicalWorks() != null && !initEventDutyDTO.getMusicalWorks().isEmpty()) {
@@ -105,16 +105,16 @@ public class EditController {
                 points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", " "));
             }
         });
-        btnEditEvent.setVisible(AccountAdministrationManager.getUserRestrain().isVisibleEditEvent());
-        txtTitle.setText(AccountAdministrationManager.getUserRestrain().FitTitleOnEventDetails(txtTitle.getText()));
     }
 
     protected void initNotEditableFields() {
-        if(!EventStatus.Unpublished.equals(initEventDutyDTO.getEventStatus())) {
-            btnEditEvent.setVisible(false);
-        } else {
+        Permission permission = AccountAdministrationManager.getInstance().getUserPermissions();
+        if(permission.isEditEventSchedule() && EventStatus.Unpublished.equals(initEventDutyDTO.getEventStatus())) {
             btnEditEvent.setVisible(true);
+        } else {
+            btnEditEvent.setVisible(false);
         }
+
         btnCancelEvent.setVisible(false);
         btnSaveEvent.setVisible(false);
         btnEditDetails.setVisible(false);
@@ -123,9 +123,9 @@ public class EditController {
 
         name.setEditable(false);
         description.setEditable(false);
-        date.setEditable(false);
-        startTime.setEditable(false);
-        endTime.setEditable(false);
+        startTime.setDisable(true);
+        endTime.setDisable(true);
+        date.setDisable(true);
         eventLocation.setEditable(false);
         conductor.setEditable(false);
         points.setEditable(false);
@@ -148,7 +148,7 @@ public class EditController {
             EventScheduleController.removeSelectedAppointmentFromCalendar(selectedAppointment);
 
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
-            eventDutyDTO.setEventDutyID(oldEventDutyDTO.getEventDutyID());
+            eventDutyDTO.setEventDutyId(oldEventDutyDTO.getEventDutyId());
             eventDutyDTO.setName(name.getText());
             eventDutyDTO.setDescription(description.getText());
             eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
@@ -156,7 +156,7 @@ public class EditController {
             eventDutyDTO.setEventType(initEventDutyDTO.getEventType());
             eventDutyDTO.setEventStatus(initEventDutyDTO.getEventStatus());
             eventDutyDTO.setConductor(conductor.getText());
-            eventDutyDTO.setEventLocation(eventLocation.getText());
+            eventDutyDTO.setLocation(eventLocation.getText());
             eventDutyDTO.setMusicalWorks(musicalWorks);
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
             eventDutyDTO.setInstrumentation(null); //TODO timebox 2
@@ -175,8 +175,8 @@ public class EditController {
 
     protected void updateRehearsal(EventDutyDTO eventDutyDTO) throws ValidationException {
         for(EventDutyDTO rehearsalFromNew : newRehearsalList) {
-            if(rehearsalFromNew.getEventDutyID() == null) {
-                rehearsalFromNew.setRehearsalFor(eventDutyDTO.getEventDutyID());
+            if(rehearsalFromNew.getEventDutyId() == null) {
+                rehearsalFromNew.setRehearsalFor(eventDutyDTO.getEventDutyId());
                 EventScheduleManager.createEventDuty(rehearsalFromNew);
                 EventScheduleController.addEventDutyToGUI(rehearsalFromNew);
             }
@@ -216,7 +216,7 @@ public class EditController {
 
     @FXML
     protected boolean cancel() {
-        if(points.getText()==null) {
+        if(points.getText() == null) {
             points.setText("0.0");
         }
 
@@ -227,7 +227,7 @@ public class EditController {
                 || !startTime.getValue().equals(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalTime())
                 || !endTime.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime())
                 || !conductor.getText().equals(initEventDutyDTO.getConductor())
-                || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
+                || !eventLocation.getText().equals(initEventDutyDTO.getLocation())
                 || !points.getText().equals(pointRef)
                 || (musicalWorks == null && initEventDutyDTO.getMusicalWorks() != null) // musical work removed
                 || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() == null) // musical work added
@@ -255,9 +255,9 @@ public class EditController {
 
         name.setEditable(true);
         description.setEditable(true);
-        date.setEditable(true);
-        startTime.setEditable(true);
-        endTime.setEditable(true);
+        startTime.setDisable(false);
+        endTime.setDisable(false);
+        date.setDisable(false);
         eventLocation.setEditable(true);
         conductor.setEditable(true);
         points.setEditable(true);

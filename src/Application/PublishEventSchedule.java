@@ -4,23 +4,22 @@ import java.time.Month;
 import java.time.Year;
 import java.util.*;
 import Application.DTO.EventDutyDTO;
-import Application.DTO.MusicalWorkDTO;
-import Domain.EventDutyModel;
-import Domain.MusicalWorkModel;
-import Persistence.Entities.*;
-import Persistence.EventDutyRDBMapper;
+import Domain.Models.EventDutyModel;
 import Persistence.Entities.EventDutyEntity;
-import Presentation.EventSchedule.EventScheduleController;
+import Persistence.PersistanceFacade;
 import Utils.Enum.EventStatus;
-import Utils.Enum.EventType;
 import Utils.MessageHelper;
 import Utils.Validator;
 import javax.xml.bind.ValidationException;
+
+import static Utils.DateHelper.convertCalendarToTimestamp;
 
 /**
  * Created by julia on 28.04.2017.
  */
 public class PublishEventSchedule {
+
+    private static PersistanceFacade<EventDutyEntity> eventDutyEntityPersistanceFacade = new PersistanceFacade(EventDutyEntity.class);
 
     public static EventDutyDTO publish(Year year, Month month) {
         //Calculate first and last day of month; note that Month starts with 0
@@ -29,22 +28,30 @@ public class PublishEventSchedule {
         Calendar firstOfMonth = Calendar.getInstance();
         firstOfMonth.set(year.getValue(), month.getValue()-1, 1);
 
-        Calendar firstNextMoneth = Calendar.getInstance();
-        firstNextMoneth.set(year.getValue(), month.getValue(), 1);
+        Calendar firstNextMonth = Calendar.getInstance();
+        firstNextMonth.set(year.getValue(), month.getValue(), 1);
 
-        List<EventDutyEntity> dutiesInRange = EventDutyRDBMapper.getEventDutyInRange(firstOfMonth, firstNextMoneth);
+        List<EventDutyEntity> dutiesInRange = eventDutyEntityPersistanceFacade.list(p -> p.getStarttime().after(convertCalendarToTimestamp(firstOfMonth))
+                && p.getStarttime().before(convertCalendarToTimestamp(firstNextMonth)));
 
         for(EventDutyEntity evt : dutiesInRange){
             eventDutyModel = EventScheduleManager.createEventDutyModel(evt);
-            try{ eventDutyModel.validate(); }catch (ValidationException val){
+            try{
+                eventDutyModel.validate();
+            } catch (ValidationException val){
                 MessageHelper.showErrorAlertMessage("Please complete duty " + evt.getEventType() + ", " + evt.getStarttime() +
                                                     "\n" + val.getMessage() );
                 return EventScheduleManager.createEventDutyDTO(eventDutyModel);
             }
 
-            if(!hardValid(evt))EventScheduleManager.createEventDutyDTO(eventDutyModel);
-
-            eventDutyModel.setEventStatus(EventStatus.Published.toString());
+            if(!hardValid(evt)) {
+                EventScheduleManager.createEventDutyDTO(eventDutyModel);
+            }
+        }
+      
+        for(EventDutyEntity evt: dutiesInRange) {
+            eventDutyModel = EventScheduleManager.createEventDutyModel(evt);
+            eventDutyModel.setEventStatus(EventStatus.Published);
             try {
                 EventScheduleManager.updateEventDuty(EventScheduleManager.createEventDutyDTO(eventDutyModel),EventScheduleManager.createEventDutyDTO(eventDutyModel));
             } catch (ValidationException e) {
@@ -77,7 +84,7 @@ public class PublishEventSchedule {
                 MessageHelper.showErrorAlertMessage( info + val.getMessage() );
                 return false;
             }
-        }
+    }
         return true;
     }
 }

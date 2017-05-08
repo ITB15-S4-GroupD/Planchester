@@ -72,7 +72,7 @@ public class CreateNonMusicalEventController {
             eventDutyDTO.setEndTime(endTime.getValue() == null ? DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue().plusHours(2)) : DateHelper.mergeDateAndTime(date.getValue(), endTime.getValue()));
             eventDutyDTO.setEventType(EventType.NonMusicalEvent);
             eventDutyDTO.setEventStatus(EventStatus.Unpublished);
-            eventDutyDTO.setEventLocation(eventLocation.getText());
+            eventDutyDTO.setLocation(eventLocation.getText());
             eventDutyDTO.setPoints((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText()));
 
             eventDutyDTO = EventScheduleManager.createNonMusicalPerformance(eventDutyDTO);

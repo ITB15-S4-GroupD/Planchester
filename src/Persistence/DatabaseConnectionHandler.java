@@ -11,9 +11,9 @@ public class DatabaseConnectionHandler {
     private final String HIBERNATE_CONFIGURARION = "hibernate.cfg.xml";
 
     private static DatabaseConnectionHandler instance = null;
-    Configuration cfg;
+    private Configuration cfg;
     private Session session;
-    SessionFactory factory;
+    private SessionFactory factory;
 
     private DatabaseConnectionHandler() {
         // Exists only to defeat instantiation.
@@ -30,7 +30,7 @@ public class DatabaseConnectionHandler {
         if(cfg == null) {
             cfg = new Configuration();
             cfg.configure(HIBERNATE_CONFIGURARION);
-            //openSession();
+            openSession();
         }
     }
 
@@ -39,18 +39,16 @@ public class DatabaseConnectionHandler {
         session = factory.openSession();
     }
 
+    public void closeSession() {
+        session.close();
+    }
+
     public Session beginTransaction() {
-        openSession();
         session.beginTransaction();
         return session;
     }
 
     public void commitTransaction() {
         session.getTransaction().commit();
-        session.close();
-    }
-
-    public void closeSession() {
-        //session.close();
     }
 }

@@ -4,6 +4,8 @@ import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
 import Application.EventScheduleManager;
 import Application.PublishEventSchedule;
+import Domain.Models.Permission;
+import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import Presentation.PlanchesterGUI;
 import Utils.DateHelper;
@@ -17,7 +19,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import jfxtras.scene.control.agenda.Agenda;
-import org.omg.CORBA.Environment;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -111,8 +112,10 @@ public class EventScheduleController {
                 showEventDetailView();
             }
         });
-        btnPublishEventSchedule.setVisible(AccountAdministrationManager.getUserRestrain().isVisibleButtonPublishEvents());
-        addNewEvent.setVisible(AccountAdministrationManager.getUserRestrain().isVisibleMenuAddNewEvent());
+
+        Permission permission = AccountAdministrationManager.getInstance().getUserPermissions();
+        btnPublishEventSchedule.setVisible(permission.isPublishEventSchedule());
+        addNewEvent.setVisible(permission.isEditEventSchedule());
 
     }
 
@@ -144,6 +147,11 @@ public class EventScheduleController {
     private void showActualWeekClicked() {
         agenda.setDisplayedLocalDateTime(LocalDateTime.now());
         setCalenderWeekLabel();
+
+        List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForWeek(agenda.getDisplayedCalendar());
+        for(EventDutyDTO event : events) {
+            addEventDutyToGUI(event);
+        }
     }
 
     public static void setDisplayedLocalDateTime(LocalDateTime localDateTime) {
@@ -190,7 +198,7 @@ public class EventScheduleController {
     public static void addEventDutyToGUI(EventDutyDTO event) {
         Agenda.Appointment appointment = new Agenda.AppointmentImpl();
         appointment.setDescription(event.getDescription());
-        appointment.setLocation(event.getEventLocation());
+        appointment.setLocation(event.getLocation());
         appointment.setStartTime(DateHelper.convertTimestampToCalendar(event.getStartTime()));
         appointment.setEndTime(DateHelper.convertTimestampToCalendar(event.getEndTime()));
 
@@ -214,6 +222,15 @@ public class EventScheduleController {
             appointment.setAppointmentGroup(nonMusicalEvent);
             appointment.setSummary(event.getName() + "\nNonMusicalEvent");
         }
+
+        if(event.getEventStatus().equals(EventStatus.Published)) {
+            appointment.setSummary(appointment.getSummary() + " (P)");
+        } else if(event.getEventStatus().equals(EventStatus.Cancelled)) {
+            appointment.setSummary(appointment.getSummary() + " (C)");
+        } else if(event.getEventStatus().equals(EventStatus.Unpublished)) {
+            appointment.setSummary(appointment.getSummary() + " (UP)");
+        }
+
         staticLoadedEventsMap.put(appointment, event);
         staticAgenda.appointments().add(appointment);
     }
@@ -231,7 +248,7 @@ public class EventScheduleController {
 
     public static void setSelectedAppointment(EventDutyDTO eventDutyDTO) {
         for (Map.Entry<Agenda.Appointment, EventDutyDTO> entry : staticLoadedEventsMap.entrySet()) {
-            if (eventDutyDTO.getEventDutyID() == entry.getValue().getEventDutyID()) {
+            if (eventDutyDTO.getEventDutyId() == entry.getValue().getEventDutyId()) {
                 staticAgenda.selectedAppointments().clear();
                 staticAgenda.selectedAppointments().add(entry.getKey());
             }

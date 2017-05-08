@@ -43,7 +43,7 @@ public class CreateTourController extends CreateController {
             eventDutyDTO.setEventType(EventType.Tour);
             eventDutyDTO.setEventStatus(EventStatus.Unpublished);
             eventDutyDTO.setConductor(conductor.getText());
-            eventDutyDTO.setEventLocation(eventLocation.getText());
+            eventDutyDTO.setLocation(eventLocation.getText());
             eventDutyDTO.setMusicalWorks(musicalWorks);
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
             eventDutyDTO.setInstrumentation(null); //TODO timebox 2
@@ -51,10 +51,9 @@ public class CreateTourController extends CreateController {
 
             eventDutyDTO =EventScheduleManager.createEventDuty(eventDutyDTO);
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
-            EventDutyDTO eventDutyDTO1 = EventScheduleManager.getEventDutyByDetails(eventDutyDTO);
 
             for(EventDutyDTO eventD : rehearsalList){
-                eventD.setRehearsalFor(eventDutyDTO1.getEventDutyID());
+                eventD.setRehearsalFor(eventDutyDTO.getEventDutyId());
                 EventScheduleManager.createEventDuty(eventD);
                 EventScheduleController.addEventDutyToGUI(eventD);
             }
