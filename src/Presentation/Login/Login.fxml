@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="Login" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="287.0" prefWidth="489.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.LoginController">
+<GridPane fx:id="Login" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="287.0" prefWidth="489.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.Login.LoginController">
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>
@@ -73,7 +73,7 @@
             </GridPane>
             <ImageView fitHeight="94.0" fitWidth="329.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@Images/logoganz.jpg" />
+                  <Image url="@../Images/logoganz.jpg" />
                </image>
             </ImageView>
          </children>

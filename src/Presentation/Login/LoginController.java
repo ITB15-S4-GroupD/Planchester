@@ -1,9 +1,11 @@
-package Presentation;
+package Presentation.Login;
 
 import Application.AccountAdministrationManager;
 import Persistence.AccountRDBMapper;
 import Persistence.Entities.AccountEntity;
+import Presentation.PlanchesterGUI;
 import Utils.MessageHelper;
+import Utils.PlanchesterMessages;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -27,7 +29,7 @@ public class LoginController {
         AccountAdministrationManager.getInstance().setAccount(username.getText(), password.getText());
 
         if(AccountAdministrationManager.getInstance().getLoggedInAccount() == null) {
-            MessageHelper.showErrorAlertMessage("Wrong username or password");
+            MessageHelper.showErrorAlertMessage(PlanchesterMessages.LOGIN_FAILED);
         } else {
             PlanchesterGUI.primaryStage.fireEvent(
                  new WindowEvent(
@@ -55,5 +57,4 @@ public class LoginController {
             )
         );
     }
-
 }
