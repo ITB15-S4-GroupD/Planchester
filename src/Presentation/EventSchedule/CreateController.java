@@ -32,27 +32,27 @@ import java.util.List;
  */
 public abstract class CreateController {
 
-    @FXML private TextField name;
-    @FXML private TextArea description;
-    @FXML private JFXTimePicker startTime;
-    @FXML private JFXTimePicker endTime;
-    @FXML private JFXDatePicker date;
-    @FXML private TextField eventLocation;
-    @FXML private TextField conductor;
-    @FXML private TextField points;
+    @FXML protected TextField name;
+    @FXML protected TextArea description;
+    @FXML protected JFXTimePicker startTime;
+    @FXML protected JFXTimePicker endTime;
+    @FXML protected JFXDatePicker date;
+    @FXML protected TextField eventLocation;
+    @FXML protected TextField conductor;
+    @FXML protected TextField points;
 
-    public static List<EventDutyDTO> rehearsalList;
-    @FXML private TableView<String> rehearsalTableView;
-    @FXML private TableColumn<String, String> rehearsalTableColumn;
+    protected static List<EventDutyDTO> rehearsalList = new LinkedList<>();
+    @FXML protected TableView<String> rehearsalTableView;
+    @FXML protected TableColumn<String, String> rehearsalTableColumn;
 
-    @FXML private TableView<String> musicalWorkTable;
-    @FXML private TableColumn<String, String> selectedMusicalWorks;
+    @FXML protected TableView<String> musicalWorkTable;
+    @FXML protected TableColumn<String, String> selectedMusicalWorks;
 
-    private List<MusicalWorkDTO> musicalWorks;
-    private InstrumentationDTO instrumentation; // TODO timebox2
+    protected List<MusicalWorkDTO> musicalWorks;
+    protected InstrumentationDTO instrumentation; // TODO timebox2
 
-    private boolean allowMultipleMusicalWorkSelection = true;
-    private EventType eventType;
+    protected boolean allowMultipleMusicalWorkSelection = true;
+    protected EventType eventType;
 
     @FXML
     public boolean cancel() {
@@ -70,15 +70,11 @@ public abstract class CreateController {
 
     @FXML
     public void initialize() {
-        rehearsalList = new LinkedList<>();
         initializeMandatoryFields();
 
         selectedMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
 
         points.textProperty().addListener((observable, oldValue, newValue) -> {
-            //^\d*\.\d{2}$
-            //"^\\d*[\\.,]?\\d{1,2}?$"
-
             if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
                 points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
             }
@@ -259,7 +255,7 @@ public abstract class CreateController {
             eventDutyDTO.setEventType(eventType);
             eventDutyDTO.setEventStatus(EventStatus.Unpublished);
             eventDutyDTO.setConductor(conductor.getText());
-            eventDutyDTO.setEventLocation(eventLocation.getText());
+            eventDutyDTO.setLocation(eventLocation.getText());
             eventDutyDTO.setMusicalWorks(musicalWorks);
             eventDutyDTO.setPoints((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText()));
             eventDutyDTO.setInstrumentation(null); //TODO timebox 2
@@ -270,7 +266,7 @@ public abstract class CreateController {
             EventDutyDTO eventDutyDTO1 = EventScheduleManager.getEventDutyByDetails(eventDutyDTO);
 
             for(EventDutyDTO eventD : rehearsalList){
-                eventD.setRehearsalFor(eventDutyDTO1.getEventDutyID());
+                eventD.setRehearsalFor(eventDutyDTO1.getEventDutyId());
                 eventD = EventScheduleManager.createEventDuty(eventD);
                 EventScheduleController.addEventDutyToGUI(eventD);
             }

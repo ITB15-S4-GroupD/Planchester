@@ -1,12 +1,13 @@
 package Presentation.EventSchedule;
 
+import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
 import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
+import Domain.Models.Permission;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
-import Utils.Enum.EventType;
 import Utils.MessageHelper;
 import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
@@ -17,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import jfxtras.scene.control.agenda.Agenda;
 
@@ -32,46 +34,47 @@ import java.util.List;
  */
 public class EditController {
 
-    @FXML private TextField name;
-    @FXML private TextArea description;
-    @FXML private JFXTimePicker startTime;
-    @FXML private JFXTimePicker endTime;
-    @FXML private JFXDatePicker date;
-    @FXML private TextField eventLocation;
-    @FXML private TextField conductor;
-    @FXML private TextField points;
+    @FXML protected TextField name;
+    @FXML protected TextArea description;
+    @FXML protected JFXTimePicker startTime;
+    @FXML protected JFXTimePicker endTime;
+    @FXML protected JFXDatePicker date;
+    @FXML protected TextField eventLocation;
+    @FXML protected TextField conductor;
+    @FXML protected TextField points;
 
     public static List<EventDutyDTO> actualRehearsalList;
     public static List<EventDutyDTO> newRehearsalList;
-    @FXML private TableView<String> rehearsalTableView;
-    @FXML private TableColumn<String, String> rehearsalTableColumn;
+    @FXML protected TableView<String> rehearsalTableView;
+    @FXML protected TableColumn<String, String> rehearsalTableColumn;
 
-    @FXML private TableView<String> musicalWorkTable;
-    @FXML private TableColumn<String, String> selectedMusicalWorks;
+    @FXML protected TableView<String> musicalWorkTable;
+    @FXML protected TableColumn<String, String> selectedMusicalWorks;
 
-    private List<MusicalWorkDTO> musicalWorks;
-    private InstrumentationDTO instrumentation; // TODO timebox2
+    protected List<MusicalWorkDTO> musicalWorks;
+    protected InstrumentationDTO instrumentation; // TODO timebox2
 
-    private Agenda.Appointment initAppointment; // remember init data to compare
-    private EventDutyDTO initEventDutyDTO; // remember init data to compare
+    protected Agenda.Appointment initAppointment; // remember init data to compare
+    protected EventDutyDTO initEventDutyDTO; // remember init data to compare
 
-    @FXML private Button btnCancelEvent;
-    @FXML private Button btnSaveEvent;
-    @FXML private Button btnEditEvent;
-    @FXML private Button btnEditDetails;
-    @FXML private Button btnAddRehearsal;
-    @FXML private Button btnRemoveRehearsal;
+    @FXML protected Button btnCancelEvent;
+    @FXML protected Button btnSaveEvent;
+    @FXML protected Button btnEditEvent;
+    @FXML protected Button btnEditDetails;
+    @FXML protected Button btnAddRehearsal;
+    @FXML protected Button btnRemoveRehearsal;
+    @FXML protected Text txtTitle;
 
     @FXML
-    public void initialize() {
+    protected void initialize() {
         checkMandatoryFields();
 
         selectedMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
 
-        Agenda.Appointment appointment = EventScheduleController.getSelectedAppointment();
-        EventDutyDTO eventDutyDTO = EventScheduleController.getEventForAppointment(appointment);
+        initAppointment = EventScheduleController.getSelectedAppointment();
+        initEventDutyDTO = EventScheduleController.getEventForAppointment(initAppointment);
 
-        actualRehearsalList = EventScheduleManager.getAllRehearsalsOfEventDuty(eventDutyDTO);
+        actualRehearsalList = EventScheduleManager.getAllRehearsalsOfEventDuty(initEventDutyDTO);
         newRehearsalList = actualRehearsalList;
         rehearsalTableView.getItems().clear();
         rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
@@ -80,37 +83,38 @@ public class EditController {
             rehearsalTableView.getItems().add(rehearsalToAdd);
         }
 
-        name.setText(eventDutyDTO.getName());
-        description.setText(eventDutyDTO.getDescription());
-        date.setValue(eventDutyDTO.getStartTime().toLocalDateTime().toLocalDate());
-        startTime.setValue(eventDutyDTO.getStartTime().toLocalDateTime().toLocalTime());
-        endTime.setValue(eventDutyDTO.getEndTime().toLocalDateTime().toLocalTime());
-        eventLocation.setText(eventDutyDTO.getEventLocation());
-        conductor.setText(eventDutyDTO.getConductor());
-        points.setText(eventDutyDTO.getPoints() != null ? String.valueOf(eventDutyDTO.getPoints()) : null);
-        if(eventDutyDTO.getMusicalWorks() != null && !eventDutyDTO.getMusicalWorks().isEmpty()) {
+        name.setText(initEventDutyDTO.getName());
+        description.setText(initEventDutyDTO.getDescription());
+        date.setValue(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalDate());
+        startTime.setValue(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalTime());
+        endTime.setValue(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime());
+        eventLocation.setText(initEventDutyDTO.getLocation());
+        conductor.setText(initEventDutyDTO.getConductor());
+        points.setText(initEventDutyDTO.getPoints() != null ? String.valueOf(initEventDutyDTO.getPoints()) : null);
+        if(initEventDutyDTO.getMusicalWorks() != null && !initEventDutyDTO.getMusicalWorks().isEmpty()) {
             musicalWorks = new ArrayList<>();
-            for(MusicalWorkDTO musicalWorkDTO : eventDutyDTO.getMusicalWorks()) {
+            for(MusicalWorkDTO musicalWorkDTO : initEventDutyDTO.getMusicalWorks()) {
                 musicalWorks.add(musicalWorkDTO);
                 musicalWorkTable.getItems().add(musicalWorkDTO.getName());
             }
         }
         initNotEditableFields();
-        initAppointment = appointment;
-        initEventDutyDTO = eventDutyDTO;
 
         points.textProperty().addListener((observable, oldValue, newValue) -> {
-            //^\d*\.\d{2}$
-            //"^\\d*[\\.,]?\\d{1,2}?$"
-
             if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
                 points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", " "));
             }
         });
     }
 
-    private void initNotEditableFields() {
-        btnEditEvent.setVisible(true);
+    protected void initNotEditableFields() {
+        Permission permission = AccountAdministrationManager.getInstance().getUserPermissions();
+        if(permission.isEditEventSchedule() && EventStatus.Unpublished.equals(initEventDutyDTO.getEventStatus())) {
+            btnEditEvent.setVisible(true);
+        } else {
+            btnEditEvent.setVisible(false);
+        }
+
         btnCancelEvent.setVisible(false);
         btnSaveEvent.setVisible(false);
         btnEditDetails.setVisible(false);
@@ -119,9 +123,9 @@ public class EditController {
 
         name.setEditable(false);
         description.setEditable(false);
-        date.setEditable(false);
-        startTime.setEditable(false);
-        endTime.setEditable(false);
+        startTime.setDisable(true);
+        endTime.setDisable(true);
+        date.setDisable(true);
         eventLocation.setEditable(false);
         conductor.setEditable(false);
         points.setEditable(false);
@@ -137,14 +141,14 @@ public class EditController {
     }
 
     @FXML
-    public void save() throws ValidationException {
+    protected void save() throws ValidationException {
         if(validate()) {
             Agenda.Appointment selectedAppointment = EventScheduleController.getSelectedAppointment();
             EventDutyDTO oldEventDutyDTO = EventScheduleController.getEventForAppointment(selectedAppointment);
             EventScheduleController.removeSelectedAppointmentFromCalendar(selectedAppointment);
 
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
-            eventDutyDTO.setEventDutyID(oldEventDutyDTO.getEventDutyID());
+            eventDutyDTO.setEventDutyId(oldEventDutyDTO.getEventDutyId());
             eventDutyDTO.setName(name.getText());
             eventDutyDTO.setDescription(description.getText());
             eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
@@ -152,7 +156,7 @@ public class EditController {
             eventDutyDTO.setEventType(initEventDutyDTO.getEventType());
             eventDutyDTO.setEventStatus(initEventDutyDTO.getEventStatus());
             eventDutyDTO.setConductor(conductor.getText());
-            eventDutyDTO.setEventLocation(eventLocation.getText());
+            eventDutyDTO.setLocation(eventLocation.getText());
             eventDutyDTO.setMusicalWorks(musicalWorks);
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
             eventDutyDTO.setInstrumentation(null); //TODO timebox 2
@@ -169,10 +173,10 @@ public class EditController {
         }
     }
 
-    private void updateRehearsal(EventDutyDTO eventDutyDTO) throws ValidationException {
+    protected void updateRehearsal(EventDutyDTO eventDutyDTO) throws ValidationException {
         for(EventDutyDTO rehearsalFromNew : newRehearsalList) {
-            if(rehearsalFromNew.getEventDutyID() == null) {
-                rehearsalFromNew.setRehearsalFor(eventDutyDTO.getEventDutyID());
+            if(rehearsalFromNew.getEventDutyId() == null) {
+                rehearsalFromNew.setRehearsalFor(eventDutyDTO.getEventDutyId());
                 EventScheduleManager.createEventDuty(rehearsalFromNew);
                 EventScheduleController.addEventDutyToGUI(rehearsalFromNew);
             }
@@ -182,7 +186,7 @@ public class EditController {
     }
 
     @FXML
-    public void addNewRehearsal() {
+    protected void addNewRehearsal() {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("CreateRehearsal.fxml"));
         Scene scene = null;
@@ -211,8 +215,8 @@ public class EditController {
     }
 
     @FXML
-    public boolean cancel() {
-        if(points.getText()==null) {
+    protected boolean cancel() {
+        if(points.getText() == null) {
             points.setText("0.0");
         }
 
@@ -223,7 +227,7 @@ public class EditController {
                 || !startTime.getValue().equals(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalTime())
                 || !endTime.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime())
                 || !conductor.getText().equals(initEventDutyDTO.getConductor())
-                || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
+                || !eventLocation.getText().equals(initEventDutyDTO.getLocation())
                 || !points.getText().equals(pointRef)
                 || (musicalWorks == null && initEventDutyDTO.getMusicalWorks() != null) // musical work removed
                 || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() == null) // musical work added
@@ -241,7 +245,7 @@ public class EditController {
     }
 
     @FXML
-    public void editEvent () {
+    protected void editEvent () {
         btnCancelEvent.setVisible(true);
         btnSaveEvent.setVisible(true);
         btnEditEvent.setVisible(false);
@@ -251,9 +255,9 @@ public class EditController {
 
         name.setEditable(true);
         description.setEditable(true);
-        date.setEditable(true);
-        startTime.setEditable(true);
-        endTime.setEditable(true);
+        startTime.setDisable(false);
+        endTime.setDisable(false);
+        date.setDisable(false);
         eventLocation.setEditable(true);
         conductor.setEditable(true);
         points.setEditable(true);
@@ -271,7 +275,7 @@ public class EditController {
 
 
     @FXML
-    public void editInstrumentation() {
+    protected void editInstrumentation() {
         InstrumentationController.selectMultipleMusicalWorks = true;
         if(date.getValue() != null) {
             InstrumentationController.newHeading = name.getText() + " | " + date.getValue().toString();
@@ -344,7 +348,7 @@ public class EditController {
         });
     }
 
-    private boolean validate() {
+    protected boolean validate() {
         LocalDate today = LocalDate.now();
         LocalTime start = startTime.getValue();
         LocalTime end = endTime.getValue();

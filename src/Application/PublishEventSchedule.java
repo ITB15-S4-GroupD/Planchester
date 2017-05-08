@@ -4,15 +4,10 @@ import java.time.Month;
 import java.time.Year;
 import java.util.*;
 import Application.DTO.EventDutyDTO;
-import Application.DTO.MusicalWorkDTO;
-import Domain.EventDutyModel;
-import Domain.MusicalWorkModel;
-import Persistence.Entities.*;
+import Domain.Models.EventDutyModel;
 import Persistence.EventDutyRDBMapper;
 import Persistence.Entities.EventDutyEntity;
-import Presentation.EventSchedule.EventScheduleController;
 import Utils.Enum.EventStatus;
-import Utils.Enum.EventType;
 import Utils.MessageHelper;
 import Utils.Validator;
 import javax.xml.bind.ValidationException;
@@ -36,14 +31,21 @@ public class PublishEventSchedule {
 
         for(EventDutyEntity evt : dutiesInRange){
             eventDutyModel = EventScheduleManager.createEventDutyModel(evt);
-            try{ eventDutyModel.validate(); }catch (ValidationException val){
+            try{
+                eventDutyModel.validate();
+            } catch (ValidationException val){
                 MessageHelper.showErrorAlertMessage("Please complete duty " + evt.getEventType() + ", " + evt.getStarttime() +
                                                     "\n" + val.getMessage() );
                 return EventScheduleManager.createEventDutyDTO(eventDutyModel);
             }
 
-            if(!hardValid(evt))EventScheduleManager.createEventDutyDTO(eventDutyModel);
-
+            if(!hardValid(evt)) {
+                EventScheduleManager.createEventDutyDTO(eventDutyModel);
+            }
+        }
+      
+        for(EventDutyEntity evt: dutiesInRange) {
+            eventDutyModel = EventScheduleManager.createEventDutyModel(evt);
             eventDutyModel.setEventStatus(EventStatus.Published.toString());
             try {
                 EventScheduleManager.updateEventDuty(EventScheduleManager.createEventDutyDTO(eventDutyModel),EventScheduleManager.createEventDutyDTO(eventDutyModel));
@@ -77,7 +79,7 @@ public class PublishEventSchedule {
                 MessageHelper.showErrorAlertMessage( info + val.getMessage() );
                 return false;
             }
-        }
+    }
         return true;
     }
 }

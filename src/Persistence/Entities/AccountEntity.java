@@ -37,7 +37,7 @@ public class AccountEntity {
     }
 
     @Basic
-    @Column(name = "password", nullable = false, length = 255, columnDefinition = "enum('Musician', 'Administrator', 'Manager', 'Substitute', 'Section_representative')")
+    @Column(name = "password", nullable = false, length = 255)
     public String getPassword() {
         return password;
     }
@@ -46,7 +46,7 @@ public class AccountEntity {
         this.password = password;
     }
 
-    @Column(name = "accountRole", nullable = false)
+    @Column(name = "accountRole", nullable = false, columnDefinition = "enum('Musician', 'Administrator', 'Manager', 'Substitute', 'Section_representative', 'Orchestral_facility_manager')")
     public String getAccountRole() {
         return accountRole;
     }

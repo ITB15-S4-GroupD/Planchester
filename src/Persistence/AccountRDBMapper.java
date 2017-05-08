@@ -22,7 +22,7 @@ public class AccountRDBMapper extends Mapper<AccountEntity> {
         } catch (NoResultException exception) {
             accountEntity = null;
         }
-
+        DatabaseConnectionHandler.getInstance().commitTransaction();
         return accountEntity;
     }
 }

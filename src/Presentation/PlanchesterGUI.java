@@ -1,25 +1,27 @@
 package Presentation;
 
+import Application.AccountAdministrationManager;
 import Application.DatabaseSessionManager;
-import Utils.Enum.AccountRole;
+import Presentation.EventSchedule.EventScheduleController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 
+import java.io.IOException;
 import java.net.URL;
 import java.rmi.UnexpectedException;
 
 public class PlanchesterGUI {
+
     public static Scene scene;
+    public static Stage primaryStage;
 
     public void start(Stage primaryStage) throws Exception {
-        DatabaseSessionManager.readConfiguration();
+        DatabaseSessionManager.beginSession();
 
+<<<<<<< HEAD
 //        primaryStage.setTitle("Planchester Login");
 //        scene = new Scene(FXMLLoader.load(getClass().getResource("Login.fxml")));
 //        primaryStage.setScene(scene);
@@ -28,11 +30,46 @@ public class PlanchesterGUI {
 
 //        primaryStage.setOnCloseRequest(t -> {
 //            if(LoginController.loggedInUser != null) {
+=======
+        primaryStage.setTitle("Planchester Login");
+        scene = new Scene(FXMLLoader.load(getClass().getResource("Login/Login.fxml")));
+        primaryStage.setScene(scene);
+        primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
+        primaryStage.show();
+        checkLogin(primaryStage);
+
+        this.primaryStage = primaryStage;
+    }
+
+    public static void showLogin() {
+        try {
+            // reset all loaded data
+            EventScheduleController.removeAllData();
+
+            primaryStage.close();
+            primaryStage = new Stage();
+            primaryStage.setTitle("Planchester Login");
+            scene = new Scene(FXMLLoader.load(PlanchesterGUI.class.getResource("Login/Login.fxml")));
+            primaryStage.setScene(scene);
+            primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
+            primaryStage.show();
+            checkLogin(primaryStage);
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private static void checkLogin(Stage primaryStage) {
+        primaryStage.setOnCloseRequest(t -> {
+            if(AccountAdministrationManager.getInstance().getLoggedInAccount() != null) {
+>>>>>>> master
                 try {
-                    showPlanchesterGUI(primaryStage);
+                    showPlanchesterGUI();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+<<<<<<< HEAD
 //            } else {
 //                Platform.exit();
 //                System.exit(0);
@@ -40,27 +77,25 @@ public class PlanchesterGUI {
 //        });
 
 //        LoginController.stage = primaryStage;
+=======
+            } else {
+                closePlanchester();
+            }
+        });
+>>>>>>> master
     }
 
-    private void showPlanchesterGUI(Stage primaryStage) throws Exception {
-        primaryStage = new Stage();
-        TabPane tabPane = createTabs();
-        primaryStage.setTitle("Planchester");
-        primaryStage.setMaximized(true);
-        primaryStage.setOnCloseRequest(t -> {
-            Platform.exit();
-            System.exit(0);
-        });
+    private static void showPlanchesterGUI() {
+        try {
+            primaryStage = new Stage();
+            primaryStage.setTitle("Planchester");
+            primaryStage.setMaximized(true);
 
-        // set and show scene
-        scene = new Scene(tabPane, 1200, 900, Color.WHITE);
-        URL url = this.getClass().getResource("CSS/stylesheet.css");
-        if (url == null) {
-            throw new UnexpectedException("CSS Resource not found. Aborting.");
-        }
-        String css = url.toExternalForm();
-        scene.getStylesheets().add(css);
+            primaryStage.setOnCloseRequest(t -> {
+                closePlanchester();
+            });
 
+<<<<<<< HEAD
         primaryStage.setScene(scene);
         primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
         primaryStage.show();
@@ -94,13 +129,28 @@ public class PlanchesterGUI {
             userAdministration.setText("User Administration");
             tabPane.getTabs().add(userAdministration);
 //        }
+=======
+            scene = new Scene(FXMLLoader.load(PlanchesterGUI.class.getResource("PlanchesterFrame.fxml")));
 
-        Tab support = new Tab();
-        support.setText("Support");
-        tabPane.getTabs().add(support);
+            URL url = PlanchesterGUI.class.getResource("CSS/stylesheet.css");
+            if (url == null) {
+                throw new UnexpectedException("CSS Resource not found. Aborting.");
+            }
+            String css = url.toExternalForm();
+            scene.getStylesheets().add(css);
 
-        //Tabs not closeable
-        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        return tabPane;
+            primaryStage.setScene(scene);
+            primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
+            primaryStage.show();
+        } catch (IOException exception) {
+                exception.printStackTrace();
+        }
+    }
+>>>>>>> master
+
+    private static void closePlanchester() {
+        DatabaseSessionManager.closeSession();
+        Platform.exit();
+        System.exit(0);
     }
 }

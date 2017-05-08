@@ -7,7 +7,11 @@ import Persistence.DatabaseConnectionHandler;
  */
 public class DatabaseSessionManager {
 
-    public static void readConfiguration() {
+    public static void beginSession() {
         DatabaseConnectionHandler.getInstance().readConfiguration();
+    }
+
+    public static void closeSession() {
+        DatabaseConnectionHandler.getInstance().closeSession();
     }
 }

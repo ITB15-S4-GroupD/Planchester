@@ -1,12 +1,16 @@
 package Presentation.EventSchedule;
 
+import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
+import Domain.Models.Permission;
+import Utils.Enum.EventStatus;
 import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.text.Text;
 import jfxtras.scene.control.agenda.Agenda;
 
 /**
@@ -25,6 +29,7 @@ public class EditNonMusicalEventController {
     @FXML private Button btnCancelEvent;
     @FXML private Button btnSaveEvent;
     @FXML private Button btnEditEvent;
+    @FXML private Text txtTitle;
 
     private EventDutyDTO initEventDutyDTO; // remember init data to compare
     private Agenda.Appointment initAppointment; // remember init data to compare
@@ -60,7 +65,13 @@ public class EditNonMusicalEventController {
     }
 
     private void initNotEditableFields() {
-        btnEditEvent.setVisible(true);
+        Permission permission = AccountAdministrationManager.getInstance().getUserPermissions();
+        if(permission.isEditEventSchedule() && EventStatus.Unpublished.equals(initEventDutyDTO.getEventStatus())) {
+            btnEditEvent.setVisible(true);
+        } else {
+            btnEditEvent.setVisible(false);
+        }
+
         btnCancelEvent.setVisible(false);
         btnSaveEvent.setVisible(false);
 
@@ -94,7 +105,7 @@ public class EditNonMusicalEventController {
                 || !date.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalDate())
                 || !startTime.getValue().equals(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalTime())
                 || !points.getText().equals(pointRef)
-                || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
+                || !eventLocation.getText().equals(initEventDutyDTO.getLocation())
                 || !points.getText().equals(pointRef)) {
 
             Alert confirmationAlertMessage = new Alert(Alert.AlertType.CONFIRMATION, PlanchesterMessages.DISCARD_CHANGES, ButtonType.YES, ButtonType.NO);

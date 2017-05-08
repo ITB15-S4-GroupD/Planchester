@@ -7,6 +7,7 @@
 *.jar
 *.war
 *.ear
+src/hibernate.cfg.xml
 
 # Folders #
 out/*
@@ -22,4 +23,4 @@ Planchester.iml
 hs_err_pid*
 
 # hibernate settings (local db)
-/src/hibernate.cfg.xml
+hibernate.cfg.xml

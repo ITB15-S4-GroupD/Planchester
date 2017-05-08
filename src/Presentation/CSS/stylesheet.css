@@ -531,9 +531,10 @@
     -fx-padding: 0.0em 0.666667em 0.0em 0.666667em; /* 0 8 0 8 */
     -fx-spacing: 0.166667em; /* 2 */
     -fx-base: derive(#d0d0d0,-70%);
-    -fx-background-color: linear-gradient(to bottom, derive(-fx-color,50%), derive(-fx-color,-30%)), -fx-body-color;
+    -fx-background-color: #c3bec1;
     -fx-background-insets: 0, 1 0 1 0;
     -fx-background-radius: 0, 0 ;
+    -fx-alignment: center-right;
 }
 
 /* Show nothing for background of normal menu button in a menu bar */
@@ -1585,7 +1586,7 @@
     -fx-background-radius: 0, 0 ;
     -fx-padding: 0.416667em 0.833em 0.416667em 0.833em; /* 5 10 5 10 */
     -fx-spacing: 0.333em; /* 4 */
-    -fx-alignment: CENTER_LEFT;
+    -fx-alignment: CENTER_RIGHT;
 }
 
 .tool-bar:horizontal > .container > .separator {
