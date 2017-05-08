@@ -47,25 +47,23 @@ public class EditRehearsalController extends EditController {
 
     @Override
     @FXML
-    public void initialize() {
+    protected void initialize() {
         //TODO GET LIST OF REHEARSALS : Christina
         super.checkMandatoryFields();
 
-        Agenda.Appointment appointment = EventScheduleController.getSelectedAppointment();
-        EventDutyDTO eventDutyDTO = EventScheduleController.getEventForAppointment(appointment);
+        initAppointment = EventScheduleController.getSelectedAppointment();
+        initEventDutyDTO = EventScheduleController.getEventForAppointment(initAppointment);
 
-        name.setText(appointment.getSummary());
-        description.setText(appointment.getDescription());
-        date.setValue(appointment.getStartLocalDateTime().toLocalDate());
-        startTime.setValue(appointment.getStartLocalDateTime().toLocalTime());
-        endTime.setValue(appointment.getEndLocalDateTime().toLocalTime());
-        eventLocation.setText(appointment.getLocation());
-        conductor.setText(eventDutyDTO.getConductor());
-        points.setText(eventDutyDTO.getPoints() != null ? String.valueOf(eventDutyDTO.getPoints()) : null);
+        name.setText(initEventDutyDTO.getName());
+        description.setText(initEventDutyDTO.getDescription());
+        date.setValue(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalDate());
+        startTime.setValue(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalTime());
+        endTime.setValue(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime());
+        eventLocation.setText(initEventDutyDTO.getEventLocation());
+        conductor.setText(initEventDutyDTO.getConductor());
+        points.setText(initEventDutyDTO.getPoints() != null ? String.valueOf(initEventDutyDTO.getPoints()) : null);
 
         initNotEditableFields();
-        initAppointment = appointment;
-        initEventDutyDTO = eventDutyDTO;
 
         points.textProperty().addListener((observable, oldValue, newValue) -> {
             //^\d*\.\d{2}$
@@ -79,8 +77,12 @@ public class EditRehearsalController extends EditController {
         txtTitle.setText(AccountAdministrationManager.getUserRestrain().FitTitleOnEventDetails(txtTitle.getText()));
     }
 
-    private void initNotEditableFields() {
-        btnEditEvent.setVisible(true);
+    protected void initNotEditableFields() {
+        if(!initEventDutyDTO.getEventStatus().equals(EventStatus.Unpublished)) {
+            btnEditEvent.setVisible(false);
+        } else {
+            btnEditEvent.setVisible(true);
+        }
         btnCancelEvent.setVisible(false);
         btnSaveEvent.setVisible(false);
 
@@ -106,7 +108,7 @@ public class EditRehearsalController extends EditController {
 
     @Override
     @FXML
-    public void save() throws ValidationException {
+    protected void save() throws ValidationException {
         if(validate()) {
             Agenda.Appointment selectedAppointment = EventScheduleController.getSelectedAppointment();
             EventDutyDTO oldEventDutyDTO = EventScheduleController.getEventForAppointment(selectedAppointment);
@@ -137,7 +139,7 @@ public class EditRehearsalController extends EditController {
 
     @Override
     @FXML
-    public boolean cancel() {
+    protected boolean cancel() {
         if(!name.getText().equals(initEventDutyDTO.getName())
                 || !description.getText().equals(initEventDutyDTO.getDescription())
                 || !date.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalDate())
@@ -162,7 +164,7 @@ public class EditRehearsalController extends EditController {
 
     @Override
     @FXML
-    public void editEvent () {
+    protected void editEvent () {
         btnCancelEvent.setVisible(true);
         btnSaveEvent.setVisible(true);
         btnEditEvent.setVisible(false);
@@ -186,7 +188,7 @@ public class EditRehearsalController extends EditController {
         conductor.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
     }
 
-    private boolean validate() {
+    protected boolean validate() {
         LocalDate today = LocalDate.now();
         LocalTime start = startTime.getValue();
         LocalTime end = endTime.getValue();

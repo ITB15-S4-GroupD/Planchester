@@ -15,13 +15,13 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="767.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.InstrumentationController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.InstrumentationController">
    <children>
-      <GridPane alignment="CENTER" layoutY="1.0" prefHeight="679.0" prefWidth="769.0">
+      <GridPane alignment="CENTER" layoutX="-2.0" layoutY="-1.0" prefHeight="695.0" prefWidth="942.0">
         <columnConstraints>
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="445.00001525878906" minWidth="10.0" prefWidth="366.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="443.0" minWidth="10.0" prefWidth="12.0" />
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="437.6666564941406" minWidth="10.0" prefWidth="379.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="515.0" minWidth="10.0" prefWidth="509.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="443.0" minWidth="8.0" prefWidth="14.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="437.6666564941406" minWidth="10.0" prefWidth="353.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints maxHeight="201.0" minHeight="10.0" prefHeight="90.0" valignment="CENTER" vgrow="SOMETIMES" />
@@ -227,9 +227,9 @@
              </ScrollPane>
             <GridPane prefHeight="558.0" prefWidth="359.0" GridPane.rowIndex="1">
               <columnConstraints>
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="150.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="10.0" prefWidth="50.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="150.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="229.0" minWidth="10.0" prefWidth="230.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="215.0" minWidth="10.0" prefWidth="63.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="289.0" minWidth="10.0" prefWidth="230.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints maxHeight="563.0" minHeight="10.0" prefHeight="550.0" vgrow="SOMETIMES" />
@@ -237,12 +237,12 @@
                <children>
                   <TableView fx:id="tableAvailable" prefHeight="200.0" prefWidth="200.0">
                     <columns>
-                      <TableColumn fx:id="tableAvailableMusicalWorks" prefWidth="149.0" text="Available" />
+                      <TableColumn fx:id="tableAvailableMusicalWorks" prefWidth="224.0" text="Available" />
                     </columns>
                   </TableView>
-                  <TableView fx:id="tableSelected" prefHeight="623.0" prefWidth="149.0" GridPane.columnIndex="2">
+                  <TableView fx:id="tableSelected" prefHeight="508.0" prefWidth="315.0" GridPane.columnIndex="2">
                     <columns>
-                      <TableColumn fx:id="tableSelectedMusicalWorks" prefWidth="149.0" text="Selected" />
+                      <TableColumn fx:id="tableSelectedMusicalWorks" prefWidth="226.0" text="Selected" />
                     </columns>
                   </TableView>
                   <GridPane prefHeight="549.0" prefWidth="27.0" GridPane.columnIndex="1">

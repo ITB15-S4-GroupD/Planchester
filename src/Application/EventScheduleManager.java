@@ -27,8 +27,8 @@ import java.util.*;
 public class EventScheduleManager {
     private static PersistanceFacade persistanceFacade = new PersistanceFacade();
 
-    private static Calendar loadedEventsStartdate; //start of the already loaded calendar
-    private static Calendar loadedEventsEnddate; //end of the already loaded calendar
+    public static Calendar loadedEventsStartdate; //start of the already loaded calendar
+    public static Calendar loadedEventsEnddate; //end of the already loaded calendar
 
     public static EventDutyDTO createEventDuty(EventDutyDTO eventDutyDTO) throws ValidationException {
         EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
