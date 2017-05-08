@@ -4,6 +4,7 @@ import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
 import Application.EventScheduleManager;
 import Application.PublishEventSchedule;
+import Presentation.CalenderController;
 import Domain.Models.Permission;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
@@ -31,7 +32,7 @@ import java.util.*;
 /**
  * Created by timorzipa on 06/04/2017.
  */
-public class EventScheduleController {
+public class EventScheduleController extends CalenderController {
 
     @FXML private Agenda agenda;
     @FXML private ScrollPane scrollPane;
@@ -120,7 +121,7 @@ public class EventScheduleController {
     }
 
     @FXML
-    private void navigateOneWeekBackClicked() {
+    public void navigateOneWeekBackClicked() {
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
         agenda.setDisplayedLocalDateTime(displayedDate.minus(7, ChronoUnit.DAYS));
         setCalenderWeekLabel();
@@ -132,7 +133,7 @@ public class EventScheduleController {
     }
 
     @FXML
-    private void navigateOneWeekForwardClicked() {
+    public void navigateOneWeekForwardClicked() {
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
         agenda.setDisplayedLocalDateTime(displayedDate.plus(7, ChronoUnit.DAYS));
         setCalenderWeekLabel();
@@ -144,14 +145,8 @@ public class EventScheduleController {
     }
 
     @FXML
-    private void showActualWeekClicked() {
-        agenda.setDisplayedLocalDateTime(LocalDateTime.now());
-        setCalenderWeekLabel();
-
-        List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForWeek(agenda.getDisplayedCalendar());
-        for(EventDutyDTO event : events) {
-            addEventDutyToGUI(event);
-        }
+    public void showActualWeekClicked() {
+       super.showActualWeekClicked();
     }
 
     public static void setDisplayedLocalDateTime(LocalDateTime localDateTime) {
@@ -255,72 +250,20 @@ public class EventScheduleController {
         }
     }
 
-    private void getGroupColorsFromCSS() {
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/Presentation/CSS/agenda.css"), "UTF-8"));
-            String line = br.readLine();
-
-            while (line != null) {
-                String setControlInnerBackground = "-fx-control-inner-background: ";
-                if(line.contains("group1")) {
-                    colorOpera = setControlInnerBackground + getColor(line) + ";";
-                } else if(line.contains("group2")) {
-                    colorConcert = setControlInnerBackground + getColor(line) + ";";
-                } else if(line.contains("group3")) {
-                    colorHofkapelle = setControlInnerBackground + getColor(line) + ";";
-                } else if(line.contains("group4")) {
-                    colorTour = setControlInnerBackground + getColor(line) + ";";
-                } else if(line.contains("group5")) {
-                    colorRehearsal = setControlInnerBackground + getColor(line) + ";";
-                } else if(line.contains("group6")) {
-                    colorNonMusical = setControlInnerBackground + getColor(line) + ";";
-                }
-                line = br.readLine();
-            }
-            br.close();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+    protected void getGroupColorsFromCSS() {
+       super.getGroupColorsFromCSS();
     }
 
-    private String getColor(String s) {
-        try {
-            return s.substring(s.indexOf("#"),s.indexOf("#")+7);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
+    protected void initializeAppointmentGroupsForEventtypes() {
+       super.initializeAppointmentGroupsForEventtypes();
     }
 
-    private static void initializeAppointmentGroupsForEventtypes() {
-        opera = new Agenda.AppointmentGroupImpl();
-        opera.setStyleClass("group1");
-        concert = new Agenda.AppointmentGroupImpl();
-        concert.setStyleClass("group2");
-        hofkapelle = new Agenda.AppointmentGroupImpl();
-        hofkapelle.setStyleClass("group3");
-        tour = new Agenda.AppointmentGroupImpl();
-        tour.setStyleClass("group4");
-        rehearsal = new Agenda.AppointmentGroupImpl();
-        rehearsal.setStyleClass("group5");
-        nonMusicalEvent = new Agenda.AppointmentGroupImpl();
-        nonMusicalEvent.setStyleClass("group6");
-    }
-
-    private void initialzeCalendarSettings() {
-        // agenda settings
-        agenda.setAllowDragging(false); //drag and drop the event
-        agenda.setAllowResize(false);
-        agenda.localeProperty().set(Locale.UK);
-        agenda.setDisplayedLocalDateTime(LocalDateTime.now()); //show current week in event scheduler
-
-        // disable edit menu
-        agenda.setEditAppointmentCallback(param -> null);
+    protected void initialzeCalendarSettings() {
+        super.initialzeCalendarSettings();
     }
 
     private void initialzeCalendarView() {
+
         //set CalenderWeek
         setCalenderWeekLabel();
         addEventTypeEntriesToMenuButton();
@@ -333,13 +276,8 @@ public class EventScheduleController {
         }
     }
 
-    private void setColorKeyMap() {
-        colorKeyOpera.setStyle(colorOpera);
-        colorKeyConcert.setStyle(colorConcert);
-        colorKeyTour.setStyle(colorTour);
-        colorKeyHofkapelle.setStyle(colorHofkapelle);
-        colorKeyRehearsal.setStyle(colorRehearsal);
-        colorKeyNonMusical.setStyle(colorNonMusical);
+    protected void setColorKeyMap() {
+        super.setColorKeyMap();
     }
 
     private void addEventTypeEntriesToMenuButton() {
@@ -390,10 +328,8 @@ public class EventScheduleController {
         }
     }
 
-    private void setCalenderWeekLabel() {
-        Calendar cal = agenda.getDisplayedCalendar();
-        int week = cal.get(Calendar.WEEK_OF_YEAR);
-        calenderWeekLabel.setText("Calender Week " + String.valueOf(week));
+    protected void setCalenderWeekLabel() {
+       super.setCalenderWeekLabel();
     }
 
     private void setEventToMenuItems() {
