@@ -23,4 +23,4 @@ Planchester.iml
 hs_err_pid*
 
 # hibernate settings (local db)
-/src/hibernate.cfg.xml
+hibernate.cfg.xml
