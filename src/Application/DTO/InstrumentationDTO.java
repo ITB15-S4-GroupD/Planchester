@@ -1,9 +1,11 @@
 package Application.DTO;
 
+import Domain.Interfaces.IInstrumentation;
+
 /**
  * Created by timor on 27.04.2017.
  */
-public class InstrumentationDTO {
+public class InstrumentationDTO implements IInstrumentation{
     private int FirstViolin;
     private int SecondViolin;
     private int Viola;

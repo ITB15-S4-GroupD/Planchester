@@ -1,9 +1,11 @@
 package Domain.Models;
 
+import Domain.Interfaces.IInstrumentation;
+
 /**
  * Created by julia on 21.04.2017.
  */
-public class InstrumentationModel {
+public class InstrumentationModel implements IInstrumentation{
     private int FirstViolin;
     private int SecondViolin;
     private int Viola;

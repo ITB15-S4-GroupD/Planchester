@@ -156,9 +156,8 @@ public class EventScheduleManager {
     }
 
     public static void removeEventDutyMusicalWorks(EventDutyEntity eventDutyEntity, MusicalWorkDTO musicalWorkDTO) {
-        EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
-        eventDutyMusicalWorkEntity.setEventDuty(eventDutyEntity.getEventDutyId());
-        eventDutyMusicalWorkEntity.setMusicalWork(musicalWorkDTO.getId());
+        EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = eventDutyMusicalWorkEntityPersistanceFacade.get(
+                p -> p.getEventDuty() == eventDutyEntity.getEventDutyId() && p.getMusicalWork() == musicalWorkDTO.getId());
         eventDutyMusicalWorkEntityPersistanceFacade.remove(eventDutyMusicalWorkEntity);
     }
 
@@ -169,7 +168,6 @@ public class EventScheduleManager {
         eventDutyMusicalWorkEntityPersistanceFacade.put(eventDutyMusicalWorkEntity);
     }
 
-    //Mapper
     public static MusicalWorkModel getMusicalWorkModel(MusicalWorkDTO musicalWorkDTO) {
         MusicalWorkModel musicalWorkModel = new MusicalWorkModel();
         musicalWorkModel.setName(musicalWorkDTO.getName());
