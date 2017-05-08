@@ -36,10 +36,80 @@ import java.util.List;
 public class EditTourController extends EditController {
 
     @FXML private JFXDatePicker endDate;
-  
+
     @Override
     @FXML
-    protected void insertEventDuty() throws ValidationException {
+    public void initialize() {
+
+        checkMandatoryFields();
+
+        selectedMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+
+        initAppointment = EventScheduleController.getSelectedAppointment();
+        initEventDutyDTO = EventScheduleController.getEventForAppointment(initAppointment);
+
+        actualRehearsalList = EventScheduleManager.getAllRehearsalsOfEventDuty(initEventDutyDTO);
+        newRehearsalList = actualRehearsalList;
+        rehearsalTableView.getItems().clear();
+        rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+        for(EventDutyDTO e : newRehearsalList) {
+            String rehearsalToAdd = e.getName();
+            rehearsalTableView.getItems().add(rehearsalToAdd);
+        }
+
+        name.setText(initEventDutyDTO.getName());
+        description.setText(initEventDutyDTO.getDescription());
+        date.setValue(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalDate());
+        endDate.setValue(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalDate());
+        eventLocation.setText(initEventDutyDTO.getEventLocation());
+        conductor.setText(initEventDutyDTO.getConductor());
+        points.setText(initEventDutyDTO.getPoints() != null ? String.valueOf(initEventDutyDTO.getPoints()) : "0.0");
+        if(initEventDutyDTO.getMusicalWorks() != null && !initEventDutyDTO.getMusicalWorks().isEmpty()) {
+            musicalWorks = new ArrayList<>();
+            for(MusicalWorkDTO musicalWorkDTO : initEventDutyDTO.getMusicalWorks()) {
+                musicalWorks.add(musicalWorkDTO);
+                musicalWorkTable.getItems().add(musicalWorkDTO.getName());
+            }
+        }
+
+        initNotEditableFields();
+
+        points.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
+                points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
+            }
+        });
+    }
+
+    @Override
+    protected void initNotEditableFields() {
+        btnEditEvent.setVisible(true);
+        btnCancelEvent.setVisible(false);
+        btnSaveEvent.setVisible(false);
+        btnEditDetails.setVisible(false);
+        btnAddRehearsal.setVisible(false);
+        btnRemoveRehearsal.setVisible(false);
+
+        name.setEditable(false);
+        description.setEditable(false);
+        date.setEditable(false);
+        endDate.setEditable(false);
+        eventLocation.setEditable(false);
+        conductor.setEditable(false);
+        points.setEditable(false);
+
+        name.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        description.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        date.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        endDate.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        eventLocation.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        points.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+        conductor.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
+    }
+
+    @Override
+    @FXML
+    protected void save() throws ValidationException {
         if(validate()) {
             Agenda.Appointment selectedAppointment = EventScheduleController.getSelectedAppointment();
             EventDutyDTO oldEventDutyDTO = EventScheduleController.getEventForAppointment(selectedAppointment);
@@ -48,7 +118,7 @@ public class EditTourController extends EditController {
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
             eventDutyDTO.setEventDutyID(oldEventDutyDTO.getEventDutyID());
             eventDutyDTO.setName(name.getText());
-            eventDutyDTO.setDescription(name.getText());
+            eventDutyDTO.setDescription(description.getText());
             eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), LocalTime.MIDNIGHT));
             eventDutyDTO.setEndTime(DateHelper.mergeDateAndTime(endDate.getValue(), LocalTime.MAX));
             eventDutyDTO.setEventType(EventType.Tour);
@@ -99,7 +169,7 @@ public class EditTourController extends EditController {
     }
 
     @Override
-    protected void initializeMandatoryFields() {
+    protected void checkMandatoryFields() {
         name.textProperty().addListener((observable, oldValue, newValue) -> {
             if (name.getText() == null || name.getText().isEmpty()) {
                 name.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);

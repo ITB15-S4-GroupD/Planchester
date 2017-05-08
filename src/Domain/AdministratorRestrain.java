@@ -52,6 +52,7 @@ public final class AdministratorRestrain implements PermissionRestrain {
 
     @Override
     public void constrainDutyRoster() {
+
     }
 
 

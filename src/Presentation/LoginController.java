@@ -33,6 +33,7 @@ public class LoginController {
             MessageHelper.showErrorAlertMessage("Wrong username or password");
         } else {
             AccountAdministrationManager.setLoggedInUser(loggedInUser);
+
             PlanchesterGUI.primaryStage.fireEvent(
                  new WindowEvent(
                     PlanchesterGUI.primaryStage,
