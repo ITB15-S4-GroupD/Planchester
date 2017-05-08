@@ -33,26 +33,9 @@ public class PlanchesterGUI {
         primaryStage.setScene(scene);
         primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
         primaryStage.show();
-
         checkLogin(primaryStage);
 
         this.primaryStage = primaryStage;
-    }
-
-    private static void checkLogin(Stage primaryStage) {
-        primaryStage.setOnCloseRequest(t -> {
-            if(AccountAdministrationManager.getLoggedInAccount() != null) {
-                try {
-                    showPlanchesterGUI();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else {
-                DatabaseSessionManager.closeSession();
-                Platform.exit();
-                System.exit(0);
-            }
-        });
     }
 
     public static void showLogin() {
@@ -73,7 +56,24 @@ public class PlanchesterGUI {
             exception.printStackTrace();
         }
     }
-  
+
+
+    private static void checkLogin(Stage primaryStage) {
+        primaryStage.setOnCloseRequest(t -> {
+            if(AccountAdministrationManager.getLoggedInAccount() != null) {
+                try {
+                    showPlanchesterGUI();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                DatabaseSessionManager.closeSession();
+                Platform.exit();
+                System.exit(0);
+            }
+        });
+    }
+
     private static void showPlanchesterGUI() {
         try {
             primaryStage = new Stage();
@@ -99,6 +99,6 @@ public class PlanchesterGUI {
             primaryStage.show();
         } catch (IOException exception) {
                 exception.printStackTrace();
-            }
+        }
     }
 }

@@ -33,8 +33,6 @@ public class PlanchesterFrameController {
     @FXML private Tab useradministrationTab;
     @FXML private Tab supportTab;
     @FXML private Menu logoutMenu;
-
-
     @FXML private TabPane tabPane;
 
     @FXML
