@@ -1,5 +1,6 @@
 package Presentation.EventSchedule;
 
+import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
 import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
@@ -17,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import jfxtras.scene.control.agenda.Agenda;
 
@@ -32,35 +34,36 @@ import java.util.List;
  */
 public class EditController {
 
-    @FXML protected TextField name;
-    @FXML protected TextArea description;
-    @FXML protected JFXTimePicker startTime;
-    @FXML protected JFXTimePicker endTime;
-    @FXML protected JFXDatePicker date;
-    @FXML protected TextField eventLocation;
-    @FXML protected TextField conductor;
-    @FXML protected TextField points;
+    @FXML private TextField name;
+    @FXML private TextArea description;
+    @FXML private JFXTimePicker startTime;
+    @FXML private JFXTimePicker endTime;
+    @FXML private JFXDatePicker date;
+    @FXML private TextField eventLocation;
+    @FXML private TextField conductor;
+    @FXML private TextField points;
 
-    protected static List<EventDutyDTO> actualRehearsalList;
-    protected static List<EventDutyDTO> newRehearsalList;
-    @FXML protected TableView<String> rehearsalTableView;
-    @FXML protected TableColumn<String, String> rehearsalTableColumn;
+    public static List<EventDutyDTO> actualRehearsalList;
+    public static List<EventDutyDTO> newRehearsalList;
+    @FXML private TableView<String> rehearsalTableView;
+    @FXML private TableColumn<String, String> rehearsalTableColumn;
 
-    @FXML protected TableView<String> musicalWorkTable;
-    @FXML protected TableColumn<String, String> selectedMusicalWorks;
+    @FXML private TableView<String> musicalWorkTable;
+    @FXML private TableColumn<String, String> selectedMusicalWorks;
 
-    protected List<MusicalWorkDTO> musicalWorks;
-    protected InstrumentationDTO instrumentation; // TODO timebox2
+    private List<MusicalWorkDTO> musicalWorks;
+    private InstrumentationDTO instrumentation; // TODO timebox2
 
-    protected Agenda.Appointment initAppointment; // remember init data to compare
-    protected EventDutyDTO initEventDutyDTO; // remember init data to compare
+    private Agenda.Appointment initAppointment; // remember init data to compare
+    private EventDutyDTO initEventDutyDTO; // remember init data to compare
 
-    @FXML protected Button btnCancelEvent;
-    @FXML protected Button btnSaveEvent;
-    @FXML protected Button btnEditEvent;
-    @FXML protected Button btnEditDetails;
-    @FXML protected Button btnAddRehearsal;
-    @FXML protected Button btnRemoveRehearsal;
+    @FXML private Button btnCancelEvent;
+    @FXML private Button btnSaveEvent;
+    @FXML private Button btnEditEvent;
+    @FXML private Button btnEditDetails;
+    @FXML private Button btnAddRehearsal;
+    @FXML private Button btnRemoveRehearsal;
+    @FXML private Text txtTitle;
 
     @FXML
     protected void initialize() {
@@ -102,6 +105,8 @@ public class EditController {
                 points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", " "));
             }
         });
+        btnEditEvent.setVisible(AccountAdministrationManager.getUserRestrain().isVisibleEditEvent());
+        txtTitle.setText(AccountAdministrationManager.getUserRestrain().FitTitleOnEventDetails(txtTitle.getText()));
     }
 
     protected void initNotEditableFields() {

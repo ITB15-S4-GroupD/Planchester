@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane fx:id="gridEditConcert" prefHeight="670.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.EditConcertController">
+<GridPane fx:id="gridEditConcert" prefHeight="670.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.EditConcertController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
     </columnConstraints>
@@ -73,7 +73,7 @@
                 <Insets left="10.0" right="10.0" />
             </padding>
         </GridPane>
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Concert Performance" textOrigin="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+        <Text fx:id="txtTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Concert Performance" textOrigin="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
             <font>
                 <Font size="22.0" />
             </font>

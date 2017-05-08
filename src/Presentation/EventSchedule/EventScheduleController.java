@@ -1,5 +1,6 @@
 package Presentation.EventSchedule;
 
+import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
 import Application.EventScheduleManager;
 import Application.PublishEventSchedule;
@@ -34,6 +35,7 @@ public class EventScheduleController {
     @FXML private Agenda agenda;
     @FXML private ScrollPane scrollPane;
     @FXML private MenuButton addNewEvent;
+    @FXML private Button btnPublishEventSchedule;
     @FXML private Label calenderWeekLabel;
 
     @FXML private MenuItem addNewConcert;
@@ -109,6 +111,9 @@ public class EventScheduleController {
                 showEventDetailView();
             }
         });
+        btnPublishEventSchedule.setVisible(AccountAdministrationManager.getUserRestrain().isVisibleButtonPublishEvents());
+        addNewEvent.setVisible(AccountAdministrationManager.getUserRestrain().isVisibleMenuAddNewEvent());
+
     }
 
     @FXML

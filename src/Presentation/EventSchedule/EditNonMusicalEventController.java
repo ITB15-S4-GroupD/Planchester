@@ -1,5 +1,6 @@
 package Presentation.EventSchedule;
 
+import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
 import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
@@ -7,6 +8,7 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.text.Text;
 import jfxtras.scene.control.agenda.Agenda;
 
 /**
@@ -25,6 +27,7 @@ public class EditNonMusicalEventController {
     @FXML private Button btnCancelEvent;
     @FXML private Button btnSaveEvent;
     @FXML private Button btnEditEvent;
+    @FXML private Text txtTitle;
 
     private EventDutyDTO initEventDutyDTO; // remember init data to compare
     private Agenda.Appointment initAppointment; // remember init data to compare
@@ -57,6 +60,8 @@ public class EditNonMusicalEventController {
                 points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
             }
         });
+        btnEditEvent.setVisible(AccountAdministrationManager.getUserRestrain().isVisibleEditEvent());
+        txtTitle.setText(AccountAdministrationManager.getUserRestrain().FitTitleOnEventDetails(txtTitle.getText()));
     }
 
     private void initNotEditableFields() {

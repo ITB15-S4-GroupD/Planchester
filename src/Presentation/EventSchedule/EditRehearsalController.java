@@ -1,5 +1,6 @@
 package Presentation.EventSchedule;
 
+import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
 import Application.EventScheduleManager;
 import Utils.DateHelper;
@@ -15,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import jfxtras.scene.control.agenda.Agenda;
 
 import javax.xml.bind.ValidationException;
@@ -41,6 +43,7 @@ public class EditRehearsalController extends EditController {
     @FXML private Button btnSaveEvent;
     @FXML private Button btnCancelEvent;
     @FXML private Button btnEditEvent;
+    @FXML private Text txtTitle;
 
     @Override
     @FXML
@@ -70,6 +73,8 @@ public class EditRehearsalController extends EditController {
                 points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
             }
         });
+        btnEditEvent.setVisible(AccountAdministrationManager.getUserRestrain().isVisibleEditEvent());
+        txtTitle.setText(AccountAdministrationManager.getUserRestrain().FitTitleOnEventDetails(txtTitle.getText()));
     }
 
     protected void initNotEditableFields() {
