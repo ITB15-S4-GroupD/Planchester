@@ -90,8 +90,8 @@ public class EditTourController extends EditController {
 
         name.setEditable(false);
         description.setEditable(false);
-        date.setEditable(false);
-        endDate.setEditable(false);
+        date.setDisable(true);
+        endDate.setDisable(true);
         eventLocation.setEditable(false);
         conductor.setEditable(false);
         points.setEditable(false);
@@ -214,5 +214,33 @@ public class EditTourController extends EditController {
             return false;
         }
         return true;
+    }
+
+    @FXML
+    @Override
+    protected void editEvent () {
+        btnCancelEvent.setVisible(true);
+        btnSaveEvent.setVisible(true);
+        btnEditEvent.setVisible(false);
+        btnEditDetails.setVisible(true);
+        btnAddRehearsal.setVisible(true);
+        btnRemoveRehearsal.setVisible(true);
+
+        name.setEditable(true);
+        description.setEditable(true);
+        date.setDisable(false);
+        endDate.setDisable(false);
+        eventLocation.setEditable(true);
+        conductor.setEditable(true);
+        points.setEditable(true);
+        conductor.setEditable(true);
+
+        name.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        description.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        date.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        endDate.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        eventLocation.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        points.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        conductor.setStyle(PlanchesterConstants.INPUTFIELD_VALID);;
     }
 }

@@ -123,9 +123,9 @@ public class EditController {
 
         name.setEditable(false);
         description.setEditable(false);
-        date.setEditable(false);
-        startTime.setEditable(false);
-        endTime.setEditable(false);
+        startTime.setDisable(true);
+        endTime.setDisable(true);
+        date.setDisable(true);
         eventLocation.setEditable(false);
         conductor.setEditable(false);
         points.setEditable(false);
@@ -255,9 +255,9 @@ public class EditController {
 
         name.setEditable(true);
         description.setEditable(true);
-        date.setEditable(true);
-        startTime.setEditable(true);
-        endTime.setEditable(true);
+        startTime.setDisable(false);
+        endTime.setDisable(false);
+        date.setDisable(false);
         eventLocation.setEditable(true);
         conductor.setEditable(true);
         points.setEditable(true);
