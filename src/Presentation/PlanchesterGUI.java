@@ -2,34 +2,27 @@ package Presentation;
 
 import Application.AccountAdministrationManager;
 import Application.DatabaseSessionManager;
-import Application.UserAdministrationManager;
-import Application.EventScheduleManager;
 import Presentation.EventSchedule.EventScheduleController;
-import Utils.Enum.AccountRole;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.UnexpectedException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PlanchesterGUI {
+
     public static Scene scene;
-    protected static Stage primaryStage;
+    public static Stage primaryStage;
 
     public void start(Stage primaryStage) throws Exception {
         DatabaseSessionManager.beginSession();
 
         primaryStage.setTitle("Planchester Login");
-        scene = new Scene(FXMLLoader.load(getClass().getResource("Login.fxml")));
+        scene = new Scene(FXMLLoader.load(getClass().getResource("Login/Login.fxml")));
         primaryStage.setScene(scene);
         primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
         primaryStage.show();
@@ -46,7 +39,7 @@ public class PlanchesterGUI {
             primaryStage.close();
             primaryStage = new Stage();
             primaryStage.setTitle("Planchester Login");
-            scene = new Scene(FXMLLoader.load(PlanchesterGUI.class.getResource("Login.fxml")));
+            scene = new Scene(FXMLLoader.load(PlanchesterGUI.class.getResource("Login/Login.fxml")));
             primaryStage.setScene(scene);
             primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
             primaryStage.show();
@@ -66,9 +59,7 @@ public class PlanchesterGUI {
                     e.printStackTrace();
                 }
             } else {
-                DatabaseSessionManager.closeSession();
-                Platform.exit();
-                System.exit(0);
+                closePlanchester();
             }
         });
     }
@@ -78,10 +69,9 @@ public class PlanchesterGUI {
             primaryStage = new Stage();
             primaryStage.setTitle("Planchester");
             primaryStage.setMaximized(true);
+
             primaryStage.setOnCloseRequest(t -> {
-                DatabaseSessionManager.closeSession();
-                Platform.exit();
-                System.exit(0);
+                closePlanchester();
             });
 
             scene = new Scene(FXMLLoader.load(PlanchesterGUI.class.getResource("PlanchesterFrame.fxml")));
@@ -99,5 +89,11 @@ public class PlanchesterGUI {
         } catch (IOException exception) {
                 exception.printStackTrace();
         }
+    }
+
+    private static void closePlanchester() {
+        DatabaseSessionManager.closeSession();
+        Platform.exit();
+        System.exit(0);
     }
 }

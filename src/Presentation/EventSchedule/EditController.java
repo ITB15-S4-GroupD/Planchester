@@ -216,7 +216,7 @@ public class EditController {
 
     @FXML
     protected boolean cancel() {
-        if(points.getText()==null) {
+        if(points.getText() == null) {
             points.setText("0.0");
         }
 
