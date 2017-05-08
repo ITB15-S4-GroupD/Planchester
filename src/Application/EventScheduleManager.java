@@ -110,7 +110,7 @@ public class EventScheduleManager {
         }
         setLoadedEventsStartAndEnddate(startdayOfWeek, enddayOfWeek);
 
-        return AccountAdministrationManager.getUserRestrain().constrainViewableEventsForEventSchedule(eventDutyDTOList);
+        return AccountAdministrationManager.getInstance().getUserPermissions().getViewableEventsForEventSchedule(eventDutyDTOList);
     }
 
     private static void setLoadedEventsStartAndEnddate(Calendar start, Calendar end) {
@@ -340,7 +340,7 @@ public class EventScheduleManager {
                 eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
             }
 
-            return AccountAdministrationManager.getUserRestrain().constrainViewableEventsForEventSchedule(eventDutyDTOList);
+            return AccountAdministrationManager.getInstance().getUserPermissions().getViewableEventsForEventSchedule(eventDutyDTOList);
         }
         return new ArrayList<>();
     }

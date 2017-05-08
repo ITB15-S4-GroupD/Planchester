@@ -5,6 +5,7 @@ import Application.DTO.EventDutyDTO;
 import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
+import Domain.Permission;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
@@ -105,16 +106,16 @@ public class EditController {
                 points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", " "));
             }
         });
-        btnEditEvent.setVisible(AccountAdministrationManager.getUserRestrain().isVisibleEditEvent());
-        txtTitle.setText(AccountAdministrationManager.getUserRestrain().FitTitleOnEventDetails(txtTitle.getText()));
     }
 
     protected void initNotEditableFields() {
-        if(!EventStatus.Unpublished.equals(initEventDutyDTO.getEventStatus())) {
-            btnEditEvent.setVisible(false);
-        } else {
+        Permission permission = AccountAdministrationManager.getInstance().getUserPermissions();
+        if(permission.isEditEventSchedule() && EventStatus.Unpublished.equals(initEventDutyDTO.getEventStatus())) {
             btnEditEvent.setVisible(true);
+        } else {
+            btnEditEvent.setVisible(false);
         }
+
         btnCancelEvent.setVisible(false);
         btnSaveEvent.setVisible(false);
         btnEditDetails.setVisible(false);

@@ -12,8 +12,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-
-
 /**
  * Created by Christina on 04.05.2017.
  */
@@ -23,21 +21,14 @@ public class LoginController {
     @FXML private PasswordField password;
     //public static AccountEntity loggedInUser;
     public static Stage stage;
-    public static AccountEntity loggedInUser;
-
-    @FXML
-    public void initialize() {
-        loggedInUser = null;
-    }
 
     @FXML
     private void login() {
-        AccountEntity loggedInUser = AccountAdministrationManager.getAccount(username.getText(), password.getText());
-        if(loggedInUser == null) {
+        AccountAdministrationManager.getInstance().setAccount(username.getText(), password.getText());
+
+        if(AccountAdministrationManager.getInstance().getLoggedInAccount() == null) {
             MessageHelper.showErrorAlertMessage("Wrong username or password");
         } else {
-            AccountAdministrationManager.setLoggedInUser(loggedInUser);
-
             PlanchesterGUI.primaryStage.fireEvent(
                  new WindowEvent(
                     PlanchesterGUI.primaryStage,
@@ -56,7 +47,7 @@ public class LoginController {
     }
 
     @FXML
-    private void cancel() {
+    public void cancel() {
         PlanchesterGUI.primaryStage.fireEvent(
             new WindowEvent(
                 PlanchesterGUI.primaryStage,

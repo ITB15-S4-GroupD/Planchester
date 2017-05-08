@@ -39,15 +39,29 @@ public class PlanchesterFrameController {
 
     @FXML
     public void initialize()  throws Exception {
-        String accountRole = AccountAdministrationManager.getLoggedInAccount().getAccountRole();
+        AccountRole accountRole = AccountAdministrationManager.getInstance().getAccountRole();
 
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         eventscheduleTab.setContent(FXMLLoader.load(getClass().getResource("EventSchedule/EventSchedule.fxml")));
 
-        if(accountRole.equals(AccountRole.Musician.toString()) || accountRole.equals(AccountRole.Section_representative.toString()) || accountRole.equals(AccountRole.Substitute.toString())) {
+        if(!AccountRole.Manager.equals(accountRole) && !AccountRole.Administrator.equals(accountRole)) {
+            tabPane.getTabs().remove(useradministrationTab);
+        }
+
+        if(AccountRole.Musician.equals(accountRole)
+                || accountRole.equals(AccountRole.Section_representative)
+                || accountRole.equals(AccountRole.Substitute)) {
             tabPane.getTabs().remove(musicalWorksTab);
             tabPane.getTabs().remove(instrumentsTab);
-            tabPane.getTabs().remove(useradministrationTab);
+        } if(AccountRole.Music_librarian.equals(accountRole)) {
+            tabPane.getTabs().remove(dutyRosterTab);
+            tabPane.getTabs().remove(instrumentsTab);
+        } else if(AccountRole.Orchestral_facility_manager.equals(accountRole)) {
+            tabPane.getTabs().remove(dutyRosterTab);
+            tabPane.getTabs().remove(musicalWorksTab);
+        } else if(AccountRole.Section_representative.equals(accountRole)) {
+            tabPane.getTabs().remove(musicalWorksTab);
+            tabPane.getTabs().remove(instrumentsTab);
         }
     }
 
@@ -58,6 +72,7 @@ public class PlanchesterFrameController {
             if (buttonType.getText().equals("Cancel")) {
                 //do nothing
             } else if (buttonType.getText().equals("Change User")) {
+                AccountAdministrationManager.getInstance().resetUser();
                 PlanchesterGUI.showLogin();
             } else if (buttonType.getText().equals("Close Planchester")) {
                 DatabaseSessionManager.closeSession();
