@@ -1,7 +1,6 @@
 package Presentation.Login;
 
 import Application.AccountAdministrationManager;
-import Persistence.AccountRDBMapper;
 import Persistence.Entities.AccountEntity;
 import Presentation.PlanchesterGUI;
 import Utils.MessageHelper;

@@ -4,7 +4,6 @@ import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
 import Persistence.Entities.InstrumentationEntity;
 import Persistence.Entities.MusicalWorkEntity;
-import Persistence.MusicalWorkRDBMapper;
 import Persistence.PersistanceFacade;
 
 import java.util.ArrayList;
@@ -14,12 +13,12 @@ import java.util.List;
  * Created by timorzipa on 06/04/2017.
  */
 public class MusicalWorkAdministratonManager {
-    private static PersistanceFacade persistanceFacade = new PersistanceFacade();
+    private static PersistanceFacade persistanceFacade = new PersistanceFacade(MusicalWorkEntity.class);
 
     public static List<MusicalWorkDTO> getAllMusicalWorks() {
-        List<MusicalWorkDTO> musicalWorksList= new ArrayList<MusicalWorkDTO>();
+        List<MusicalWorkDTO> musicalWorksList= new ArrayList<>();
 
-        List<MusicalWorkEntity> musicalWorks = MusicalWorkRDBMapper.getAllMusicalWorks();
+        List<MusicalWorkEntity> musicalWorks = persistanceFacade.list(null);
         for(MusicalWorkEntity musicalWork : musicalWorks) {
             musicalWorksList.add(getMusicalWorkDTO(musicalWork));
         }

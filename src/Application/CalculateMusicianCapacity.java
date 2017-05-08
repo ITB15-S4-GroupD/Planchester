@@ -9,6 +9,8 @@ import Utils.Enum.EventType;
 
 import java.util.*;
 
+import static Utils.DateHelper.convertCalendarToTimestamp;
+
 /**
  * Created by Garvin u. Malena on 4/24/2017.
  *
@@ -16,7 +18,6 @@ import java.util.*;
  */
 public class CalculateMusicianCapacity {
 
-    private static PersistanceFacade persistanceFacade = new PersistanceFacade();
     private static HashMap<String, Integer> difference = new HashMap<>();
 
     public static HashMap<String, Integer> checkCapacityInRange(Calendar eventstart, Calendar eventend) {
@@ -39,27 +40,50 @@ public class CalculateMusicianCapacity {
 
     private static HashMap<String, Integer> getAllMusicians() {
         LinkedList<String> instruments = new LinkedList<>();
-        instruments.addFirst("flute");
-        instruments.add("violin1");
-        instruments.add("violin2");
-        instruments.add("viola");
-        instruments.add("doublebass");
-        instruments.add("oboe");
-        instruments.add("clarinet");
-        instruments.add("bassoon");
-        instruments.add("horn");
-        instruments.add("trumpet");
-        instruments.add("trombone");
-        instruments.add("tube");
-        instruments.add("kettledrum");
-        instruments.add("harp");
-        instruments.add("violincello");
-        instruments.addLast("percussion");
+        instruments.addFirst("Flute");
+        instruments.add("First Violin");
+        instruments.add("Second Violin");
+        instruments.add("Viola");
+        instruments.add("Violoncello");
+        instruments.add("Double Bass");
+        instruments.add("English Horn");
+        instruments.add("French Horn");
+        instruments.add("Basset Horn");
+        instruments.add("Trumpet");
+        instruments.add("Trombone");
+        instruments.add("Bass Trombone");
+        instruments.add("Contrabass Trombone");
+        instruments.add("Tuba");
+        instruments.add("Kettledrum");
+        instruments.add("Percussion");
+        instruments.add("Harp");
+        instruments.add("Piccolo");
+        instruments.add("Oboe");
+        instruments.add("Clarinet");
+        instruments.add("Bass Clarinet");
+        instruments.add("Bassoon");
+        instruments.add("Heckelphone");
+        instruments.add("Contrabassoon");
+        instruments.add("Heckelphone");
+        instruments.add("Saxophone");
 
         int maxPartPlayers = 0;
         HashMap<String, Integer> availableMusicians = new HashMap<>();
         for (String currentPart : instruments) {
-            Integer amount = MusicianPartRDBMapper.getCountedMusicians(currentPart);
+
+            PersistanceFacade<PartTypeEntity> partTypeEntityPersistanceFacade = new PersistanceFacade<>(PartTypeEntity.class);
+            PartTypeEntity partTypeEntity = partTypeEntityPersistanceFacade.get(p -> p.getPartType().toLowerCase().equals(currentPart.toLowerCase()));
+
+            PersistanceFacade<PartEntity> partEntityPersistanceFacade = new PersistanceFacade<>(PartEntity.class);
+            PartEntity partEntity = partEntityPersistanceFacade.get(p -> p.getPartType() == partTypeEntity.getPartTypeId());
+
+            Integer amount;
+            if(partEntity != null) {
+                PersistanceFacade<MusicianPartEntity> musicianPartEntityPersistanceFacade = new PersistanceFacade<>(MusicianPartEntity.class);
+                amount = musicianPartEntityPersistanceFacade.list(p -> p.getPart() == partEntity.getPartId()).size();
+            } else {
+                amount = 0;
+            }
             availableMusicians.put(currentPart, amount);
         }
         return availableMusicians;
@@ -67,42 +91,62 @@ public class CalculateMusicianCapacity {
 
     private static HashMap<String, Integer> getInstrumentationByMusicalWorks(List<EventDutyModel> events) {
         //Alernative Insturmentation can be ignored (this is not in the 1. timebox...)
-       HashMap<String, Integer> instrumentationForAllEvents = new HashMap<String, Integer>();
-        instrumentationForAllEvents.put("violin1", 0);
-        instrumentationForAllEvents.put("violin2", 0);
-        instrumentationForAllEvents.put("viola", 0);
-        instrumentationForAllEvents.put("violincello", 0);
-        instrumentationForAllEvents.put("doublebass", 0);
-        instrumentationForAllEvents.put("oboe", 0);
-        instrumentationForAllEvents.put("flute", 0);
-        instrumentationForAllEvents.put("clarinet", 0);
-        instrumentationForAllEvents.put("bassoon", 0);
-        instrumentationForAllEvents.put("horn", 0);
-        instrumentationForAllEvents.put("trumpet", 0);
-        instrumentationForAllEvents.put("trombone", 0);
-        instrumentationForAllEvents.put("tube", 0);
-        instrumentationForAllEvents.put("kettledrum", 0);
-        instrumentationForAllEvents.put("percussion", 0);
-        instrumentationForAllEvents.put("harp", 0);
+       HashMap<String, Integer> instrumentationForAllEvents = new HashMap<>();
+        instrumentationForAllEvents.put("Flute", 0);
+        instrumentationForAllEvents.put("First Violin", 0);
+        instrumentationForAllEvents.put("Second Violin", 0);
+        instrumentationForAllEvents.put("Viola", 0);
+        instrumentationForAllEvents.put("Violoncello", 0);
+        instrumentationForAllEvents.put("Double Bass", 0);
+        instrumentationForAllEvents.put("English Horn", 0);
+        instrumentationForAllEvents.put("French Horn", 0);
+        instrumentationForAllEvents.put("Basset Horn", 0);
+        instrumentationForAllEvents.put("Trumpet", 0);
+        instrumentationForAllEvents.put("Trombone", 0);
+        instrumentationForAllEvents.put("Bass Trombone", 0);
+        instrumentationForAllEvents.put("Contrabass Trombone", 0);
+        instrumentationForAllEvents.put("Tuba", 0);
+        instrumentationForAllEvents.put("Kettledrum", 0);
+        instrumentationForAllEvents.put("Percussion", 0);
+        instrumentationForAllEvents.put("Harp", 0);
+        instrumentationForAllEvents.put("Piccolo", 0);
+        instrumentationForAllEvents.put("Oboe", 0);
+        instrumentationForAllEvents.put("Clarinet", 0);
+        instrumentationForAllEvents.put("Bass Clarinet", 0);
+        instrumentationForAllEvents.put("Bassoon", 0);
+        instrumentationForAllEvents.put("Heckelphone", 0);
+        instrumentationForAllEvents.put("Contrabassoon", 0);
+        instrumentationForAllEvents.put("Heckelphone", 0);
+        instrumentationForAllEvents.put("Saxophone", 0);
 
         for (EventDutyModel eventDuty : events) {
             HashMap<String, Integer> instrumentation = new HashMap<String, Integer>();
-            instrumentation.put("violin1", 0);
-            instrumentation.put("violin2", 0);
-            instrumentation.put("viola", 0);
-            instrumentation.put("violincello", 0);
-            instrumentation.put("doublebass", 0);
-            instrumentation.put("oboe", 0);
-            instrumentation.put("flute", 0);
-            instrumentation.put("clarinet", 0);
-            instrumentation.put("bassoon", 0);
-            instrumentation.put("horn", 0);
-            instrumentation.put("trumpet", 0);
-            instrumentation.put("trombone", 0);
-            instrumentation.put("tube", 0);
-            instrumentation.put("kettledrum", 0);
-            instrumentation.put("percussion", 0);
-            instrumentation.put("harp", 0);
+            instrumentation.put("Flute", 0);
+            instrumentation.put("First Violin", 0);
+            instrumentation.put("Second Violin", 0);
+            instrumentation.put("Viola", 0);
+            instrumentation.put("Violoncello", 0);
+            instrumentation.put("Double Bass", 0);
+            instrumentation.put("English Horn", 0);
+            instrumentation.put("French Horn", 0);
+            instrumentation.put("Basset Horn", 0);
+            instrumentation.put("Trumpet", 0);
+            instrumentation.put("Trombone", 0);
+            instrumentation.put("Bass Trombone", 0);
+            instrumentation.put("Contrabass Trombone", 0);
+            instrumentation.put("Tuba", 0);
+            instrumentation.put("Kettledrum", 0);
+            instrumentation.put("Percussion", 0);
+            instrumentation.put("Harp", 0);
+            instrumentation.put("Piccolo", 0);
+            instrumentation.put("Oboe", 0);
+            instrumentation.put("Clarinet", 0);
+            instrumentation.put("Bass Clarinet", 0);
+            instrumentation.put("Bassoon", 0);
+            instrumentation.put("Heckelphone", 0);
+            instrumentation.put("Contrabassoon", 0);
+            instrumentation.put("Heckelphone", 0);
+            instrumentation.put("Saxophone", 0);
 
             List<Integer> instrumentationIDs = getInstrumentationIDsForMusicalWorks(eventDuty);
 
@@ -160,16 +204,26 @@ public class CalculateMusicianCapacity {
 
     private static List<Integer> getInstrumentationIDsForMusicalWorks(EventDutyModel eventDutyModel) {
         List<Integer> ids = new ArrayList<>();
-        List<Integer> musicalWorks = EventDutyMusicalWorkRDBMapper.getAllMusicalWorkIDsByEventID(eventDutyModel.getEventDutyId());
-        for (Integer musicalWorkID : musicalWorks) {
-            List<Integer> instrumentationIDs = MusicalWorkRDBMapper.getInstrumentationIDByMusicalWorkID(musicalWorkID);
-            ids.addAll(instrumentationIDs);
+
+        PersistanceFacade<EventDutyMusicalWorkEntity> eventDutyMusicalWorkEntityPersistanceFacade = new PersistanceFacade<>(EventDutyMusicalWorkEntity.class);
+        List<EventDutyMusicalWorkEntity> eventDutyMusicalWorkEntities = eventDutyMusicalWorkEntityPersistanceFacade.list(p -> p.getEventDuty() == eventDutyModel.getEventDutyId());
+
+        for (EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity : eventDutyMusicalWorkEntities) {
+
+            PersistanceFacade<MusicalWorkEntity> musicalWorkEntityPersistanceFacade = new PersistanceFacade<>(MusicalWorkEntity.class);
+            MusicalWorkEntity musicalWork = musicalWorkEntityPersistanceFacade.get(p -> p.getMusicalWorkId() == eventDutyMusicalWorkEntity.getMusicalWork());
+
+            ids.add(musicalWork.getInstrumentationId());
         }
         return ids;
     }
 
     private static List<EventDutyModel> getAllEventsDuring(Calendar eventstart, Calendar eventend) {
-        List<EventDutyEntity> eventDuties = EventDutyRDBMapper.getAllEventDutiesInRange(eventstart, eventend);
+
+
+        PersistanceFacade<EventDutyEntity> eventDutyEntityPersistanceFacade = new PersistanceFacade<>(EventDutyEntity.class);
+        List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p -> p.getStarttime().after(convertCalendarToTimestamp(eventstart))
+                && p.getStarttime().before(convertCalendarToTimestamp(eventend)));
 
         List<EventDutyModel> eventDutyModelList = new ArrayList<>();
         for(EventDutyEntity eventDutyEntity : eventDuties) {
@@ -180,7 +234,7 @@ public class CalculateMusicianCapacity {
 
     private static HashMap<String, Integer> getAmountWoodInstrumentation(int instrumentationID) {
         HashMap<String, Integer> instrumentationMap = new HashMap<>();
-        PersistanceFacade<WoodInstrumentationEntity> persistanceFacade = new PersistanceFacade<>();
+        PersistanceFacade<WoodInstrumentationEntity> persistanceFacade = new PersistanceFacade<>(WoodInstrumentationEntity.class);
         WoodInstrumentationEntity woodInstrumentationEntity = persistanceFacade.get(instrumentationID);
         instrumentationMap.put("flute", woodInstrumentationEntity.getFlute());
         instrumentationMap.put("oboe", woodInstrumentationEntity.getOboe());
@@ -191,7 +245,7 @@ public class CalculateMusicianCapacity {
 
     private static HashMap<String, Integer> getAmountStringInstrumentation(int instrumentationID) {
         HashMap<String, Integer> instrumentationMap = new HashMap<>();
-        PersistanceFacade<StringInstrumentationEntity> persistanceFacade = new PersistanceFacade<>();
+        PersistanceFacade<StringInstrumentationEntity> persistanceFacade = new PersistanceFacade<>(StringInstrumentationEntity.class);
         StringInstrumentationEntity stringInstrumentationEntity = persistanceFacade.get(instrumentationID);
         instrumentationMap.put("violin1", stringInstrumentationEntity.getViolin1());
         instrumentationMap.put("violin2", stringInstrumentationEntity.getViolin2());
@@ -203,7 +257,7 @@ public class CalculateMusicianCapacity {
 
     private static HashMap<String, Integer> getAmountPercussionInstrumentation(int instrumentationID) {
         HashMap<String, Integer> instrumentationMap = new HashMap<>();
-        PersistanceFacade<PercussionInstrumentationEntity> persistanceFacade = new PersistanceFacade<>();
+        PersistanceFacade<PercussionInstrumentationEntity> persistanceFacade = new PersistanceFacade<>(PercussionInstrumentationEntity.class);
         PercussionInstrumentationEntity percussionInstrumentationEntity = persistanceFacade.get(instrumentationID);
         instrumentationMap.put("kettledrum", percussionInstrumentationEntity.getKettledrum());
         instrumentationMap.put("percussion", percussionInstrumentationEntity.getPercussion());
@@ -213,7 +267,7 @@ public class CalculateMusicianCapacity {
 
     private static HashMap<String, Integer> getAmountBrassInstrumentation(int instrumentationID) {
         HashMap<String, Integer> instrumentationMap = new HashMap<>();
-        PersistanceFacade<BrassInstrumentationEntity> persistanceFacade = new PersistanceFacade<>();
+        PersistanceFacade<BrassInstrumentationEntity> persistanceFacade = new PersistanceFacade<>(BrassInstrumentationEntity.class);
         BrassInstrumentationEntity brassInstrumentationEntity = persistanceFacade.get(instrumentationID);
         instrumentationMap.put("horn", brassInstrumentationEntity.getHorn());
         instrumentationMap.put("trumpet", brassInstrumentationEntity.getTrumpet());
