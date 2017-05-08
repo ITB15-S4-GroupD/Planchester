@@ -18,6 +18,7 @@ public class PersistanceFacade {
         mappers.put(InstrumentEntity.class, new InstrumentationRDBMapper());
         mappers.put(MusicalWorkEntity.class , new MusicalWorkRDBMapper());
         mappers.put(MusicianPartEntity.class, new MusicianPartRDBMapper());
+        mappers.put(DutyDispositionEntity.class, new DutyDispositionRDBMapper());
         mappers.put(PercussionInstrumentationEntity.class, new PercussionInstrumentationRDBMapper());
         mappers.put(StringInstrumentationEntity.class, new StringInstrumentationRDBMapper());
         mappers.put(WoodInstrumentationEntity.class, new WoodInstrumentationRDBMapper());
