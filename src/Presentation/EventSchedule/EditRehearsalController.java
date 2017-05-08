@@ -138,6 +138,11 @@ public class EditRehearsalController extends EditController {
     @Override
     @FXML
     protected boolean cancel() {
+        if(points.getText() == null) {
+            points.setText("0.0");
+        }
+
+        String pointRef = (initEventDutyDTO.getPoints() != null)? String.valueOf(initEventDutyDTO.getPoints()) : "0.0";
         if(!name.getText().equals(initEventDutyDTO.getName())
                 || !description.getText().equals(initEventDutyDTO.getDescription())
                 || !date.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalDate())
@@ -145,9 +150,10 @@ public class EditRehearsalController extends EditController {
                 || !endTime.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime())
                 || !conductor.getText().equals(initEventDutyDTO.getConductor())
                 || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
-                || (initEventDutyDTO.getPoints() == null && !points.getText().isEmpty()) // points added
-                || (initEventDutyDTO.getPoints() != null && points.getText().isEmpty()) // points removed
-                || (initEventDutyDTO.getPoints() != null && !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints()))){// points changed {
+                || !points.getText().equals(pointRef)
+                || (musicalWorks == null && initEventDutyDTO.getMusicalWorks() != null) // musical work removed
+                || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() == null) // musical work added
+                || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() != null && !musicalWorks.equals(initEventDutyDTO.getMusicalWorks()))){// points changed {
 
             ButtonType answer = MessageHelper.showConfirmationMessage(PlanchesterMessages.DISCARD_CHANGES);
             if(ButtonType.NO.equals(answer)) {
