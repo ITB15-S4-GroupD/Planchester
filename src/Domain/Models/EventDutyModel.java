@@ -1,6 +1,6 @@
 package Domain.Models;
 
-import Domain.Interfaces.EventDutyInterface;
+import Domain.Interfaces.IEventDuty;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import Utils.Validator;
@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by julia on 13.04.2017.
  */
-public class EventDutyModel implements EventDutyInterface {
+public class EventDutyModel implements IEventDuty {
     private Integer eventDutyId;
     private String name;
     private String description;
