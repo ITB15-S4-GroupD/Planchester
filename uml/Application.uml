@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>Application</OriginalElement>
+  <nodes>
+    <node x="158.1071428571429" y="780.0">Application.DTO.MusicalWorkDTO</node>
+    <node x="756.0" y="1955.0">Application.PublishEventSchedule</node>
+    <node x="389.0" y="1955.0">Application.DatabaseSessionManager</node>
+    <node x="680.0" y="1360.0">Application.MusicalWorkAdministratonManager</node>
+    <node x="0.0" y="1955.0">Application.UserAdministrationManager</node>
+    <node x="431.0" y="0.0">Application.DTO.InstrumentationDTO</node>
+    <node x="1091.0" y="1955.0">Application.DutyRosterManager</node>
+    <node x="119.0" y="1120.0">Application.DTO.EventDutyDTO</node>
+    <node x="1706.0" y="0.0">Application.InstrumentAdministrationManager</node>
+    <node x="0.0" y="1740.0">Application.EventScheduleManager</node>
+    <node x="1183.0" y="0.0">Application.CalculateMusicianCapacity</node>
+  </nodes>
+  <notes />
+  <edges />
+  <settings layout="Hierarchic Group" zoom="0.3906172839506173" x="1056.0" y="1003.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

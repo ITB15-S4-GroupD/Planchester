@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>Utils</OriginalElement>
+  <nodes>
+    <node x="0.0" y="415.0">Utils.PlanchesterMessages</node>
+    <node x="505.0" y="710.0">Utils.Enum.DutyDispositionStatus</node>
+    <node x="0.0" y="925.0">Utils.Enum.DutyRosterStatus</node>
+    <node x="303.0" y="0.0">Utils.Enum.AccountRole</node>
+    <node x="885.0" y="0.0">Utils.Enum.EventType</node>
+    <node x="837.0" y="710.0">Utils.Enum.EventStatus</node>
+    <node x="0.0" y="0.0">Utils.Enum.SectionType</node>
+    <node x="291.0" y="925.0">Utils.Enum.RequestType</node>
+    <node x="487.0" y="415.0">Utils.Enum.OrchestraRole</node>
+    <node x="852.0" y="925.0">Utils.DateHelper</node>
+    <node x="0.0" y="1100.0">Utils.Validator</node>
+    <node x="0.0" y="710.0">Utils.PlanchesterConstants</node>
+    <node x="604.0" y="0.0">Utils.Enum.PersonRole</node>
+    <node x="581.0" y="925.0">Utils.MessageHelper</node>
+  </nodes>
+  <notes />
+  <edges />
+  <settings layout="Hierarchic Group" zoom="1.0" x="549.0" y="575.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
