@@ -36,14 +36,21 @@ public class PublishEventSchedule {
 
         for(EventDutyEntity evt : dutiesInRange){
             eventDutyModel = EventScheduleManager.createEventDutyModel(evt);
-            try{ eventDutyModel.validate(); }catch (ValidationException val){
+            try{
+                eventDutyModel.validate();
+            } catch (ValidationException val){
                 MessageHelper.showErrorAlertMessage("Please complete duty " + evt.getEventType() + ", " + evt.getStarttime() +
                                                     "\n" + val.getMessage() );
                 return EventScheduleManager.createEventDutyDTO(eventDutyModel);
             }
 
-            if(!hardValid(evt))EventScheduleManager.createEventDutyDTO(eventDutyModel);
+            if(!hardValid(evt)) {
+                EventScheduleManager.createEventDutyDTO(eventDutyModel);
+            }
+        }
 
+        for(EventDutyEntity evt: dutiesInRange) {
+            eventDutyModel = EventScheduleManager.createEventDutyModel(evt);
             eventDutyModel.setEventStatus(EventStatus.Published.toString());
             try {
                 EventScheduleManager.updateEventDuty(EventScheduleManager.createEventDutyDTO(eventDutyModel),EventScheduleManager.createEventDutyDTO(eventDutyModel));
@@ -77,7 +84,7 @@ public class PublishEventSchedule {
                 MessageHelper.showErrorAlertMessage( info + val.getMessage() );
                 return false;
             }
-        }
+    }
         return true;
     }
 }
