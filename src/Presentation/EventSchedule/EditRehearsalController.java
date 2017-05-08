@@ -3,7 +3,7 @@ package Presentation.EventSchedule;
 import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
 import Application.EventScheduleManager;
-import Domain.Permission;
+import Domain.Models.Permission;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
@@ -60,7 +60,7 @@ public class EditRehearsalController extends EditController {
         date.setValue(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalDate());
         startTime.setValue(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalTime());
         endTime.setValue(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime());
-        eventLocation.setText(initEventDutyDTO.getEventLocation());
+        eventLocation.setText(initEventDutyDTO.getLocation());
         conductor.setText(initEventDutyDTO.getConductor());
         points.setText(initEventDutyDTO.getPoints() != null ? String.valueOf(initEventDutyDTO.getPoints()) : null);
 
@@ -113,7 +113,7 @@ public class EditRehearsalController extends EditController {
             EventScheduleController.removeSelectedAppointmentFromCalendar(selectedAppointment);
 
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
-            eventDutyDTO.setEventDutyID(oldEventDutyDTO.getEventDutyID());
+            eventDutyDTO.setEventDutyId(oldEventDutyDTO.getEventDutyId());
             eventDutyDTO.setName(name.getText());
             eventDutyDTO.setDescription(description.getText());
             eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
@@ -121,7 +121,7 @@ public class EditRehearsalController extends EditController {
             eventDutyDTO.setEventType(EventType.Rehearsal);
             eventDutyDTO.setEventStatus(EventStatus.Unpublished);
             eventDutyDTO.setConductor(conductor.getText());
-            eventDutyDTO.setEventLocation(eventLocation.getText());
+            eventDutyDTO.setLocation(eventLocation.getText());
             eventDutyDTO.setMusicalWorks(null);
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
             eventDutyDTO.setInstrumentation(null);
@@ -144,7 +144,7 @@ public class EditRehearsalController extends EditController {
                 || !startTime.getValue().equals(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalTime())
                 || !endTime.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime())
                 || !conductor.getText().equals(initEventDutyDTO.getConductor())
-                || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
+                || !eventLocation.getText().equals(initEventDutyDTO.getLocation())
                 || (initEventDutyDTO.getPoints() == null && !points.getText().isEmpty()) // points added
                 || (initEventDutyDTO.getPoints() != null && points.getText().isEmpty()) // points removed
                 || (initEventDutyDTO.getPoints() != null && !Double.valueOf(points.getText()).equals(initEventDutyDTO.getPoints()))){// points changed {

@@ -56,7 +56,7 @@ public class CreateRehearsalController extends CreateController {
             eventDutyDTO.setEventType(EventType.Rehearsal);
             eventDutyDTO.setEventStatus(EventStatus.Unpublished);
             eventDutyDTO.setConductor(conductor.getText());
-            eventDutyDTO.setEventLocation(eventLocation.getText());
+            eventDutyDTO.setLocation(eventLocation.getText());
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
             eventDutyDTO.setRehearsalFor(null);
 

@@ -1,9 +1,12 @@
 package Application;
 
-import Domain.EventDutyModel;
-import Domain.MusicalWorkModel;
+import Domain.Models.EventDutyModel;
+import Domain.Models.MusicalWorkModel;
 import Persistence.*;
 import Persistence.Entities.*;
+import Utils.Enum.EventStatus;
+import Utils.Enum.EventType;
+
 import java.util.*;
 
 /**
@@ -220,13 +223,13 @@ public class CalculateMusicianCapacity {
         eventDutyModel.setEventDutyId(eventDutyEntity.getEventDutyId());
         eventDutyModel.setName(eventDutyEntity.getName());
         eventDutyModel.setDescription(eventDutyEntity.getDescription());
-        eventDutyModel.setStarttime(eventDutyEntity.getStarttime());
-        eventDutyModel.setEndtime(eventDutyEntity.getEndtime());
-        eventDutyModel.setEventType(eventDutyEntity.getEventType().toString());
-        eventDutyModel.setEventStatus(eventDutyEntity.getEventStatus().toString());
+        eventDutyModel.setStartTime(eventDutyEntity.getStarttime());
+        eventDutyModel.setEndTime(eventDutyEntity.getEndtime());
+        eventDutyModel.setEventType(EventType.valueOf(eventDutyEntity.getEventType().toString()));
+        eventDutyModel.setEventStatus(EventStatus.valueOf(eventDutyEntity.getEventStatus().toString()));
         eventDutyModel.setConductor(eventDutyEntity.getConductor());
         eventDutyModel.setLocation(eventDutyEntity.getLocation());
-        eventDutyModel.setDefaultPoints(eventDutyEntity.getDefaultPoints());
+        eventDutyModel.setPoints(eventDutyEntity.getDefaultPoints());
         eventDutyModel.setInstrumentation(eventDutyEntity.getInstrumentation());
         eventDutyModel.setRehearsalFor(eventDutyEntity.getRehearsalFor());
         return eventDutyModel;

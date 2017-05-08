@@ -4,15 +4,10 @@ import java.time.Month;
 import java.time.Year;
 import java.util.*;
 import Application.DTO.EventDutyDTO;
-import Application.DTO.MusicalWorkDTO;
-import Domain.EventDutyModel;
-import Domain.MusicalWorkModel;
-import Persistence.Entities.*;
+import Domain.Models.EventDutyModel;
 import Persistence.EventDutyRDBMapper;
 import Persistence.Entities.EventDutyEntity;
-import Presentation.EventSchedule.EventScheduleController;
 import Utils.Enum.EventStatus;
-import Utils.Enum.EventType;
 import Utils.MessageHelper;
 import Utils.Validator;
 import javax.xml.bind.ValidationException;
@@ -44,7 +39,7 @@ public class PublishEventSchedule {
 
             if(!hardValid(evt))EventScheduleManager.createEventDutyDTO(eventDutyModel);
 
-            eventDutyModel.setEventStatus(EventStatus.Published.toString());
+            eventDutyModel.setEventStatus(EventStatus.Published);
             try {
                 EventScheduleManager.updateEventDuty(EventScheduleManager.createEventDutyDTO(eventDutyModel),EventScheduleManager.createEventDutyDTO(eventDutyModel));
             } catch (ValidationException e) {

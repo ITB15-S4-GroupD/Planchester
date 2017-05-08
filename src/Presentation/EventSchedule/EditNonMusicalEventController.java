@@ -2,7 +2,7 @@ package Presentation.EventSchedule;
 
 import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
-import Domain.Permission;
+import Domain.Models.Permission;
 import Utils.Enum.EventStatus;
 import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
@@ -105,7 +105,7 @@ public class EditNonMusicalEventController {
                 || !date.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalDate())
                 || !startTime.getValue().equals(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalTime())
                 || !points.getText().equals(pointRef)
-                || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
+                || !eventLocation.getText().equals(initEventDutyDTO.getLocation())
                 || !points.getText().equals(pointRef)) {
 
             Alert confirmationAlertMessage = new Alert(Alert.AlertType.CONFIRMATION, PlanchesterMessages.DISCARD_CHANGES, ButtonType.YES, ButtonType.NO);
