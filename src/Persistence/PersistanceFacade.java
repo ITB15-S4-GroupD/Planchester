@@ -21,6 +21,7 @@ public class PersistanceFacade {
         mappers.put(PercussionInstrumentationEntity.class, new PercussionInstrumentationRDBMapper());
         mappers.put(MusicianPartEntity.class, new MusicianPartRDBMapper());
         mappers.put(AccountEntity.class, new AccountRDBMapper());
+        mappers.put(DutyDispositionEntity.class, new DutyDispositionRDBMapper());
     }
 
     public Object get(int oid, Class persistenceClass) {

@@ -20,26 +20,26 @@ public class PlanchesterGUI {
     public void start(Stage primaryStage) throws Exception {
         DatabaseSessionManager.readConfiguration();
 
-        primaryStage.setTitle("Planchester Login");
-        scene = new Scene(FXMLLoader.load(getClass().getResource("Login.fxml")));
-        primaryStage.setScene(scene);
-        primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
-        primaryStage.show();
+//        primaryStage.setTitle("Planchester Login");
+//        scene = new Scene(FXMLLoader.load(getClass().getResource("Login.fxml")));
+//        primaryStage.setScene(scene);
+//        primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
+//        primaryStage.show();
 
-        primaryStage.setOnCloseRequest(t -> {
-            if(LoginController.loggedInUser != null) {
+//        primaryStage.setOnCloseRequest(t -> {
+//            if(LoginController.loggedInUser != null) {
                 try {
                     showPlanchesterGUI(primaryStage);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else {
-                Platform.exit();
-                System.exit(0);
-            }
-        });
+//            } else {
+//                Platform.exit();
+//                System.exit(0);
+//            }
+//        });
 
-        LoginController.stage = primaryStage;
+//        LoginController.stage = primaryStage;
     }
 
     private void showPlanchesterGUI(Stage primaryStage) throws Exception {
@@ -67,12 +67,13 @@ public class PlanchesterGUI {
     }
 
     private TabPane createTabs() throws java.io.IOException {
-        String accountRole = LoginController.loggedInUser.getAccountRole();
+//        String accountRole = LoginController.loggedInUser.getAccountRole();
 
         TabPane tabPane = new TabPane();
 
         Tab dutyRoster = new Tab();
         dutyRoster.setText("Duty Roster");
+        dutyRoster.setContent(FXMLLoader.load(getClass().getResource("DutyRoster/DutyRoster.fxml")));
         tabPane.getTabs().add(dutyRoster);
 
         Tab eventSchedule = new Tab();
@@ -80,7 +81,7 @@ public class PlanchesterGUI {
         eventSchedule.setContent(FXMLLoader.load(getClass().getResource("EventSchedule/EventSchedule.fxml")));
         tabPane.getTabs().add(eventSchedule);
 
-        if(accountRole.equals(AccountRole.Manager.toString()) || accountRole.equals(AccountRole.Administrator.toString())) {
+//        if(accountRole.equals(AccountRole.Manager.toString()) || accountRole.equals(AccountRole.Administrator.toString())) {
             Tab musicalWorks = new Tab();
             musicalWorks.setText("Musical Works");
             tabPane.getTabs().add(musicalWorks);
@@ -92,7 +93,7 @@ public class PlanchesterGUI {
             Tab userAdministration = new Tab();
             userAdministration.setText("User Administration");
             tabPane.getTabs().add(userAdministration);
-        }
+//        }
 
         Tab support = new Tab();
         support.setText("Support");
