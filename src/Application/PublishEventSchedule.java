@@ -46,7 +46,7 @@ public class PublishEventSchedule {
       
         for(EventDutyEntity evt: dutiesInRange) {
             eventDutyModel = EventScheduleManager.createEventDutyModel(evt);
-            eventDutyModel.setEventStatus(EventStatus.Published.toString());
+            eventDutyModel.setEventStatus(EventStatus.Published);
             try {
                 EventScheduleManager.updateEventDuty(EventScheduleManager.createEventDutyDTO(eventDutyModel),EventScheduleManager.createEventDutyDTO(eventDutyModel));
             } catch (ValidationException e) {
