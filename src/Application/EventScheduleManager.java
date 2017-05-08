@@ -59,7 +59,7 @@ public class EventScheduleManager {
     public static void updateEventDuty(EventDutyDTO newEventDutyDTO, EventDutyDTO oldEventDutyDTO) throws ValidationException {
         EventDutyModel eventDutyModel = createEventDutyModel(newEventDutyDTO);
         eventDutyModel.validate();
-        EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
+        EventDutyEntity eventDutyEntity = eventDutyEntityPersistanceFacade.get(eventDutyModel.getEventDutyId());
         eventDutyEntityPersistanceFacade.put(eventDutyEntity);
 
         /*
@@ -99,6 +99,24 @@ public class EventScheduleManager {
 
     public static List<EventDutyDTO> getEventDutyListForWeek(Calendar cal) {
         return getEventDutyInRange(DateHelper.getStartOfWeek(cal), DateHelper.getEndOfWeek(cal));
+    }
+
+    public static List<EventDutyDTO> getAllRehearsalsOfEventDuty(EventDutyDTO eventDutyDTO) {
+        if(eventDutyDTO.getEventDutyId() != null) {
+            List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p -> p.getRehearsalFor() == eventDutyDTO.getEventDutyId());
+
+            List<EventDutyModel> eventDutyModelList = new ArrayList<>();
+            for (EventDutyEntity eventDutyEntity : eventDuties) {
+                eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
+            }
+            List<EventDutyDTO> eventDutyDTOList = new ArrayList<>();
+            for (EventDutyModel eventDutyModel : eventDutyModelList) {
+                eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
+            }
+
+            return AccountAdministrationManager.getInstance().getUserPermissions().getViewableEventsForEventSchedule(eventDutyDTOList);
+        }
+        return new ArrayList<>();
     }
 
     private static List<EventDutyDTO> getEventDutyInRange(Calendar startdayOfWeek, Calendar enddayOfWeek) {
@@ -316,7 +334,7 @@ public class EventScheduleManager {
         eventDutyModel.setInstrumentation(eventDutyEntity.getInstrumentation());
         eventDutyModel.setRehearsalFor(eventDutyEntity.getRehearsalFor());
 
-        if(!eventDutyEntity.getEventDutyMusicalWorksByEventDutyId().isEmpty()) {
+        if(eventDutyEntity.getEventDutyMusicalWorksByEventDutyId() != null && !eventDutyEntity.getEventDutyMusicalWorksByEventDutyId().isEmpty()) {
             List<MusicalWorkModel> musicalWorkModels = new ArrayList<>();
             for (EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity : eventDutyEntity.getEventDutyMusicalWorksByEventDutyId()) {
                 MusicalWorkEntity musicalWorkEntity = eventDutyMusicalWorkEntity.getMusicalWorkByMusicalWork();
@@ -326,24 +344,5 @@ public class EventScheduleManager {
         }
 
         return eventDutyModel;
-    }
-
-    public static List<EventDutyDTO> getAllRehearsalsOfEventDuty(EventDutyDTO eventDutyDTO) {
-        if(eventDutyDTO.getEventDutyId() != null) {
-
-            List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p -> p.getRehearsalFor() == eventDutyDTO.getEventDutyId());
-
-            List<EventDutyModel> eventDutyModelList = new ArrayList<>();
-            for (EventDutyEntity eventDutyEntity : eventDuties) {
-                eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
-            }
-            List<EventDutyDTO> eventDutyDTOList = new ArrayList<>();
-            for (EventDutyModel eventDutyModel : eventDutyModelList) {
-                eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
-            }
-
-            return AccountAdministrationManager.getInstance().getUserPermissions().getViewableEventsForEventSchedule(eventDutyDTOList);
-        }
-        return new ArrayList<>();
     }
 }
