@@ -88,10 +88,6 @@ public class EventScheduleManager {
         }
     }
 
-    public static EventDutyDTO createNonMusicalPerformance(EventDutyDTO eventDutyDTO) {
-		return null;
-	}
-
     public static List<EventDutyDTO> getEventDutyListForCurrentWeek() {
         Calendar today = Calendar.getInstance();
         return getEventDutyInRange(DateHelper.getStartOfWeek(today), DateHelper.getEndOfWeek(today));

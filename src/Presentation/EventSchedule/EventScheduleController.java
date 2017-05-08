@@ -201,7 +201,7 @@ public class EventScheduleController {
 
     public static void addEventDutyToGUI(EventDutyDTO event) {
         Agenda.Appointment appointment = new Agenda.AppointmentImpl();
-        appointment.setDescription(event.getDescription());
+        appointment.setDescription(event.getName());
         appointment.setLocation(event.getLocation());
         appointment.setStartTime(DateHelper.convertTimestampToCalendar(event.getStartTime()));
         appointment.setEndTime(DateHelper.convertTimestampToCalendar(event.getEndTime()));
