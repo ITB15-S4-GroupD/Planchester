@@ -1,5 +1,6 @@
 package Presentation;
 
+import Application.AccountAdministrationManager;
 import Application.DatabaseSessionManager;
 import Application.EventScheduleManager;
 import Presentation.EventSchedule.EventScheduleController;
@@ -38,7 +39,7 @@ public class PlanchesterFrameController {
 
     @FXML
     public void initialize()  throws Exception {
-        String accountRole = LoginController.loggedInUser.getAccountRole();
+        String accountRole = AccountAdministrationManager.getLoggedInAccount().getAccountRole();
 
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         eventscheduleTab.setContent(FXMLLoader.load(getClass().getResource("EventSchedule/EventSchedule.fxml")));

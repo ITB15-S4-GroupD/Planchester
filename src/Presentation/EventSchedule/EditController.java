@@ -1,5 +1,6 @@
 package Presentation.EventSchedule;
 
+import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
 import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
@@ -17,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import jfxtras.scene.control.agenda.Agenda;
 
@@ -41,8 +43,8 @@ public class EditController {
     @FXML protected TextField conductor;
     @FXML protected TextField points;
 
-    protected static List<EventDutyDTO> actualRehearsalList;
-    protected static List<EventDutyDTO> newRehearsalList;
+    public static List<EventDutyDTO> actualRehearsalList;
+    public static List<EventDutyDTO> newRehearsalList;
     @FXML protected TableView<String> rehearsalTableView;
     @FXML protected TableColumn<String, String> rehearsalTableColumn;
 
@@ -61,6 +63,7 @@ public class EditController {
     @FXML protected Button btnEditDetails;
     @FXML protected Button btnAddRehearsal;
     @FXML protected Button btnRemoveRehearsal;
+    @FXML protected Text txtTitle;
 
     @FXML
     protected void initialize() {
@@ -102,10 +105,12 @@ public class EditController {
                 points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", " "));
             }
         });
+        btnEditEvent.setVisible(AccountAdministrationManager.getUserRestrain().isVisibleEditEvent());
+        txtTitle.setText(AccountAdministrationManager.getUserRestrain().FitTitleOnEventDetails(txtTitle.getText()));
     }
 
     protected void initNotEditableFields() {
-        if(!initEventDutyDTO.getEventStatus().equals(EventStatus.Unpublished)) {
+        if(!EventStatus.Unpublished.equals(initEventDutyDTO.getEventStatus())) {
             btnEditEvent.setVisible(false);
         } else {
             btnEditEvent.setVisible(true);

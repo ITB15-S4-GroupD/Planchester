@@ -1,6 +1,8 @@
 package Presentation;
 
+import Application.AccountAdministrationManager;
 import Application.DatabaseSessionManager;
+import Application.UserAdministrationManager;
 import Application.EventScheduleManager;
 import Presentation.EventSchedule.EventScheduleController;
 import Utils.Enum.AccountRole;
@@ -16,6 +18,8 @@ import javafx.scene.image.Image;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.UnexpectedException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlanchesterGUI {
     public static Scene scene;
@@ -37,7 +41,7 @@ public class PlanchesterGUI {
 
     private static void checkLogin(Stage primaryStage) {
         primaryStage.setOnCloseRequest(t -> {
-            if(LoginController.loggedInUser != null) {
+            if(AccountAdministrationManager.getLoggedInAccount() != null) {
                 try {
                     showPlanchesterGUI();
                 } catch (Exception e) {
@@ -49,7 +53,6 @@ public class PlanchesterGUI {
                 System.exit(0);
             }
         });
-
     }
 
     public static void showLogin() {
@@ -70,7 +73,7 @@ public class PlanchesterGUI {
             exception.printStackTrace();
         }
     }
-
+  
     private static void showPlanchesterGUI() {
         try {
             primaryStage = new Stage();
