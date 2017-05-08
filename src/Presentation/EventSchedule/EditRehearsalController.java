@@ -149,7 +149,7 @@ public class EditRehearsalController extends EditController {
                 || !endTime.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime())
                 || !conductor.getText().equals(initEventDutyDTO.getConductor())
                 || !eventLocation.getText().equals(initEventDutyDTO.getLocation())
-                || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
+                || !eventLocation.getText().equals(initEventDutyDTO.getLocation())
                 || !points.getText().equals(pointRef)
                 || (musicalWorks == null && initEventDutyDTO.getMusicalWorks() != null) // musical work removed
                 || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() == null) // musical work added
