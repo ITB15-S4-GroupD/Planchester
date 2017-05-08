@@ -20,6 +20,8 @@ import Utils.MessageHelper;
 import javax.xml.bind.ValidationException;
 import java.util.*;
 
+import static Utils.DateHelper.convertCalendarToTimestamp;
+
 /**
  * Created by timorzipa on 06/04/2017.
  */
@@ -96,8 +98,9 @@ public class EventScheduleManager {
             return new ArrayList<>();
         }
 
-        EventDutyRDBMapper rdbMapper = (EventDutyRDBMapper) persistanceFacade.getMapper(EventDutyEntity.class);
-        List<EventDutyEntity> eventDuties = rdbMapper.getEventDutyInRange(startdayOfWeek, enddayOfWeek);
+        PersistanceFacade<EventDutyEntity> persistanceFacade = new PersistanceFacade<EventDutyEntity>();
+        List<EventDutyEntity> eventDuties = persistanceFacade.list(p -> p.getStarttime().after(convertCalendarToTimestamp(startdayOfWeek))
+                && p.getStarttime().before(convertCalendarToTimestamp(enddayOfWeek)));
 
         List<EventDutyModel> eventDutyModelList = new ArrayList<>();
         for(EventDutyEntity eventDutyEntity : eventDuties) {
@@ -317,18 +320,11 @@ public class EventScheduleManager {
         return eventDutyModel;
     }
 
-    public static EventDutyDTO getEventDutyByDetails(EventDutyDTO eventDutyDTO) {
-        EventDutyRDBMapper rdbMapper = (EventDutyRDBMapper) persistanceFacade.getMapper(EventDutyEntity.class);
-        List<EventDutyEntity> eventDuties = rdbMapper.getEventDutyByDetails(eventDutyDTO.getName(), eventDutyDTO.getStartTime());
-        EventDutyModel eventDutyModel =  createEventDutyModel(eventDuties.get(0));
-        EventDutyDTO eventDutyDTO1 = createEventDutyDTO(eventDutyModel);
-        return eventDutyDTO1;
-    }
-
     public static List<EventDutyDTO> getAllRehearsalsOfEventDuty(EventDutyDTO eventDutyDTO) {
         if(eventDutyDTO.getEventDutyId() != null) {
-            EventDutyRDBMapper rdbMapper = (EventDutyRDBMapper) persistanceFacade.getMapper(EventDutyEntity.class);
-            List<EventDutyEntity> eventDuties = rdbMapper.getAllRehearsalsOfEventDuty(eventDutyDTO.getEventDutyId());
+
+            PersistanceFacade<EventDutyEntity> persistanceFacade = new PersistanceFacade<>();
+            List<EventDutyEntity> eventDuties = persistanceFacade.list(p -> p.getRehearsalFor() == eventDutyDTO.getEventDutyId());
 
             List<EventDutyModel> eventDutyModelList = new ArrayList<>();
             for (EventDutyEntity eventDutyEntity : eventDuties) {

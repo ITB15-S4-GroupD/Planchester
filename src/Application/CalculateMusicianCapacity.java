@@ -178,9 +178,10 @@ public class CalculateMusicianCapacity {
         return eventDutyModelList;
     }
 
-    private static HashMap<String, Integer> getAmountWoodInstrumentation(int instrumentationIDs) {
+    private static HashMap<String, Integer> getAmountWoodInstrumentation(int instrumentationID) {
         HashMap<String, Integer> instrumentationMap = new HashMap<>();
-        WoodInstrumentationEntity woodInstrumentationEntity = (WoodInstrumentationEntity) persistanceFacade.get(instrumentationIDs, WoodInstrumentationEntity.class);
+        PersistanceFacade<WoodInstrumentationEntity> persistanceFacade = new PersistanceFacade<>();
+        WoodInstrumentationEntity woodInstrumentationEntity = persistanceFacade.get(instrumentationID);
         instrumentationMap.put("flute", woodInstrumentationEntity.getFlute());
         instrumentationMap.put("oboe", woodInstrumentationEntity.getOboe());
         instrumentationMap.put("clarinet", woodInstrumentationEntity.getClarinet());
@@ -188,9 +189,10 @@ public class CalculateMusicianCapacity {
         return instrumentationMap;
     }
 
-    private static HashMap<String, Integer> getAmountStringInstrumentation(int instrumentationIDs) {
+    private static HashMap<String, Integer> getAmountStringInstrumentation(int instrumentationID) {
         HashMap<String, Integer> instrumentationMap = new HashMap<>();
-        StringInstrumentationEntity stringInstrumentationEntity = (StringInstrumentationEntity) persistanceFacade.get(instrumentationIDs, StringInstrumentationEntity.class);
+        PersistanceFacade<StringInstrumentationEntity> persistanceFacade = new PersistanceFacade<>();
+        StringInstrumentationEntity stringInstrumentationEntity = persistanceFacade.get(instrumentationID);
         instrumentationMap.put("violin1", stringInstrumentationEntity.getViolin1());
         instrumentationMap.put("violin2", stringInstrumentationEntity.getViolin2());
         instrumentationMap.put("viola", stringInstrumentationEntity.getViola());
@@ -199,18 +201,20 @@ public class CalculateMusicianCapacity {
         return instrumentationMap;
     }
 
-    private static HashMap<String, Integer> getAmountPercussionInstrumentation(int instrumentationIDs) {
+    private static HashMap<String, Integer> getAmountPercussionInstrumentation(int instrumentationID) {
         HashMap<String, Integer> instrumentationMap = new HashMap<>();
-        PercussionInstrumentationEntity percussionInstrumentationEntity = (PercussionInstrumentationEntity) persistanceFacade.get(instrumentationIDs, PercussionInstrumentationEntity.class);
+        PersistanceFacade<PercussionInstrumentationEntity> persistanceFacade = new PersistanceFacade<>();
+        PercussionInstrumentationEntity percussionInstrumentationEntity = persistanceFacade.get(instrumentationID);
         instrumentationMap.put("kettledrum", percussionInstrumentationEntity.getKettledrum());
         instrumentationMap.put("percussion", percussionInstrumentationEntity.getPercussion());
         instrumentationMap.put("harp", percussionInstrumentationEntity.getHarp());
         return instrumentationMap;
     }
 
-    private static HashMap<String, Integer> getAmountBrassInstrumentation(int instrumentationIDs) {
+    private static HashMap<String, Integer> getAmountBrassInstrumentation(int instrumentationID) {
         HashMap<String, Integer> instrumentationMap = new HashMap<>();
-        BrassInstrumentationEntity brassInstrumentationEntity = (BrassInstrumentationEntity) persistanceFacade.get(instrumentationIDs, BrassInstrumentationEntity.class);
+        PersistanceFacade<BrassInstrumentationEntity> persistanceFacade = new PersistanceFacade<>();
+        BrassInstrumentationEntity brassInstrumentationEntity = persistanceFacade.get(instrumentationID);
         instrumentationMap.put("horn", brassInstrumentationEntity.getHorn());
         instrumentationMap.put("trumpet", brassInstrumentationEntity.getTrumpet());
         instrumentationMap.put("trombone", brassInstrumentationEntity.getTrombone());

@@ -263,10 +263,9 @@ public abstract class CreateController {
 
             eventDutyDTO = EventScheduleManager.createEventDuty(eventDutyDTO);
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
-            EventDutyDTO eventDutyDTO1 = EventScheduleManager.getEventDutyByDetails(eventDutyDTO);
 
             for(EventDutyDTO eventD : rehearsalList){
-                eventD.setRehearsalFor(eventDutyDTO1.getEventDutyId());
+                eventD.setRehearsalFor(eventDutyDTO.getEventDutyId());
                 eventD = EventScheduleManager.createEventDuty(eventD);
                 EventScheduleController.addEventDutyToGUI(eventD);
             }
