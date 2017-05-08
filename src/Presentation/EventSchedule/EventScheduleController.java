@@ -146,7 +146,7 @@ public class EventScheduleController extends CalenderController {
 
     @FXML
     public void showActualWeekClicked() {
-       super.showActualWeekClicked();
+        super.showActualWeekClicked();
     }
 
     public static void setDisplayedLocalDateTime(LocalDateTime localDateTime) {
