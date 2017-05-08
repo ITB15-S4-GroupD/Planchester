@@ -73,45 +73,6 @@ public class PlanchesterGUI {
             exception.printStackTrace();
         }
     }
-
-    private TabPane createTabs() throws java.io.IOException {
-
-        TabPane tabPane = new TabPane();
-        List<Tab> tabList = new ArrayList<>();
-
-        Tab dutyRoster = new Tab();
-        dutyRoster.setId("TbDutyRoster");
-        dutyRoster.setText("Duty Roster");
-        tabList.add(dutyRoster);
-
-        Tab eventSchedule = new Tab();
-        eventSchedule.setId("TbEventSchedule");
-        eventSchedule.setText("Event Schedule");
-        eventSchedule.setContent(FXMLLoader.load(getClass().getResource("EventSchedule/EventSchedule.fxml")));
-        tabList.add(eventSchedule);
-
-        Tab musicalWorks = new Tab();
-        musicalWorks.setId("TbMusicalWorks");
-        musicalWorks.setText("Musical Works");
-        tabList.add(musicalWorks);
-
-        Tab instruments = new Tab();
-        instruments.setId("TbInstruments");
-        instruments.setText("Instruments");
-        tabList.add(instruments);
-
-        Tab userAdministration = new Tab();
-        userAdministration.setId("TbUserAdministration");
-        userAdministration.setText("User Administration");
-        tabList.add(userAdministration);
-
-        Tab support = new Tab();
-        support.setId("TbSupport");
-        support.setText("Support");
-        tabList.add(support);
-
-        tabPane.getTabs().addAll(AccountAdministrationManager.getUserRestrain().constrainMainTabs(tabList));
-    }
   
     private static void showPlanchesterGUI() {
         try {
