@@ -3,6 +3,7 @@ package Presentation.EventSchedule;
 import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
 import Application.EventScheduleManager;
+import Domain.Permission;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
@@ -66,23 +67,20 @@ public class EditRehearsalController extends EditController {
         initNotEditableFields();
 
         points.textProperty().addListener((observable, oldValue, newValue) -> {
-            //^\d*\.\d{2}$
-            //"^\\d*[\\.,]?\\d{1,2}?$"
-
             if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
                 points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
             }
         });
-        btnEditEvent.setVisible(AccountAdministrationManager.getUserRestrain().isVisibleEditEvent());
-        txtTitle.setText(AccountAdministrationManager.getUserRestrain().FitTitleOnEventDetails(txtTitle.getText()));
     }
 
     protected void initNotEditableFields() {
-        if(!initEventDutyDTO.getEventStatus().equals(EventStatus.Unpublished)) {
-            btnEditEvent.setVisible(false);
-        } else {
+        Permission permission = AccountAdministrationManager.getInstance().getUserPermissions();
+        if(permission.isEditEventSchedule() && EventStatus.Unpublished.equals(initEventDutyDTO.getEventStatus())) {
             btnEditEvent.setVisible(true);
+        } else {
+            btnEditEvent.setVisible(false);
         }
+
         btnCancelEvent.setVisible(false);
         btnSaveEvent.setVisible(false);
 

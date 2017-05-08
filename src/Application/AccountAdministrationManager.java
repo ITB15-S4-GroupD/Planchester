@@ -1,7 +1,6 @@
 package Application;
 
-import Domain.PermissionRestrain;
-import Domain.PermissionObject;
+import Domain.Permission;
 import Persistence.AccountRDBMapper;
 import Persistence.Entities.AccountEntity;
 import Utils.Enum.AccountRole;
@@ -11,33 +10,51 @@ import Utils.Enum.AccountRole;
  */
 public class AccountAdministrationManager {
 
-    private static AccountRole userRole = null;
-    private static AccountEntity userAccount = null;
-    private static PermissionRestrain userRestrain = null;
+    private static AccountAdministrationManager instance = null;
 
-    public static AccountEntity getAccount(String username, String password) {
-        return AccountRDBMapper.getAccount(username, password);
+    private AccountRole accountRole = null;
+    private AccountEntity userAccount = null;
+    private Permission permission = null;
+
+    private AccountAdministrationManager() {}
+
+    public static AccountAdministrationManager getInstance() {
+        if(instance == null) {
+            instance = new AccountAdministrationManager();
+        }
+        return instance;
     }
 
-    public static void setLoggedInUser(AccountEntity account){
-
-        if(userAccount == null){
-            userAccount = account;
-            userRole = AccountRole.valueOf(userAccount.getAccountRole());
-            userRestrain = new PermissionObject(userRole);
+    public void setAccount(String username, String password) {
+        AccountEntity accountEntity = AccountRDBMapper.getAccount(username, password);
+        if(accountEntity != null) {
+            setLoggedInUser(accountEntity);
         }
     }
 
-    public static AccountEntity getLoggedInAccount(){
+    private void setLoggedInUser(AccountEntity account) {
+        userAccount = account;
+        accountRole = AccountRole.valueOf(userAccount.getAccountRole());
+
+        // set permissions
+        permission = new Permission(accountRole);
+    }
+
+    public void resetUser() {
+        accountRole = null;
+        userAccount = null;
+        permission = null;
+    }
+
+    public AccountEntity getLoggedInAccount(){
         return userAccount;
     }
 
-    public static String getLoggedInName(){
-        return userAccount.getUsername() + " as " + userAccount.getAccountRole();
+    public Permission getUserPermissions(){
+        return permission;
     }
 
-    public static PermissionRestrain getUserRestrain(){
-        return userRestrain;
+    public AccountRole getAccountRole() {
+        return accountRole;
     }
-
 }

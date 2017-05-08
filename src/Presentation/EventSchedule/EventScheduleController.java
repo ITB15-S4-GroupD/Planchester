@@ -4,6 +4,7 @@ import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
 import Application.EventScheduleManager;
 import Application.PublishEventSchedule;
+import Domain.Permission;
 import Utils.Enum.EventType;
 import Presentation.PlanchesterGUI;
 import Utils.DateHelper;
@@ -111,8 +112,10 @@ public class EventScheduleController {
                 showEventDetailView();
             }
         });
-        btnPublishEventSchedule.setVisible(AccountAdministrationManager.getUserRestrain().isVisibleButtonPublishEvents());
-        addNewEvent.setVisible(AccountAdministrationManager.getUserRestrain().isVisibleMenuAddNewEvent());
+
+        Permission permission = AccountAdministrationManager.getInstance().getUserPermissions();
+        btnPublishEventSchedule.setVisible(permission.isPublishEventSchedule());
+        addNewEvent.setVisible(permission.isEditEventSchedule());
 
     }
 

@@ -2,6 +2,8 @@ package Presentation.EventSchedule;
 
 import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
+import Domain.Permission;
+import Utils.Enum.EventStatus;
 import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
@@ -60,12 +62,16 @@ public class EditNonMusicalEventController {
                 points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
             }
         });
-        btnEditEvent.setVisible(AccountAdministrationManager.getUserRestrain().isVisibleEditEvent());
-        txtTitle.setText(AccountAdministrationManager.getUserRestrain().FitTitleOnEventDetails(txtTitle.getText()));
     }
 
     private void initNotEditableFields() {
-        btnEditEvent.setVisible(true);
+        Permission permission = AccountAdministrationManager.getInstance().getUserPermissions();
+        if(permission.isEditEventSchedule() && EventStatus.Unpublished.equals(initEventDutyDTO.getEventStatus())) {
+            btnEditEvent.setVisible(true);
+        } else {
+            btnEditEvent.setVisible(false);
+        }
+
         btnCancelEvent.setVisible(false);
         btnSaveEvent.setVisible(false);
 

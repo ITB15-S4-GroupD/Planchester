@@ -41,7 +41,7 @@ public class PlanchesterGUI {
 
     private static void checkLogin(Stage primaryStage) {
         primaryStage.setOnCloseRequest(t -> {
-            if(AccountAdministrationManager.getLoggedInAccount() != null) {
+            if(AccountAdministrationManager.getInstance().getLoggedInAccount() != null) {
                 try {
                     showPlanchesterGUI();
                 } catch (Exception e) {
