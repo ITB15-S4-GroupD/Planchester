@@ -2,10 +2,9 @@ package Presentation.EventSchedule;
 
 import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
-import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
-import Domain.Permission;
+import Domain.Models.Permission;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
@@ -14,22 +13,14 @@ import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import jfxtras.scene.control.agenda.Agenda;
 
 import javax.xml.bind.ValidationException;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Christina on 20.04.2017.
@@ -62,7 +53,7 @@ public class EditTourController extends EditController {
         description.setText(initEventDutyDTO.getDescription());
         date.setValue(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalDate());
         endDate.setValue(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalDate());
-        eventLocation.setText(initEventDutyDTO.getEventLocation());
+        eventLocation.setText(initEventDutyDTO.getLocation());
         conductor.setText(initEventDutyDTO.getConductor());
         points.setText(initEventDutyDTO.getPoints() != null ? String.valueOf(initEventDutyDTO.getPoints()) : "0.0");
         if(initEventDutyDTO.getMusicalWorks() != null && !initEventDutyDTO.getMusicalWorks().isEmpty()) {
@@ -99,8 +90,8 @@ public class EditTourController extends EditController {
 
         name.setEditable(false);
         description.setEditable(false);
-        date.setEditable(false);
-        endDate.setEditable(false);
+        date.setDisable(true);
+        endDate.setDisable(true);
         eventLocation.setEditable(false);
         conductor.setEditable(false);
         points.setEditable(false);
@@ -123,7 +114,7 @@ public class EditTourController extends EditController {
             EventScheduleController.removeSelectedAppointmentFromCalendar(selectedAppointment);
 
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
-            eventDutyDTO.setEventDutyID(oldEventDutyDTO.getEventDutyID());
+            eventDutyDTO.setEventDutyId(oldEventDutyDTO.getEventDutyId());
             eventDutyDTO.setName(name.getText());
             eventDutyDTO.setDescription(description.getText());
             eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), LocalTime.MIDNIGHT));
@@ -131,7 +122,7 @@ public class EditTourController extends EditController {
             eventDutyDTO.setEventType(EventType.Tour);
             eventDutyDTO.setEventStatus(EventStatus.Unpublished);
             eventDutyDTO.setConductor(conductor.getText());
-            eventDutyDTO.setEventLocation(eventLocation.getText());
+            eventDutyDTO.setLocation(eventLocation.getText());
             eventDutyDTO.setMusicalWorks(musicalWorks);
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
             eventDutyDTO.setInstrumentation(null); //TODO timebox 2
@@ -158,7 +149,7 @@ public class EditTourController extends EditController {
                 || !date.getValue().equals(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalDate())
                 || !endDate.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalDate())
                 || !conductor.getText().equals(initEventDutyDTO.getConductor())
-                || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
+                || !eventLocation.getText().equals(initEventDutyDTO.getLocation())
                 || !points.getText().equals(pointRef)
                 || (musicalWorks == null && initEventDutyDTO.getMusicalWorks() != null) // musical work removed
                 || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() == null) // musical work added
@@ -223,5 +214,33 @@ public class EditTourController extends EditController {
             return false;
         }
         return true;
+    }
+
+    @FXML
+    @Override
+    protected void editEvent () {
+        btnCancelEvent.setVisible(true);
+        btnSaveEvent.setVisible(true);
+        btnEditEvent.setVisible(false);
+        btnEditDetails.setVisible(true);
+        btnAddRehearsal.setVisible(true);
+        btnRemoveRehearsal.setVisible(true);
+
+        name.setEditable(true);
+        description.setEditable(true);
+        date.setDisable(false);
+        endDate.setDisable(false);
+        eventLocation.setEditable(true);
+        conductor.setEditable(true);
+        points.setEditable(true);
+        conductor.setEditable(true);
+
+        name.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        description.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        date.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        endDate.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        eventLocation.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        points.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
+        conductor.setStyle(PlanchesterConstants.INPUTFIELD_VALID);;
     }
 }

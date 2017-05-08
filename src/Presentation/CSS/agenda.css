@@ -43,6 +43,7 @@
 	-fx-stroke: transparent;
 	-fx-border-color:LIGHTGRAY;
 	-fx-border-width: 0px 0px 0px 1px;
+	/* -fx-background-color: blueviolet; */
 }
 
 .Agenda .weekend {

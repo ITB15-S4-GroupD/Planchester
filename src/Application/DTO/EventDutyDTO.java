@@ -1,5 +1,6 @@
 package Application.DTO;
 
+import Domain.Interfaces.EventDutyInterface;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import java.sql.Timestamp;
@@ -8,14 +9,14 @@ import java.util.List;
 /**
  * Created by julia on 26.04.2017.
  */
-public class EventDutyDTO {
-    private Integer eventDutyID;
+public class EventDutyDTO implements EventDutyInterface {
+    private Integer eventDutyId;
     private String name;
     private String description;
     private Timestamp startTime;
     private Timestamp endTime;
-    private Enum<EventType> eventType;
-    private Enum<EventStatus> eventStatus;
+    private EventType eventType;
+    private EventStatus eventStatus;
     private String conductor;
     private String eventLocation;
     private List<MusicalWorkDTO> musicalWorks;
@@ -23,12 +24,12 @@ public class EventDutyDTO {
     private Integer instrumentation;
     private Integer rehearsalFor;
 
-    public Integer getEventDutyID() {
-        return eventDutyID;
+    public Integer getEventDutyId() {
+        return eventDutyId;
     }
 
-    public void setEventDutyID(Integer eventDutyID) {
-        this.eventDutyID = eventDutyID;
+    public void setEventDutyId(Integer eventDutyID) {
+        this.eventDutyId = eventDutyID;
     }
 
     public String getName() {
@@ -63,27 +64,27 @@ public class EventDutyDTO {
         this.endTime = endTime;
     }
 
-    public Enum<EventType> getEventType() {
+    public EventType getEventType() {
         return eventType;
     }
 
-    public void setEventType(Enum<EventType> eventType) {
+    public void setEventType(EventType eventType) {
         this.eventType = eventType;
     }
 
-    public Enum<EventStatus> getEventStatus() {
+    public EventStatus getEventStatus() {
         return eventStatus;
     }
 
-    public void setEventStatus(Enum<EventStatus> eventStatus) {
+    public void setEventStatus(EventStatus eventStatus) {
         this.eventStatus = eventStatus;
     }
 
-    public String getEventLocation() {
+    public String getLocation() {
         return eventLocation;
     }
 
-    public void setEventLocation(String eventLocation) {
+    public void setLocation(String eventLocation) {
         this.eventLocation = eventLocation;
     }
 

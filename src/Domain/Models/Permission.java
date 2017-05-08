@@ -1,4 +1,4 @@
-package Domain;
+package Domain.Models;
 
 import Application.DTO.EventDutyDTO;
 import Utils.Enum.AccountRole;

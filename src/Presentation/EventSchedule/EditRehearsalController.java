@@ -3,7 +3,7 @@ package Presentation.EventSchedule;
 import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
 import Application.EventScheduleManager;
-import Domain.Permission;
+import Domain.Models.Permission;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
@@ -60,7 +60,7 @@ public class EditRehearsalController extends EditController {
         date.setValue(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalDate());
         startTime.setValue(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalTime());
         endTime.setValue(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime());
-        eventLocation.setText(initEventDutyDTO.getEventLocation());
+        eventLocation.setText(initEventDutyDTO.getLocation());
         conductor.setText(initEventDutyDTO.getConductor());
         points.setText(initEventDutyDTO.getPoints() != null ? String.valueOf(initEventDutyDTO.getPoints()) : null);
 
@@ -86,13 +86,12 @@ public class EditRehearsalController extends EditController {
 
         name.setEditable(false);
         description.setEditable(false);
-        date.setEditable(false);
-        startTime.setEditable(false);
-        endTime.setEditable(false);
         eventLocation.setEditable(false);
         conductor.setEditable(false);
         points.setEditable(false);
-
+        startTime.setDisable(true);
+        endTime.setDisable(true);
+        date.setDisable(true);
 
         name.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
         description.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
@@ -113,7 +112,7 @@ public class EditRehearsalController extends EditController {
             EventScheduleController.removeSelectedAppointmentFromCalendar(selectedAppointment);
 
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
-            eventDutyDTO.setEventDutyID(oldEventDutyDTO.getEventDutyID());
+            eventDutyDTO.setEventDutyId(oldEventDutyDTO.getEventDutyId());
             eventDutyDTO.setName(name.getText());
             eventDutyDTO.setDescription(description.getText());
             eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
@@ -121,11 +120,11 @@ public class EditRehearsalController extends EditController {
             eventDutyDTO.setEventType(EventType.Rehearsal);
             eventDutyDTO.setEventStatus(EventStatus.Unpublished);
             eventDutyDTO.setConductor(conductor.getText());
-            eventDutyDTO.setEventLocation(eventLocation.getText());
+            eventDutyDTO.setLocation(eventLocation.getText());
             eventDutyDTO.setMusicalWorks(null);
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
             eventDutyDTO.setInstrumentation(null);
-            eventDutyDTO.setRehearsalFor(null);
+            eventDutyDTO.setRehearsalFor(initEventDutyDTO.getRehearsalFor());
 
             EventScheduleManager.updateEventDuty(eventDutyDTO, initEventDutyDTO);
 
@@ -149,6 +148,7 @@ public class EditRehearsalController extends EditController {
                 || !startTime.getValue().equals(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalTime())
                 || !endTime.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime())
                 || !conductor.getText().equals(initEventDutyDTO.getConductor())
+                || !eventLocation.getText().equals(initEventDutyDTO.getLocation())
                 || !eventLocation.getText().equals(initEventDutyDTO.getEventLocation())
                 || !points.getText().equals(pointRef)
                 || (musicalWorks == null && initEventDutyDTO.getMusicalWorks() != null) // musical work removed
@@ -175,12 +175,12 @@ public class EditRehearsalController extends EditController {
 
         name.setEditable(true);
         description.setEditable(true);
-        date.setEditable(true);
-        startTime.setEditable(true);
-        endTime.setEditable(true);
         eventLocation.setEditable(true);
         points.setEditable(true);
         conductor.setEditable(true);
+        startTime.setDisable(false);
+        endTime.setDisable(false);
+        date.setDisable(false);
 
         name.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
         description.setStyle(PlanchesterConstants.INPUTFIELD_VALID);

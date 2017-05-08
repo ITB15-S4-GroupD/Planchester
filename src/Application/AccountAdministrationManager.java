@@ -1,6 +1,6 @@
 package Application;
 
-import Domain.Permission;
+import Domain.Models.Permission;
 import Persistence.AccountRDBMapper;
 import Persistence.Entities.AccountEntity;
 import Utils.Enum.AccountRole;
