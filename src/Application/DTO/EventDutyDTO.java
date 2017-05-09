@@ -1,6 +1,6 @@
 package Application.DTO;
 
-import Domain.Interfaces.EventDutyInterface;
+import Domain.Interfaces.IEventDuty;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import java.sql.Timestamp;
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by julia on 26.04.2017.
  */
-public class EventDutyDTO implements EventDutyInterface {
+public class EventDutyDTO implements IEventDuty {
     private Integer eventDutyId;
     private String name;
     private String description;
