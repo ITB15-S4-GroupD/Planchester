@@ -3,6 +3,8 @@ package Utils;
 import Application.DTO.EventDutyDTO;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,13 +44,18 @@ public class MessageHelper {
         alert.setTitle("Planchester Warning");
 
         StringBuilder warning = new StringBuilder();
-        warning.append("There are not enough musicians available for "
-                + eventDutyDTO.getEventType() + " " + eventDutyDTO.getName() + " on "
-                + eventDutyDTO.getStartTime().toLocalDateTime().toLocalDate().toString()
-                + ".\nFollowing instruments are missing:\n");
+        warning.append("There are not enough musicians available for ");
+        warning.append(eventDutyDTO.getEventType());
+        warning.append(" ");
+        warning.append(eventDutyDTO.getName());
+        warning.append(" on ");
+        warning.append(eventDutyDTO.getStartTime().toLocalDateTime().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        warning.append(".\nFollowing instruments are missing:\n");
+
         for (Map.Entry<String, Integer> musicianCapacity : musicanCapacityMap.entrySet()) {
             warning.append(musicianCapacity.getKey() + ": " + musicianCapacity.getValue() + "\n");
         }
+
         alert.setHeaderText(warning.toString());
         alert.showAndWait();
     }
