@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -170,16 +171,20 @@ public abstract class CreateController {
     @FXML
     public void removeRehearsal() {
         String rehearsalToRemove = rehearsalTableView.getSelectionModel().getSelectedItem();
-        for(EventDutyDTO eventDutyDTO : rehearsalList) {
-            if(eventDutyDTO.getName().equals(rehearsalToRemove)) {
-                rehearsalList.remove(eventDutyDTO);
+
+        Iterator<EventDutyDTO> rehearsals = rehearsalList.iterator();
+        while (rehearsals.hasNext()) {
+            EventDutyDTO rehearsal = rehearsals.next();
+            if(rehearsal.getName().equals(rehearsalToRemove)) {
+                rehearsals.remove();
                 break;
             }
         }
-        rehearsalTableView.getItems().remove(rehearsalTableView.getSelectionModel().getFocusedIndex());
+        rehearsalTableView.getItems().remove(rehearsalToRemove);
         rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
-        for(EventDutyDTO e : rehearsalList) {
-            String rehearsalToAdd = e.getName();
+        rehearsalTableView.getItems().clear();
+        for(EventDutyDTO rehearsal : rehearsalList) {
+            String rehearsalToAdd = rehearsal.getName();
             rehearsalTableView.getItems().add(rehearsalToAdd);
         }
     }
