@@ -13,7 +13,7 @@ public class AccountEntity {
     private String username;
     private String password;
     private String accountRole;
-    private Collection<PersonEntity> peopleByAccountId;
+    private PersonEntity personByAccountId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -79,12 +79,12 @@ public class AccountEntity {
         return result;
     }
 
-    @OneToMany(mappedBy = "accountByAccount")
-    public Collection<PersonEntity> getPeopleByAccountId() {
-        return peopleByAccountId;
+    @OneToOne(mappedBy = "accountByAccount")
+    public PersonEntity getPersonAccountId() {
+        return personByAccountId;
     }
 
-    public void setPeopleByAccountId(Collection<PersonEntity> peopleByAccountId) {
-        this.peopleByAccountId = peopleByAccountId;
+    public void setPersonAccountId(PersonEntity personByAccountId) {
+        this.personByAccountId = personByAccountId;
     }
 }

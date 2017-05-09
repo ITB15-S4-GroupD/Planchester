@@ -4,6 +4,7 @@ import Application.DTO.EventDutyDTO;
 import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
+import Presentation.EventSchedule.EventScheduleController;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import Utils.MessageHelper;
@@ -31,8 +32,8 @@ import java.util.List;
 public class CreateTourController extends CreateController {
     @FXML private JFXDatePicker endDate;
 
-    @Override
     @FXML
+    @Override
     protected void insertEventDuty() throws ValidationException {
         if (validate()) {
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
@@ -49,26 +50,24 @@ public class CreateTourController extends CreateController {
             eventDutyDTO.setInstrumentation(null); //TODO timebox 2
             eventDutyDTO.setRehearsalFor(null);
 
-            eventDutyDTO =EventScheduleManager.createEventDuty(eventDutyDTO);
+            eventDutyDTO = EventScheduleManager.createEventDuty(eventDutyDTO);
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
-            EventDutyDTO eventDutyDTO1 = EventScheduleManager.getEventDutyByDetails(eventDutyDTO);
 
             for(EventDutyDTO eventD : rehearsalList){
-                eventD.setRehearsalFor(eventDutyDTO1.getEventDutyId());
+                eventD.setRehearsalFor(eventDutyDTO.getEventDutyId());
                 EventScheduleManager.createEventDuty(eventD);
                 EventScheduleController.addEventDutyToGUI(eventD);
             }
 
             rehearsalList.clear();
-
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
             EventScheduleController.setSelectedAppointment(eventDutyDTO); // select created appointment
         }
     }
 
-    @Override
     @FXML
+    @Override
     public boolean cancel() {
         if (!name.getText().isEmpty() || !description.getText().isEmpty() || date.getValue() != null
                 || endDate.getValue() != null || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty()

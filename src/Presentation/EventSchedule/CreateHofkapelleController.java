@@ -11,8 +11,8 @@ import javax.xml.bind.ValidationException;
 
 public class CreateHofkapelleController extends CreateController {
 
-    @Override
     @FXML
+    @Override
     protected void insertEventDuty() throws ValidationException {
         super.setEventType(EventType.Hofkapelle);
         super.insertEventDuty();

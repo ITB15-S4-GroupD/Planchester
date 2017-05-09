@@ -3,6 +3,7 @@ package Presentation.EventSchedule;
 import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
 import Application.MusicalWorkAdministratonManager;
+import Domain.Interfaces.IInstrumentation;
 import Utils.PlanchesterConstants;
 import com.jfoenix.controls.JFXRadioButton;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -175,7 +176,6 @@ public class InstrumentationController {
     private void setSelectedMusicalWork(String selecetdItem) {
         if(selecetdItem != null) {
             MusicalWorkDTO musicalWorkDTO = musicalWorks.stream().filter(o -> o.getName().equals(selecetdItem)).findFirst().get();
-
             clearInstrumentation();
             setStandardInstrumentation(musicalWorkDTO.getInstrumentation());
         }
@@ -201,7 +201,7 @@ public class InstrumentationController {
         standardVioloncello.setText(null);
     }
 
-    private void setStandardInstrumentation(InstrumentationDTO instrumentation) {
+    private void setStandardInstrumentation(IInstrumentation instrumentation) {
         standardBasson.setText(String.valueOf(instrumentation.getBasson()));
         standardClarinet.setText(String.valueOf(instrumentation.getClarinet()));
         standardDescription.setText(instrumentation.getDescription() != null ? String.valueOf(instrumentation.getDescription()) : null);

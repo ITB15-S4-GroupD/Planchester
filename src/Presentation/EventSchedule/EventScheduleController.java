@@ -10,6 +10,7 @@ import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import Presentation.PlanchesterGUI;
 import Utils.DateHelper;
+import Utils.PlanchesterConstants;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -39,6 +40,7 @@ public class EventScheduleController extends CalenderController {
     @FXML private MenuButton addNewEvent;
     @FXML private Button btnPublishEventSchedule;
     @FXML private Label calenderWeekLabel;
+    @FXML private Label unpublishedLabel;
 
     @FXML private MenuItem addNewConcert;
     @FXML private MenuItem addNewOpera;
@@ -53,6 +55,7 @@ public class EventScheduleController extends CalenderController {
     @FXML private JFXTextField colorKeyHofkapelle;
     @FXML private JFXTextField colorKeyRehearsal;
     @FXML private JFXTextField colorKeyNonMusical;
+    @FXML private JFXTextField mandatoryField;
 
     private String colorOpera;
     private String colorConcert;
@@ -117,6 +120,7 @@ public class EventScheduleController extends CalenderController {
         Permission permission = AccountAdministrationManager.getInstance().getUserPermissions();
         btnPublishEventSchedule.setVisible(permission.isPublishEventSchedule());
         addNewEvent.setVisible(permission.isEditEventSchedule());
+        unpublishedLabel.setVisible(permission.isEditEventSchedule());
 
     }
 
@@ -192,7 +196,7 @@ public class EventScheduleController extends CalenderController {
 
     public static void addEventDutyToGUI(EventDutyDTO event) {
         Agenda.Appointment appointment = new Agenda.AppointmentImpl();
-        appointment.setDescription(event.getDescription());
+        appointment.setDescription(event.getName());
         appointment.setLocation(event.getLocation());
         appointment.setStartTime(DateHelper.convertTimestampToCalendar(event.getStartTime()));
         appointment.setEndTime(DateHelper.convertTimestampToCalendar(event.getEndTime()));
@@ -278,6 +282,16 @@ public class EventScheduleController extends CalenderController {
 
     protected void setColorKeyMap() {
         super.setColorKeyMap();
+        
+        
+        /* old from master
+         colorKeyOpera.setStyle(colorOpera);
+        colorKeyConcert.setStyle(colorConcert);
+        colorKeyTour.setStyle(colorTour);
+        colorKeyHofkapelle.setStyle(colorHofkapelle);
+        colorKeyRehearsal.setStyle(colorRehearsal);
+        colorKeyNonMusical.setStyle(colorNonMusical);
+        mandatoryField.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY); */
     }
 
     private void addEventTypeEntriesToMenuButton() {
@@ -420,7 +434,16 @@ public class EventScheduleController extends CalenderController {
     @FXML public void refresh() {
         removeAllData();
 
-        List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForWeek(agenda.getDisplayedCalendar());
+        List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForWeek(staticAgenda.getDisplayedCalendar());
+        for(EventDutyDTO event : events) {
+            addEventDutyToGUI(event);
+        }
+    }
+
+    public static void reload() {
+        removeAllData();
+
+        List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForWeek(staticAgenda.getDisplayedCalendar());
         for(EventDutyDTO event : events) {
             addEventDutyToGUI(event);
         }

@@ -1,15 +1,18 @@
 package Application.DTO;
 
+import Domain.Interfaces.IInstrumentation;
+import Domain.Interfaces.IMusicalWork;
+
 /**
  * Created by timor on 27.04.2017.
  */
-public class MusicalWorkDTO {
+public class MusicalWorkDTO implements IMusicalWork {
     private int instrumentationId;
     private int id;
     private String name;
     private String composer;
-    private InstrumentationDTO instrumentation;
-    private InstrumentationDTO alternativeInstrumentation;
+    private IInstrumentation instrumentation;
+    private IInstrumentation alternativeInstrumentation;
 
     public int getInstrumentationId() {
         return instrumentationId;
@@ -43,19 +46,19 @@ public class MusicalWorkDTO {
         this.composer = composer;
     }
 
-    public InstrumentationDTO getInstrumentation() {
+    public IInstrumentation getInstrumentation() {
         return instrumentation;
     }
 
-    public void setInstrumentation(InstrumentationDTO instrumentation) {
+    public void setInstrumentation(IInstrumentation instrumentation) {
         this.instrumentation = instrumentation;
     }
 
-    public InstrumentationDTO getAlternativeInstrumentation() {
+    public IInstrumentation getAlternativeInstrumentation() {
         return alternativeInstrumentation;
     }
 
-    public void setAlternativeInstrumentation(InstrumentationDTO instrumentation) {
+    public void setAlternativeInstrumentation(IInstrumentation instrumentation) {
         this.alternativeInstrumentation = instrumentation;
     }
 }

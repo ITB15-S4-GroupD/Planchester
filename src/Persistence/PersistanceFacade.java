@@ -1,44 +1,96 @@
 package Persistence;
 
-import Persistence.Entities.*;
-
-import java.util.HashMap;
+import org.hibernate.Session;
+import javax.persistence.Entity;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.lang.reflect.ParameterizedType;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Created by julia on 26.04.2017.
  */
-public class PersistanceFacade {
-    HashMap<Class, Mapper> mappers = new HashMap<Class, Mapper> ();
 
-    public PersistanceFacade() {
-        mappers.put(AccountEntity.class, new AccountRDBMapper());
-        mappers.put(BrassInstrumentationEntity.class, new BrassInstrumentationRDBMapper());
-        mappers.put(EventDutyMusicalWorkEntity.class, new EventDutyMusicalWorkRDBMapper());
-        mappers.put(EventDutyEntity.class , new EventDutyRDBMapper());
-        mappers.put(InstrumentEntity.class, new InstrumentationRDBMapper());
-        mappers.put(MusicalWorkEntity.class , new MusicalWorkRDBMapper());
-        mappers.put(MusicianPartEntity.class, new MusicianPartRDBMapper());
-        mappers.put(DutyDispositionEntity.class, new DutyDispositionRDBMapper());
-        mappers.put(PercussionInstrumentationEntity.class, new PercussionInstrumentationRDBMapper());
-        mappers.put(StringInstrumentationEntity.class, new StringInstrumentationRDBMapper());
-        mappers.put(WoodInstrumentationEntity.class, new WoodInstrumentationRDBMapper());
+public class PersistanceFacade<T> {
+
+    private final Class<T> persistanceClass;
+
+    public PersistanceFacade(Class<T> entityClass) {
+        persistanceClass = entityClass;
     }
 
-    public Object get(int oid, Class persistenceClass) {
-        Mapper mapper = mappers.get(persistenceClass);
-        return mapper.get(oid);
-    }
-    public Object put(Object obj) {
-        Mapper mapper = mappers.get(obj.getClass());
-        return mapper.put(obj);
+    public T get(int oid) {
+        Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
+        T object = session.get(persistanceClass,oid);
+        DatabaseConnectionHandler.getInstance().commitTransaction();
+        return object;
     }
 
-    public void remove(int oid, Class persistenceClass) {
-        Mapper mapper = mappers.get(persistenceClass);
-        mapper.remove(oid);
+    public T get(Predicate<T> predicate) {
+        Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
+
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<T> query = builder.createQuery(persistanceClass);
+        Root<T> root = query.from(persistanceClass);
+        query.select(root);
+
+        List<T> list;
+        if (predicate == null) {
+            list = session.createQuery(query).list();
+        } else {
+            list = session.createQuery(query).stream().filter(predicate).collect(Collectors.toList());
+        }
+
+        T object;
+        if(list.isEmpty()) {
+            object = null;
+        } else {
+            object = list.get(0);
+        }
+
+        DatabaseConnectionHandler.getInstance().commitTransaction();
+        return object;
     }
 
-    public Mapper getMapper(Class persistenceClass) {
-        return mappers.get(persistenceClass);
+    public T put(T obj) {
+        Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
+        session.saveOrUpdate(obj);
+        DatabaseConnectionHandler.getInstance().commitTransaction();
+        return obj;
+    }
+
+    public void remove(int oid) {
+        Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
+        Object object = (T)session.get(persistanceClass, oid);
+        session.delete(object);
+        DatabaseConnectionHandler.getInstance().commitTransaction();
+    }
+
+    public void remove(T object) {
+        Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
+        session.delete(object);
+        DatabaseConnectionHandler.getInstance().commitTransaction();
+    }
+
+    public List<T> list(Predicate<T> predicate) {
+        Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
+
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<T> query = builder.createQuery(persistanceClass);
+        Root<T> root = query.from(persistanceClass);
+        query.select(root);
+
+        List<T> list;
+        if (predicate == null) {
+            list = session.createQuery(query).list();
+        } else {
+            list = session.createQuery(query).stream().filter(predicate).collect(Collectors.toList());
+        }
+
+        DatabaseConnectionHandler.getInstance().commitTransaction();
+        return list;
     }
 }

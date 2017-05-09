@@ -5,17 +5,22 @@ import java.time.Year;
 import java.util.*;
 import Application.DTO.EventDutyDTO;
 import Domain.Models.EventDutyModel;
-import Persistence.EventDutyRDBMapper;
 import Persistence.Entities.EventDutyEntity;
+import Persistence.PersistanceFacade;
+import Presentation.EventSchedule.EventScheduleController;
 import Utils.Enum.EventStatus;
 import Utils.MessageHelper;
 import Utils.Validator;
 import javax.xml.bind.ValidationException;
 
+import static Utils.DateHelper.convertCalendarToTimestamp;
+
 /**
  * Created by julia on 28.04.2017.
  */
 public class PublishEventSchedule {
+
+    private static PersistanceFacade<EventDutyEntity> eventDutyEntityPersistanceFacade = new PersistanceFacade(EventDutyEntity.class);
 
     public static EventDutyDTO publish(Year year, Month month) {
         //Calculate first and last day of month; note that Month starts with 0
@@ -24,10 +29,11 @@ public class PublishEventSchedule {
         Calendar firstOfMonth = Calendar.getInstance();
         firstOfMonth.set(year.getValue(), month.getValue()-1, 1);
 
-        Calendar firstNextMoneth = Calendar.getInstance();
-        firstNextMoneth.set(year.getValue(), month.getValue(), 1);
+        Calendar firstNextMonth = Calendar.getInstance();
+        firstNextMonth.set(year.getValue(), month.getValue(), 1);
 
-        List<EventDutyEntity> dutiesInRange = EventDutyRDBMapper.getEventDutyInRange(firstOfMonth, firstNextMoneth);
+        List<EventDutyEntity> dutiesInRange = eventDutyEntityPersistanceFacade.list(p -> p.getStarttime().after(convertCalendarToTimestamp(firstOfMonth))
+                && p.getStarttime().before(convertCalendarToTimestamp(firstNextMonth)));
 
         for(EventDutyEntity evt : dutiesInRange){
             eventDutyModel = EventScheduleManager.createEventDutyModel(evt);
@@ -46,7 +52,7 @@ public class PublishEventSchedule {
       
         for(EventDutyEntity evt: dutiesInRange) {
             eventDutyModel = EventScheduleManager.createEventDutyModel(evt);
-            eventDutyModel.setEventStatus(EventStatus.Published.toString());
+            eventDutyModel.setEventStatus(EventStatus.Published);
             try {
                 EventScheduleManager.updateEventDuty(EventScheduleManager.createEventDutyDTO(eventDutyModel),EventScheduleManager.createEventDutyDTO(eventDutyModel));
             } catch (ValidationException e) {
@@ -54,6 +60,7 @@ public class PublishEventSchedule {
             }
         }
 
+        EventScheduleController.reload();
         MessageHelper.showInformationMessage("All events of the month " + month.toString().toLowerCase() + " have been published");
         return null;
     }
