@@ -1,7 +1,6 @@
 package Persistence;
 
 import org.hibernate.Session;
-
 import javax.persistence.Entity;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;

@@ -2,8 +2,13 @@ package Application;
 
 import Domain.Models.Permission;
 import Persistence.Entities.AccountEntity;
+import Persistence.Entities.MusicianPartEntity;
+import Persistence.Entities.PartEntity;
 import Persistence.PersistanceFacade;
 import Utils.Enum.AccountRole;
+import Utils.Enum.SectionType;
+
+import java.util.Collection;
 
 /**
  * Created by timorzipa on 04/05/2017.
@@ -16,6 +21,7 @@ public class AccountAdministrationManager {
     private AccountRole accountRole = null;
     private AccountEntity userAccount = null;
     private Permission permission = null;
+    private SectionType sectionType;
 
     private AccountAdministrationManager() {}
 
@@ -30,6 +36,11 @@ public class AccountAdministrationManager {
         AccountEntity accountEntity = persistanceFacade.get(p -> p.getUsername().equals(username) && p.getPassword().equals(password));
         if(accountEntity != null) {
             setLoggedInUser(accountEntity);
+            Collection<MusicianPartEntity> parts = accountEntity.getPersonAccountId().getMusicianPartsByPersonId();
+            for(MusicianPartEntity musicianPartEntity : parts) {
+                sectionType = SectionType.valueOf(musicianPartEntity.getPartByPart().getSectionType());
+                return;
+            }
         }
     }
 
@@ -46,6 +57,8 @@ public class AccountAdministrationManager {
         userAccount = null;
         permission = null;
     }
+
+    public SectionType getSectionType() { return sectionType; }
 
     public AccountEntity getLoggedInAccount(){
         return userAccount;
