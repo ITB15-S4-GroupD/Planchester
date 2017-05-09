@@ -26,7 +26,7 @@
             <RowConstraints fillHeight="false" maxHeight="10.0" minHeight="10.0" prefHeight="10.0" />
             <RowConstraints fillHeight="false" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" />
             <RowConstraints fillHeight="false" maxHeight="10.0" minHeight="10.0" prefHeight="10.0" />
-                <RowConstraints fillHeight="false" maxHeight="119.0" minHeight="21.0" prefHeight="65.0" />
+                <RowConstraints fillHeight="false" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" />
                 <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="593.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="NEVER" />
             </rowConstraints>
@@ -153,10 +153,23 @@
                     </rowConstraints>
                      <children>
                         <Label text="(P) ... Published" GridPane.columnIndex="2" />
-                        <Label text="(UP) ... Unpublished" GridPane.columnIndex="1" />
-                        <Label text="(C) ... Cancel" />
+                        <Label fx:id="unpublishedLabel" text="(UP) ... Unpublished" />
+                        <Label text="(C) ... Cancelled" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
+               </children>
+            </GridPane>
+            <GridPane GridPane.columnIndex="1" GridPane.rowIndex="5">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <JFXTextField fx:id="mandatoryField" alignment="CENTER" editable="false" text="Mandatory Field" GridPane.columnIndex="2" />
                </children>
             </GridPane>
                 
