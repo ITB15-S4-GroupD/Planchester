@@ -23,5 +23,5 @@ out/*
 hs_err_pid*
 
 # hibernate settings (local db)
-hibernate.cfg.xml
+src/hibernate.cfg.xml
 /src/hibernate.cfg.xml
