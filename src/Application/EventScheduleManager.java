@@ -45,12 +45,12 @@ public class EventScheduleManager {
             }
         }
 
-        /*
+
         HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()), DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()));
         if(!musicanCapacityMap.isEmpty()) {
-            MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap);
+            MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap, eventDutyDTO);
         }
-        */
+
 
         eventDutyDTO.setEventDutyId(eventDutyEntity.getEventDutyId());
         return eventDutyDTO;
@@ -62,12 +62,12 @@ public class EventScheduleManager {
         EventDutyEntity eventDutyEntity = eventDutyEntityPersistanceFacade.get(eventDutyModel.getEventDutyId());
         eventDutyEntityPersistanceFacade.put(eventDutyEntity);
 
-        /*
+
         HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()), DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()));
         if(!musicanCapacityMap.isEmpty()) {
-            MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap);
+            MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap, newEventDutyDTO);
         }
-        */
+
 
         // check for changes in musical works
         // remove all musical works which did exist but now don't
