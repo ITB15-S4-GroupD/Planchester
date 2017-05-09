@@ -15,14 +15,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane fx:id="gridNewHofkapelle" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.CreateHofkapelleController">
+<GridPane fx:id="gridNewHofkapelle" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.CreateHofkapelleController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="55.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="443.99999237060547" minHeight="10.0" prefHeight="427.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="443.99999237060547" minHeight="10.0" prefHeight="86.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="641.0" minHeight="10.0" prefHeight="585.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="443.99999237060547" minHeight="10.0" prefHeight="207.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="59.333343505859375" minHeight="0.0" prefHeight="53.0" vgrow="NEVER" />
    </rowConstraints>
    <children>
@@ -41,12 +41,12 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="82.0" minHeight="10.0" prefHeight="82.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="37.0" minHeight="10.0" prefHeight="14.0" valignment="TOP" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="57.0" minHeight="7.0" prefHeight="55.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="149.0" minHeight="10.0" prefHeight="149.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="37.0" minHeight="10.0" prefHeight="25.0" valignment="TOP" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="54.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="90.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <padding>
             <Insets left="10.0" right="10.0" />
@@ -69,7 +69,7 @@
             <TextField fx:id="eventLocation" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <TextField fx:id="conductor" GridPane.columnIndex="1" GridPane.rowIndex="8" />
             <TextField fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-            <TableView fx:id="musicalWorkTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <TableView fx:id="musicalWorkTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
               <columns>
                 <TableColumn fx:id="selectedMusicalWorks" prefWidth="249.0" text="Title" />
               </columns>
@@ -99,11 +99,11 @@
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="164.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="117.0" minHeight="10.0" prefHeight="117.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="67.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="156.0" minHeight="10.0" prefHeight="156.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="67.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TableView fx:id="rehearsalTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+            <TableView fx:id="rehearsalTableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="250.0" GridPane.columnIndex="1">
               <columns>
                 <TableColumn fx:id="rehearsalTableColumn" prefWidth="249.0" text="Rehearsal(s)" />
               </columns>
