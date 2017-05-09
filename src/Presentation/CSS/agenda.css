@@ -3,7 +3,7 @@
 }
 
 .Agenda { 
-	-fx-font-family: "Roboto Condensed Light"; 	
+	-fx-font-family: "Calibri";
 }
 
 .Agenda .Week {
@@ -46,6 +46,7 @@
 	/* -fx-background-color: blueviolet; */
 }
 
+
 .Agenda .weekend {
 	-fx-background-color: #eeeeee90;
 }
@@ -57,6 +58,12 @@
 	-fx-border-color: WHITE;
 	-fx-border-width: 1px;
 }
+
+.Agenda .tooltip {
+	display: none;
+	display: block;
+}
+
 
 .Agenda .AppointmentTimeLabel {
 	-fx-fill: BLACK;

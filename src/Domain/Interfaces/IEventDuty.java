@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 /**
  * Created by timorzipa on 08/05/2017.
  */
-public interface IEventDuty<T> {
+public interface IEventDuty {
     Integer getEventDutyId();
     void setEventDutyId(Integer eventDutyId);
     String getName();

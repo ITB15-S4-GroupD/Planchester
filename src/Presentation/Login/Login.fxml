@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="Login" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="287.0" prefWidth="489.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.Login.LoginController">
+<GridPane fx:id="Login" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="287.0" prefWidth="489.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.Login.LoginController">
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>
@@ -62,8 +62,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button mnemonicParsing="false" onAction="#cancel" text="Cancel" />
-                        <Button mnemonicParsing="false" onAction="#login" text="Login" GridPane.columnIndex="2" />
+                        <Button fx:id="btnLogin" disable="true" mnemonicParsing="false" onAction="#login" prefWidth="80.0" text="Login" GridPane.columnIndex="2" />
                      </children>
                   </GridPane>
                </children>

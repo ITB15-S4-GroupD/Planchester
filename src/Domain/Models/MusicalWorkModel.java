@@ -1,15 +1,18 @@
 package Domain.Models;
 
+import Domain.Interfaces.IInstrumentation;
+import Domain.Interfaces.IMusicalWork;
+
 /**
  * Created by timor on 27.04.2017.
  */
-public class MusicalWorkModel {
+public class MusicalWorkModel implements IMusicalWork{
     private int id;
     private int instrumentationId;
     private String name;
     private String composer;
-    private InstrumentationModel instrumentation;
-    private InstrumentationModel alternativeInstrumentation;
+    private IInstrumentation instrumentation;
+    private IInstrumentation alternativeInstrumentation;
 
     public int getInstrumentationId() {
         return instrumentationId;
@@ -43,19 +46,19 @@ public class MusicalWorkModel {
         this.composer = composer;
     }
 
-    public InstrumentationModel getInstrumentation() {
+    public IInstrumentation getInstrumentation() {
         return instrumentation;
     }
 
-    public void setInstrumentation(InstrumentationModel instrumentation) {
+    public void setInstrumentation(IInstrumentation instrumentation) {
         this.instrumentation = instrumentation;
     }
 
-    public InstrumentationModel getAlternativeInstrumentation() {
+    public IInstrumentation getAlternativeInstrumentation() {
         return alternativeInstrumentation;
     }
 
-    public void setAlternativeInstrumentation(InstrumentationModel instrumentation) {
+    public void setAlternativeInstrumentation(IInstrumentation instrumentation) {
         this.alternativeInstrumentation = instrumentation;
     }
 }

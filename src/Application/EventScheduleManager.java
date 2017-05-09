@@ -88,10 +88,6 @@ public class EventScheduleManager {
         }
     }
 
-    public static EventDutyDTO createNonMusicalPerformance(EventDutyDTO eventDutyDTO) {
-		return null;
-	}
-
     public static List<EventDutyDTO> getEventDutyListForCurrentWeek() {
         Calendar today = Calendar.getInstance();
         return getEventDutyInRange(DateHelper.getStartOfWeek(today), DateHelper.getEndOfWeek(today));
@@ -156,9 +152,8 @@ public class EventScheduleManager {
     }
 
     public static void removeEventDutyMusicalWorks(EventDutyEntity eventDutyEntity, MusicalWorkDTO musicalWorkDTO) {
-        EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
-        eventDutyMusicalWorkEntity.setEventDuty(eventDutyEntity.getEventDutyId());
-        eventDutyMusicalWorkEntity.setMusicalWork(musicalWorkDTO.getId());
+        EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = eventDutyMusicalWorkEntityPersistanceFacade.get(
+                p -> p.getEventDuty() == eventDutyEntity.getEventDutyId() && p.getMusicalWork() == musicalWorkDTO.getId());
         eventDutyMusicalWorkEntityPersistanceFacade.remove(eventDutyMusicalWorkEntity);
     }
 
@@ -169,7 +164,6 @@ public class EventScheduleManager {
         eventDutyMusicalWorkEntityPersistanceFacade.put(eventDutyMusicalWorkEntity);
     }
 
-    //Mapper
     public static MusicalWorkModel getMusicalWorkModel(MusicalWorkDTO musicalWorkDTO) {
         MusicalWorkModel musicalWorkModel = new MusicalWorkModel();
         musicalWorkModel.setName(musicalWorkDTO.getName());

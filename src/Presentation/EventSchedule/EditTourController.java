@@ -129,12 +129,8 @@ public class EditTourController extends EditController {
             eventDutyDTO.setRehearsalFor(null);
           
             EventScheduleManager.updateEventDuty(eventDutyDTO, initEventDutyDTO);
-
             EventScheduleController.addEventDutyToGUI(eventDutyDTO);
-            //Add added Rehearsal to EventDuty
             updateRehearsal(eventDutyDTO);
-
-            EventScheduleController.addEventDutyToGUI(eventDutyDTO);
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
         }

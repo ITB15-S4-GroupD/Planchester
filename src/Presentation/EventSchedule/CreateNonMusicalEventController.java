@@ -9,37 +9,26 @@ import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+
+import javax.xml.bind.ValidationException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 /**
  * Created by Christina on 27.04.2017.
  */
-public class CreateNonMusicalEventController {
+public class CreateNonMusicalEventController extends CreateController {
 
-    @FXML private TextField name;
-    @FXML private TextArea description;
-    @FXML private JFXDatePicker date;
-    @FXML private JFXTimePicker startTime;
-    @FXML private JFXTimePicker endTime;
-    @FXML private TextField eventLocation;
-    @FXML private TextField points;
-    @FXML private Button btnCancel;
-    @FXML private Button btnSaveNewConcert;
-
-
-
-    @FXML public void initialize() {
+    @FXML
+    public void initialize() {
         initializeMandatoryFields();
 
         points.textProperty().addListener((observable, oldValue, newValue) -> {
-            //^\d*\.\d{2}$
-            //"^\\d*[\\.,]?\\d{1,2}?$"
-
             if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
                 points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
             }
@@ -63,7 +52,8 @@ public class CreateNonMusicalEventController {
     }
 
     @FXML
-    public void insertNewConcertPerformance() {
+    @Override
+    public void insertEventDuty() throws ValidationException {
         if(validate()) {
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
             eventDutyDTO.setName(name.getText());
@@ -75,7 +65,7 @@ public class CreateNonMusicalEventController {
             eventDutyDTO.setLocation(eventLocation.getText());
             eventDutyDTO.setPoints((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText()));
 
-            eventDutyDTO = EventScheduleManager.createNonMusicalPerformance(eventDutyDTO);
+            eventDutyDTO = EventScheduleManager.createEventDuty(eventDutyDTO);
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
@@ -83,7 +73,8 @@ public class CreateNonMusicalEventController {
         }
     }
 
-    private boolean validate() {
+    @Override
+    protected boolean validate() {
         LocalDate today = LocalDate.now();
         LocalTime start = startTime.getValue();
         LocalTime end = endTime.getValue();
@@ -106,41 +97,11 @@ public class CreateNonMusicalEventController {
             throwErrorAlertMessage("The starttime must be in future. \n");
             return false;
         }
-
         return true;
     }
 
     private void throwErrorAlertMessage(String errormessage){
         Alert alert = new Alert(Alert.AlertType.ERROR, errormessage, ButtonType.OK);
         alert.showAndWait();
-    }
-
-    private void initializeMandatoryFields() {
-        name.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-        date.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-        startTime.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-
-        name.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(name.getText() == null || name.getText().isEmpty()) {
-                name.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-            } else {
-                name.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
-            }
-        });
-        date.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if(date.getValue() == null) {
-                date.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-            } else {
-                date.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
-            }
-        });
-
-        startTime.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if(startTime.getValue() == null) {
-                startTime.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
-            } else {
-                startTime.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
-            }
-        });
     }
 }

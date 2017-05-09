@@ -49,7 +49,7 @@ public class CreateTourController extends CreateController {
             eventDutyDTO.setInstrumentation(null); //TODO timebox 2
             eventDutyDTO.setRehearsalFor(null);
 
-            eventDutyDTO =EventScheduleManager.createEventDuty(eventDutyDTO);
+            eventDutyDTO = EventScheduleManager.createEventDuty(eventDutyDTO);
             EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
 
             for(EventDutyDTO eventD : rehearsalList){
@@ -59,7 +59,6 @@ public class CreateTourController extends CreateController {
             }
 
             rehearsalList.clear();
-
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
             EventScheduleController.setSelectedAppointment(eventDutyDTO); // select created appointment
