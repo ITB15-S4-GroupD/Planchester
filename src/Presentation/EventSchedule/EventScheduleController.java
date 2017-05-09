@@ -489,7 +489,16 @@ public class EventScheduleController {
     @FXML public void refresh() {
         removeAllData();
 
-        List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForWeek(agenda.getDisplayedCalendar());
+        List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForWeek(staticAgenda.getDisplayedCalendar());
+        for(EventDutyDTO event : events) {
+            addEventDutyToGUI(event);
+        }
+    }
+
+    public static void reload() {
+        removeAllData();
+
+        List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForWeek(staticAgenda.getDisplayedCalendar());
         for(EventDutyDTO event : events) {
             addEventDutyToGUI(event);
         }
