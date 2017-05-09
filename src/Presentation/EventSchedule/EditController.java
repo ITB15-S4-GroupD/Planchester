@@ -6,6 +6,8 @@ import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
 import Domain.Models.Permission;
+import Presentation.EventSchedule.EventScheduleController;
+import Presentation.EventSchedule.InstrumentationController;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.MessageHelper;

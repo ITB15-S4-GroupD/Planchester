@@ -4,6 +4,7 @@ import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
 import Application.EventScheduleManager;
 import Domain.Models.Permission;
+import Presentation.EventSchedule.EventScheduleController;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;

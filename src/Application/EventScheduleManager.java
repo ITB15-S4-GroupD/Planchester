@@ -43,12 +43,10 @@ public class EventScheduleManager {
             }
         }
 
-
         HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()), DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()));
         if(!musicanCapacityMap.isEmpty()) {
             MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap, eventDutyDTO);
         }
-
 
         eventDutyDTO.setEventDutyId(eventDutyEntity.getEventDutyId());
         return eventDutyDTO;
@@ -57,7 +55,24 @@ public class EventScheduleManager {
     public static void updateEventDuty(EventDutyDTO newEventDutyDTO, EventDutyDTO oldEventDutyDTO) throws ValidationException {
         EventDutyModel eventDutyModel = createEventDutyModel(newEventDutyDTO);
         eventDutyModel.validate();
+
+        // get object from db
         EventDutyEntity eventDutyEntity = eventDutyEntityPersistanceFacade.get(eventDutyModel.getEventDutyId());
+
+        // update object
+        eventDutyEntity.setName(eventDutyModel.getName());
+        eventDutyEntity.setDescription(eventDutyModel.getDescription());
+        eventDutyEntity.setStarttime(eventDutyModel.getStartTime());
+        eventDutyEntity.setEndtime(eventDutyModel.getEndTime());
+        eventDutyEntity.setEventType(eventDutyModel.getEventType().toString());
+        eventDutyEntity.setEventStatus(eventDutyModel.getEventStatus().toString());
+        eventDutyEntity.setConductor(eventDutyModel.getConductor());
+        eventDutyEntity.setLocation(eventDutyModel.getLocation());
+        eventDutyEntity.setDefaultPoints(eventDutyModel.getPoints() == null ? 0.0 : Double.valueOf(eventDutyModel.getPoints()));
+        eventDutyEntity.setInstrumentation(eventDutyModel.getInstrumentation());
+        eventDutyEntity.setRehearsalFor(eventDutyModel.getRehearsalFor());
+
+        // save updated object
         eventDutyEntityPersistanceFacade.put(eventDutyEntity);
 
         HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()), DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()));
@@ -74,6 +89,7 @@ public class EventScheduleManager {
                 }
             }
         }
+
         // add all new musical works which did not exist before
         if(newEventDutyDTO.getMusicalWorks() != null) {
             for (MusicalWorkDTO musicalWorkDTO : newEventDutyDTO.getMusicalWorks()) {
