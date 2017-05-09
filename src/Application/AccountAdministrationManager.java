@@ -36,19 +36,23 @@ public class AccountAdministrationManager {
         AccountEntity accountEntity = persistanceFacade.get(p -> p.getUsername().equals(username) && p.getPassword().equals(password));
         if(accountEntity != null) {
             setLoggedInUser(accountEntity);
-            if(accountEntity.getPersonAccountId().getMusicianPartsByPersonId() != null) {
-                Collection<MusicianPartEntity> parts = accountEntity.getPersonAccountId().getMusicianPartsByPersonId();
-                for(MusicianPartEntity musicianPartEntity : parts) {
-                    sectionType = SectionType.valueOf(musicianPartEntity.getPartByPart().getSectionType());
-                    return;
-                }
-            }
         }
     }
 
     private void setLoggedInUser(AccountEntity account) {
+        resetUser();
+
         userAccount = account;
         accountRole = AccountRole.valueOf(userAccount.getAccountRole());
+
+        // get section type
+        if(account.getPersonAccountId().getMusicianPartsByPersonId() != null) {
+            Collection<MusicianPartEntity> parts = account.getPersonAccountId().getMusicianPartsByPersonId();
+            for(MusicianPartEntity musicianPartEntity : parts) {
+                sectionType = SectionType.valueOf(musicianPartEntity.getPartByPart().getSectionType());
+                return;
+            }
+        }
 
         // set permissions
         permission = new Permission(accountRole);
@@ -58,6 +62,7 @@ public class AccountAdministrationManager {
         accountRole = null;
         userAccount = null;
         permission = null;
+        sectionType = null;
     }
 
     public SectionType getSectionType() { return sectionType; }
