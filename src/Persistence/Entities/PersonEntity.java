@@ -189,7 +189,7 @@ public class PersonEntity {
         this.musicianPartsByPersonId = musicianPartsByPersonId;
     }
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "account", referencedColumnName = "accountID", insertable = false, updatable = false)
     public AccountEntity getAccountByAccount() {
         return accountByAccount;
