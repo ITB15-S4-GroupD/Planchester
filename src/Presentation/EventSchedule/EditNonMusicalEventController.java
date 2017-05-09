@@ -130,7 +130,8 @@ public class EditNonMusicalEventController extends EditController {
         return true;
     }
 
-    public void editEvent () {
+    @Override
+    protected void editEvent () {
         btnCancelEvent.setVisible(true);
         btnSaveEvent.setVisible(true);
         btnEditEvent.setVisible(false);
@@ -152,6 +153,7 @@ public class EditNonMusicalEventController extends EditController {
         points.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
     }
 
+    @Override
     protected boolean validate() {
         LocalDate today = LocalDate.now();
         LocalTime start = startTime.getValue();

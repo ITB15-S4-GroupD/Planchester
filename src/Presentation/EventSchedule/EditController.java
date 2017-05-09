@@ -52,7 +52,7 @@ public class EditController {
     @FXML protected TableColumn<String, String> selectedMusicalWorks;
 
     protected List<MusicalWorkDTO> musicalWorks;
-    protected InstrumentationDTO instrumentation; // TODO timebox2
+    protected InstrumentationDTO instrumentation;
 
     protected Agenda.Appointment initAppointment; // remember init data to compare
     protected EventDutyDTO initEventDutyDTO; // remember init data to compare
@@ -245,7 +245,7 @@ public class EditController {
     }
 
     @FXML
-    protected void editEvent () {
+    protected void editEvent() {
         btnCancelEvent.setVisible(true);
         btnSaveEvent.setVisible(true);
         btnEditEvent.setVisible(false);
@@ -272,7 +272,6 @@ public class EditController {
         points.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
         conductor.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
     }
-
 
     @FXML
     protected void editInstrumentation() {

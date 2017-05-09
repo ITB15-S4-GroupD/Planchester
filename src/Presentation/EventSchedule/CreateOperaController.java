@@ -10,17 +10,17 @@ import javax.xml.bind.ValidationException;
  */
 public class CreateOperaController extends CreateController{
 
-    @Override
     @FXML
-    public void editInstrumentation() {
-        super.setMusicalWorkMulitpleSelection(false);
-        super.editInstrumentation();
-    }
-
     @Override
-    @FXML
     protected void insertEventDuty() throws ValidationException {
         super.setEventType(EventType.Opera);
         super.insertEventDuty();
+    }
+
+    @FXML
+    @Override
+    public void editInstrumentation() {
+        super.setMusicalWorkMulitpleSelection(false);
+        super.editInstrumentation();
     }
 }

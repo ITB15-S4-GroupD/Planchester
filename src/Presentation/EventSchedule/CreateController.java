@@ -41,33 +41,16 @@ public abstract class CreateController {
     @FXML protected TextField eventLocation;
     @FXML protected TextField conductor;
     @FXML protected TextField points;
-
-    protected static List<EventDutyDTO> rehearsalList = new LinkedList<>();
     @FXML protected TableView<String> rehearsalTableView;
     @FXML protected TableColumn<String, String> rehearsalTableColumn;
-
     @FXML protected TableView<String> musicalWorkTable;
     @FXML protected TableColumn<String, String> selectedMusicalWorks;
+    protected static List<EventDutyDTO> rehearsalList = new LinkedList<EventDutyDTO>();
 
     protected List<MusicalWorkDTO> musicalWorks;
-    protected InstrumentationDTO instrumentation; // TODO timebox2
-
+    protected InstrumentationDTO instrumentation;
     protected boolean allowMultipleMusicalWorkSelection = true;
     protected EventType eventType;
-
-    @FXML
-    public boolean cancel() {
-        if(!name.getText().isEmpty() || !description.getText().isEmpty() || date.getValue() != null
-                || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty() || !points.getText().isEmpty() || (musicalWorks != null && !musicalWorks.isEmpty())) {
-            ButtonType answer = MessageHelper.showConfirmationMessage(PlanchesterMessages.DISCARD_CHANGES);
-            if(ButtonType.NO.equals(answer)) {
-                return false;
-            }
-        }
-        // remove content of sidebar
-        EventScheduleController.resetSideContent();
-        return true;
-    }
 
     @FXML
     public void initialize() {
@@ -82,12 +65,33 @@ public abstract class CreateController {
         });
     }
 
-    protected void setMusicalWorkMulitpleSelection(boolean value) {
-        allowMultipleMusicalWorkSelection = value;
-    }
+    @FXML
+    public void addNewRehearsal() {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("CreateRehearsal.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = new Stage();
+        stage.setTitle("Add new Rehearsal");
+        stage.setScene(scene);
+        stage.show();
 
-    protected void setEventType(EventType eventType) {
-        this.eventType = eventType;
+        stage.setOnCloseRequest(we -> {
+            if(CreateRehearsalController.apply) {
+                rehearsalList.add(CreateRehearsalController.eventDutyDTO);
+                rehearsalTableView.getItems().clear();
+                rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+                for(EventDutyDTO e : rehearsalList) {
+                    String rehearsalToAdd = e.getName();
+                    rehearsalTableView.getItems().add(rehearsalToAdd);
+                }
+            }
+        });
+        CreateRehearsalController.stage = stage;
     }
 
     @FXML
@@ -140,35 +144,6 @@ public abstract class CreateController {
     }
 
     @FXML
-    public void addNewRehearsal() {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("CreateRehearsal.fxml"));
-        Scene scene = null;
-        try {
-            scene = new Scene(fxmlLoader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Stage stage = new Stage();
-        stage.setTitle("Add new Rehearsal");
-        stage.setScene(scene);
-        stage.show();
-
-        stage.setOnCloseRequest(we -> {
-            if(CreateRehearsalController.apply) {
-                rehearsalList.add(CreateRehearsalController.eventDutyDTO);
-                rehearsalTableView.getItems().clear();
-                rehearsalTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
-                for(EventDutyDTO e : rehearsalList) {
-                    String rehearsalToAdd = e.getName();
-                    rehearsalTableView.getItems().add(rehearsalToAdd);
-                }
-            }
-        });
-        CreateRehearsalController.stage = stage;
-    }
-
-    @FXML
     public void removeRehearsal() {
         String rehearsalToRemove = rehearsalTableView.getSelectionModel().getSelectedItem();
 
@@ -187,6 +162,63 @@ public abstract class CreateController {
             String rehearsalToAdd = rehearsal.getName();
             rehearsalTableView.getItems().add(rehearsalToAdd);
         }
+    }
+
+    @FXML
+    protected void insertEventDuty() throws ValidationException {
+        if(validate()) {
+
+            EventDutyDTO eventDutyDTO = new EventDutyDTO();
+            eventDutyDTO.setName(name.getText());
+            eventDutyDTO.setDescription(description.getText());
+            eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
+            eventDutyDTO.setEndTime(endTime.getValue() == null ? DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue().plusHours(2)) : DateHelper.mergeDateAndTime(date.getValue(), endTime.getValue()));
+            eventDutyDTO.setEventType(eventType);
+            eventDutyDTO.setEventStatus(EventStatus.Unpublished);
+            eventDutyDTO.setConductor(conductor.getText());
+            eventDutyDTO.setLocation(eventLocation.getText());
+            eventDutyDTO.setMusicalWorks(musicalWorks);
+            eventDutyDTO.setPoints((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText()));
+            eventDutyDTO.setInstrumentation(null); //TODO timebox 2
+            eventDutyDTO.setRehearsalFor(null);
+
+            eventDutyDTO = EventScheduleManager.createEventDuty(eventDutyDTO);
+            EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
+
+            for(EventDutyDTO eventD : rehearsalList){
+                eventD.setRehearsalFor(eventDutyDTO.getEventDutyId());
+                eventD = EventScheduleManager.createEventDuty(eventD);
+                EventScheduleController.addEventDutyToGUI(eventD);
+            }
+
+            rehearsalList.clear();
+
+            EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
+            EventScheduleController.resetSideContent(); // remove content of sidebar
+            EventScheduleController.setSelectedAppointment(eventDutyDTO); // select created appointment
+        }
+    }
+
+    @FXML
+    public boolean cancel() {
+        if(!name.getText().isEmpty() || !description.getText().isEmpty() || date.getValue() != null
+                || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty() || !points.getText().isEmpty() || (musicalWorks != null && !musicalWorks.isEmpty())) {
+            ButtonType answer = MessageHelper.showConfirmationMessage(PlanchesterMessages.DISCARD_CHANGES);
+            if(ButtonType.NO.equals(answer)) {
+                return false;
+            }
+        }
+        // remove content of sidebar
+        EventScheduleController.resetSideContent();
+        return true;
+    }
+
+    protected void setEventType(EventType eventType) {
+        this.eventType = eventType;
+    }
+
+    protected void setMusicalWorkMulitpleSelection(boolean value) {
+        allowMultipleMusicalWorkSelection = value;
     }
 
     protected boolean validate() {
@@ -246,40 +278,5 @@ public abstract class CreateController {
                 startTime.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
             }
         });
-    }
-
-    @FXML
-    protected void insertEventDuty() throws ValidationException {
-        if(validate()) {
-
-            EventDutyDTO eventDutyDTO = new EventDutyDTO();
-            eventDutyDTO.setName(name.getText());
-            eventDutyDTO.setDescription(description.getText());
-            eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
-            eventDutyDTO.setEndTime(endTime.getValue() == null ? DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue().plusHours(2)) : DateHelper.mergeDateAndTime(date.getValue(), endTime.getValue()));
-            eventDutyDTO.setEventType(eventType);
-            eventDutyDTO.setEventStatus(EventStatus.Unpublished);
-            eventDutyDTO.setConductor(conductor.getText());
-            eventDutyDTO.setLocation(eventLocation.getText());
-            eventDutyDTO.setMusicalWorks(musicalWorks);
-            eventDutyDTO.setPoints((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText()));
-            eventDutyDTO.setInstrumentation(null); //TODO timebox 2
-            eventDutyDTO.setRehearsalFor(null);
-
-            eventDutyDTO = EventScheduleManager.createEventDuty(eventDutyDTO);
-            EventScheduleController.addEventDutyToGUI(eventDutyDTO); // add event to agenda
-
-            for(EventDutyDTO eventD : rehearsalList){
-                eventD.setRehearsalFor(eventDutyDTO.getEventDutyId());
-                eventD = EventScheduleManager.createEventDuty(eventD);
-                EventScheduleController.addEventDutyToGUI(eventD);
-            }
-
-            rehearsalList.clear();
-
-            EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
-            EventScheduleController.resetSideContent(); // remove content of sidebar
-            EventScheduleController.setSelectedAppointment(eventDutyDTO); // select created appointment
-        }
     }
 }
