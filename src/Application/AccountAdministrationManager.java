@@ -36,10 +36,12 @@ public class AccountAdministrationManager {
         AccountEntity accountEntity = persistanceFacade.get(p -> p.getUsername().equals(username) && p.getPassword().equals(password));
         if(accountEntity != null) {
             setLoggedInUser(accountEntity);
-            Collection<MusicianPartEntity> parts = accountEntity.getPersonAccountId().getMusicianPartsByPersonId();
-            for(MusicianPartEntity musicianPartEntity : parts) {
-                sectionType = SectionType.valueOf(musicianPartEntity.getPartByPart().getSectionType());
-                return;
+            if(accountEntity.getPersonAccountId().getMusicianPartsByPersonId() != null) {
+                Collection<MusicianPartEntity> parts = accountEntity.getPersonAccountId().getMusicianPartsByPersonId();
+                for(MusicianPartEntity musicianPartEntity : parts) {
+                    sectionType = SectionType.valueOf(musicianPartEntity.getPartByPart().getSectionType());
+                    return;
+                }
             }
         }
     }
