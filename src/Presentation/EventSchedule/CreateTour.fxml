@@ -104,9 +104,9 @@
          <children>
             <Label text="Rehearsal(s)" />
             <TableView fx:id="rehearsalTableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="250.0" GridPane.columnIndex="1">
-              <columns>
-                <TableColumn prefWidth="249.0" text="Rehearsal(s)" />
-              </columns>
+                <columns>
+                    <TableColumn fx:id="rehearsalTableColumn" prefWidth="250.0" text="Rehearsal(s)" />
+                </columns>
             </TableView>
             <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1">
               <columnConstraints>
