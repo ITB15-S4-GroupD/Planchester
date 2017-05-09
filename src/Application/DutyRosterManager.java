@@ -2,11 +2,9 @@ package Application;
 
 import Application.DTO.EventDutyDTO;
 import Application.DTO.MusicalWorkDTO;
-import Domain.EventDutyModel;
-import Persistence.DutyDispositionRDBMapper;
+import Domain.Models.EventDutyModel;
 import Persistence.Entities.DutyDispositionEntity;
 import Persistence.Entities.EventDutyEntity;
-import Persistence.EventDutyRDBMapper;
 import Persistence.PersistanceFacade;
 import Utils.DateHelper;
 import Utils.MessageHelper;
@@ -17,12 +15,15 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import static Application.EventScheduleManager.createEventDutyDTO;
+import static Application.EventScheduleManager.createEventDutyModel;
+
 /**
  * Created by timorzipa on 06/04/2017.
  */
 public class DutyRosterManager {
 
-    private static PersistanceFacade persistanceFacade = new PersistanceFacade();
+    private static PersistanceFacade<EventDutyEntity> eventDutyEntityPersistanceFacade = new PersistanceFacade(EventDutyEntity.class);
 
     private static Calendar loadedEventsStartdate; //start of the already loaded calendar
     private static Calendar loadedEventsEnddate; //end of the already loaded calendar
@@ -42,13 +43,15 @@ public class DutyRosterManager {
             return new ArrayList<>();
         }
 
-        DutyDispositionRDBMapper rdbMapper = (DutyDispositionRDBMapper) persistanceFacade.getMapper(DutyDispositionEntity.class);
-        List<EventDutyEntity> eventDuties = rdbMapper.getDutyRosterInRange(startdayOfWeek, enddayOfWeek);
+        startdayOfWeek.setTimeInMillis(startdayOfWeek.getTimeInMillis()-1);
+
+        List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p -> p.getStarttime().after(DateHelper.convertCalendarToTimestamp(startdayOfWeek)) && p.getStarttime().before(DateHelper.convertCalendarToTimestamp(enddayOfWeek)));
 
         List<EventDutyModel> eventDutyModelList = new ArrayList<>();
         for(EventDutyEntity eventDutyEntity : eventDuties) {
             eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
         }
+
         List<EventDutyDTO> eventDutyDTOList = new ArrayList<>();
         for(EventDutyModel eventDutyModel : eventDutyModelList) {
             eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
@@ -57,4 +60,17 @@ public class DutyRosterManager {
         return eventDutyDTOList;
     }
 
+    private static void setLoadedEventsStartAndEnddate(Calendar start, Calendar end) {
+        if(loadedEventsStartdate == null) {
+            loadedEventsStartdate = start;
+        } else if(loadedEventsStartdate.after(start)) {
+            loadedEventsStartdate = start;
+        }
+
+        if(loadedEventsEnddate == null) {
+            loadedEventsEnddate = end;
+        } else if (loadedEventsEnddate.before((end))) {
+            loadedEventsEnddate = end;
+        }
+    }
 }

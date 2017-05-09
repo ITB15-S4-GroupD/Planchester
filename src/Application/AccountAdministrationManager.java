@@ -45,6 +45,9 @@ public class AccountAdministrationManager {
         userAccount = account;
         accountRole = AccountRole.valueOf(userAccount.getAccountRole());
 
+        // set permissions
+        permission = new Permission(accountRole);
+
         // get section type
         if(account.getPersonAccountId().getMusicianPartsByPersonId() != null) {
             Collection<MusicianPartEntity> parts = account.getPersonAccountId().getMusicianPartsByPersonId();
@@ -53,9 +56,6 @@ public class AccountAdministrationManager {
                 return;
             }
         }
-
-        // set permissions
-        permission = new Permission(accountRole);
     }
 
     public void resetUser() {

@@ -6,6 +6,7 @@ import Presentation.EventSchedule.EventScheduleController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 
@@ -21,16 +22,6 @@ public class PlanchesterGUI {
     public void start(Stage primaryStage) throws Exception {
         DatabaseSessionManager.beginSession();
 
-<<<<<<< HEAD
-//        primaryStage.setTitle("Planchester Login");
-//        scene = new Scene(FXMLLoader.load(getClass().getResource("Login.fxml")));
-//        primaryStage.setScene(scene);
-//        primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
-//        primaryStage.show();
-
-//        primaryStage.setOnCloseRequest(t -> {
-//            if(LoginController.loggedInUser != null) {
-=======
         primaryStage.setTitle("Planchester Login");
         scene = new Scene(FXMLLoader.load(getClass().getResource("Login/Login.fxml")));
         primaryStage.setScene(scene);
@@ -63,26 +54,15 @@ public class PlanchesterGUI {
     private static void checkLogin(Stage primaryStage) {
         primaryStage.setOnCloseRequest(t -> {
             if(AccountAdministrationManager.getInstance().getLoggedInAccount() != null) {
->>>>>>> master
                 try {
                     showPlanchesterGUI();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-<<<<<<< HEAD
-//            } else {
-//                Platform.exit();
-//                System.exit(0);
-//            }
-//        });
-
-//        LoginController.stage = primaryStage;
-=======
             } else {
                 closePlanchester();
             }
         });
->>>>>>> master
     }
 
     private static void showPlanchesterGUI() {
@@ -95,41 +75,6 @@ public class PlanchesterGUI {
                 closePlanchester();
             });
 
-<<<<<<< HEAD
-        primaryStage.setScene(scene);
-        primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
-        primaryStage.show();
-    }
-
-    private TabPane createTabs() throws java.io.IOException {
-//        String accountRole = LoginController.loggedInUser.getAccountRole();
-
-        TabPane tabPane = new TabPane();
-
-        Tab dutyRoster = new Tab();
-        dutyRoster.setText("Duty Roster");
-        dutyRoster.setContent(FXMLLoader.load(getClass().getResource("DutyRoster/DutyRoster.fxml")));
-        tabPane.getTabs().add(dutyRoster);
-
-        Tab eventSchedule = new Tab();
-        eventSchedule.setText("Event Schedule");
-        eventSchedule.setContent(FXMLLoader.load(getClass().getResource("EventSchedule/EventSchedule.fxml")));
-        tabPane.getTabs().add(eventSchedule);
-
-//        if(accountRole.equals(AccountRole.Manager.toString()) || accountRole.equals(AccountRole.Administrator.toString())) {
-            Tab musicalWorks = new Tab();
-            musicalWorks.setText("Musical Works");
-            tabPane.getTabs().add(musicalWorks);
-
-            Tab instruments = new Tab();
-            instruments.setText("Instruments");
-            tabPane.getTabs().add(instruments);
-
-            Tab userAdministration = new Tab();
-            userAdministration.setText("User Administration");
-            tabPane.getTabs().add(userAdministration);
-//        }
-=======
             scene = new Scene(FXMLLoader.load(PlanchesterGUI.class.getResource("PlanchesterFrame.fxml")));
 
             URL url = PlanchesterGUI.class.getResource("CSS/stylesheet.css");
@@ -143,10 +88,9 @@ public class PlanchesterGUI {
             primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
             primaryStage.show();
         } catch (IOException exception) {
-                exception.printStackTrace();
+            exception.printStackTrace();
         }
     }
->>>>>>> master
 
     private static void closePlanchester() {
         DatabaseSessionManager.closeSession();

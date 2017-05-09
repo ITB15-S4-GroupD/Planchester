@@ -127,39 +127,39 @@ public class DutyRosterController extends CalenderController{
         super.initialzeCalendarSettings();
     }
 
-        public static void addDutyRosterToGUI(EventDutyDTO event) {
-            Agenda.Appointment appointment = new Agenda.AppointmentImpl();
-            appointment.setDescription(event.getDescription());
-            appointment.setLocation(event.getEventLocation());
-            appointment.setStartTime(DateHelper.convertTimestampToCalendar(event.getStartTime()));
-            appointment.setEndTime(DateHelper.convertTimestampToCalendar(event.getEndTime()));
+    public static void addDutyRosterToGUI(EventDutyDTO event) {
+        Agenda.Appointment appointment = new Agenda.AppointmentImpl();
+        appointment.setDescription(event.getDescription());
+        appointment.setLocation(event.getLocation());
+        appointment.setStartTime(DateHelper.convertTimestampToCalendar(event.getStartTime()));
+        appointment.setEndTime(DateHelper.convertTimestampToCalendar(event.getEndTime()));
 
-            if(EventType.Opera.equals(event.getEventType())) {
-                appointment.setAppointmentGroup(opera);
-                appointment.setSummary(event.getName() + "\nOpera");
-            } else if(EventType.Concert.equals(event.getEventType())) {
-                appointment.setAppointmentGroup(concert);
-                appointment.setSummary(event.getName() + "\nConcert");
-            } else if(EventType.Tour.equals(event.getEventType())) {
-                appointment.setAppointmentGroup(tour);
-                appointment.setWholeDay(true);
-            } else if(EventType.Rehearsal.equals(event.getEventType())) {
-                appointment.setAppointmentGroup(rehearsal);
-                appointment.setSummary(event.getName() + "\nRehearsal");
-            } else if(EventType.Hofkapelle.equals(event.getEventType())) {
-                appointment.setAppointmentGroup(hofkapelle);
-                appointment.setSummary(event.getName() + "\nHofkapelle");
-            } else if(EventType.NonMusicalEvent.equals(event.getEventType())) {
-                appointment.setAppointmentGroup(nonMusicalEvent);
-                appointment.setSummary(event.getName() + "\nNonMusicalEvent");
-            }
-            staticLoadedEventsMap.put(appointment, event);
-            staticAgenda.appointments().add(appointment);
+        if(EventType.Opera.equals(event.getEventType())) {
+            appointment.setAppointmentGroup(opera);
+            appointment.setSummary(event.getName() + "\nOpera");
+        } else if(EventType.Concert.equals(event.getEventType())) {
+            appointment.setAppointmentGroup(concert);
+            appointment.setSummary(event.getName() + "\nConcert");
+        } else if(EventType.Tour.equals(event.getEventType())) {
+            appointment.setAppointmentGroup(tour);
+            appointment.setWholeDay(true);
+        } else if(EventType.Rehearsal.equals(event.getEventType())) {
+            appointment.setAppointmentGroup(rehearsal);
+            appointment.setSummary(event.getName() + "\nRehearsal");
+        } else if(EventType.Hofkapelle.equals(event.getEventType())) {
+            appointment.setAppointmentGroup(hofkapelle);
+            appointment.setSummary(event.getName() + "\nHofkapelle");
+        } else if(EventType.NonMusicalEvent.equals(event.getEventType())) {
+            appointment.setAppointmentGroup(nonMusicalEvent);
+            appointment.setSummary(event.getName() + "\nNonMusicalEvent");
         }
+        staticLoadedEventsMap.put(appointment, event);
+        staticAgenda.appointments().add(appointment);
+    }
 
 
 
-       protected void initializeAppointmentGroupsForEventtypes() {
+    protected void initializeAppointmentGroupsForEventtypes() {
           super.initializeAppointmentGroupsForEventtypes();
        }
 

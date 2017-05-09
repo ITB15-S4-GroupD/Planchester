@@ -141,8 +141,8 @@ public abstract class CalenderController {
 
 
     protected void initializeAppointmentGroupsForEventtypes() {
-        opera.setStyleClass("group1");
         opera = new Agenda.AppointmentGroupImpl();
+        opera.setStyleClass("group1");
         concert = new Agenda.AppointmentGroupImpl();
         concert.setStyleClass("group2");
         hofkapelle = new Agenda.AppointmentGroupImpl();
