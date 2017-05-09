@@ -14,10 +14,8 @@ import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import Utils.MessageHelper;
-
 import javax.xml.bind.ValidationException;
 import java.util.*;
-
 import static Utils.DateHelper.convertCalendarToTimestamp;
 
 /**
@@ -62,12 +60,10 @@ public class EventScheduleManager {
         EventDutyEntity eventDutyEntity = eventDutyEntityPersistanceFacade.get(eventDutyModel.getEventDutyId());
         eventDutyEntityPersistanceFacade.put(eventDutyEntity);
 
-
         HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()), DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()));
         if(!musicanCapacityMap.isEmpty()) {
             MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap, newEventDutyDTO);
         }
-
 
         // check for changes in musical works
         // remove all musical works which did exist but now don't
@@ -120,6 +116,8 @@ public class EventScheduleManager {
                 loadedEventsStartdate.compareTo(startdayOfWeek) <= 0 && loadedEventsEnddate.compareTo(enddayOfWeek) >= 0) {
             return new ArrayList<>();
         }
+
+        startdayOfWeek.setTimeInMillis(startdayOfWeek.getTimeInMillis()-1);
 
         List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p -> p.getStarttime().after(convertCalendarToTimestamp(startdayOfWeek))
                 && p.getStarttime().before(convertCalendarToTimestamp(enddayOfWeek)));
