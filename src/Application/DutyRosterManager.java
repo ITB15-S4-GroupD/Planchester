@@ -60,14 +60,13 @@ public class DutyRosterManager {
                         || p.getSectionDutyRosterBySectionDutyRoster().getDutyRosterStatus().equals(DutyRosterStatus.Published.toString()))
         );
 
-        List<EventDutyEntity> eventDuties = new ArrayList<>();
-        for(EventDutySectionDutyRosterEntity eventDutySectionDutyRosterEntity : eventDutySectionDutyRosterEntities) {
-            eventDuties.add(eventDutySectionDutyRosterEntity.getEventDutyByEventDuty());
-        }
-
         List<EventDutyModel> eventDutyModelList = new ArrayList<>();
-        for(EventDutyEntity eventDutyEntity : eventDuties) {
-            eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
+        for(EventDutySectionDutyRosterEntity eventDutySectionDutyRosterEntity : eventDutySectionDutyRosterEntities) {
+            EventDutyEntity eventDutyEntity = eventDutySectionDutyRosterEntity.getEventDutyByEventDuty();
+
+            EventDutyModel eventDutyModel = createEventDutyModel(eventDutyEntity);
+            eventDutyModel.setDutyRosterStatus(DutyRosterStatus.valueOf(eventDutySectionDutyRosterEntity.getSectionDutyRosterBySectionDutyRoster().getDutyRosterStatus()));
+            eventDutyModelList.add(eventDutyModel);
         }
 
         List<EventDutyDTO> eventDutyDTOList = new ArrayList<>();

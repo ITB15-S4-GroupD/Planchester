@@ -2,6 +2,7 @@ package Application.DTO;
 
 import Domain.Interfaces.IEventDuty;
 import Domain.Models.EventDutyModel;
+import Utils.Enum.DutyRosterStatus;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import java.sql.Timestamp;
@@ -24,6 +25,7 @@ public class EventDutyDTO implements IEventDuty {
     private Double points;
     private Integer instrumentation;
     private Integer rehearsalFor;
+    private DutyRosterStatus dutyRosterStatus;
 
     public Integer getEventDutyId() {
         return eventDutyId;
@@ -119,6 +121,14 @@ public class EventDutyDTO implements IEventDuty {
 
     public void setInstrumentation(Integer instrumentation) {
         this.instrumentation = instrumentation;
+    }
+
+    public DutyRosterStatus getDutyRosterStatus() {
+        return dutyRosterStatus;
+    }
+
+    public void setDutyRosterStatus(DutyRosterStatus dutyRosterStatus) {
+        this.dutyRosterStatus = dutyRosterStatus;
     }
 
     public Integer getRehearsalFor() {

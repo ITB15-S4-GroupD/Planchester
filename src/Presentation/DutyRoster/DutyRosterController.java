@@ -2,11 +2,12 @@ package Presentation.DutyRoster;
 
 import Application.DTO.EventDutyDTO;
 import Application.DutyRosterManager;
-import Application.EventScheduleManager;
 import Presentation.CalenderController;
 
 import Presentation.PlanchesterGUI;
 import Utils.DateHelper;
+import Utils.Enum.DutyRosterStatus;
+import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
@@ -75,7 +76,7 @@ public class DutyRosterController extends CalenderController{
         agenda.setDisplayedLocalDateTime(displayedDate.minus(7, ChronoUnit.DAYS));
         setCalenderWeekLabel();
 
-        List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForWeek(agenda.getDisplayedCalendar());
+        List<EventDutyDTO> events = DutyRosterManager.getDutyRosterListForWeek(agenda.getDisplayedCalendar());
         for(EventDutyDTO event : events) {
             addDutyRosterToGUI(event);
         }
@@ -87,7 +88,7 @@ public class DutyRosterController extends CalenderController{
         agenda.setDisplayedLocalDateTime(displayedDate.plus(7, ChronoUnit.DAYS));
         setCalenderWeekLabel();
 
-        List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForWeek(agenda.getDisplayedCalendar());
+        List<EventDutyDTO> events = DutyRosterManager.getDutyRosterListForWeek(agenda.getDisplayedCalendar());
         for (EventDutyDTO event : events) {
             addDutyRosterToGUI(event);
         }
@@ -124,6 +125,13 @@ public class DutyRosterController extends CalenderController{
             appointment.setAppointmentGroup(nonMusicalEvent);
             appointment.setSummary(event.getName() + "\nNonMusicalEvent");
         }
+
+        if(event.getDutyRosterStatus().equals(DutyRosterStatus.Published)) {
+            appointment.setSummary(appointment.getSummary() + " (P)");
+        } else if(event.getEventStatus().equals(DutyRosterStatus.Unpublished)) {
+            appointment.setSummary(appointment.getSummary() + " (UP)");
+        }
+
         staticLoadedEventsMap.put(appointment, event);
         staticAgenda.appointments().add(appointment);
     }

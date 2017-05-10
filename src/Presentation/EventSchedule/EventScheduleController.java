@@ -46,8 +46,9 @@ public class EventScheduleController extends CalenderController {
     @FXML private MenuItem addNewOpera;
     @FXML private MenuItem addNewTour;
     @FXML private MenuItem addNewHofkapelle;
-    @FXML private MenuItem addNewRehearsal;
     @FXML private MenuItem addNewNonMusicalEvent;
+
+    @FXML protected JFXTextField mandatoryField;
 
     private static Map<Agenda.Appointment, EventDutyDTO> staticLoadedEventsMap = new HashMap<>();
     private static boolean editOpen = false;
@@ -97,7 +98,6 @@ public class EventScheduleController extends CalenderController {
         btnPublishEventSchedule.setVisible(permission.isPublishEventSchedule());
         addNewEvent.setVisible(permission.isEditEventSchedule());
         unpublishedLabel.setVisible(permission.isEditEventSchedule());
-
     }
 
     @FXML
@@ -122,11 +122,6 @@ public class EventScheduleController extends CalenderController {
         for(EventDutyDTO event : events) {
             addEventDutyToGUI(event);
         }
-    }
-
-    @FXML
-    public void showActualWeekClicked() {
-        super.showActualWeekClicked();
     }
 
     public static void setDisplayedLocalDateTime(LocalDateTime localDateTime) {
@@ -163,7 +158,6 @@ public class EventScheduleController extends CalenderController {
         staticAgenda.selectedAppointments().clear();
         selectedAppointment = null;
     }
-
 
     public static void removeSelectedAppointmentFromCalendar(Agenda.Appointment appointment) {
         staticLoadedEventsMap.remove(selectedAppointment);
@@ -258,16 +252,7 @@ public class EventScheduleController extends CalenderController {
 
     protected void setColorKeyMap() {
         super.setColorKeyMap();
-        
-        
-        /* old from master
-         colorKeyOpera.setStyle(colorOpera);
-        colorKeyConcert.setStyle(colorConcert);
-        colorKeyTour.setStyle(colorTour);
-        colorKeyHofkapelle.setStyle(colorHofkapelle);
-        colorKeyRehearsal.setStyle(colorRehearsal);
-        colorKeyNonMusical.setStyle(colorNonMusical);
-        mandatoryField.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY); */
+        mandatoryField.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
     }
 
     private void addEventTypeEntriesToMenuButton() {
@@ -275,14 +260,12 @@ public class EventScheduleController extends CalenderController {
         addNewOpera = new MenuItem(EventType.Opera.toString());
         addNewTour = new  MenuItem(EventType.Tour.toString());
         addNewHofkapelle = new MenuItem(EventType.Hofkapelle.toString());
-        //addNewRehearsal = new MenuItem(EventType.Rehearsal.toString());
         addNewNonMusicalEvent = new MenuItem(EventType.NonMusicalEvent.toString());
 
         addNewEvent.getItems().add(addNewConcert);
         addNewEvent.getItems().add(addNewOpera);
         addNewEvent.getItems().add(addNewTour);
         addNewEvent.getItems().add(addNewHofkapelle);
-        //addNewEvent.getItems().add(addNewRehearsal);
         addNewEvent.getItems().add(addNewNonMusicalEvent);
     }
 
@@ -316,10 +299,6 @@ public class EventScheduleController extends CalenderController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    protected void setCalenderWeekLabel() {
-       super.setCalenderWeekLabel();
     }
 
     private void setEventToMenuItems() {
