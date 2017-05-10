@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import jfxtras.scene.control.agenda.Agenda?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="993.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.DutyRoster.DutyRosterController">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="993.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.DutyRoster.DutyRosterController">
     <children>
         <GridPane layoutX="52.0" layoutY="101.0" prefHeight="993.0" prefWidth="1500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
@@ -79,7 +79,7 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Button fx:id="btnPublishDutyRoster" mnemonicParsing="false" prefHeight="31.0" prefWidth="150.0" text="Publish Duty Roster" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
+                                <Button fx:id="btnPublishDutyRoster" mnemonicParsing="false" onAction="#publishDutyRoster" prefHeight="31.0" prefWidth="150.0" text="Publish Duty Roster" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
                             </children>
                         </GridPane>
                     </children>

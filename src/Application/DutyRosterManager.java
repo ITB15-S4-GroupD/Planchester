@@ -78,6 +78,33 @@ public class DutyRosterManager {
         return eventDutyDTOList;
     }
 
+    public static List<EventDutyEntity> getDutyRosterEntitiesInRange(Calendar startdayOfWeek, Calendar enddayOfWeek) {
+        if(loadedEventsStartdate != null && loadedEventsEnddate != null &&
+                loadedEventsStartdate.compareTo(startdayOfWeek) <= 0 && loadedEventsEnddate.compareTo(enddayOfWeek) >= 0) {
+            return new ArrayList<>();
+        }
+
+        startdayOfWeek.setTimeInMillis(startdayOfWeek.getTimeInMillis()-1);
+
+        AccountRole accountRole = AccountAdministrationManager.getInstance().getAccountRole();
+
+        // get all events for user section in specified time space and for his account role
+        List<EventDutySectionDutyRosterEntity> eventDutySectionDutyRosterEntities = eventDutySectionDutyRosterEntityPersistanceFacade.list(p ->
+                (p.getEventDutyByEventDuty().getStarttime().after(DateHelper.convertCalendarToTimestamp(startdayOfWeek))
+                        && p.getEventDutyByEventDuty().getStarttime().before(DateHelper.convertCalendarToTimestamp(enddayOfWeek)))
+                        && (p.getSectionDutyRosterBySectionDutyRoster().getSectionType().equals(AccountAdministrationManager.getInstance().getSectionType().toString()))
+                        && (accountRole.equals(AccountRole.Section_representative)
+                        || p.getSectionDutyRosterBySectionDutyRoster().getDutyRosterStatus().equals(DutyRosterStatus.Published.toString()))
+        );
+
+        List<EventDutyEntity> eventDutyEntities = new ArrayList<>();
+        for(EventDutySectionDutyRosterEntity eventDutySectionDutyRosterEntity : eventDutySectionDutyRosterEntities) {
+            eventDutyEntities.add(eventDutySectionDutyRosterEntity.getEventDutyByEventDuty());
+        }
+
+        return eventDutyEntities;
+    }
+
     private static void setLoadedEventsStartAndEnddate(Calendar start, Calendar end) {
         if(loadedEventsStartdate == null) {
             loadedEventsStartdate = start;
