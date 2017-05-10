@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 /**
  * Created by julia on 26.04.2017.
  */
+
 public class PersistanceFacade<T> {
 
     private final Class<T> persistanceClass;

@@ -6,6 +6,7 @@ import Presentation.EventSchedule.EventScheduleController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 
@@ -87,7 +88,7 @@ public class PlanchesterGUI {
             primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
             primaryStage.show();
         } catch (IOException exception) {
-                exception.printStackTrace();
+            exception.printStackTrace();
         }
     }
 

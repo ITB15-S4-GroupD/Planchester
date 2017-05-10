@@ -1,6 +1,7 @@
 package Domain.Models;
 
 import Domain.Interfaces.IEventDuty;
+import Utils.Enum.DutyRosterStatus;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import Utils.Validator;
@@ -25,6 +26,7 @@ public class EventDutyModel implements IEventDuty {
     private Integer rehearsalFor;
     private Integer instrumentation;
     private List<MusicalWorkModel> musicalWorks;
+    private DutyRosterStatus dutyRosterStatus;
 
     public EventDutyModel() { }
 
@@ -141,6 +143,14 @@ public class EventDutyModel implements IEventDuty {
 
     public void setInstrumentation(Integer instrumentation) {
         this.instrumentation = instrumentation;
+    }
+
+    public DutyRosterStatus getDutyRosterStatus() {
+        return dutyRosterStatus;
+    }
+
+    public void setDutyRosterStatus(DutyRosterStatus dutyRosterStatus) {
+        this.dutyRosterStatus = dutyRosterStatus;
     }
 
     public List<MusicalWorkModel> getMusicalWorks() {

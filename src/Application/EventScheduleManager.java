@@ -250,6 +250,7 @@ public class EventScheduleManager {
         eventDutyModel.setPoints(eventDutyDTO.getPoints());
         eventDutyModel.setInstrumentation(eventDutyDTO.getInstrumentation());
         eventDutyModel.setRehearsalFor(eventDutyDTO.getRehearsalFor());
+        eventDutyModel.setDutyRosterStatus(eventDutyDTO.getDutyRosterStatus());
         if(eventDutyDTO.getMusicalWorks() != null && !eventDutyDTO.getMusicalWorks().isEmpty()) {
             List<MusicalWorkModel> musicalWorkModels = new ArrayList<>();
             for (MusicalWorkDTO musicalWorkDTO : eventDutyDTO.getMusicalWorks()) {
@@ -316,6 +317,7 @@ public class EventScheduleManager {
         eventDutyDTO.setPoints(eventDutyModel.getPoints());
         eventDutyDTO.setInstrumentation(eventDutyModel.getInstrumentation());
         eventDutyDTO.setRehearsalFor(eventDutyModel.getRehearsalFor());
+        eventDutyDTO.setDutyRosterStatus(eventDutyModel.getDutyRosterStatus());
 
         if(eventDutyModel.getMusicalWorks() != null) {
             List<MusicalWorkDTO> musicalWorkDTOS = new ArrayList<>();
