@@ -4,6 +4,7 @@ import Application.DTO.EventDutyDTO;
 import Application.DutyRoster;
 import Application.DutyRosterManager;
 import Application.PublishEventSchedule;
+import Application.DutyRosterManager;
 import Presentation.CalenderController;
 
 import Presentation.PlanchesterGUI;
@@ -18,7 +19,10 @@ import javafx.scene.control.*;
 import jfxtras.scene.control.agenda.Agenda;
 
 import java.time.LocalDateTime;
+<<<<<<< HEAD
 import java.time.Year;
+=======
+>>>>>>> master
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 

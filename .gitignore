@@ -25,3 +25,5 @@ hs_err_pid*
 # hibernate settings (local db)
 src/hibernate.cfg.xml
 /src/hibernate.cfg.xml
+
+out/production/Planchester/Presentation/EventSchedule/EventSchedule.fxml
