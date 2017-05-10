@@ -1,6 +1,7 @@
 package Application.DTO;
 
 import Domain.Interfaces.IEventDuty;
+import Domain.Models.EventDutyModel;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import java.sql.Timestamp;

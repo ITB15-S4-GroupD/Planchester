@@ -21,22 +21,18 @@ import java.util.*;
  * Created by TheeLenchen on 08.05.2017.
  */
 public abstract class CalenderController {
+    @FXML protected Agenda agenda;
+    @FXML protected ScrollPane scrollPane;
 
+    @FXML protected MenuButton addNewEvent;
+    @FXML protected Label calenderWeekLabel;
 
-    @FXML
-    private Agenda agenda;
-    @FXML private ScrollPane scrollPane;
-    @FXML private MenuButton addNewEvent;
-    @FXML private Label calenderWeekLabel;
-
-    @FXML
-    private JFXTextField colorKeyConcert;
-    @FXML private JFXTextField colorKeyOpera;
-    @FXML private JFXTextField colorKeyTour;
-    @FXML private JFXTextField colorKeyHofkapelle;
-    @FXML private JFXTextField colorKeyRehearsal;
-    @FXML private JFXTextField colorKeyNonMusical;
-
+    @FXML private JFXTextField colorKeyConcert;
+    @FXML protected JFXTextField colorKeyOpera;
+    @FXML protected JFXTextField colorKeyTour;
+    @FXML protected JFXTextField colorKeyHofkapelle;
+    @FXML protected JFXTextField colorKeyRehearsal;
+    @FXML protected JFXTextField colorKeyNonMusical;
 
     private String colorOpera;
     private String colorConcert;
@@ -45,19 +41,12 @@ public abstract class CalenderController {
     private String colorNonMusical;
     private String colorHofkapelle;
 
-
-    private static Agenda staticAgenda;
-    private static Agenda.AppointmentGroup opera;
-    private static Agenda.AppointmentGroup concert;
-    private static Agenda.AppointmentGroup hofkapelle;
-    private static Agenda.AppointmentGroup tour;
-    private static Agenda.AppointmentGroup rehearsal;
-    private static Agenda.AppointmentGroup nonMusicalEvent;
-    private static Agenda.Appointment selectedAppointment;
-
-    private static Map<Agenda.Appointment, EventDutyDTO> staticLoadedEventsMap = new HashMap<>();
-    private static ScrollPane staticScrollPane;
-    private static boolean editOpen = false;
+    protected static Agenda.AppointmentGroup opera;
+    protected static Agenda.AppointmentGroup concert;
+    protected static Agenda.AppointmentGroup hofkapelle;
+    protected static Agenda.AppointmentGroup tour;
+    protected static Agenda.AppointmentGroup rehearsal;
+    protected static Agenda.AppointmentGroup nonMusicalEvent;
 
     protected void getGroupColorsFromCSS() {
         try {
@@ -98,7 +87,6 @@ public abstract class CalenderController {
         return null;
     }
 
-
     protected void setColorKeyMap() {
         colorKeyOpera.setStyle(colorOpera);
         colorKeyConcert.setStyle(colorConcert);
@@ -119,26 +107,6 @@ public abstract class CalenderController {
         agenda.setDisplayedLocalDateTime(LocalDateTime.now());
         setCalenderWeekLabel();
     }
-
-    protected static Node tryResetSideContent() {
-        if(getSideContent() == null) {
-            return null;
-        } else {
-            Button discard = (Button) PlanchesterGUI.scene.lookup("#discard");
-            discard.fire();
-            return getSideContent();
-        }
-    }
-
-    protected static void resetSideContent() {
-        staticScrollPane.setContent(null);
-        editOpen = false;
-    }
-
-    protected static Node getSideContent() {
-        return staticScrollPane.getContent();
-    }
-
 
     protected void initializeAppointmentGroupsForEventtypes() {
         opera = new Agenda.AppointmentGroupImpl();
@@ -162,6 +130,4 @@ public abstract class CalenderController {
         agenda.localeProperty().set(Locale.UK);
         agenda.setDisplayedLocalDateTime(LocalDateTime.now()); //show current week in event scheduler
     }
-
-
 }

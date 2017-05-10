@@ -5,8 +5,11 @@ import Application.DTO.MusicalWorkDTO;
 import Domain.Models.EventDutyModel;
 import Persistence.Entities.DutyDispositionEntity;
 import Persistence.Entities.EventDutyEntity;
+import Persistence.Entities.EventDutySectionDutyRosterEntity;
 import Persistence.PersistanceFacade;
 import Utils.DateHelper;
+import Utils.Enum.AccountRole;
+import Utils.Enum.DutyRosterStatus;
 import Utils.MessageHelper;
 
 import javax.xml.bind.ValidationException;
@@ -24,6 +27,7 @@ import static Application.EventScheduleManager.createEventDutyModel;
 public class DutyRosterManager {
 
     private static PersistanceFacade<EventDutyEntity> eventDutyEntityPersistanceFacade = new PersistanceFacade(EventDutyEntity.class);
+    private static PersistanceFacade<EventDutySectionDutyRosterEntity> eventDutySectionDutyRosterEntityPersistanceFacade = new PersistanceFacade(EventDutySectionDutyRosterEntity.class);
 
     private static Calendar loadedEventsStartdate; //start of the already loaded calendar
     private static Calendar loadedEventsEnddate; //end of the already loaded calendar
@@ -45,7 +49,21 @@ public class DutyRosterManager {
 
         startdayOfWeek.setTimeInMillis(startdayOfWeek.getTimeInMillis()-1);
 
-        List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p -> p.getStarttime().after(DateHelper.convertCalendarToTimestamp(startdayOfWeek)) && p.getStarttime().before(DateHelper.convertCalendarToTimestamp(enddayOfWeek)));
+        AccountRole accountRole = AccountAdministrationManager.getInstance().getAccountRole();
+
+        // get all events for user section in specified time space and for his account role
+        List<EventDutySectionDutyRosterEntity> eventDutySectionDutyRosterEntities = eventDutySectionDutyRosterEntityPersistanceFacade.list(p ->
+                (p.getEventDutyByEventDuty().getStarttime().after(DateHelper.convertCalendarToTimestamp(startdayOfWeek))
+                && p.getEventDutyByEventDuty().getStarttime().before(DateHelper.convertCalendarToTimestamp(enddayOfWeek)))
+                && (p.getSectionDutyRosterBySectionDutyRoster().getSectionType().equals(AccountAdministrationManager.getInstance().getSectionType().toString()))
+                && (accountRole.equals(AccountRole.Section_representative)
+                        || p.getSectionDutyRosterBySectionDutyRoster().getDutyRosterStatus().equals(DutyRosterStatus.Published.toString()))
+        );
+
+        List<EventDutyEntity> eventDuties = new ArrayList<>();
+        for(EventDutySectionDutyRosterEntity eventDutySectionDutyRosterEntity : eventDutySectionDutyRosterEntities) {
+            eventDuties.add(eventDutySectionDutyRosterEntity.getEventDutyByEventDuty());
+        }
 
         List<EventDutyModel> eventDutyModelList = new ArrayList<>();
         for(EventDutyEntity eventDutyEntity : eventDuties) {
@@ -57,6 +75,7 @@ public class DutyRosterManager {
             eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
         }
         setLoadedEventsStartAndEnddate(startdayOfWeek, enddayOfWeek);
+
         return eventDutyDTOList;
     }
 

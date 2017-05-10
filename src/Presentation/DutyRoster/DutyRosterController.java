@@ -1,13 +1,16 @@
 package Presentation.DutyRoster;
 
 import Application.DTO.EventDutyDTO;
+import Application.DutyRosterManager;
 import Application.EventScheduleManager;
 import Presentation.CalenderController;
 
+import Presentation.PlanchesterGUI;
 import Utils.DateHelper;
 import Utils.Enum.EventType;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import jfxtras.scene.control.agenda.Agenda;
 
@@ -20,77 +23,50 @@ import java.util.*;
  */
 public class DutyRosterController extends CalenderController{
 
-        @FXML
-        private Agenda agenda;
-        @FXML private ScrollPane scrollPane;
+    protected static Agenda staticAgenda;
+    protected static ScrollPane staticScrollPane;
+    protected static Map<Agenda.Appointment, EventDutyDTO> staticLoadedEventsMap = new HashMap<>();
+    protected static boolean editOpen = false;
+    protected static Agenda.Appointment selectedAppointment;
 
-        private static Agenda staticAgenda;
-        private static Agenda.AppointmentGroup opera;
-        private static Agenda.AppointmentGroup concert;
-        private static Agenda.AppointmentGroup hofkapelle;
-        private static Agenda.AppointmentGroup tour;
-        private static Agenda.AppointmentGroup rehearsal;
-        private static Agenda.AppointmentGroup nonMusicalEvent;
-        private static Agenda.Appointment selectedAppointment;
+    @FXML
+    public void initialize() {
+        staticAgenda = agenda;
+        staticScrollPane = scrollPane;
 
-        private static Map<Agenda.Appointment, EventDutyDTO> staticLoadedEventsMap = new HashMap<>();
-        private static ScrollPane staticScrollPane;
-        private static boolean editOpen = false;
+        getGroupColorsFromCSS();
+        initializeAppointmentGroupsForEventtypes(); //must be the first initialize-call
+        initialzeCalendarSettings();
+        initialzeCalendarView();
 
-        @FXML
-        public void initialize() {
-            staticAgenda = agenda;
-            staticScrollPane = scrollPane;
-
-            getGroupColorsFromCSS();
-            initializeAppointmentGroupsForEventtypes(); //must be the first initialize-call
-            initialzeCalendarSettings();
-            initialzeCalendarView();
-
-            agenda.setOnMouseClicked(event -> {
-                if(event.getTarget().toString().contains("DayBodyPane")) {
-                    if(editOpen == true){
-                        if(tryResetSideContent() == null) {
-                            removeSelection();
-                        }
-                    }
-                }
-            });
-
-            agenda.selectedAppointments().addListener((ListChangeListener<Agenda.Appointment>) c -> {
-                if(agenda.selectedAppointments().isEmpty()) {
-                    return;
-                }
-
-                if(selectedAppointment != null && (agenda.selectedAppointments().get(0) != selectedAppointment)) {
+        agenda.setOnMouseClicked(event -> {
+            if(event.getTarget().toString().contains("DayBodyPane")) {
+                if(editOpen == true){
                     if(tryResetSideContent() == null) {
-                        selectedAppointment = agenda.selectedAppointments().get(0);
-//                        showDutyDetailView();
-                    } else {
-                        agenda.selectedAppointments().clear();
-                        agenda.selectedAppointments().add(selectedAppointment);
+                        removeSelection();
                     }
-                } else if(selectedAppointment == null && tryResetSideContent() == null) {
-                    selectedAppointment = agenda.selectedAppointments().get(0);
-//                    showDutyDetailView();
                 }
-            });
-        }
+            }
+        });
 
-    protected void getGroupColorsFromCSS() {
-            super.getGroupColorsFromCSS();
-    }
+        agenda.selectedAppointments().addListener((ListChangeListener<Agenda.Appointment>) c -> {
+            if(agenda.selectedAppointments().isEmpty()) {
+                return;
+            }
 
-    protected void setColorKeyMap() {
-            super.setColorKeyMap();
-    }
-
-    protected void setCalenderWeekLabel() {
-            super.setCalenderWeekLabel();
-    }
-
-    protected void showActualWeekClicked() {
-            super.showActualWeekClicked();
+            if(selectedAppointment != null && (agenda.selectedAppointments().get(0) != selectedAppointment)) {
+                if(tryResetSideContent() == null) {
+                    selectedAppointment = agenda.selectedAppointments().get(0);
+//                        showDutyDetailView();
+                } else {
+                    agenda.selectedAppointments().clear();
+                    agenda.selectedAppointments().add(selectedAppointment);
+                }
+            } else if(selectedAppointment == null && tryResetSideContent() == null) {
+                selectedAppointment = agenda.selectedAppointments().get(0);
+//                    showDutyDetailView();
+            }
+        });
     }
 
     @FXML
@@ -114,17 +90,12 @@ public class DutyRosterController extends CalenderController{
         List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForWeek(agenda.getDisplayedCalendar());
         for (EventDutyDTO event : events) {
             addDutyRosterToGUI(event);
-
         }
     }
 
     public static void removeSelection() {
             staticAgenda.selectedAppointments().clear();
             selectedAppointment = null;
-        }
-
-    protected void initialzeCalendarSettings() {
-        super.initialzeCalendarSettings();
     }
 
     public static void addDutyRosterToGUI(EventDutyDTO event) {
@@ -157,12 +128,24 @@ public class DutyRosterController extends CalenderController{
         staticAgenda.appointments().add(appointment);
     }
 
+    public static Node tryResetSideContent() {
+        if(getSideContent() == null) {
+            return null;
+        } else {
+            Button discard = (Button) PlanchesterGUI.scene.lookup("#discard");
+            discard.fire();
+            return getSideContent();
+        }
+    }
 
+    public static void resetSideContent() {
+        staticScrollPane.setContent(null);
+        editOpen = false;
+    }
 
-    protected void initializeAppointmentGroupsForEventtypes() {
-          super.initializeAppointmentGroupsForEventtypes();
-       }
-
+    public static Node getSideContent() {
+        return staticScrollPane.getContent();
+    }
 
     private void initialzeCalendarView() {
         //set CalenderWeek
@@ -170,9 +153,9 @@ public class DutyRosterController extends CalenderController{
         setColorKeyMap();
 
         //put events to calendar
-        List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForCurrentWeek();
+        List<EventDutyDTO> events = DutyRosterManager.getDutyRosterListForCurrentWeek();
         for(EventDutyDTO event : events) {
             addDutyRosterToGUI(event);
         }
     }
-    }
+}

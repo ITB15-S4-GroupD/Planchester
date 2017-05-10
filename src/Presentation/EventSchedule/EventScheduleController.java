@@ -35,11 +35,11 @@ import java.util.*;
  */
 public class EventScheduleController extends CalenderController {
 
-    @FXML private Agenda agenda;
-    @FXML private ScrollPane scrollPane;
+    protected static Agenda staticAgenda;
+    protected static ScrollPane staticScrollPane;
+
     @FXML private MenuButton addNewEvent;
     @FXML private Button btnPublishEventSchedule;
-    @FXML private Label calenderWeekLabel;
     @FXML private Label unpublishedLabel;
 
     @FXML private MenuItem addNewConcert;
@@ -49,33 +49,9 @@ public class EventScheduleController extends CalenderController {
     @FXML private MenuItem addNewRehearsal;
     @FXML private MenuItem addNewNonMusicalEvent;
 
-    @FXML private JFXTextField colorKeyConcert;
-    @FXML private JFXTextField colorKeyOpera;
-    @FXML private JFXTextField colorKeyTour;
-    @FXML private JFXTextField colorKeyHofkapelle;
-    @FXML private JFXTextField colorKeyRehearsal;
-    @FXML private JFXTextField colorKeyNonMusical;
-    @FXML private JFXTextField mandatoryField;
-
-    private String colorOpera;
-    private String colorConcert;
-    private String colorTour;
-    private String colorRehearsal;
-    private String colorNonMusical;
-    private String colorHofkapelle;
-
-    private static Agenda staticAgenda;
-    private static Agenda.AppointmentGroup opera;
-    private static Agenda.AppointmentGroup concert;
-    private static Agenda.AppointmentGroup hofkapelle;
-    private static Agenda.AppointmentGroup tour;
-    private static Agenda.AppointmentGroup rehearsal;
-    private static Agenda.AppointmentGroup nonMusicalEvent;
-    private static Agenda.Appointment selectedAppointment;
-
     private static Map<Agenda.Appointment, EventDutyDTO> staticLoadedEventsMap = new HashMap<>();
-    private static ScrollPane staticScrollPane;
     private static boolean editOpen = false;
+    private static Agenda.Appointment selectedAppointment;
 
     @FXML
     public void initialize() {
