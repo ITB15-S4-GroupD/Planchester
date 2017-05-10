@@ -5,6 +5,7 @@ import Application.DTO.EventDutyDTO;
 import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
 import Domain.Models.Permission;
+import Presentation.EventSchedule.EventScheduleController;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
@@ -29,8 +30,8 @@ public class EditTourController extends EditController {
 
     @FXML private JFXDatePicker endDate;
 
-    @Override
     @FXML
+    @Override
     public void initialize() {
 
         checkMandatoryFields();
@@ -105,8 +106,8 @@ public class EditTourController extends EditController {
         conductor.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
     }
 
-    @Override
     @FXML
+    @Override
     protected void save() throws ValidationException {
         if(validate()) {
             Agenda.Appointment selectedAppointment = EventScheduleController.getSelectedAppointment();
@@ -129,19 +130,15 @@ public class EditTourController extends EditController {
             eventDutyDTO.setRehearsalFor(null);
           
             EventScheduleManager.updateEventDuty(eventDutyDTO, initEventDutyDTO);
-
             EventScheduleController.addEventDutyToGUI(eventDutyDTO);
-            //Add added Rehearsal to EventDuty
             updateRehearsal(eventDutyDTO);
-
-            EventScheduleController.addEventDutyToGUI(eventDutyDTO);
             EventScheduleController.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime()); // set agenda view to week of created event
             EventScheduleController.resetSideContent(); // remove content of sidebar
         }
     }
 
-    @Override
     @FXML
+    @Override
     protected boolean cancel() {
         String pointRef = (initEventDutyDTO.getPoints() != null)? String.valueOf(initEventDutyDTO.getPoints()) : "0.0";
         if(!name.getText().equals(initEventDutyDTO.getName())
@@ -218,7 +215,7 @@ public class EditTourController extends EditController {
 
     @FXML
     @Override
-    protected void editEvent () {
+    protected void editEvent() {
         btnCancelEvent.setVisible(true);
         btnSaveEvent.setVisible(true);
         btnEditEvent.setVisible(false);

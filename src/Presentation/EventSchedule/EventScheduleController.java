@@ -4,11 +4,13 @@ import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
 import Application.EventScheduleManager;
 import Application.PublishEventSchedule;
+import Presentation.CalenderController;
 import Domain.Models.Permission;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import Presentation.PlanchesterGUI;
 import Utils.DateHelper;
+import Utils.PlanchesterConstants;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -31,47 +33,26 @@ import java.util.*;
 /**
  * Created by timorzipa on 06/04/2017.
  */
-public class EventScheduleController {
+public class EventScheduleController extends CalenderController {
 
-    @FXML private Agenda agenda;
-    @FXML private ScrollPane scrollPane;
+    protected static Agenda staticAgenda;
+    protected static ScrollPane staticScrollPane;
+
     @FXML private MenuButton addNewEvent;
     @FXML private Button btnPublishEventSchedule;
-    @FXML private Label calenderWeekLabel;
+    @FXML private Label unpublishedLabel;
 
     @FXML private MenuItem addNewConcert;
     @FXML private MenuItem addNewOpera;
     @FXML private MenuItem addNewTour;
     @FXML private MenuItem addNewHofkapelle;
-    @FXML private MenuItem addNewRehearsal;
     @FXML private MenuItem addNewNonMusicalEvent;
 
-    @FXML private JFXTextField colorKeyConcert;
-    @FXML private JFXTextField colorKeyOpera;
-    @FXML private JFXTextField colorKeyTour;
-    @FXML private JFXTextField colorKeyHofkapelle;
-    @FXML private JFXTextField colorKeyRehearsal;
-    @FXML private JFXTextField colorKeyNonMusical;
-
-    private String colorOpera;
-    private String colorConcert;
-    private String colorTour;
-    private String colorRehearsal;
-    private String colorNonMusical;
-    private String colorHofkapelle;
-
-    private static Agenda staticAgenda;
-    private static Agenda.AppointmentGroup opera;
-    private static Agenda.AppointmentGroup concert;
-    private static Agenda.AppointmentGroup hofkapelle;
-    private static Agenda.AppointmentGroup tour;
-    private static Agenda.AppointmentGroup rehearsal;
-    private static Agenda.AppointmentGroup nonMusicalEvent;
-    private static Agenda.Appointment selectedAppointment;
+    @FXML protected JFXTextField mandatoryField;
 
     private static Map<Agenda.Appointment, EventDutyDTO> staticLoadedEventsMap = new HashMap<>();
-    private static ScrollPane staticScrollPane;
     private static boolean editOpen = false;
+    private static Agenda.Appointment selectedAppointment;
 
     @FXML
     public void initialize() {
@@ -116,11 +97,11 @@ public class EventScheduleController {
         Permission permission = AccountAdministrationManager.getInstance().getUserPermissions();
         btnPublishEventSchedule.setVisible(permission.isPublishEventSchedule());
         addNewEvent.setVisible(permission.isEditEventSchedule());
-
+        unpublishedLabel.setVisible(permission.isEditEventSchedule());
     }
 
     @FXML
-    private void navigateOneWeekBackClicked() {
+    public void navigateOneWeekBackClicked() {
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
         agenda.setDisplayedLocalDateTime(displayedDate.minus(7, ChronoUnit.DAYS));
         setCalenderWeekLabel();
@@ -132,20 +113,9 @@ public class EventScheduleController {
     }
 
     @FXML
-    private void navigateOneWeekForwardClicked() {
+    public void navigateOneWeekForwardClicked() {
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
         agenda.setDisplayedLocalDateTime(displayedDate.plus(7, ChronoUnit.DAYS));
-        setCalenderWeekLabel();
-
-        List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForWeek(agenda.getDisplayedCalendar());
-        for(EventDutyDTO event : events) {
-            addEventDutyToGUI(event);
-        }
-    }
-
-    @FXML
-    private void showActualWeekClicked() {
-        agenda.setDisplayedLocalDateTime(LocalDateTime.now());
         setCalenderWeekLabel();
 
         List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForWeek(agenda.getDisplayedCalendar());
@@ -189,7 +159,6 @@ public class EventScheduleController {
         selectedAppointment = null;
     }
 
-
     public static void removeSelectedAppointmentFromCalendar(Agenda.Appointment appointment) {
         staticLoadedEventsMap.remove(selectedAppointment);
         staticAgenda.appointments().remove(selectedAppointment);
@@ -197,7 +166,7 @@ public class EventScheduleController {
 
     public static void addEventDutyToGUI(EventDutyDTO event) {
         Agenda.Appointment appointment = new Agenda.AppointmentImpl();
-        appointment.setDescription(event.getDescription());
+        appointment.setDescription(event.getName());
         appointment.setLocation(event.getLocation());
         appointment.setStartTime(DateHelper.convertTimestampToCalendar(event.getStartTime()));
         appointment.setEndTime(DateHelper.convertTimestampToCalendar(event.getEndTime()));
@@ -255,72 +224,20 @@ public class EventScheduleController {
         }
     }
 
-    private void getGroupColorsFromCSS() {
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/Presentation/CSS/agenda.css"), "UTF-8"));
-            String line = br.readLine();
-
-            while (line != null) {
-                String setControlInnerBackground = "-fx-control-inner-background: ";
-                if(line.contains("group1")) {
-                    colorOpera = setControlInnerBackground + getColor(line) + ";";
-                } else if(line.contains("group2")) {
-                    colorConcert = setControlInnerBackground + getColor(line) + ";";
-                } else if(line.contains("group3")) {
-                    colorHofkapelle = setControlInnerBackground + getColor(line) + ";";
-                } else if(line.contains("group4")) {
-                    colorTour = setControlInnerBackground + getColor(line) + ";";
-                } else if(line.contains("group5")) {
-                    colorRehearsal = setControlInnerBackground + getColor(line) + ";";
-                } else if(line.contains("group6")) {
-                    colorNonMusical = setControlInnerBackground + getColor(line) + ";";
-                }
-                line = br.readLine();
-            }
-            br.close();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+    protected void getGroupColorsFromCSS() {
+       super.getGroupColorsFromCSS();
     }
 
-    private String getColor(String s) {
-        try {
-            return s.substring(s.indexOf("#"),s.indexOf("#")+7);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
+    protected void initializeAppointmentGroupsForEventtypes() {
+       super.initializeAppointmentGroupsForEventtypes();
     }
 
-    private static void initializeAppointmentGroupsForEventtypes() {
-        opera = new Agenda.AppointmentGroupImpl();
-        opera.setStyleClass("group1");
-        concert = new Agenda.AppointmentGroupImpl();
-        concert.setStyleClass("group2");
-        hofkapelle = new Agenda.AppointmentGroupImpl();
-        hofkapelle.setStyleClass("group3");
-        tour = new Agenda.AppointmentGroupImpl();
-        tour.setStyleClass("group4");
-        rehearsal = new Agenda.AppointmentGroupImpl();
-        rehearsal.setStyleClass("group5");
-        nonMusicalEvent = new Agenda.AppointmentGroupImpl();
-        nonMusicalEvent.setStyleClass("group6");
-    }
-
-    private void initialzeCalendarSettings() {
-        // agenda settings
-        agenda.setAllowDragging(false); //drag and drop the event
-        agenda.setAllowResize(false);
-        agenda.localeProperty().set(Locale.UK);
-        agenda.setDisplayedLocalDateTime(LocalDateTime.now()); //show current week in event scheduler
-
-        // disable edit menu
-        agenda.setEditAppointmentCallback(param -> null);
+    protected void initialzeCalendarSettings() {
+        super.initialzeCalendarSettings();
     }
 
     private void initialzeCalendarView() {
+
         //set CalenderWeek
         setCalenderWeekLabel();
         addEventTypeEntriesToMenuButton();
@@ -333,13 +250,9 @@ public class EventScheduleController {
         }
     }
 
-    private void setColorKeyMap() {
-        colorKeyOpera.setStyle(colorOpera);
-        colorKeyConcert.setStyle(colorConcert);
-        colorKeyTour.setStyle(colorTour);
-        colorKeyHofkapelle.setStyle(colorHofkapelle);
-        colorKeyRehearsal.setStyle(colorRehearsal);
-        colorKeyNonMusical.setStyle(colorNonMusical);
+    protected void setColorKeyMap() {
+        super.setColorKeyMap();
+        mandatoryField.setStyle(PlanchesterConstants.INPUTFIELD_MANDATORY);
     }
 
     private void addEventTypeEntriesToMenuButton() {
@@ -347,14 +260,12 @@ public class EventScheduleController {
         addNewOpera = new MenuItem(EventType.Opera.toString());
         addNewTour = new  MenuItem(EventType.Tour.toString());
         addNewHofkapelle = new MenuItem(EventType.Hofkapelle.toString());
-        //addNewRehearsal = new MenuItem(EventType.Rehearsal.toString());
         addNewNonMusicalEvent = new MenuItem(EventType.NonMusicalEvent.toString());
 
         addNewEvent.getItems().add(addNewConcert);
         addNewEvent.getItems().add(addNewOpera);
         addNewEvent.getItems().add(addNewTour);
         addNewEvent.getItems().add(addNewHofkapelle);
-        //addNewEvent.getItems().add(addNewRehearsal);
         addNewEvent.getItems().add(addNewNonMusicalEvent);
     }
 
@@ -388,12 +299,6 @@ public class EventScheduleController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void setCalenderWeekLabel() {
-        Calendar cal = agenda.getDisplayedCalendar();
-        int week = cal.get(Calendar.WEEK_OF_YEAR);
-        calenderWeekLabel.setText("Calender Week " + String.valueOf(week));
     }
 
     private void setEventToMenuItems() {
@@ -484,7 +389,16 @@ public class EventScheduleController {
     @FXML public void refresh() {
         removeAllData();
 
-        List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForWeek(agenda.getDisplayedCalendar());
+        List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForWeek(staticAgenda.getDisplayedCalendar());
+        for(EventDutyDTO event : events) {
+            addEventDutyToGUI(event);
+        }
+    }
+
+    public static void reload() {
+        removeAllData();
+
+        List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForWeek(staticAgenda.getDisplayedCalendar());
         for(EventDutyDTO event : events) {
             addEventDutyToGUI(event);
         }

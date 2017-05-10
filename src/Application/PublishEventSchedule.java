@@ -7,6 +7,7 @@ import Application.DTO.EventDutyDTO;
 import Domain.Models.EventDutyModel;
 import Persistence.Entities.EventDutyEntity;
 import Persistence.PersistanceFacade;
+import Presentation.EventSchedule.EventScheduleController;
 import Utils.Enum.EventStatus;
 import Utils.MessageHelper;
 import Utils.Validator;
@@ -59,6 +60,7 @@ public class PublishEventSchedule {
             }
         }
 
+        EventScheduleController.reload();
         MessageHelper.showInformationMessage("All events of the month " + month.toString().toLowerCase() + " have been published");
         return null;
     }

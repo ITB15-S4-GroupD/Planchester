@@ -3,12 +3,16 @@ package Application;
 import Domain.Models.EventDutyModel;
 import Persistence.Entities.*;
 import Persistence.PersistanceFacade;
+import Utils.Enum.DutyDispositionStatus;
+import Utils.Enum.SectionType;
+import Utils.MessageHelper;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.Month;
 import java.time.Year;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static Application.EventScheduleManager.createEventDutyModel;
@@ -22,145 +26,119 @@ public class DutyRoster {
 
     private Calendar firstOfMonth = Calendar.getInstance();
     private Calendar firstOfNextMonth = Calendar.getInstance();
-    private String section;
-    private MusicianPartEntity musicianPart;
-    private List<EventDutyModel> eventsDuring;
+    private SectionType section;
+    private PartTypeEntity partTypeEntity;
 
-    public void validateMonth(Year year, Month month) {
+    public boolean validateMonth(Year year, Month month) {
         //zweimal selbe parameter übergeben, da aufruf und logik bei setter
-        this.setFirstOfMonth(year, month);
-        this.setFirstOfNextMonth(year, month);
+        setFirstOfMonth(year, month);
+        setFirstOfNextMonth(year, month);
 
-        Collection<PersonEntity> persons = AccountAdministrationManager.getInstance().getLoggedInAccount().getPeopleByAccountId();
-        for (PersonEntity person : persons) {
-            Collection<MusicianPartEntity> parts = person.getMusicianPartsByPersonId();
-            for (MusicianPartEntity part : parts) {
-                part.getPartByPart().getSectionType();
-                this.section = part.getPartByPart().getSectionType().toString();
-                this.musicianPart = part;
+        section = AccountAdministrationManager.getInstance().getSectionType();
+        Collection<MusicianPartEntity> parts = AccountAdministrationManager.getInstance().getLoggedInAccount().getPersonAccountId().getMusicianPartsByPersonId();
+
+        for(MusicianPartEntity musicianPartEntity : parts) {
+            partTypeEntity = musicianPartEntity.getPartByPart().getPartTypeByPartType();
+        }
+
+        for (EventDutyEntity event : DutyRosterManager.getDutyRosterEntitiesInRange(firstOfMonth, firstOfNextMonth)) {
+            if(validateDuty(event) == false) {
+                return false;
             }
         }
 
-        this.eventsDuring = this.getEventsDuringMonth(year, month);
-
-        for (EventDutyModel event : this.eventsDuring) {
-            this.validateDuty(event);
-        }
-
+        return true;
     }
 
-    public void validateDuty(EventDutyModel event) {
-        Integer instrumentationID = event.getInstrumentation();
-        int amount = 0;
-        PersistanceFacade<StringInstrumentationEntity> persistenceFacadeString;
-        PersistanceFacade<WoodInstrumentationEntity> persistenceFacadeWood;
-        PersistanceFacade<BrassInstrumentationEntity> persistenceFacadeBrass;
-        PersistanceFacade<PercussionInstrumentationEntity> persistenceFacadePercussion;
-        StringInstrumentationEntity stringInstrumentationEntity;
-        WoodInstrumentationEntity woodInstrumentationEntity;
-        BrassInstrumentationEntity brassInstrumentationEntity;
-        PercussionInstrumentationEntity percussionInstrumentationEntity;
-
-        switch (this.section) {
-            case ("Violin1"):
-                persistenceFacadeString = new PersistanceFacade<>(StringInstrumentationEntity.class);
-                stringInstrumentationEntity = persistenceFacadeString.get(instrumentationID);
-                amount = stringInstrumentationEntity.getViolin1();
-                break;
-            case "Violin2":
-                persistenceFacadeString = new PersistanceFacade<>(StringInstrumentationEntity.class);
-                stringInstrumentationEntity = persistenceFacadeString.get(instrumentationID);
-                amount = stringInstrumentationEntity.getViolin2();
-                break;
-            case "Viola":
-                persistenceFacadeString = new PersistanceFacade<>(StringInstrumentationEntity.class);
-                stringInstrumentationEntity = persistenceFacadeString.get(instrumentationID);
-                amount = stringInstrumentationEntity.getViola();
-                break;
-            case "Violincello":
-                persistenceFacadeString = new PersistanceFacade<>(StringInstrumentationEntity.class);
-                stringInstrumentationEntity = persistenceFacadeString.get(instrumentationID);
-                amount = stringInstrumentationEntity.getViolincello();
-                break;
-            case "Doublebass":
-                persistenceFacadeString = new PersistanceFacade<>(StringInstrumentationEntity.class);
-                stringInstrumentationEntity = persistenceFacadeString.get(instrumentationID);
-                amount = stringInstrumentationEntity.getDoublebass();
-                break;
-
-            case "Woodwind":
-                persistenceFacadeWood = new PersistanceFacade<>(WoodInstrumentationEntity.class);
-                woodInstrumentationEntity = persistenceFacadeWood.get(instrumentationID);
-                amount = woodInstrumentationEntity.getBassoon() + woodInstrumentationEntity.getClarinet() + woodInstrumentationEntity.getFlute() + woodInstrumentationEntity.getOboe();
-                break;
-
-            case "Brass":
-                persistenceFacadeBrass = new PersistanceFacade<>(BrassInstrumentationEntity.class);
-                brassInstrumentationEntity = persistenceFacadeBrass.get(instrumentationID);
-                amount = brassInstrumentationEntity.getHorn() + brassInstrumentationEntity.getTrombone() + brassInstrumentationEntity.getTrumpet() + brassInstrumentationEntity.getTube();
-                break;
-
-            case "Percussion":
-                persistenceFacadePercussion = new PersistanceFacade<>(PercussionInstrumentationEntity.class);
-                percussionInstrumentationEntity = persistenceFacadePercussion.get(instrumentationID);
-                amount = percussionInstrumentationEntity.getHarp() + percussionInstrumentationEntity.getKettledrum() + percussionInstrumentationEntity.getPercussion();
-                break;
-
-            default:
-                //do nothing
+    public boolean validateDuty(EventDutyEntity event) {
+        int required = 0;
+        if(event.getInstrumentationByInstrumentation() == null) {
+            StringBuilder warning = new StringBuilder();
+            warning.append("Instrumentation for ");
+            warning.append(event.getEventType());
+            warning.append(" ");
+            warning.append(event.getName());
+            warning.append(" on ");
+            warning.append(event.getStarttime().toLocalDateTime().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            warning.append(" is missing.");
+            MessageHelper.showErrorAlertMessage(warning.toString());
+            return false;
         }
 
-        this.checkIfEnoughMusiciansAreAdressed(this.section, amount, event);
-    }
+        StringInstrumentationEntity stringInstrumentationEntity = event.getInstrumentationByInstrumentation().getStringInstrumentationByStringInstrumentation();
+        switch (section) {
+            case Violin1:
+                required = stringInstrumentationEntity.getViolin1();
+                break;
+            case Violin2:
+                required = stringInstrumentationEntity.getViolin2();
+                break;
+            case Viola:
+                required = stringInstrumentationEntity.getViola();
+                break;
+            case Violincello:
+                required = stringInstrumentationEntity.getViolincello();
+                break;
+            case Doublebass:
+                required = stringInstrumentationEntity.getDoublebass();
+                break;
 
-    public void checkIfEnoughMusiciansAreAdressed(String section, int necessary, EventDutyModel eventDutyModel){
-        //Vergleich benötigte mit zugewiesenen Musikern
-        DutyDispositionEntity dutyDispositionEntity = null;
-        EventDutyEntity eventDutyEntity;
-        dutyDispositionEntity.setEventDuty(eventDutyModel.getEventDutyId());
-        eventDutyEntity = dutyDispositionEntity.getEventDutyByEventDuty();
-        MusicianPartEntity mp;
-        dutyDispositionEntity.getMusician();
+            case Woodwind:
+                WoodInstrumentationEntity woodInstrumentationEntity = event.getInstrumentationByInstrumentation().getWoodInstrumentationByWoodInstrumentation();
+                required = woodInstrumentationEntity.getBassoon() + woodInstrumentationEntity.getClarinet() + woodInstrumentationEntity.getFlute() + woodInstrumentationEntity.getOboe();
+                break;
 
-    }
+            case Brass:
+                BrassInstrumentationEntity brassInstrumentationEntity = event.getInstrumentationByInstrumentation().getBrassInstrumentationByBrassInstrumentation();
+                required = brassInstrumentationEntity.getHorn() + brassInstrumentationEntity.getTrombone() + brassInstrumentationEntity.getTrumpet() + brassInstrumentationEntity.getTube();
+                break;
 
-    public List<EventDutyModel> getEventsDuringMonth(Year year, Month month) {
-        this.setFirstOfMonth(year, month);
-        this.setFirstOfNextMonth(year, month); 
-
-        PersistanceFacade<EventDutyEntity> eventDutyEntityPersistanceFacade = new PersistanceFacade<>(EventDutyEntity.class);
-        List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p -> p.getStarttime().after(this.getFirstOfMonth().getTime())
-                && p.getStarttime().before(this.getFirstOfNextMonth().getTime()));
-
-        List<EventDutyModel> eventDutyModelList = new ArrayList<>();
-        for (EventDutyEntity eventDutyEntity : eventDuties) {
-            eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
+            case Percussion:
+                PercussionInstrumentationEntity percussionInstrumentationEntity = event.getInstrumentationByInstrumentation().getPercussionInstrumentationByPercussionInstrumentation();
+                required = percussionInstrumentationEntity.getHarp() + percussionInstrumentationEntity.getKettledrum() + percussionInstrumentationEntity.getPercussion();
+                break;
         }
-        return eventDutyModelList;
+
+        int adressed = getCountMusicicansForEventAndPart(event, partTypeEntity, DutyDispositionStatus.Normal);
+
+        if(required > adressed) {
+            int missing = required - adressed;
+            StringBuilder warning = new StringBuilder();
+            warning.append("There are not enough musicians assigned for ");
+            warning.append(event.getEventType());
+            warning.append(" ");
+            warning.append(event.getName());
+            warning.append(" on ");
+            warning.append(event.getStarttime().toLocalDateTime().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            warning.append(".\n");
+            warning.append(missing);
+            warning.append(" ");
+            warning.append(partTypeEntity.getPartType());
+            warning.append(" are missing.");
+            MessageHelper.showErrorAlertMessage(warning.toString());
+            return false;
+        }
+        return true;
+    }
+
+    public int getCountMusicicansForEventAndPart(EventDutyEntity eventDutyEntity, PartTypeEntity partTypeEntity, DutyDispositionStatus dutyDispositionStatus) {
+        PersistanceFacade<DutyDispositionEntity> dutyDispositionEntityPersistanceFacade = new PersistanceFacade<>(DutyDispositionEntity.class);
+
+        return dutyDispositionEntityPersistanceFacade.list(p -> p.getEventDuty() == eventDutyEntity.getEventDutyId()
+                && p.getPersonByMusician().getMusicianPartsByPersonId().stream().filter(c -> c.getPartByPart().equals(partTypeEntity)) != null
+                && p.getDutyDispositionStatus().equals(dutyDispositionStatus.toString())
+        ).size();
     }
 
     /**
      * Getters and Setters
      */
 
-    public String getSection() {
-        return this.section;
-    }
-
     public void setFirstOfMonth(Year year, Month month) {
         this.firstOfMonth.set(year.getValue(), month.getValue() - 1, 1);
-    }
-
-    public Calendar getFirstOfMonth() {
-        return this.firstOfMonth;
     }
 
     public void setFirstOfNextMonth(Year year, Month month) {
         this.firstOfNextMonth.set(year.getValue(), month.getValue(), 1);
     }
-
-    public Calendar getFirstOfNextMonth() {
-        return firstOfNextMonth;
-    }
-
 }

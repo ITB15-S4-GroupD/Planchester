@@ -41,6 +41,7 @@ public class PlanchesterFrameController {
 
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         eventscheduleTab.setContent(FXMLLoader.load(getClass().getResource("EventSchedule/EventSchedule.fxml")));
+        dutyRosterTab.setContent(FXMLLoader.load(getClass().getResource("DutyRoster/DutyRoster.fxml")));
 
         if(!AccountRole.Manager.equals(accountRole) && !AccountRole.Administrator.equals(accountRole)) {
             tabPane.getTabs().remove(useradministrationTab);

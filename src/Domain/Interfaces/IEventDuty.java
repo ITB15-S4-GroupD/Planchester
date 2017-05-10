@@ -1,5 +1,6 @@
 package Domain.Interfaces;
 
+import Utils.Enum.DutyRosterStatus;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import java.sql.Timestamp;
@@ -7,7 +8,7 @@ import java.sql.Timestamp;
 /**
  * Created by timorzipa on 08/05/2017.
  */
-public interface IEventDuty<T> {
+public interface IEventDuty {
     Integer getEventDutyId();
     void setEventDutyId(Integer eventDutyId);
     String getName();
@@ -32,4 +33,6 @@ public interface IEventDuty<T> {
     void setRehearsalFor(Integer rehearsalFor);
     Integer getInstrumentation();
     void setInstrumentation(Integer instrumentation);
+    DutyRosterStatus getDutyRosterStatus();
+    void setDutyRosterStatus(DutyRosterStatus dutyRosterStatus);
 }

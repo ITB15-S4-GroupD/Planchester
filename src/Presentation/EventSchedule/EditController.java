@@ -6,6 +6,8 @@ import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
 import Domain.Models.Permission;
+import Presentation.EventSchedule.EventScheduleController;
+import Presentation.EventSchedule.InstrumentationController;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.MessageHelper;
@@ -52,7 +54,7 @@ public class EditController {
     @FXML protected TableColumn<String, String> selectedMusicalWorks;
 
     protected List<MusicalWorkDTO> musicalWorks;
-    protected InstrumentationDTO instrumentation; // TODO timebox2
+    protected InstrumentationDTO instrumentation;
 
     protected Agenda.Appointment initAppointment; // remember init data to compare
     protected EventDutyDTO initEventDutyDTO; // remember init data to compare
@@ -144,11 +146,10 @@ public class EditController {
     protected void save() throws ValidationException {
         if(validate()) {
             Agenda.Appointment selectedAppointment = EventScheduleController.getSelectedAppointment();
-            EventDutyDTO oldEventDutyDTO = EventScheduleController.getEventForAppointment(selectedAppointment);
             EventScheduleController.removeSelectedAppointmentFromCalendar(selectedAppointment);
 
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
-            eventDutyDTO.setEventDutyId(oldEventDutyDTO.getEventDutyId());
+            eventDutyDTO.setEventDutyId(initEventDutyDTO.getEventDutyId());
             eventDutyDTO.setName(name.getText());
             eventDutyDTO.setDescription(description.getText());
             eventDutyDTO.setStartTime(DateHelper.mergeDateAndTime(date.getValue(), startTime.getValue()));
@@ -245,7 +246,7 @@ public class EditController {
     }
 
     @FXML
-    protected void editEvent () {
+    protected void editEvent() {
         btnCancelEvent.setVisible(true);
         btnSaveEvent.setVisible(true);
         btnEditEvent.setVisible(false);
@@ -272,7 +273,6 @@ public class EditController {
         points.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
         conductor.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
     }
-
 
     @FXML
     protected void editInstrumentation() {

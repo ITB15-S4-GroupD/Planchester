@@ -14,10 +14,8 @@ import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import Utils.MessageHelper;
-
 import javax.xml.bind.ValidationException;
 import java.util.*;
-
 import static Utils.DateHelper.convertCalendarToTimestamp;
 
 /**
@@ -26,7 +24,7 @@ import static Utils.DateHelper.convertCalendarToTimestamp;
 public class EventScheduleManager {
     private static PersistanceFacade<EventDutyEntity> eventDutyEntityPersistanceFacade = new PersistanceFacade(EventDutyEntity.class);
     private static PersistanceFacade<EventDutyMusicalWorkEntity> eventDutyMusicalWorkEntityPersistanceFacade = new PersistanceFacade(EventDutyMusicalWorkEntity.class);
-
+    private static PersistanceFacade<MusicalWorkEntity> musicalWorkEntityPersistanceFacade = new PersistanceFacade<MusicalWorkEntity>(MusicalWorkEntity.class);
     public static Calendar loadedEventsStartdate; //start of the already loaded calendar
     public static Calendar loadedEventsEnddate; //end of the already loaded calendar
 
@@ -45,12 +43,10 @@ public class EventScheduleManager {
             }
         }
 
-        /*
-        HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()), DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()));
+        HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(eventDutyModel.getStartTime(), eventDutyModel.getEndTime());
         if(!musicanCapacityMap.isEmpty()) {
-            MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap);
+            MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap, eventDutyDTO);
         }
-        */
 
         eventDutyDTO.setEventDutyId(eventDutyEntity.getEventDutyId());
         return eventDutyDTO;
@@ -59,38 +55,58 @@ public class EventScheduleManager {
     public static void updateEventDuty(EventDutyDTO newEventDutyDTO, EventDutyDTO oldEventDutyDTO) throws ValidationException {
         EventDutyModel eventDutyModel = createEventDutyModel(newEventDutyDTO);
         eventDutyModel.validate();
-        EventDutyEntity eventDutyEntity = eventDutyEntityPersistanceFacade.get(eventDutyModel.getEventDutyId());
-        eventDutyEntityPersistanceFacade.put(eventDutyEntity);
 
-        /*
-        HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()), DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()));
-        if(!musicanCapacityMap.isEmpty()) {
-            MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap);
-        }
-        */
+        // get object from db
+        EventDutyEntity eventDutyEntity = eventDutyEntityPersistanceFacade.get(eventDutyModel.getEventDutyId());
+
+        // update object
+        eventDutyEntity.setName(eventDutyModel.getName());
+        eventDutyEntity.setDescription(eventDutyModel.getDescription());
+        eventDutyEntity.setStarttime(eventDutyModel.getStartTime());
+        eventDutyEntity.setEndtime(eventDutyModel.getEndTime());
+        eventDutyEntity.setEventType(eventDutyModel.getEventType().toString());
+        eventDutyEntity.setEventStatus(eventDutyModel.getEventStatus().toString());
+        eventDutyEntity.setConductor(eventDutyModel.getConductor());
+        eventDutyEntity.setLocation(eventDutyModel.getLocation());
+        eventDutyEntity.setDefaultPoints(eventDutyModel.getPoints() == null ? 0.0 : Double.valueOf(eventDutyModel.getPoints()));
+        eventDutyEntity.setInstrumentation(eventDutyModel.getInstrumentation());
+        eventDutyEntity.setRehearsalFor(eventDutyModel.getRehearsalFor());
 
         // check for changes in musical works
         // remove all musical works which did exist but now don't
         if(oldEventDutyDTO.getMusicalWorks() != null) {
             for (MusicalWorkDTO musicalWorkDTO : oldEventDutyDTO.getMusicalWorks()) {
                 if (newEventDutyDTO.getMusicalWorks() == null || !newEventDutyDTO.getMusicalWorks().contains(musicalWorkDTO)) {
-                    removeEventDutyMusicalWorks(eventDutyEntity, musicalWorkDTO);
+                    EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = eventDutyMusicalWorkEntityPersistanceFacade.get(
+                            p -> p.getEventDuty() == eventDutyEntity.getEventDutyId() && p.getMusicalWork() == musicalWorkDTO.getId());
+                    eventDutyEntity.getEventDutyMusicalWorksByEventDutyId().remove(eventDutyMusicalWorkEntity);
+                    removeEventDutyMusicalWorks(eventDutyEntity,musicalWorkDTO);
                 }
             }
         }
+
         // add all new musical works which did not exist before
         if(newEventDutyDTO.getMusicalWorks() != null) {
             for (MusicalWorkDTO musicalWorkDTO : newEventDutyDTO.getMusicalWorks()) {
-                if ( musicalWorkDTO != null && (oldEventDutyDTO.getMusicalWorks() == null || !oldEventDutyDTO.getMusicalWorks().contains(musicalWorkDTO)) ) {
-                    createEventDutyMusicalWorks(eventDutyEntity, musicalWorkDTO);
+                if (oldEventDutyDTO.getMusicalWorks() == null || !oldEventDutyDTO.getMusicalWorks().contains(musicalWorkDTO)) {
+                    EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
+                    eventDutyMusicalWorkEntity.setEventDuty(eventDutyEntity.getEventDutyId());
+                    eventDutyMusicalWorkEntity.setMusicalWork(musicalWorkDTO.getId());
+                    eventDutyMusicalWorkEntity.setMusicalWorkByMusicalWork(musicalWorkEntityPersistanceFacade.get(musicalWorkDTO.getId()));
+                    eventDutyEntity.getEventDutyMusicalWorksByEventDutyId().add(eventDutyMusicalWorkEntity);
+                    createEventDutyMusicalWorks(eventDutyEntity,musicalWorkDTO);
                 }
             }
         }
-    }
 
-    public static EventDutyDTO createNonMusicalPerformance(EventDutyDTO eventDutyDTO) {
-		return null;
-	}
+        // save updated object
+        eventDutyEntityPersistanceFacade.put(eventDutyEntity);
+
+        HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(eventDutyModel.getStartTime(), eventDutyModel.getEndTime());
+        if(!musicanCapacityMap.isEmpty()) {
+            MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap, newEventDutyDTO);
+        }
+    }
 
     public static List<EventDutyDTO> getEventDutyListForCurrentWeek() {
         Calendar today = Calendar.getInstance();
@@ -125,6 +141,8 @@ public class EventScheduleManager {
             return new ArrayList<>();
         }
 
+        startdayOfWeek.setTimeInMillis(startdayOfWeek.getTimeInMillis()-1);
+
         List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p -> p.getStarttime().after(convertCalendarToTimestamp(startdayOfWeek))
                 && p.getStarttime().before(convertCalendarToTimestamp(enddayOfWeek)));
 
@@ -132,10 +150,12 @@ public class EventScheduleManager {
         for(EventDutyEntity eventDutyEntity : eventDuties) {
             eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
         }
+
         List<EventDutyDTO> eventDutyDTOList = new ArrayList<>();
         for(EventDutyModel eventDutyModel : eventDutyModelList) {
             eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
         }
+
         setLoadedEventsStartAndEnddate(startdayOfWeek, enddayOfWeek);
 
         return AccountAdministrationManager.getInstance().getUserPermissions().getViewableEventsForEventSchedule(eventDutyDTOList);
@@ -156,9 +176,8 @@ public class EventScheduleManager {
     }
 
     public static void removeEventDutyMusicalWorks(EventDutyEntity eventDutyEntity, MusicalWorkDTO musicalWorkDTO) {
-        EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
-        eventDutyMusicalWorkEntity.setEventDuty(eventDutyEntity.getEventDutyId());
-        eventDutyMusicalWorkEntity.setMusicalWork(musicalWorkDTO.getId());
+        EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = eventDutyMusicalWorkEntityPersistanceFacade.get(
+                p -> p.getEventDuty() == eventDutyEntity.getEventDutyId() && p.getMusicalWork() == musicalWorkDTO.getId());
         eventDutyMusicalWorkEntityPersistanceFacade.remove(eventDutyMusicalWorkEntity);
     }
 
@@ -169,7 +188,6 @@ public class EventScheduleManager {
         eventDutyMusicalWorkEntityPersistanceFacade.put(eventDutyMusicalWorkEntity);
     }
 
-    //Mapper
     public static MusicalWorkModel getMusicalWorkModel(MusicalWorkDTO musicalWorkDTO) {
         MusicalWorkModel musicalWorkModel = new MusicalWorkModel();
         musicalWorkModel.setName(musicalWorkDTO.getName());
@@ -242,6 +260,7 @@ public class EventScheduleManager {
         eventDutyModel.setPoints(eventDutyDTO.getPoints());
         eventDutyModel.setInstrumentation(eventDutyDTO.getInstrumentation());
         eventDutyModel.setRehearsalFor(eventDutyDTO.getRehearsalFor());
+        eventDutyModel.setDutyRosterStatus(eventDutyDTO.getDutyRosterStatus());
         if(eventDutyDTO.getMusicalWorks() != null && !eventDutyDTO.getMusicalWorks().isEmpty()) {
             List<MusicalWorkModel> musicalWorkModels = new ArrayList<>();
             for (MusicalWorkDTO musicalWorkDTO : eventDutyDTO.getMusicalWorks()) {
@@ -308,6 +327,7 @@ public class EventScheduleManager {
         eventDutyDTO.setPoints(eventDutyModel.getPoints());
         eventDutyDTO.setInstrumentation(eventDutyModel.getInstrumentation());
         eventDutyDTO.setRehearsalFor(eventDutyModel.getRehearsalFor());
+        eventDutyDTO.setDutyRosterStatus(eventDutyModel.getDutyRosterStatus());
 
         if(eventDutyModel.getMusicalWorks() != null) {
             List<MusicalWorkDTO> musicalWorkDTOS = new ArrayList<>();

@@ -1,7 +1,6 @@
 package Persistence;
 
 import org.hibernate.Session;
-
 import javax.persistence.Entity;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -14,6 +13,7 @@ import java.util.stream.Collectors;
 /**
  * Created by julia on 26.04.2017.
  */
+
 public class PersistanceFacade<T> {
 
     private final Class<T> persistanceClass;
