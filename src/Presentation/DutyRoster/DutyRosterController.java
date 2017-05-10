@@ -126,11 +126,14 @@ public class DutyRosterController extends CalenderController{
             appointment.setSummary(event.getName() + "\nNonMusicalEvent");
         }
 
-        if(event.getDutyRosterStatus().equals(DutyRosterStatus.Published)) {
+        if(EventStatus.Cancelled.equals(event.getEventStatus())) {
+            appointment.setSummary(appointment.getSummary() + " (C)");
+        } else if(DutyRosterStatus.Published.equals(event.getDutyRosterStatus())) {
             appointment.setSummary(appointment.getSummary() + " (P)");
-        } else if(event.getEventStatus().equals(DutyRosterStatus.Unpublished)) {
+        } else if(DutyRosterStatus.Unpublished.equals(event.getDutyRosterStatus())) {
             appointment.setSummary(appointment.getSummary() + " (UP)");
         }
+
 
         staticLoadedEventsMap.put(appointment, event);
         staticAgenda.appointments().add(appointment);

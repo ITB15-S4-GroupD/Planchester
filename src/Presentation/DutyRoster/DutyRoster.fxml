@@ -118,6 +118,21 @@
                         <JFXTextField fx:id="colorKeyHofkapelle" alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="90.0" text="Hofkapelle" GridPane.columnIndex="3" />
                         <JFXTextField fx:id="colorKeyRehearsal" alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="90.0" text="Rehearsal" GridPane.columnIndex="4" />
                         <JFXTextField fx:id="colorKeyNonMusical" alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="90.0" text="Non Musical " GridPane.columnIndex="5" />
+                        <GridPane GridPane.columnIndex="6">
+                            <columnConstraints>
+                                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="143.0" />
+                                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="143.0" />
+                                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="153.0" minWidth="10.0" prefWidth="135.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Label text="(P) ... Published" GridPane.columnIndex="2" />
+                                <Label fx:id="unpublishedLabel" text="(UP) ... Unpublished" />
+                                <Label text="(C) ... Cancelled" GridPane.columnIndex="1" />
+                            </children>
+                        </GridPane>
                     </children>
                 </GridPane>
 
