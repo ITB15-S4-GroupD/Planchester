@@ -46,7 +46,7 @@ public class PublishEventSchedule {
             }
 
             if(!hardValid(evt)) {
-                EventScheduleManager.createEventDutyDTO(eventDutyModel);
+                return EventScheduleManager.createEventDutyDTO(eventDutyModel);
             }
         }
       

@@ -353,4 +353,18 @@ public class EventScheduleManager {
 
         return eventDutyModel;
     }
+
+    public static List<EventDutyDTO> getAllUnpublishedMonths() {
+        List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p -> p.getEventStatus().equals(EventStatus.Unpublished.toString()));
+
+        List<EventDutyModel> eventDutyModelList = new ArrayList<>();
+        for(EventDutyEntity eventDutyEntity : eventDuties) {
+            eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
+        }
+        List<EventDutyDTO> eventDutyDTOList = new ArrayList<>();
+        for(EventDutyModel eventDutyModel : eventDutyModelList) {
+            eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
+        }
+        return eventDutyDTOList;
+    }
 }
