@@ -24,7 +24,7 @@ public class PersistanceFacade<T> {
 
     public T get(int oid) {
         Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
-        T object = session.get(persistanceClass,oid);
+        T object = session.get(persistanceClass, oid);
         DatabaseConnectionHandler.getInstance().commitTransaction();
         return object;
     }
@@ -58,20 +58,24 @@ public class PersistanceFacade<T> {
     public T put(T obj) {
         Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
         session.saveOrUpdate(obj);
+        session.flush();
+        session.refresh(obj);
         DatabaseConnectionHandler.getInstance().commitTransaction();
         return obj;
     }
 
     public void remove(int oid) {
         Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
-        Object object = (T)session.get(persistanceClass, oid);
-        session.delete(object);
+        Object obj = (T)session.get(persistanceClass, oid);
+        session.delete(obj);
+        session.refresh(obj);
         DatabaseConnectionHandler.getInstance().commitTransaction();
     }
 
-    public void remove(T object) {
+    public void remove(T obj) {
         Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
-        session.delete(object);
+        session.delete(obj);
+        session.refresh(obj);
         DatabaseConnectionHandler.getInstance().commitTransaction();
     }
 

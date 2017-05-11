@@ -407,7 +407,5 @@ public class EventScheduleController extends CalenderController {
     public static void removeAllData() {
         staticLoadedEventsMap.clear();
         staticAgenda.appointments().clear();
-        EventScheduleManager.loadedEventsEnddate = null;
-        EventScheduleManager.loadedEventsStartdate = null;
     }
 }
