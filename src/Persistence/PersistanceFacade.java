@@ -1,11 +1,20 @@
 package Persistence;
 
+import Persistence.Entities.EventDutyEntity;
+import Utils.Enum.EventStatus;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
+
 import javax.persistence.Entity;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -24,7 +33,7 @@ public class PersistanceFacade<T> {
 
     public T get(int oid) {
         Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
-        T object = session.get(persistanceClass,oid);
+        T object = session.get(persistanceClass, oid);
         DatabaseConnectionHandler.getInstance().commitTransaction();
         return object;
     }
@@ -58,20 +67,26 @@ public class PersistanceFacade<T> {
     public T put(T obj) {
         Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
         session.saveOrUpdate(obj);
+        session.flush();
+        session.refresh(obj);
         DatabaseConnectionHandler.getInstance().commitTransaction();
         return obj;
     }
 
     public void remove(int oid) {
         Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
-        Object object = (T)session.get(persistanceClass, oid);
-        session.delete(object);
+        Object obj = (T)session.get(persistanceClass, oid);
+        session.delete(obj);
+        session.flush();
+        session.refresh(obj);
         DatabaseConnectionHandler.getInstance().commitTransaction();
     }
 
-    public void remove(T object) {
+    public void remove(T obj) {
         Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
-        session.delete(object);
+        session.delete(obj);
+        session.flush();
+        session.refresh(obj);
         DatabaseConnectionHandler.getInstance().commitTransaction();
     }
 

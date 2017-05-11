@@ -24,14 +24,12 @@ import static Utils.DateHelper.convertCalendarToTimestamp;
 public class EventScheduleManager {
     private static PersistanceFacade<EventDutyEntity> eventDutyEntityPersistanceFacade = new PersistanceFacade(EventDutyEntity.class);
     private static PersistanceFacade<EventDutyMusicalWorkEntity> eventDutyMusicalWorkEntityPersistanceFacade = new PersistanceFacade(EventDutyMusicalWorkEntity.class);
-    private static PersistanceFacade<MusicalWorkEntity> musicalWorkEntityPersistanceFacade = new PersistanceFacade<MusicalWorkEntity>(MusicalWorkEntity.class);
-    public static Calendar loadedEventsStartdate; //start of the already loaded calendar
-    public static Calendar loadedEventsEnddate; //end of the already loaded calendar
 
     public static EventDutyDTO createEventDuty(EventDutyDTO eventDutyDTO) throws ValidationException {
         EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
         eventDutyModel.validate();
         EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
+
         eventDutyEntity = eventDutyEntityPersistanceFacade.put(eventDutyEntity);
 
         // create connection between event duty and musical work
@@ -77,10 +75,7 @@ public class EventScheduleManager {
         if(oldEventDutyDTO.getMusicalWorks() != null) {
             for (MusicalWorkDTO musicalWorkDTO : oldEventDutyDTO.getMusicalWorks()) {
                 if (newEventDutyDTO.getMusicalWorks() == null || !newEventDutyDTO.getMusicalWorks().contains(musicalWorkDTO)) {
-                    EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = eventDutyMusicalWorkEntityPersistanceFacade.get(
-                            p -> p.getEventDuty() == eventDutyEntity.getEventDutyId() && p.getMusicalWork() == musicalWorkDTO.getId());
-                    eventDutyEntity.getEventDutyMusicalWorksByEventDutyId().remove(eventDutyMusicalWorkEntity);
-                    removeEventDutyMusicalWorks(eventDutyEntity,musicalWorkDTO);
+                    removeEventDutyMusicalWorks(eventDutyEntity, musicalWorkDTO);
                 }
             }
         }
@@ -89,11 +84,6 @@ public class EventScheduleManager {
         if(newEventDutyDTO.getMusicalWorks() != null) {
             for (MusicalWorkDTO musicalWorkDTO : newEventDutyDTO.getMusicalWorks()) {
                 if (oldEventDutyDTO.getMusicalWorks() == null || !oldEventDutyDTO.getMusicalWorks().contains(musicalWorkDTO)) {
-                    EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity = new EventDutyMusicalWorkEntity();
-                    eventDutyMusicalWorkEntity.setEventDuty(eventDutyEntity.getEventDutyId());
-                    eventDutyMusicalWorkEntity.setMusicalWork(musicalWorkDTO.getId());
-                    eventDutyMusicalWorkEntity.setMusicalWorkByMusicalWork(musicalWorkEntityPersistanceFacade.get(musicalWorkDTO.getId()));
-                    eventDutyEntity.getEventDutyMusicalWorksByEventDutyId().add(eventDutyMusicalWorkEntity);
                     createEventDutyMusicalWorks(eventDutyEntity,musicalWorkDTO);
                 }
             }
@@ -136,43 +126,22 @@ public class EventScheduleManager {
     }
 
     private static List<EventDutyDTO> getEventDutyInRange(Calendar startdayOfWeek, Calendar enddayOfWeek) {
-        if(loadedEventsStartdate != null && loadedEventsEnddate != null &&
-                loadedEventsStartdate.compareTo(startdayOfWeek) <= 0 && loadedEventsEnddate.compareTo(enddayOfWeek) >= 0) {
-            return new ArrayList<>();
-        }
-
-        startdayOfWeek.setTimeInMillis(startdayOfWeek.getTimeInMillis()-1);
+        startdayOfWeek.setTimeInMillis(startdayOfWeek.getTimeInMillis() - 1);
 
         List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p -> p.getStarttime().after(convertCalendarToTimestamp(startdayOfWeek))
                 && p.getStarttime().before(convertCalendarToTimestamp(enddayOfWeek)));
 
         List<EventDutyModel> eventDutyModelList = new ArrayList<>();
-        for(EventDutyEntity eventDutyEntity : eventDuties) {
+        for (EventDutyEntity eventDutyEntity : eventDuties) {
             eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
         }
 
         List<EventDutyDTO> eventDutyDTOList = new ArrayList<>();
-        for(EventDutyModel eventDutyModel : eventDutyModelList) {
+        for (EventDutyModel eventDutyModel : eventDutyModelList) {
             eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
         }
 
-        setLoadedEventsStartAndEnddate(startdayOfWeek, enddayOfWeek);
-
         return AccountAdministrationManager.getInstance().getUserPermissions().getViewableEventsForEventSchedule(eventDutyDTOList);
-    }
-
-    private static void setLoadedEventsStartAndEnddate(Calendar start, Calendar end) {
-        if(loadedEventsStartdate == null) {
-            loadedEventsStartdate = start;
-        } else if(loadedEventsStartdate.after(start)) {
-            loadedEventsStartdate = start;
-        }
-
-        if(loadedEventsEnddate == null) {
-            loadedEventsEnddate = end;
-        } else if (loadedEventsEnddate.before((end))) {
-            loadedEventsEnddate = end;
-        }
     }
 
     public static void removeEventDutyMusicalWorks(EventDutyEntity eventDutyEntity, MusicalWorkDTO musicalWorkDTO) {
@@ -364,5 +333,19 @@ public class EventScheduleManager {
         }
 
         return eventDutyModel;
+    }
+
+    public static List<EventDutyDTO> getAllUnpublishedMonths() {
+        List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p -> p.getEventStatus().equals(EventStatus.Unpublished.toString()));
+
+        List<EventDutyModel> eventDutyModelList = new ArrayList<>();
+        for(EventDutyEntity eventDutyEntity : eventDuties) {
+            eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
+        }
+        List<EventDutyDTO> eventDutyDTOList = new ArrayList<>();
+        for(EventDutyModel eventDutyModel : eventDutyModelList) {
+            eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
+        }
+        return eventDutyDTOList;
     }
 }
