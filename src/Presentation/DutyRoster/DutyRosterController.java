@@ -14,10 +14,12 @@ import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import jfxtras.scene.control.agenda.Agenda;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.time.temporal.ChronoUnit;
@@ -33,11 +35,17 @@ public class DutyRosterController extends CalenderController{
     protected static Map<Agenda.Appointment, EventDutyDTO> staticLoadedEventsMap = new HashMap<>();
     protected static boolean editOpen = false;
     protected static Agenda.Appointment selectedAppointment;
+    @FXML private ScrollPane scrollPane;
 
 
 
     @FXML
     public void initialize() {
+        try {
+            scrollPane.setContent(FXMLLoader.load(getClass().getResource("ShowDuty.fxml")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         staticAgenda = agenda;
         staticScrollPane = scrollPane;
 
