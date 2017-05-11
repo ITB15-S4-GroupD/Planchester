@@ -212,7 +212,7 @@ public class EventDutyEntity implements Serializable {
         this.instrumentationByInstrumentation = instrumentationByInstrumentation;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "eventDutyByEventDuty")
+    @OneToMany(mappedBy = "eventDutyByEventDuty")
     public Collection<EventDutyMusicalWorkEntity> getEventDutyMusicalWorksByEventDutyId() {
         return eventDutyMusicalWorksByEventDutyId;
     }

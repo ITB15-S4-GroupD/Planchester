@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+       <!--  <property name="connection.url">jdbc:mysql://127.0.0.1:3306/sem4_team2</property>-->
+        <property name="connection.url">jdbc:mysql://127.0.0.1:3306/planchester</property>
+        <!-- <property name="connection.url">jdbc:mysql://mysql.vlbg.org:3306/sem4_team2</property> -->
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">passwort</property>
+        <property name="show_sql">true</property>
+        <mapping class="Persistence.Entities.AccountEntity"/>
+        <mapping class="Persistence.Entities.BrassInstrumentationEntity"/>
+        <mapping class="Persistence.Entities.DutyDispositionEntity"/>
+        <mapping class="Persistence.Entities.EventDutyEntity"/>
+        <mapping class="Persistence.Entities.EventDutyMusicalWorkEntity"/>
+        <mapping class="Persistence.Entities.EventDutySectionDutyRosterEntity"/>
+        <mapping class="Persistence.Entities.InstrumentEntity"/>
+        <mapping class="Persistence.Entities.InstrumentTypeEntity"/>
+        <mapping class="Persistence.Entities.InstrumentationEntity"/>
+        <mapping class="Persistence.Entities.MusicalWorkEntity"/>
+        <mapping class="Persistence.Entities.MusicianPartEntity"/>
+        <mapping class="Persistence.Entities.PartEntity"/>
+        <mapping class="Persistence.Entities.PartTypeEntity"/>
+        <mapping class="Persistence.Entities.PercussionInstrumentationEntity"/>
+        <mapping class="Persistence.Entities.PersonEntity"/>
+        <mapping class="Persistence.Entities.PersonOrchestraRoleEntity"/>
+        <mapping class="Persistence.Entities.RequestEntity"/>
+        <mapping class="Persistence.Entities.SectionDutyRosterEntity"/>
+        <mapping class="Persistence.Entities.SpecialInstrumentationEntity"/>
+        <mapping class="Persistence.Entities.StringInstrumentationEntity"/>
+        <mapping class="Persistence.Entities.WoodInstrumentationEntity"/>
+        <!-- DB schema will be updated if needed -->
+        <!-- <property name="hbm2ddl.auto">update</property> -->
+    </session-factory>
+</hibernate-configuration>

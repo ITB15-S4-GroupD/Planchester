@@ -8,6 +8,7 @@ import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -23,7 +24,7 @@ public class CalculateMusicianCapacity {
     private static HashMap<String, Integer> difference = new HashMap<>();
     private static PersistanceFacade<EventDutyEntity> eventDutyEntityPersistanceFacade = new PersistanceFacade<>(EventDutyEntity.class);
 
-    public static HashMap<String, Integer> checkCapacityInRange(Calendar eventstart, Calendar eventend) {
+    public static HashMap<String, Integer> checkCapacityInRange(Timestamp eventstart, Timestamp eventend) {
         List<EventDutyEntity> allEvents = getAllEventsDuring(eventstart, eventend);
         HashMap<String, Integer> requiredDutyInstrumentation = getInstrumentationByMusicalWorks(allEvents);
         HashMap<String, Integer> allMusicians = getAllMusicians();
@@ -90,34 +91,8 @@ public class CalculateMusicianCapacity {
     }
 
     private static HashMap<String, Integer> getInstrumentationByMusicalWorks(List<EventDutyEntity> events) {
-        //Alernative Insturmentation can be ignored (this is not in the 1. timebox...)
-       HashMap<String, Integer> instrumentationForAllEvents = new HashMap<>();
-        // wood
-        instrumentationForAllEvents.put("Flute", 0);
-        instrumentationForAllEvents.put("Oboe", 0);
-        instrumentationForAllEvents.put("Clarinet", 0);
-        instrumentationForAllEvents.put("Bassoon", 0);
-
-        // string
-        instrumentationForAllEvents.put("First Violin", 0);
-        instrumentationForAllEvents.put("Second Violin", 0);
-        instrumentationForAllEvents.put("Viola", 0);
-        instrumentationForAllEvents.put("Violoncello", 0);
-        instrumentationForAllEvents.put("Double Bass", 0);
-
-        // percussion
-        instrumentationForAllEvents.put("Kettledrum", 0);
-        instrumentationForAllEvents.put("Percussion", 0);
-        instrumentationForAllEvents.put("Harp", 0);
-
-        // brass
-        instrumentationForAllEvents.put("French Horn", 0);
-        instrumentationForAllEvents.put("Trumpet", 0);
-        instrumentationForAllEvents.put("Trombone", 0);
-        instrumentationForAllEvents.put("Tuba", 0);
-
+        HashMap<String, Integer> instrumentation = new HashMap<>();
         for (EventDutyEntity eventDuty : events) {
-            HashMap<String, Integer> instrumentation = new HashMap<>();
             // wood
             instrumentation.put("Flute", 0);
             instrumentation.put("Oboe", 0);
@@ -187,14 +162,8 @@ public class CalculateMusicianCapacity {
                 if (instrumentation.get("Tuba") < brass.get("Tuba"))
                     instrumentation.put("Tuba", brass.get("Tuba"));
             }
-
-            Iterator it = instrumentation.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry) it.next();
-                instrumentationForAllEvents.put((String)pair.getKey(), instrumentationForAllEvents.get(pair.getKey()) + (Integer) pair.getValue());
-            }
         }
-        return instrumentationForAllEvents;
+        return instrumentation;
     }
 
     private static List<Integer> getInstrumentationIDsForMusicalWorks(EventDutyModel eventDutyModel) {
@@ -213,16 +182,18 @@ public class CalculateMusicianCapacity {
         return ids;
     }
 
-    private static List<EventDutyEntity> getAllEventsDuring(Calendar eventstart, Calendar eventend) {
+    private static List<EventDutyEntity> getAllEventsDuring(Timestamp eventstart, Timestamp eventend) {
 
         // event start before and ends after
         // event starts inside
         // event ends inside
+        // is event
 
         return eventDutyEntityPersistanceFacade.list(p ->
-                (p.getStarttime().before(DateHelper.convertCalendarToTimestamp(eventstart)) && p.getEndtime().after(DateHelper.convertCalendarToTimestamp(eventend)))
-                || (p.getStarttime().after(DateHelper.convertCalendarToTimestamp(eventstart)) && p.getStarttime().before(DateHelper.convertCalendarToTimestamp(eventend)))
-                || (p.getEndtime().after(DateHelper.convertCalendarToTimestamp(eventstart)) && p.getEndtime().before(DateHelper.convertCalendarToTimestamp(eventend)))
+                (p.getStarttime().before(eventstart) && p.getEndtime().after(eventend))
+                || (p.getStarttime().after(eventstart) && p.getStarttime().before(eventend))
+                || (p.getEndtime().after(eventstart) && p.getEndtime().before(eventend))
+                || (p.getEndtime().equals(eventend) && p.getStarttime().equals(eventstart))
         );
     }
 

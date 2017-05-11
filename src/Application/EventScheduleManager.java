@@ -24,14 +24,13 @@ import static Utils.DateHelper.convertCalendarToTimestamp;
 public class EventScheduleManager {
     private static PersistanceFacade<EventDutyEntity> eventDutyEntityPersistanceFacade = new PersistanceFacade(EventDutyEntity.class);
     private static PersistanceFacade<EventDutyMusicalWorkEntity> eventDutyMusicalWorkEntityPersistanceFacade = new PersistanceFacade(EventDutyMusicalWorkEntity.class);
-
-    public static Calendar loadedEventsStartdate; //start of the already loaded calendar
-    public static Calendar loadedEventsEnddate; //end of the already loaded calendar
+    private static PersistanceFacade<MusicalWorkEntity> musicalWorkEntityPersistanceFacade = new PersistanceFacade<>(MusicalWorkEntity.class);
 
     public static EventDutyDTO createEventDuty(EventDutyDTO eventDutyDTO) throws ValidationException {
         EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
         eventDutyModel.validate();
         EventDutyEntity eventDutyEntity = createEventDutyEntity(eventDutyModel);
+
         eventDutyEntity = eventDutyEntityPersistanceFacade.put(eventDutyEntity);
 
         // create connection between event duty and musical work
@@ -43,7 +42,7 @@ public class EventScheduleManager {
             }
         }
 
-        HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()), DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()));
+        HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(eventDutyModel.getStartTime(), eventDutyModel.getEndTime());
         if(!musicanCapacityMap.isEmpty()) {
             MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap, eventDutyDTO);
         }
@@ -72,14 +71,6 @@ public class EventScheduleManager {
         eventDutyEntity.setInstrumentation(eventDutyModel.getInstrumentation());
         eventDutyEntity.setRehearsalFor(eventDutyModel.getRehearsalFor());
 
-        // save updated object
-        eventDutyEntityPersistanceFacade.put(eventDutyEntity);
-
-        HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()), DateHelper.convertTimestampToCalendar(eventDutyModel.getStartTime()));
-        if(!musicanCapacityMap.isEmpty()) {
-            MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap, newEventDutyDTO);
-        }
-
         // check for changes in musical works
         // remove all musical works which did exist but now don't
         if(oldEventDutyDTO.getMusicalWorks() != null) {
@@ -93,10 +84,18 @@ public class EventScheduleManager {
         // add all new musical works which did not exist before
         if(newEventDutyDTO.getMusicalWorks() != null) {
             for (MusicalWorkDTO musicalWorkDTO : newEventDutyDTO.getMusicalWorks()) {
-                if ( musicalWorkDTO != null && (oldEventDutyDTO.getMusicalWorks() == null || !oldEventDutyDTO.getMusicalWorks().contains(musicalWorkDTO)) ) {
-                    createEventDutyMusicalWorks(eventDutyEntity, musicalWorkDTO);
+                if (oldEventDutyDTO.getMusicalWorks() == null || !oldEventDutyDTO.getMusicalWorks().contains(musicalWorkDTO)) {
+                    createEventDutyMusicalWorks(eventDutyEntity,musicalWorkDTO);
                 }
             }
+        }
+
+        // save updated object
+        eventDutyEntityPersistanceFacade.put(eventDutyEntity);
+
+        HashMap<String, Integer> musicanCapacityMap = CalculateMusicianCapacity.checkCapacityInRange(eventDutyModel.getStartTime(), eventDutyModel.getEndTime());
+        if(!musicanCapacityMap.isEmpty()) {
+            MessageHelper.showWarningMusicianCapacityMessage(musicanCapacityMap, newEventDutyDTO);
         }
     }
 
@@ -128,41 +127,22 @@ public class EventScheduleManager {
     }
 
     private static List<EventDutyDTO> getEventDutyInRange(Calendar startdayOfWeek, Calendar enddayOfWeek) {
-        if(loadedEventsStartdate != null && loadedEventsEnddate != null &&
-                loadedEventsStartdate.compareTo(startdayOfWeek) <= 0 && loadedEventsEnddate.compareTo(enddayOfWeek) >= 0) {
-            return new ArrayList<>();
-        }
-
-        startdayOfWeek.setTimeInMillis(startdayOfWeek.getTimeInMillis()-1);
+        startdayOfWeek.setTimeInMillis(startdayOfWeek.getTimeInMillis() - 1);
 
         List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p -> p.getStarttime().after(convertCalendarToTimestamp(startdayOfWeek))
                 && p.getStarttime().before(convertCalendarToTimestamp(enddayOfWeek)));
 
         List<EventDutyModel> eventDutyModelList = new ArrayList<>();
-        for(EventDutyEntity eventDutyEntity : eventDuties) {
+        for (EventDutyEntity eventDutyEntity : eventDuties) {
             eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
         }
+
         List<EventDutyDTO> eventDutyDTOList = new ArrayList<>();
-        for(EventDutyModel eventDutyModel : eventDutyModelList) {
+        for (EventDutyModel eventDutyModel : eventDutyModelList) {
             eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
         }
-        setLoadedEventsStartAndEnddate(startdayOfWeek, enddayOfWeek);
 
         return AccountAdministrationManager.getInstance().getUserPermissions().getViewableEventsForEventSchedule(eventDutyDTOList);
-    }
-
-    private static void setLoadedEventsStartAndEnddate(Calendar start, Calendar end) {
-        if(loadedEventsStartdate == null) {
-            loadedEventsStartdate = start;
-        } else if(loadedEventsStartdate.after(start)) {
-            loadedEventsStartdate = start;
-        }
-
-        if(loadedEventsEnddate == null) {
-            loadedEventsEnddate = end;
-        } else if (loadedEventsEnddate.before((end))) {
-            loadedEventsEnddate = end;
-        }
     }
 
     public static void removeEventDutyMusicalWorks(EventDutyEntity eventDutyEntity, MusicalWorkDTO musicalWorkDTO) {
@@ -250,6 +230,7 @@ public class EventScheduleManager {
         eventDutyModel.setPoints(eventDutyDTO.getPoints());
         eventDutyModel.setInstrumentation(eventDutyDTO.getInstrumentation());
         eventDutyModel.setRehearsalFor(eventDutyDTO.getRehearsalFor());
+        eventDutyModel.setDutyRosterStatus(eventDutyDTO.getDutyRosterStatus());
         if(eventDutyDTO.getMusicalWorks() != null && !eventDutyDTO.getMusicalWorks().isEmpty()) {
             List<MusicalWorkModel> musicalWorkModels = new ArrayList<>();
             for (MusicalWorkDTO musicalWorkDTO : eventDutyDTO.getMusicalWorks()) {
@@ -316,6 +297,7 @@ public class EventScheduleManager {
         eventDutyDTO.setPoints(eventDutyModel.getPoints());
         eventDutyDTO.setInstrumentation(eventDutyModel.getInstrumentation());
         eventDutyDTO.setRehearsalFor(eventDutyModel.getRehearsalFor());
+        eventDutyDTO.setDutyRosterStatus(eventDutyModel.getDutyRosterStatus());
 
         if(eventDutyModel.getMusicalWorks() != null) {
             List<MusicalWorkDTO> musicalWorkDTOS = new ArrayList<>();
