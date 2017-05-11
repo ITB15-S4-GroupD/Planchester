@@ -44,8 +44,8 @@
             <children>
                 <Label text="Event Name" />
                 <Label text="Description" GridPane.rowIndex="1" />
-                <Label text="Startdate" GridPane.rowIndex="2" />
-                <Label text="Enddate" GridPane.rowIndex="3" />
+                <Label text="Start date" GridPane.rowIndex="2" />
+                <Label text="End date" GridPane.rowIndex="3" />
                 <Label text="Location" GridPane.rowIndex="4" />
                 <Label text="Musical Work" GridPane.rowIndex="5" />
                 <Label text="Conductor" GridPane.rowIndex="7" />

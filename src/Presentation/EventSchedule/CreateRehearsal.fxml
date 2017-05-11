@@ -48,8 +48,8 @@
             <Label text="Event Name" />
             <Label text="Description" GridPane.rowIndex="1" />
             <Label text="Date" GridPane.rowIndex="2" />
-            <Label text="Starttime" GridPane.rowIndex="3" />
-            <Label text="Endtime" GridPane.rowIndex="4" />
+            <Label text="Start time" GridPane.rowIndex="3" />
+            <Label text="End time" GridPane.rowIndex="4" />
             <Label text="Location" GridPane.rowIndex="5" />
             <Label text="Conductor" GridPane.rowIndex="6" />
             <Label text="Points" GridPane.rowIndex="7" />

@@ -34,6 +34,8 @@ public class DutyRosterController extends CalenderController{
     protected static boolean editOpen = false;
     protected static Agenda.Appointment selectedAppointment;
 
+
+
     @FXML
     public void initialize() {
         staticAgenda = agenda;
@@ -103,6 +105,11 @@ public class DutyRosterController extends CalenderController{
         for (EventDutyDTO event : events) {
             addDutyRosterToGUI(event);
         }
+    }
+
+    @FXML
+    public void refresh() {
+
     }
 
     public static void removeSelection() {
