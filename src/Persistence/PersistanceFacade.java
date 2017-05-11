@@ -77,6 +77,7 @@ public class PersistanceFacade<T> {
         Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
         Object obj = (T)session.get(persistanceClass, oid);
         session.delete(obj);
+        session.flush();
         session.refresh(obj);
         DatabaseConnectionHandler.getInstance().commitTransaction();
     }
@@ -84,6 +85,7 @@ public class PersistanceFacade<T> {
     public void remove(T obj) {
         Session session = DatabaseConnectionHandler.getInstance().beginTransaction();
         session.delete(obj);
+        session.flush();
         session.refresh(obj);
         DatabaseConnectionHandler.getInstance().commitTransaction();
     }
