@@ -40,13 +40,13 @@ public class PublishEventSchedule {
             try{
                 eventDutyModel.validate();
             } catch (ValidationException val){
-                MessageHelper.showErrorAlertMessage("Please complete duty " + evt.getEventType() + ", " + evt.getStarttime() +
+                MessageHelper.showErrorAlertMessage("Please complete event " + evt.getEventType() + ", " + evt.getStarttime() +
                                                     "\n" + val.getMessage() );
                 return EventScheduleManager.createEventDutyDTO(eventDutyModel);
             }
 
             if(!hardValid(evt)) {
-                EventScheduleManager.createEventDutyDTO(eventDutyModel);
+                return EventScheduleManager.createEventDutyDTO(eventDutyModel);
             }
         }
       
@@ -66,7 +66,7 @@ public class PublishEventSchedule {
     }
 
     private static boolean hardValid(EventDutyEntity duty){
-        String info = "Please complete duty " + duty.getEventType() + ", " + duty.getStarttime() + "\n" ;
+        String info = "Please complete event " + duty.getEventType() + ", " + duty.getStarttime() + "\n" ;
 
         try{ Validator.validatePublishLocation(duty.getLocation()); }
         catch (ValidationException val){

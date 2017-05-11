@@ -10,6 +10,7 @@ import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import Presentation.PlanchesterGUI;
 import Utils.DateHelper;
+import Utils.MessageHelper;
 import Utils.PlanchesterConstants;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.ListChangeListener;
@@ -26,6 +27,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.Year;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -38,8 +40,8 @@ public class EventScheduleController extends CalenderController {
     protected static Agenda staticAgenda;
     protected static ScrollPane staticScrollPane;
 
+    @FXML private MenuButton publishEventSchedule;
     @FXML private MenuButton addNewEvent;
-    @FXML private Button btnPublishEventSchedule;
     @FXML private Label unpublishedLabel;
 
     @FXML private MenuItem addNewConcert;
@@ -95,7 +97,7 @@ public class EventScheduleController extends CalenderController {
         });
 
         Permission permission = AccountAdministrationManager.getInstance().getUserPermissions();
-        btnPublishEventSchedule.setVisible(permission.isPublishEventSchedule());
+        publishEventSchedule.setVisible(permission.isPublishEventSchedule());
         addNewEvent.setVisible(permission.isEditEventSchedule());
         unpublishedLabel.setVisible(permission.isEditEventSchedule());
     }
@@ -223,30 +225,77 @@ public class EventScheduleController extends CalenderController {
             }
         }
     }
-
-    protected void getGroupColorsFromCSS() {
-       super.getGroupColorsFromCSS();
-    }
-
-    protected void initializeAppointmentGroupsForEventtypes() {
-       super.initializeAppointmentGroupsForEventtypes();
-    }
-
-    protected void initialzeCalendarSettings() {
-        super.initialzeCalendarSettings();
-    }
-
+  
     private void initialzeCalendarView() {
 
         //set CalenderWeek
         setCalenderWeekLabel();
         addEventTypeEntriesToMenuButton();
+        addMonthsEntriesToMenuButton();
         setColorKeyMap();
 
         //put events to calendar
         List<EventDutyDTO> events = EventScheduleManager.getEventDutyListForCurrentWeek();
         for(EventDutyDTO event : events) {
             addEventDutyToGUI(event);
+        }
+    }
+
+    private void addMonthsEntriesToMenuButton() {
+        publishEventSchedule.getItems().clear();
+        List<EventDutyDTO> unpublishedEvents = EventScheduleManager.getAllUnpublishedMonths();
+        List<String>  months = new ArrayList<>();
+        EventHandler<ActionEvent> action = chooseMonthToPublish();
+        Calendar cal = Calendar.getInstance();
+        for(EventDutyDTO unpublishedEvent : unpublishedEvents) {
+            cal.setTimeInMillis(unpublishedEvent.getStartTime().getTime());
+            int month = cal.get(Calendar.MONTH) + 1;
+            int year = cal.get(Calendar.YEAR);
+            String monthYear = String.valueOf(month + " | " + year);
+            boolean isInList = false;
+            for(String monYear : months) {
+                if(monYear.equals(monthYear)){
+                    isInList = true;
+                }
+            }
+            if(!isInList) {
+                months.add(monthYear);
+            }
+        }
+        for(String monthYear : months) {
+            MenuItem month = new MenuItem(monthYear);
+            month.setOnAction(action);
+            publishEventSchedule.getItems().add(month);
+        }
+
+    }
+
+    private EventHandler<ActionEvent> chooseMonthToPublish() {
+        return new EventHandler<ActionEvent>() {
+
+            public void handle(ActionEvent event) {
+                MenuItem mItem = (MenuItem) event.getSource();
+                ButtonType buttonType = MessageHelper.showConfirmationMessage("Are you sure to publish " + mItem.getText());
+                if(buttonType.equals(ButtonType.YES)) {
+                    publishEventSchedule(mItem);
+                }
+            }
+        };
+    }
+
+
+   private void publishEventSchedule(MenuItem item) {
+        String monthOfYear = item.getText();
+        String[] parts = monthOfYear.split(" | ");
+        int month = Integer.valueOf(parts[0]);
+        int year = Integer.valueOf(parts[2]);
+        EventDutyDTO eventDutyDTO = PublishEventSchedule.publish(Year.of(year), Month.of(month));
+        if(eventDutyDTO != null) {
+            setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime());
+            refresh();
+            setSelectedAppointment(eventDutyDTO);
+        } else {
+            publishEventSchedule.getItems().remove(item);
         }
     }
 
@@ -378,14 +427,6 @@ public class EventScheduleController extends CalenderController {
         });
     }
 
-    @FXML public void publishEventSchedule() {
-        LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
-        EventDutyDTO eventDutyDTO = PublishEventSchedule.publish(Year.of(displayedDate.getYear()),displayedDate.getMonth());
-        if(eventDutyDTO != null) {
-            setSelectedAppointment(eventDutyDTO);
-        }
-    }
-
     @FXML public void refresh() {
         removeAllData();
 
@@ -393,6 +434,7 @@ public class EventScheduleController extends CalenderController {
         for(EventDutyDTO event : events) {
             addEventDutyToGUI(event);
         }
+        addMonthsEntriesToMenuButton();
     }
 
     public static void reload() {
