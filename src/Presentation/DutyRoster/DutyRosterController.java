@@ -1,10 +1,9 @@
 package Presentation.DutyRoster;
 
+import Application.*;
 import Application.DTO.EventDutyDTO;
-import Application.DutyRoster;
 import Application.DutyRosterManager;
-import Application.PublishEventSchedule;
-import Application.DutyRosterManager;
+import Domain.Models.Permission;
 import Presentation.CalenderController;
 
 import Presentation.PlanchesterGUI;
@@ -12,7 +11,10 @@ import Utils.DateHelper;
 import Utils.Enum.DutyRosterStatus;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
+import Utils.MessageHelper;
 import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -21,6 +23,7 @@ import jfxtras.scene.control.agenda.Agenda;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.Year;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -33,11 +36,9 @@ public class DutyRosterController extends CalenderController{
     protected static Agenda staticAgenda;
     protected static ScrollPane staticScrollPane;
     protected static Map<Agenda.Appointment, EventDutyDTO> staticLoadedEventsMap = new HashMap<>();
-    protected static boolean editOpen = false;
     protected static Agenda.Appointment selectedAppointment;
     @FXML private ScrollPane scrollPane;
-
-
+    @FXML protected MenuButton publishDutyRoster;
 
     @FXML
     public void initialize() {
@@ -56,43 +57,99 @@ public class DutyRosterController extends CalenderController{
 
         agenda.setOnMouseClicked(event -> {
             if(event.getTarget().toString().contains("DayBodyPane")) {
-                if(editOpen == true){
-                    if(tryResetSideContent() == null) {
-                        removeSelection();
-                    }
-                }
+                resetSideContent();
+                removeSelection();
             }
         });
 
         agenda.selectedAppointments().addListener((ListChangeListener<Agenda.Appointment>) c -> {
             if(agenda.selectedAppointments().isEmpty()) {
+                resetSideContent();
                 return;
             }
 
-            if(selectedAppointment != null && (agenda.selectedAppointments().get(0) != selectedAppointment)) {
-                if(tryResetSideContent() == null) {
-                    selectedAppointment = agenda.selectedAppointments().get(0);
-//                        showDutyDetailView();
-                } else {
-                    agenda.selectedAppointments().clear();
-                    agenda.selectedAppointments().add(selectedAppointment);
-                }
-            } else if(selectedAppointment == null && tryResetSideContent() == null) {
-                selectedAppointment = agenda.selectedAppointments().get(0);
-//                    showDutyDetailView();
-            }
+            resetSideContent();
+            selectedAppointment = agenda.selectedAppointments().get(0);
+            //showDutyDetailView();
         });
+
+        Permission permission = AccountAdministrationManager.getInstance().getUserPermissions();
+        publishDutyRoster.setVisible(permission.isPublishDutyRoster());
     }
 
-    @FXML
-    private void publishDutyRoster() {
+    private void addMonthsEntriesToMenuButton() {
+        if(AccountAdministrationManager.getInstance().getUserPermissions().isPublishDutyRoster()) {
+            publishDutyRoster.getItems().clear();
+            List<EventDutyDTO> unpublishedEvents = DutyRosterManager.getAllUnpublishedMonths();
+            List<String> months = new ArrayList<>();
+            EventHandler<ActionEvent> action = chooseMonthToPublish();
+            Calendar cal = Calendar.getInstance();
+            for (EventDutyDTO unpublishedEvent : unpublishedEvents) {
+                cal.setTimeInMillis(unpublishedEvent.getStartTime().getTime());
+                int month = cal.get(Calendar.MONTH) + 1;
+                int year = cal.get(Calendar.YEAR);
+                String monthYear = String.valueOf(month + " | " + year);
+                boolean isInList = false;
+                for (String monYear : months) {
+                    if (monYear.equals(monthYear)) {
+                        isInList = true;
+                    }
+                }
+                if (!isInList) {
+                    months.add(monthYear);
+                }
+            }
+            for (String monthYear : months) {
+                MenuItem month = new MenuItem(monthYear);
+                month.setOnAction(action);
+                publishDutyRoster.getItems().add(month);
+            }
+        }
+    }
+
+    private EventHandler<ActionEvent> chooseMonthToPublish() {
+        return event -> {
+            MenuItem mItem = (MenuItem) event.getSource();
+            ButtonType buttonType = MessageHelper.showConfirmationMessage("Are you sure to publish " + mItem.getText());
+            if(buttonType.equals(ButtonType.YES)) {
+                publishDutyRoster(mItem);
+            }
+        };
+    }
+
+    private void publishDutyRoster(MenuItem item) {
+        String monthOfYear = item.getText();
+        String[] parts = monthOfYear.split(" | ");
+        int month = Integer.valueOf(parts[0]);
+        int year = Integer.valueOf(parts[2]);
+
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
         DutyRoster dutyRoster = new DutyRoster();
-        dutyRoster.validateMonth(Year.of(displayedDate.getYear()), displayedDate.getMonth());
+        EventDutyDTO eventDutyDTO = dutyRoster.validateMonth(Year.of(displayedDate.getYear()), displayedDate.getMonth());
+
+        if (eventDutyDTO != null) {
+            PublishDutyRoster.publish(Year.of(year), Month.of(month));
+            agenda.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime());
+            refresh();
+            setSelectedAppointment(eventDutyDTO);
+        } else {
+            publishDutyRoster.getItems().remove(item);
+        }
+
+    }
+
+    public static void setSelectedAppointment(EventDutyDTO eventDutyDTO) {
+        for (Map.Entry<Agenda.Appointment, EventDutyDTO> entry : staticLoadedEventsMap.entrySet()) {
+            if (eventDutyDTO.getEventDutyId() == entry.getValue().getEventDutyId()) {
+                staticAgenda.selectedAppointments().clear();
+                staticAgenda.selectedAppointments().add(entry.getKey());
+            }
+        }
     }
 
     @FXML
     protected void navigateOneWeekBackClicked() {
+        removeAllData();
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
         agenda.setDisplayedLocalDateTime(displayedDate.minus(7, ChronoUnit.DAYS));
         setCalenderWeekLabel();
@@ -105,6 +162,7 @@ public class DutyRosterController extends CalenderController{
 
     @FXML
     protected void navigateOneWeekForwardClicked() {
+        removeAllData();
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
         agenda.setDisplayedLocalDateTime(displayedDate.plus(7, ChronoUnit.DAYS));
         setCalenderWeekLabel();
@@ -116,8 +174,33 @@ public class DutyRosterController extends CalenderController{
     }
 
     @FXML
-    public void refresh() {
+    protected void showActualWeekClicked() {
+        super.showActualWeekClicked();
+        refresh();
+    }
 
+    @FXML public void refresh() {
+        removeAllData();
+
+        List<EventDutyDTO> events = DutyRosterManager.getDutyRosterListForWeek(staticAgenda.getDisplayedCalendar());
+        for(EventDutyDTO event : events) {
+            addDutyRosterToGUI(event);
+        }
+        addMonthsEntriesToMenuButton();
+    }
+
+    public static void reload() {
+        removeAllData();
+
+        List<EventDutyDTO> events = DutyRosterManager.getDutyRosterListForWeek(staticAgenda.getDisplayedCalendar());
+        for(EventDutyDTO event : events) {
+            addDutyRosterToGUI(event);
+        }
+    }
+
+    public static void removeAllData() {
+        staticLoadedEventsMap.clear();
+        staticAgenda.appointments().clear();
     }
 
     public static void removeSelection() {
@@ -160,34 +243,19 @@ public class DutyRosterController extends CalenderController{
             appointment.setSummary(appointment.getSummary() + " (UP)");
         }
 
-
         staticLoadedEventsMap.put(appointment, event);
         staticAgenda.appointments().add(appointment);
     }
 
-    public static Node tryResetSideContent() {
-        if(getSideContent() == null) {
-            return null;
-        } else {
-            Button discard = (Button) PlanchesterGUI.scene.lookup("#discard");
-            discard.fire();
-            return getSideContent();
-        }
-    }
-
     public static void resetSideContent() {
         staticScrollPane.setContent(null);
-        editOpen = false;
-    }
-
-    public static Node getSideContent() {
-        return staticScrollPane.getContent();
     }
 
     private void initialzeCalendarView() {
         //set CalenderWeek
         setCalenderWeekLabel();
         setColorKeyMap();
+        addMonthsEntriesToMenuButton();
 
         //put events to calendar
         List<EventDutyDTO> events = DutyRosterManager.getDutyRosterListForCurrentWeek();

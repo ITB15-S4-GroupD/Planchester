@@ -10,6 +10,7 @@ import Persistence.PersistanceFacade;
 import Utils.DateHelper;
 import Utils.Enum.AccountRole;
 import Utils.Enum.DutyRosterStatus;
+import Utils.Enum.EventStatus;
 import Utils.MessageHelper;
 
 import javax.xml.bind.ValidationException;
@@ -29,9 +30,6 @@ public class DutyRosterManager {
     private static PersistanceFacade<EventDutyEntity> eventDutyEntityPersistanceFacade = new PersistanceFacade(EventDutyEntity.class);
     private static PersistanceFacade<EventDutySectionDutyRosterEntity> eventDutySectionDutyRosterEntityPersistanceFacade = new PersistanceFacade(EventDutySectionDutyRosterEntity.class);
 
-    private static Calendar loadedEventsStartdate; //start of the already loaded calendar
-    private static Calendar loadedEventsEnddate; //end of the already loaded calendar
-
     public static List<EventDutyDTO> getDutyRosterListForCurrentWeek() {
         Calendar today = Calendar.getInstance();
         return getDutyRosterInRange(DateHelper.getStartOfWeek(today), DateHelper.getEndOfWeek(today));
@@ -42,10 +40,6 @@ public class DutyRosterManager {
     }
 
     private static List<EventDutyDTO> getDutyRosterInRange(Calendar startdayOfWeek, Calendar enddayOfWeek) {
-        if(loadedEventsStartdate != null && loadedEventsEnddate != null &&
-                loadedEventsStartdate.compareTo(startdayOfWeek) <= 0 && loadedEventsEnddate.compareTo(enddayOfWeek) >= 0) {
-            return new ArrayList<>();
-        }
 
         startdayOfWeek.setTimeInMillis(startdayOfWeek.getTimeInMillis()-1);
 
@@ -73,16 +67,11 @@ public class DutyRosterManager {
         for(EventDutyModel eventDutyModel : eventDutyModelList) {
             eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
         }
-        setLoadedEventsStartAndEnddate(startdayOfWeek, enddayOfWeek);
 
         return eventDutyDTOList;
     }
 
     public static List<EventDutyEntity> getDutyRosterEntitiesInRange(Calendar startdayOfWeek, Calendar enddayOfWeek) {
-        if(loadedEventsStartdate != null && loadedEventsEnddate != null &&
-                loadedEventsStartdate.compareTo(startdayOfWeek) <= 0 && loadedEventsEnddate.compareTo(enddayOfWeek) >= 0) {
-            return new ArrayList<>();
-        }
 
         startdayOfWeek.setTimeInMillis(startdayOfWeek.getTimeInMillis()-1);
 
@@ -105,17 +94,28 @@ public class DutyRosterManager {
         return eventDutyEntities;
     }
 
-    private static void setLoadedEventsStartAndEnddate(Calendar start, Calendar end) {
-        if(loadedEventsStartdate == null) {
-            loadedEventsStartdate = start;
-        } else if(loadedEventsStartdate.after(start)) {
-            loadedEventsStartdate = start;
-        }
+    public static List<EventDutyDTO> getAllUnpublishedMonths() {
+        AccountRole accountRole = AccountAdministrationManager.getInstance().getAccountRole();
 
-        if(loadedEventsEnddate == null) {
-            loadedEventsEnddate = end;
-        } else if (loadedEventsEnddate.before((end))) {
-            loadedEventsEnddate = end;
+        // get all events for user section in specified time space and for his account role
+        List<EventDutySectionDutyRosterEntity> eventDutySectionDutyRosterEntities = eventDutySectionDutyRosterEntityPersistanceFacade.list(p ->
+                (p.getSectionDutyRosterBySectionDutyRoster().getSectionType().equals(AccountAdministrationManager.getInstance().getSectionType().toString()))
+                        && (accountRole.equals(AccountRole.Section_representative)
+                        || p.getSectionDutyRosterBySectionDutyRoster().getDutyRosterStatus().equals(DutyRosterStatus.Unpublished.toString()))
+        );
+
+        List<EventDutyEntity> eventDuties = new ArrayList<>();
+        for(EventDutySectionDutyRosterEntity eventDutySectionDutyRosterEntity : eventDutySectionDutyRosterEntities) {
+            eventDuties.add(eventDutySectionDutyRosterEntity.getEventDutyByEventDuty());
         }
+        List<EventDutyModel> eventDutyModelList = new ArrayList<>();
+        for(EventDutyEntity eventDutyEntity : eventDuties) {
+            eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
+        }
+        List<EventDutyDTO> eventDutyDTOList = new ArrayList<>();
+        for(EventDutyModel eventDutyModel : eventDutyModelList) {
+            eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
+        }
+        return eventDutyDTOList;
     }
 }
