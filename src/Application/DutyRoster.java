@@ -1,5 +1,6 @@
 package Application;
 
+import Application.DTO.EventDutyDTO;
 import Domain.Models.EventDutyModel;
 import Persistence.Entities.*;
 import Persistence.PersistanceFacade;
@@ -29,7 +30,7 @@ public class DutyRoster {
     private SectionType section;
     private PartTypeEntity partTypeEntity;
 
-    public boolean validateMonth(Year year, Month month) {
+    public EventDutyDTO validateMonth(Year year, Month month) {
         //zweimal selbe parameter übergeben, da aufruf und logik bei setter
         setFirstOfMonth(year, month);
         setFirstOfNextMonth(year, month);
@@ -43,11 +44,13 @@ public class DutyRoster {
 
         for (EventDutyEntity event : DutyRosterManager.getDutyRosterEntitiesInRange(firstOfMonth, firstOfNextMonth)) {
             if(validateDuty(event) == false) {
-                return false;
+                EventDutyModel eventDutyModel = EventScheduleManager.createEventDutyModel(event);
+                EventDutyDTO eventDutyDTO = EventScheduleManager.createEventDutyDTO(eventDutyModel);
+                return eventDutyDTO;
             }
         }
 
-        return true;
+        return null;
     }
 
     public boolean validateDuty(EventDutyEntity event) {
