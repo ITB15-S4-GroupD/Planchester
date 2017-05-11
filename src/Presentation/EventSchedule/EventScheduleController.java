@@ -285,8 +285,13 @@ public class EventScheduleController extends CalenderController {
         };
     }
 
+    @FXML
+    protected void showActualWeekClicked() {
+        super.showActualWeekClicked();
+        refresh();
+    }
 
-   private void publishEventSchedule(MenuItem item) {
+    private void publishEventSchedule(MenuItem item) {
         String monthOfYear = item.getText();
         String[] parts = monthOfYear.split(" | ");
         int month = Integer.valueOf(parts[0]);
