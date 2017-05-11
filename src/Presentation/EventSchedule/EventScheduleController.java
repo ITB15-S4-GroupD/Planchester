@@ -377,7 +377,6 @@ public class EventScheduleController {
                 ButtonType buttonType = MessageHelper.showConfirmationMessage("Are you sure to publish " + mItem.getText());
                 if(buttonType.equals(ButtonType.YES)) {
                     publishEventSchedule(mItem);
-                    publishEventSchedule.getItems().remove(mItem);
                 }
             }
         };
@@ -392,6 +391,9 @@ public class EventScheduleController {
         EventDutyDTO eventDutyDTO = PublishEventSchedule.publish(Year.of(year), Month.of(month));
         if(eventDutyDTO != null) {
             setSelectedAppointment(eventDutyDTO);
+            //setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime());
+        } else {
+            publishEventSchedule.getItems().remove(item);
         }
     }
 
