@@ -13,7 +13,7 @@ import java.util.List;
  * Created by timorzipa on 06/04/2017.
  */
 public class MusicalWorkAdministratonManager {
-    private static PersistanceFacade persistanceFacade = new PersistanceFacade(MusicalWorkEntity.class);
+    private static PersistanceFacade<MusicalWorkEntity> persistanceFacade = new PersistanceFacade(MusicalWorkEntity.class);
 
     public static List<MusicalWorkDTO> getAllMusicalWorks() {
         List<MusicalWorkDTO> musicalWorksList= new ArrayList<>();

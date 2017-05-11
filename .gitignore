@@ -16,11 +16,14 @@ out/*
 *.exe
 
 # .idea files #
-workspace.xml
-Planchester.iml
+/Planchester.iml
+/.idea/workspace.xml
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
 # hibernate settings (local db)
-hibernate.cfg.xml
+src/hibernate.cfg.xml
+/src/hibernate.cfg.xml
+
+out/production/Planchester/Presentation/EventSchedule/EventSchedule.fxml

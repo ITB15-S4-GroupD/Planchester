@@ -4,6 +4,7 @@ import Application.DTO.EventDutyDTO;
 import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
+import Presentation.EventSchedule.EventScheduleController;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import Utils.MessageHelper;
@@ -31,8 +32,8 @@ import java.util.List;
 public class CreateTourController extends CreateController {
     @FXML private JFXDatePicker endDate;
 
-    @Override
     @FXML
+    @Override
     protected void insertEventDuty() throws ValidationException {
         if (validate()) {
             EventDutyDTO eventDutyDTO = new EventDutyDTO();
@@ -65,8 +66,8 @@ public class CreateTourController extends CreateController {
         }
     }
 
-    @Override
     @FXML
+    @Override
     public boolean cancel() {
         if (!name.getText().isEmpty() || !description.getText().isEmpty() || date.getValue() != null
                 || endDate.getValue() != null || !eventLocation.getText().isEmpty() || !conductor.getText().isEmpty()

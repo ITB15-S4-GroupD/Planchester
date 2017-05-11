@@ -4,6 +4,7 @@ import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
 import Application.EventScheduleManager;
 import Domain.Models.Permission;
+import Presentation.EventSchedule.EventScheduleController;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
@@ -28,26 +29,8 @@ import java.time.LocalTime;
  * Created by Christina on 29.04.2017.
  */
 public class EditRehearsalController extends EditController {
-
-    @FXML private TextField name;
-    @FXML private TextArea description;
-    @FXML private JFXTimePicker startTime;
-    @FXML private JFXTimePicker endTime;
-    @FXML private JFXDatePicker date;
-    @FXML private TextField eventLocation;
-    @FXML private TextField conductor;
-    @FXML private TextField points;
-
-    private EventDutyDTO initEventDutyDTO; // remember init data to compare
-    private Agenda.Appointment initAppointment; // remember init data to compare
-
-    @FXML private Button btnSaveEvent;
-    @FXML private Button btnCancelEvent;
-    @FXML private Button btnEditEvent;
-    @FXML private Text txtTitle;
-
-    @Override
     @FXML
+    @Override
     protected void initialize() {
         //TODO GET LIST OF REHEARSALS : Christina
         super.checkMandatoryFields();
@@ -73,6 +56,7 @@ public class EditRehearsalController extends EditController {
         });
     }
 
+    @Override
     protected void initNotEditableFields() {
         Permission permission = AccountAdministrationManager.getInstance().getUserPermissions();
         if(permission.isEditEventSchedule() && EventStatus.Unpublished.equals(initEventDutyDTO.getEventStatus())) {
@@ -103,8 +87,8 @@ public class EditRehearsalController extends EditController {
         conductor.setStyle(PlanchesterConstants.INPUTFIELD_NOTEDITABLE);
     }
 
-    @Override
     @FXML
+    @Override
     protected void save() throws ValidationException {
         if(validate()) {
             Agenda.Appointment selectedAppointment = EventScheduleController.getSelectedAppointment();
@@ -134,8 +118,8 @@ public class EditRehearsalController extends EditController {
         }
     }
 
-    @Override
     @FXML
+    @Override
     protected boolean cancel() {
         if(points.getText() == null) {
             points.setText("0.0");
@@ -166,8 +150,8 @@ public class EditRehearsalController extends EditController {
         return true;
     }
 
-    @Override
     @FXML
+    @Override
     protected void editEvent () {
         btnCancelEvent.setVisible(true);
         btnSaveEvent.setVisible(true);
@@ -192,6 +176,7 @@ public class EditRehearsalController extends EditController {
         conductor.setStyle(PlanchesterConstants.INPUTFIELD_VALID);
     }
 
+    @Override
     protected boolean validate() {
         LocalDate today = LocalDate.now();
         LocalTime start = startTime.getValue();

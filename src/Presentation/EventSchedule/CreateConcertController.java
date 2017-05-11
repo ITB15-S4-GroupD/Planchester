@@ -10,8 +10,8 @@ import javax.xml.bind.ValidationException;
 
 public class CreateConcertController extends CreateController {
 
-    @Override
     @FXML
+    @Override
     protected void insertEventDuty() throws ValidationException {
         super.setEventType(EventType.Concert);
         super.insertEventDuty();

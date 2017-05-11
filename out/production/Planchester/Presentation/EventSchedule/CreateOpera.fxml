@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Text?>
 <?import jfxtras.scene.layout.GridPane?>
 
-<GridPane fx:id="gridNewOpera" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="670.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.CreateOperaController">
+<GridPane fx:id="gridNewOpera" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.CreateOperaController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -109,8 +109,8 @@
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="280.0" minWidth="10.0" prefWidth="254.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="134.0" minHeight="10.0" prefHeight="131.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="67.0" minHeight="10.0" prefHeight="23.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="177.0" minHeight="10.0" prefHeight="177.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="67.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <GridPane GridPane.columnIndex="2">
@@ -120,7 +120,7 @@
               </rowConstraints>
             </GridPane>
             <Label text="Rehearsal(s) " />
-            <TableView fx:id="rehearsalTableView" prefHeight="88.0" prefWidth="145.0" GridPane.columnIndex="1">
+            <TableView fx:id="rehearsalTableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="250.0" GridPane.columnIndex="1">
               <columns>
                 <TableColumn fx:id="rehearsalTableColumn" prefWidth="253.0" text="Rehearsal(s)" />
               </columns>
@@ -134,7 +134,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="btnAddNewReahearsal" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#addNewRehearsal" prefWidth="59.0" text="Add ..." >
+                  <Button fx:id="btnAddNewReahearsal" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#addNewRehearsal" prefWidth="59.0" text="Add ...">
                    <GridPane.margin>
                        <Insets top="5.0" />
                    </GridPane.margin></Button>

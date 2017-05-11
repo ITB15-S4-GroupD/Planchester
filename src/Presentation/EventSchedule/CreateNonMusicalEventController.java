@@ -2,9 +2,11 @@ package Presentation.EventSchedule;
 
 import Application.DTO.EventDutyDTO;
 import Application.EventScheduleManager;
+import Presentation.EventSchedule.EventScheduleController;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import Utils.DateHelper;
+import Utils.MessageHelper;
 import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
@@ -27,7 +29,6 @@ public class CreateNonMusicalEventController extends CreateController {
     @FXML
     public void initialize() {
         initializeMandatoryFields();
-
         points.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
                 points.setText(newValue.replaceAll("[^\\d*[\\,.]?\\d*?]", ""));
@@ -35,7 +36,8 @@ public class CreateNonMusicalEventController extends CreateController {
         });
     }
 
-    @FXML public boolean cancel() {
+    @FXML
+    public boolean cancel() {
         if(!name.getText().isEmpty() || !description.getText().isEmpty() || date.getValue() != null
                 || !eventLocation.getText().isEmpty() || !points.getText().isEmpty()) {
             Alert confirmationAlterMessage = new Alert(Alert.AlertType.CONFIRMATION, PlanchesterMessages.DISCARD_CHANGES, ButtonType.YES, ButtonType.NO);
@@ -80,28 +82,23 @@ public class CreateNonMusicalEventController extends CreateController {
         LocalTime end = endTime.getValue();
 
         if(name.getText().isEmpty()){
-            throwErrorAlertMessage("The Name is missing.");
+            MessageHelper.showErrorAlertMessage("The Name is missing.");
             name.requestFocus();
             return false;
         } else if(date.getValue() == null || date.getValue().isBefore(today) ){
-            throwErrorAlertMessage("The date is not valid.");
+            MessageHelper.showErrorAlertMessage("The date is not valid.");
             date.requestFocus();
             return false;
         } else if(start == null) {
-            throwErrorAlertMessage("The starttime is missing.");
+            MessageHelper.showErrorAlertMessage("The starttime is missing.");
             return false;
         } else if(end != null && (start.isAfter(end) || start.equals(end))) {
-            throwErrorAlertMessage("The endtime is not after the starttime. ");
+            MessageHelper.showErrorAlertMessage("The endtime is not after the starttime.");
             return false;
         } else if(date.getValue().equals(today) && start.isBefore(LocalTime.now())){
-            throwErrorAlertMessage("The starttime must be in future. \n");
+            MessageHelper.showErrorAlertMessage("The starttime must be in future.");
             return false;
         }
         return true;
-    }
-
-    private void throwErrorAlertMessage(String errormessage){
-        Alert alert = new Alert(Alert.AlertType.ERROR, errormessage, ButtonType.OK);
-        alert.showAndWait();
     }
 }
