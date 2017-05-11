@@ -104,6 +104,7 @@ public class EventScheduleController extends CalenderController {
 
     @FXML
     public void navigateOneWeekBackClicked() {
+        removeAllData();
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
         agenda.setDisplayedLocalDateTime(displayedDate.minus(7, ChronoUnit.DAYS));
         setCalenderWeekLabel();
@@ -116,6 +117,7 @@ public class EventScheduleController extends CalenderController {
 
     @FXML
     public void navigateOneWeekForwardClicked() {
+        removeAllData();
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
         agenda.setDisplayedLocalDateTime(displayedDate.plus(7, ChronoUnit.DAYS));
         setCalenderWeekLabel();
