@@ -390,8 +390,9 @@ public class EventScheduleController {
         int year = Integer.valueOf(parts[2]);
         EventDutyDTO eventDutyDTO = PublishEventSchedule.publish(Year.of(year), Month.of(month));
         if(eventDutyDTO != null) {
+            setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime());
+            refresh();
             setSelectedAppointment(eventDutyDTO);
-            //setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime());
         } else {
             publishEventSchedule.getItems().remove(item);
         }
