@@ -24,11 +24,11 @@ public class PublishEventSchedule {
     private static PersistanceFacade<EventDutyEntity> eventDutyEntityPersistanceFacade = new PersistanceFacade(EventDutyEntity.class);
 
     public static EventDutyDTO publish(Year year, Month month) {
-        //Calculate first and last day of month; note that Month starts with 0
         EventDutyModel eventDutyModel;
 
         List<EventDutyEntity> dutiesInRange = eventDutyEntityPersistanceFacade.list(
                 p -> p.getStarttime().toLocalDateTime().getMonth().equals(month)
+                && p.getStarttime().toLocalDateTime().getYear() == year.getValue()
                 && p.getEventStatus().equals(EventStatus.Unpublished.toString()));
 
         for(EventDutyEntity evt : dutiesInRange){
