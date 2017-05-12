@@ -229,7 +229,6 @@ public class EventScheduleController extends CalenderController {
     }
   
     private void initialzeCalendarView() {
-
         //set CalenderWeek
         setCalenderWeekLabel();
         addEventTypeEntriesToMenuButton();
@@ -244,56 +243,59 @@ public class EventScheduleController extends CalenderController {
     }
 
     private void addMonthsEntriesToMenuButton() {
-        publishEventSchedule.getItems().clear();
-        List<EventDutyDTO> unpublishedEvents = EventScheduleManager.getAllUnpublishedMonths();
-        List<String>  months = new ArrayList<>();
-        EventHandler<ActionEvent> action = chooseMonthToPublish();
-        Calendar cal = Calendar.getInstance();
-        for(EventDutyDTO unpublishedEvent : unpublishedEvents) {
-            cal.setTimeInMillis(unpublishedEvent.getStartTime().getTime());
-            int month = cal.get(Calendar.MONTH) + 1;
-            int year = cal.get(Calendar.YEAR);
-            String monthYear = String.valueOf(month + " | " + year);
-            boolean isInList = false;
-            for(String monYear : months) {
-                if(monYear.equals(monthYear)){
-                    isInList = true;
+        if(AccountAdministrationManager.getInstance().getUserPermissions().isPublishEventSchedule()) {
+            publishEventSchedule.getItems().clear();
+            List<EventDutyDTO> unpublishedEvents = EventScheduleManager.getAllUnpublishedMonths();
+            List<String> months = new ArrayList<>();
+            EventHandler<ActionEvent> action = chooseMonthToPublish();
+            Calendar cal = Calendar.getInstance();
+            for (EventDutyDTO unpublishedEvent : unpublishedEvents) {
+                cal.setTimeInMillis(unpublishedEvent.getStartTime().getTime());
+                int month = cal.get(Calendar.MONTH) + 1;
+                int year = cal.get(Calendar.YEAR);
+                String monthYear = String.valueOf(month + " | " + year);
+                boolean isInList = false;
+                for (String monYear : months) {
+                    if (monYear.equals(monthYear)) {
+                        isInList = true;
+                    }
+                }
+                if (!isInList) {
+                    months.add(monthYear);
                 }
             }
-            if(!isInList) {
-                months.add(monthYear);
+            for (String monthYear : months) {
+                MenuItem month = new MenuItem(monthYear);
+                month.setOnAction(action);
+                publishEventSchedule.getItems().add(month);
             }
         }
-        for(String monthYear : months) {
-            MenuItem month = new MenuItem(monthYear);
-            month.setOnAction(action);
-            publishEventSchedule.getItems().add(month);
-        }
-
     }
 
     private EventHandler<ActionEvent> chooseMonthToPublish() {
-        return new EventHandler<ActionEvent>() {
-
-            public void handle(ActionEvent event) {
-                MenuItem mItem = (MenuItem) event.getSource();
-                ButtonType buttonType = MessageHelper.showConfirmationMessage("Are you sure to publish " + mItem.getText());
-                if(buttonType.equals(ButtonType.YES)) {
-                    publishEventSchedule(mItem);
-                }
+        return event -> {
+            MenuItem mItem = (MenuItem) event.getSource();
+            ButtonType buttonType = MessageHelper.showConfirmationMessage("Are you sure to publish " + mItem.getText());
+            if(buttonType.equals(ButtonType.YES)) {
+                publishEventSchedule(mItem);
             }
         };
     }
 
+    @FXML
+    protected void showActualWeekClicked() {
+        super.showActualWeekClicked();
+        refresh();
+    }
 
-   private void publishEventSchedule(MenuItem item) {
+    private void publishEventSchedule(MenuItem item) {
         String monthOfYear = item.getText();
         String[] parts = monthOfYear.split(" | ");
         int month = Integer.valueOf(parts[0]);
         int year = Integer.valueOf(parts[2]);
         EventDutyDTO eventDutyDTO = PublishEventSchedule.publish(Year.of(year), Month.of(month));
         if(eventDutyDTO != null) {
-            setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime());
+            agenda.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime());
             refresh();
             setSelectedAppointment(eventDutyDTO);
         } else {

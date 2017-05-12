@@ -1,5 +1,6 @@
 package Application;
 
+import java.sql.Timestamp;
 import java.time.Month;
 import java.time.Year;
 import java.util.*;
@@ -23,17 +24,12 @@ public class PublishEventSchedule {
     private static PersistanceFacade<EventDutyEntity> eventDutyEntityPersistanceFacade = new PersistanceFacade(EventDutyEntity.class);
 
     public static EventDutyDTO publish(Year year, Month month) {
-        //Calculate first and last day of month; note that Month starts with 0
         EventDutyModel eventDutyModel;
 
-        Calendar firstOfMonth = Calendar.getInstance();
-        firstOfMonth.set(year.getValue(), month.getValue()-1, 1);
-
-        Calendar firstNextMonth = Calendar.getInstance();
-        firstNextMonth.set(year.getValue(), month.getValue(), 1);
-
-        List<EventDutyEntity> dutiesInRange = eventDutyEntityPersistanceFacade.list(p -> p.getStarttime().after(convertCalendarToTimestamp(firstOfMonth))
-                && p.getStarttime().before(convertCalendarToTimestamp(firstNextMonth)));
+        List<EventDutyEntity> dutiesInRange = eventDutyEntityPersistanceFacade.list(
+                p -> p.getStarttime().toLocalDateTime().getMonth().equals(month)
+                && p.getStarttime().toLocalDateTime().getYear() == year.getValue()
+                && p.getEventStatus().equals(EventStatus.Unpublished.toString()));
 
         for(EventDutyEntity evt : dutiesInRange){
             eventDutyModel = EventScheduleManager.createEventDutyModel(evt);
@@ -50,14 +46,9 @@ public class PublishEventSchedule {
             }
         }
       
-        for(EventDutyEntity evt: dutiesInRange) {
-            eventDutyModel = EventScheduleManager.createEventDutyModel(evt);
-            eventDutyModel.setEventStatus(EventStatus.Published);
-            try {
-                EventScheduleManager.updateEventDuty(EventScheduleManager.createEventDutyDTO(eventDutyModel),EventScheduleManager.createEventDutyDTO(eventDutyModel));
-            } catch (ValidationException e) {
-                e.printStackTrace();
-            }
+        for(EventDutyEntity eventDutyEntity: dutiesInRange) {
+            eventDutyEntity.setEventStatus(EventStatus.Published.toString());
+            eventDutyEntityPersistanceFacade.put(eventDutyEntity);
         }
 
         EventScheduleController.reload();
