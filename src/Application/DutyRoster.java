@@ -79,8 +79,8 @@ public class DutyRoster {
             case Viola:
                 required = stringInstrumentationEntity.getViola();
                 break;
-            case Violincello:
-                required = stringInstrumentationEntity.getViolincello();
+            case Violoncello:
+                required = stringInstrumentationEntity.getVioloncello();
                 break;
             case Doublebass:
                 required = stringInstrumentationEntity.getDoublebass();

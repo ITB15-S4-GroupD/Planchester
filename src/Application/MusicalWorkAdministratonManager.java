@@ -53,7 +53,7 @@ public class MusicalWorkAdministratonManager {
         instrumentationDTO.setTrumpet(instrumentationEntity.getBrassInstrumentationByBrassInstrumentation().getTrumpet());
         instrumentationDTO.setTube(instrumentationEntity.getBrassInstrumentationByBrassInstrumentation().getTube());
         instrumentationDTO.setViola(instrumentationEntity.getStringInstrumentationByStringInstrumentation().getViola());
-        instrumentationDTO.setVioloncello(instrumentationEntity.getStringInstrumentationByStringInstrumentation().getViolincello());
+        instrumentationDTO.setVioloncello(instrumentationEntity.getStringInstrumentationByStringInstrumentation().getVioloncello());
         return instrumentationDTO;
     }
 }
