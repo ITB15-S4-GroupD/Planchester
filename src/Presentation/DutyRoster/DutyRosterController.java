@@ -2,27 +2,34 @@ package Presentation.DutyRoster;
 
 import Application.*;
 import Application.DTO.EventDutyDTO;
+import Application.DTO.InstrumentationDTO;
+import Application.DTO.MusicalWorkDTO;
 import Application.DutyRosterManager;
+import Domain.Interfaces.IInstrumentation;
 import Domain.Models.Permission;
+import Persistence.Entities.*;
 import Presentation.CalenderController;
 
 import Presentation.PlanchesterGUI;
 import Utils.DateHelper;
-import Utils.Enum.DutyRosterStatus;
-import Utils.Enum.EventStatus;
-import Utils.Enum.EventType;
+import Utils.Enum.*;
 import Utils.MessageHelper;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import jfxtras.scene.control.agenda.Agenda;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.Year;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -35,6 +42,7 @@ public class DutyRosterController extends CalenderController{
     protected static ScrollPane staticScrollPane;
     protected static Map<Agenda.Appointment, EventDutyDTO> staticLoadedEventsMap = new HashMap<>();
     protected static Agenda.Appointment selectedAppointment;
+    @FXML private ScrollPane scrollPane;
     @FXML protected MenuButton publishDutyRoster;
 
     @FXML
@@ -62,11 +70,247 @@ public class DutyRosterController extends CalenderController{
 
             resetSideContent();
             selectedAppointment = agenda.selectedAppointments().get(0);
-            //showDutyDetailView();
+            showDutyDetailView();
         });
 
         Permission permission = AccountAdministrationManager.getInstance().getUserPermissions();
         publishDutyRoster.setVisible(permission.isPublishDutyRoster());
+    }
+
+    private void showDutyDetailView() {
+        try {
+            scrollPane.setContent(FXMLLoader.load(getClass().getResource("ShowDuty.fxml")));
+            EventDutyDTO eventDutyDTO = getEventForAppointment(selectedAppointment);
+            SectionType sectionType = AccountAdministrationManager.getInstance().getSectionType();
+
+            // fill in event details
+            Label eventName = (Label)PlanchesterGUI.scene.lookup("#eventName");
+            eventName.setText(eventDutyDTO.getName());
+            Label eventDescription = (Label)PlanchesterGUI.scene.lookup("#eventDescription");
+            eventDescription.setText(eventDutyDTO.getDescription());
+
+            if(!eventDutyDTO.getEventType().equals(EventType.Tour)) {
+                Label eventDate = (Label)PlanchesterGUI.scene.lookup("#eventDate");
+                eventDate.setText(eventDutyDTO.getStartTime().toLocalDateTime().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                Label eventStartTime = (Label)PlanchesterGUI.scene.lookup("#eventStartTime");
+                eventStartTime.setText(eventDutyDTO.getStartTime().toLocalDateTime().toLocalTime().format(DateTimeFormatter.ofPattern("hh:mm")));
+                Label eventEndTime = (Label)PlanchesterGUI.scene.lookup("#eventEndTime");
+                eventEndTime.setText(eventDutyDTO.getEndTime().toLocalDateTime().toLocalTime().format(DateTimeFormatter.ofPattern("hh:mm")));
+            } else {
+                Label eventStartDate = (Label)PlanchesterGUI.scene.lookup("#eventStartDate");
+                eventStartDate.setText(eventDutyDTO.getStartTime().toLocalDateTime().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                Label eventEndDate = (Label)PlanchesterGUI.scene.lookup("#eventEndDate");
+                eventEndDate.setText(eventDutyDTO.getEndTime().toLocalDateTime().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            }
+            Label eventLocation = (Label) PlanchesterGUI.scene.lookup("#eventLocation");
+            eventLocation.setText(eventDutyDTO.getLocation());
+            Label eventConductor = (Label) PlanchesterGUI.scene.lookup("#eventConductor");
+            eventConductor.setText(eventDutyDTO.getConductor());
+            Label eventPoints = (Label) PlanchesterGUI.scene.lookup("#eventPoints");
+            eventPoints.setText(eventDutyDTO.getPoints().toString());
+
+            // fill in musical works
+            TableView eventMusicalWorkTable = (TableView)PlanchesterGUI.scene.lookup("#eventMusicalWorkTable");
+            for(MusicalWorkDTO musicalWorkDTO : eventDutyDTO.getMusicalWorks()) {
+                eventMusicalWorkTable.getItems().add(musicalWorkDTO.getName());
+            }
+
+            // fill in disposition details
+
+            IInstrumentation instrumentation = eventDutyDTO.getInstrumentation();
+            int amountOfTables = 0;
+
+            String label1 = null;
+            String label2 = null;
+            String label3 = null;
+            String label4 = null;
+
+            int required1 = 0;
+            int required2 = 0;
+            int required3 = 0;
+            int required4 = 0;
+
+            List<String> entries1 = new ArrayList<>();
+            List<String> entries2 = new ArrayList<>();
+            List<String> entries3 = new ArrayList<>();
+            List<String> entries4 = new ArrayList<>();
+
+            switch (sectionType) {
+                case Violin1:
+                    amountOfTables = 1;
+                    required1 = instrumentation.getFirstViolin();
+                    label1 = "First Violin";
+                    entries1 = getAdressed(eventDutyDTO, label1);
+                    break;
+                case Violin2:
+                    amountOfTables = 1;
+                    required1 = instrumentation.getSecondViolin();
+                    label1 ="Second Violin";
+                    entries1 = getAdressed(eventDutyDTO, label1);
+                    break;
+                case Viola:
+                    amountOfTables = 1;
+                    required1 = instrumentation.getViola();
+                    label1 ="Viola";
+                    entries1 = getAdressed(eventDutyDTO, label1);
+                    break;
+                case Violincello:
+                    amountOfTables = 1;
+                    required1 = instrumentation.getVioloncello();
+                    label1 ="Violoncello";
+                    entries1 = getAdressed(eventDutyDTO, label1);
+                    break;
+                case Doublebass:
+                    amountOfTables = 1;
+                    required1 = instrumentation.getDoublebass();
+                    label1 ="Double Bass";
+                    entries1 = getAdressed(eventDutyDTO, label1);
+                    break;
+
+                case Woodwind:
+                    amountOfTables = 4;
+
+                    label1 = "Bassoon";
+                    required1 = instrumentation.getBasson();
+                    entries1 = getAdressed(eventDutyDTO, label1);
+
+                    label2 = "Clarinet";
+                    required2 = instrumentation.getClarinet();
+                    entries2 = getAdressed(eventDutyDTO, label2);
+
+                    label3 = "Flute";
+                    required3 = instrumentation.getFlute();
+                    entries3 = getAdressed(eventDutyDTO, label3);
+
+                    label4 = "Oboe";
+                    required4 = instrumentation.getOboe();
+                    entries4 = getAdressed(eventDutyDTO, label4);
+                    break;
+
+                case Brass:
+                    amountOfTables = 4;
+
+                    label1 = "French Horn";
+                    required1 = instrumentation.getHorn();
+                    entries1 = getAdressed(eventDutyDTO, label1);
+
+                    label2 = "Trombone";
+                    required2 = instrumentation.getTrombone();
+                    entries2 = getAdressed(eventDutyDTO, label2);
+
+                    label3 = "Trumpet";
+                    required3 = instrumentation.getTrumpet();
+                    entries3 = getAdressed(eventDutyDTO, label3);
+
+                    label4 = "Tuba";
+                    required4 = instrumentation.getTube();
+                    entries4 = getAdressed(eventDutyDTO, label4);
+                    break;
+
+                case Percussion:
+                    amountOfTables = 3;
+
+                    label1 = "Percussion";
+                    required1 = instrumentation.getPercussion();
+                    entries1 = getAdressed(eventDutyDTO, label1);
+
+                    label2 = "Harp";
+                    required2 = instrumentation.getHarp();
+                    entries2 = getAdressed(eventDutyDTO, label2);
+
+                    label3 = "Kettledrum";
+                    required3 = instrumentation.getKettledrum();
+                    entries3 = getAdressed(eventDutyDTO, label3);
+                    break;
+            }
+
+            GridPane dispositionGridPane = (GridPane)PlanchesterGUI.scene.lookup("#dispositionGridPane");
+
+            TableView table1 = (TableView)PlanchesterGUI.scene.lookup("#table1");
+            TableView table2 = (TableView)PlanchesterGUI.scene.lookup("#table2");
+            TableView table3 = (TableView)PlanchesterGUI.scene.lookup("#table3");
+            TableView table4 = (TableView)PlanchesterGUI.scene.lookup("#table4");
+
+            Label table1Label = (Label)PlanchesterGUI.scene.lookup("#table1Label");
+            Label table2Label = (Label)PlanchesterGUI.scene.lookup("#table2Label");
+            Label table3Label = (Label)PlanchesterGUI.scene.lookup("#table3Label");
+            Label table4Label = (Label)PlanchesterGUI.scene.lookup("#table4Label");
+
+
+            // TODO hide tables not needed
+
+            if(amountOfTables == 1) {
+                dispositionGridPane = removeRowFromGridPane(1, dispositionGridPane);
+                dispositionGridPane = removeRowFromGridPane(2, dispositionGridPane);
+                dispositionGridPane = removeRowFromGridPane(3, dispositionGridPane);
+            } else if(amountOfTables == 3) {
+                dispositionGridPane = removeRowFromGridPane(3, dispositionGridPane);
+            }
+
+            if(amountOfTables > 0) {
+                table1Label.setText(label1);
+                for(String s : entries1) {
+                    table1.getItems().add(s);
+                }
+                for(int i = required1 - entries1.size(); i > 0; i--) {
+                    table1.getItems().add("Missing");
+                }
+            }
+            if(amountOfTables > 2) {
+                table2Label.setText(label2);
+                for(String s : entries2) {
+                    table2.getItems().add(s);
+                }
+                for(int i = required2 - entries2.size(); i > 0; i--) {
+                    table2.getItems().add("Missing");
+                }
+
+                table3Label.setText(label3);
+                for(String s : entries3) {
+                    table3.getItems().add(s);
+                }
+                for(int i = required3 - entries3.size(); i > 0; i--) {
+                    table3.getItems().add("Missing");
+                }
+            }
+            if(amountOfTables > 3) {
+                table4Label.setText(label4);
+                for(String s : entries4) {
+                    table4.getItems().add(s);
+                }
+                for(int i = required4 - entries4.size(); i > 0; i--) {
+                    table4.getItems().add("Missing");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private GridPane removeRowFromGridPane(int row, GridPane gridPane ) {
+        Set<Node> deleteNodes = new HashSet<>();
+        for (Node child : gridPane.getChildren()) {
+            // get index from child
+            Integer rowIndex = GridPane.getRowIndex(child);
+
+            // handle null values for index=0
+            int r = rowIndex == null ? 0 : rowIndex;
+
+            if (r == row) {
+                // collect matching rows for deletion
+                deleteNodes.add(child);
+            }
+        }
+        gridPane.getChildren().removeAll(deleteNodes);
+        return gridPane;
+    }
+
+    private List<String> getAdressed(EventDutyDTO eventDutyDTO, String partType) {
+        return DutyRoster.getAdressedMusicicansForEventAndPart(eventDutyDTO, partType, DutyDispositionStatus.Normal);
+    }
+
+    public static EventDutyDTO getEventForAppointment(Agenda.Appointment appointment) {
+        return staticLoadedEventsMap.get(appointment);
     }
 
     private void addMonthsEntriesToMenuButton() {

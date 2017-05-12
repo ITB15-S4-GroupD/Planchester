@@ -1,10 +1,13 @@
 package Application.DTO;
 
 import Domain.Interfaces.IEventDuty;
+import Domain.Interfaces.IInstrumentation;
 import Domain.Models.EventDutyModel;
 import Utils.Enum.DutyRosterStatus;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
+
+import java.lang.instrument.Instrumentation;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -23,9 +26,10 @@ public class EventDutyDTO implements IEventDuty {
     private String eventLocation;
     private List<MusicalWorkDTO> musicalWorks;
     private Double points;
-    private Integer instrumentation;
+    private IInstrumentation instrumentation;
     private Integer rehearsalFor;
     private DutyRosterStatus dutyRosterStatus;
+    private int instrumentationId;
 
     public Integer getEventDutyId() {
         return eventDutyId;
@@ -115,12 +119,20 @@ public class EventDutyDTO implements IEventDuty {
         this.points = points;
     }
 
-    public Integer getInstrumentation() {
+    public IInstrumentation getInstrumentation() {
         return instrumentation;
     }
 
-    public void setInstrumentation(Integer instrumentation) {
+    public void setInstrumentation(IInstrumentation instrumentation) {
         this.instrumentation = instrumentation;
+    }
+
+    public int getInstrumentationId() {
+        return instrumentationId;
+    }
+
+    public void setInstrumentationId(int instrumentationId) {
+        this.instrumentationId = instrumentationId;
     }
 
     public DutyRosterStatus getDutyRosterStatus() {

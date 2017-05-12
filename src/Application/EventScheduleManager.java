@@ -8,6 +8,7 @@ import Domain.Models.MusicalWorkModel;
 import Persistence.Entities.EventDutyEntity;
 import Domain.Models.EventDutyModel;
 import Persistence.Entities.EventDutyMusicalWorkEntity;
+import Persistence.Entities.InstrumentationEntity;
 import Persistence.Entities.MusicalWorkEntity;
 import Persistence.PersistanceFacade;
 import Utils.DateHelper;
@@ -67,7 +68,7 @@ public class EventScheduleManager {
         eventDutyEntity.setConductor(eventDutyModel.getConductor());
         eventDutyEntity.setLocation(eventDutyModel.getLocation());
         eventDutyEntity.setDefaultPoints(eventDutyModel.getPoints() == null ? 0.0 : Double.valueOf(eventDutyModel.getPoints()));
-        eventDutyEntity.setInstrumentation(eventDutyModel.getInstrumentation());
+        eventDutyEntity.setInstrumentation(eventDutyModel.getInstrumentationId());
         eventDutyEntity.setRehearsalFor(eventDutyModel.getRehearsalFor());
 
         // check for changes in musical works
@@ -215,6 +216,53 @@ public class EventScheduleManager {
         return instrumentationModel;
     }
 
+    public static InstrumentationModel getInstrumentationModel(InstrumentationEntity instrumentationEntity){
+        if(instrumentationEntity == null ) {
+            return null;
+        }
+        InstrumentationModel instrumentationModel = new InstrumentationModel();
+        instrumentationModel.setBasson(instrumentationEntity.getWoodInstrumentationByWoodInstrumentation().getBassoon());
+        instrumentationModel.setClarinet(instrumentationEntity.getWoodInstrumentationByWoodInstrumentation().getClarinet());
+        instrumentationModel.setDescription(instrumentationEntity.getPercussionInstrumentationByPercussionInstrumentation().getPercussionDescription());
+        instrumentationModel.setDoublebass(instrumentationEntity.getStringInstrumentationByStringInstrumentation().getDoublebass());
+        instrumentationModel.setFirstViolin(instrumentationEntity.getStringInstrumentationByStringInstrumentation().getViolin1());
+        instrumentationModel.setFlute(instrumentationEntity.getWoodInstrumentationByWoodInstrumentation().getFlute());
+        instrumentationModel.setHarp(instrumentationEntity.getPercussionInstrumentationByPercussionInstrumentation().getHarp());
+        instrumentationModel.setHorn(instrumentationEntity.getBrassInstrumentationByBrassInstrumentation().getHorn());
+        instrumentationModel.setKettledrum(instrumentationEntity.getPercussionInstrumentationByPercussionInstrumentation().getKettledrum());
+        instrumentationModel.setOboe(instrumentationEntity.getWoodInstrumentationByWoodInstrumentation().getOboe());
+        instrumentationModel.setPercussion(instrumentationEntity.getPercussionInstrumentationByPercussionInstrumentation().getPercussion());
+        instrumentationModel.setSecondViolin(instrumentationEntity.getStringInstrumentationByStringInstrumentation().getViolin2());
+        instrumentationModel.setTrombone(instrumentationEntity.getBrassInstrumentationByBrassInstrumentation().getTrombone());
+        instrumentationModel.setTrumpet(instrumentationEntity.getBrassInstrumentationByBrassInstrumentation().getTrumpet());
+        instrumentationModel.setTube(instrumentationEntity.getBrassInstrumentationByBrassInstrumentation().getTube());
+        instrumentationModel.setViola(instrumentationEntity.getStringInstrumentationByStringInstrumentation().getViola());
+        instrumentationModel.setVioloncello(instrumentationEntity.getStringInstrumentationByStringInstrumentation().getViolincello());
+        return instrumentationModel;
+    }
+
+    public static InstrumentationDTO getInstrumentationDTO(InstrumentationModel instrumentationModel) {
+        InstrumentationDTO instrumentationDTO = new InstrumentationDTO();
+        instrumentationDTO.setBasson(instrumentationModel.getBasson());
+        instrumentationDTO.setClarinet(instrumentationModel.getClarinet());
+        instrumentationDTO.setDescription(instrumentationModel.getDescription());
+        instrumentationDTO.setDoublebass(instrumentationModel.getDoublebass());
+        instrumentationDTO.setFirstViolin(instrumentationModel.getFirstViolin());
+        instrumentationDTO.setFlute(instrumentationModel.getFlute());
+        instrumentationDTO.setHarp(instrumentationModel.getHarp());
+        instrumentationDTO.setHorn(instrumentationModel.getHorn());
+        instrumentationDTO.setKettledrum(instrumentationModel.getKettledrum());
+        instrumentationDTO.setOboe(instrumentationModel.getOboe());
+        instrumentationDTO.setPercussion(instrumentationModel.getPercussion());
+        instrumentationDTO.setSecondViolin(instrumentationModel.getSecondViolin());
+        instrumentationDTO.setTrombone(instrumentationModel.getTrombone());
+        instrumentationDTO.setTrumpet(instrumentationModel.getTrumpet());
+        instrumentationDTO.setTube(instrumentationModel.getTube());
+        instrumentationDTO.setViola(instrumentationModel.getViola());
+        instrumentationDTO.setVioloncello(instrumentationModel.getVioloncello());
+        return instrumentationDTO;
+    }
+
     public static EventDutyModel createEventDutyModel(EventDutyDTO eventDutyDTO) {
         EventDutyModel eventDutyModel = new EventDutyModel();
         eventDutyModel.setEventDutyId(eventDutyDTO.getEventDutyId());
@@ -256,7 +304,7 @@ public class EventScheduleManager {
         eventDutyEntity.setConductor(eventDutyModel.getConductor());
         eventDutyEntity.setLocation(eventDutyModel.getLocation());
         eventDutyEntity.setDefaultPoints(eventDutyModel.getPoints() == null ? 0.0 : Double.valueOf(eventDutyModel.getPoints()));
-        eventDutyEntity.setInstrumentation(eventDutyModel.getInstrumentation());
+        eventDutyEntity.setInstrumentation(eventDutyModel.getInstrumentationId());
         eventDutyEntity.setRehearsalFor(eventDutyModel.getRehearsalFor());
 
         if(eventDutyModel.getMusicalWorks() != null) {
@@ -320,7 +368,7 @@ public class EventScheduleManager {
         eventDutyModel.setConductor(eventDutyEntity.getConductor());
         eventDutyModel.setLocation(eventDutyEntity.getLocation());
         eventDutyModel.setPoints(eventDutyEntity.getDefaultPoints());
-        eventDutyModel.setInstrumentation(eventDutyEntity.getInstrumentation());
+        eventDutyModel.setInstrumentation(getInstrumentationModel(eventDutyEntity.getInstrumentationByInstrumentation()));
         eventDutyModel.setRehearsalFor(eventDutyEntity.getRehearsalFor());
 
         if(eventDutyEntity.getEventDutyMusicalWorksByEventDutyId() != null && !eventDutyEntity.getEventDutyMusicalWorksByEventDutyId().isEmpty()) {
