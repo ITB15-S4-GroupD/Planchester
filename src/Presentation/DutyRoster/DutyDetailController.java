@@ -1,5 +1,6 @@
 package Presentation.DutyRoster;
 
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -10,8 +11,8 @@ import javafx.scene.control.TableView;
  */
 public class DutyDetailController {
 
-    @FXML private TableView<?> musicalWorkTable;
-    @FXML private TableColumn<?, ?> selectedMusicalWorks;
+    @FXML private TableView<String> musicalWorkTable;
+    @FXML private TableColumn<String, String> selectedMusicalWorks;
 
     @FXML private Label eventNameLabel;
     @FXML private Label descriptionLabel;
@@ -22,5 +23,8 @@ public class DutyDetailController {
     @FXML private Label pointsLabel;
     @FXML private Label startTimeLabel;
 
+    @FXML public void initialize() {
+        selectedMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+    }
 
 }

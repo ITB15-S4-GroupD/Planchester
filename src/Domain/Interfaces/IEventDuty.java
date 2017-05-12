@@ -3,6 +3,8 @@ package Domain.Interfaces;
 import Utils.Enum.DutyRosterStatus;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
+
+import java.lang.instrument.Instrumentation;
 import java.sql.Timestamp;
 
 /**
@@ -31,8 +33,10 @@ public interface IEventDuty {
     void setPoints(Double points);
     Integer getRehearsalFor();
     void setRehearsalFor(Integer rehearsalFor);
-    Integer getInstrumentation();
-    void setInstrumentation(Integer instrumentation);
+    IInstrumentation getInstrumentation();
+    void setInstrumentation(IInstrumentation instrumentation);
+    int getInstrumentationId();
+    void setInstrumentationId(int instrumentationId);
     DutyRosterStatus getDutyRosterStatus();
     void setDutyRosterStatus(DutyRosterStatus dutyRosterStatus);
 }

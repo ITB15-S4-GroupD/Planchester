@@ -21,7 +21,6 @@ public class ShowDutyController {
     public void initialize() throws IOException {
         detailsTab.setContent(FXMLLoader.load(getClass().getResource("DutyDetail.fxml")));
         dispositionTab.setContent(FXMLLoader.load(getClass().getResource("DutyDisposition.fxml")));
-
     }
 
 

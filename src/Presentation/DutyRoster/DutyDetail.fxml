@@ -44,6 +44,11 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
+            <Label text="Start Time" GridPane.rowIndex="3">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
             <Label text="End time" GridPane.rowIndex="4">
                <font>
                   <Font name="System Bold" size="12.0" />
@@ -69,24 +74,23 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <TableView fx:id="musicalWorkTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <Label id="eventName" fx:id="eventNameLabel" text="Label" GridPane.columnIndex="1" />
+            <Label id="eventDescription" fx:id="descriptionLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label id="eventDate" fx:id="dateLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label id="eventStartTime" fx:id="startTimeLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label id="eventEndTime" fx:id="endTimeLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label id="eventLocation" fx:id="locationLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TableView id="eventMusicalWorkTable" fx:id="musicalWorkTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                <columns>
-                  <TableColumn fx:id="selectedMusicalWorks" prefWidth="249.0" text="Title" />
+                  <TableColumn id="eventMusicalWorkTableColumn" fx:id="selectedMusicalWorks" prefWidth="249.0" text="Title" />
                </columns>
             </TableView>
-            <Label fx:id="eventNameLabel" text="Label" GridPane.columnIndex="1" />
-            <Label fx:id="descriptionLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label fx:id="dateLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label fx:id="endTimeLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Label fx:id="locationLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Label fx:id="conductorLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <Label fx:id="pointsLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-            <Label text="Start time" GridPane.rowIndex="3">
+            <Label id="eventConductor" fx:id="conductorLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Label id="eventPoints" fx:id="pointsLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="8" >
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="startTimeLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
          <padding>
             <Insets left="10.0" right="10.0" />

@@ -133,6 +133,25 @@ public class DutyRoster {
         ).size();
     }
 
+    public static List<String> getAdressedMusicicansForEventAndPart(EventDutyDTO eventDutyDTO, String partType, DutyDispositionStatus dutyDispositionStatus) {
+        PersistanceFacade<DutyDispositionEntity> dutyDispositionEntityPersistanceFacade = new PersistanceFacade<>(DutyDispositionEntity.class);
+        PersistanceFacade<PartTypeEntity> partTypeEntityPersistanceFacade = new PersistanceFacade<>(PartTypeEntity.class);
+
+        PartTypeEntity partTypeEntity = partTypeEntityPersistanceFacade.get(p -> p.getPartType().equals(partType));
+
+        List<DutyDispositionEntity> dutyDispositionEntities = dutyDispositionEntityPersistanceFacade.list(p ->
+                p.getEventDuty() == eventDutyDTO.getEventDutyId()
+                && p.getPersonByMusician().getMusicianPartsByPersonId().stream().anyMatch(c -> c.getPart() == partTypeEntity.getPartTypeId())
+                && p.getDutyDispositionStatus().equals(dutyDispositionStatus.toString())
+        );
+
+        List<String> musicians = new ArrayList<>();
+        for(DutyDispositionEntity dutyDispositionEntity : dutyDispositionEntities) {
+            musicians.add(dutyDispositionEntity.getPersonByMusician().getFirstname() + " " + dutyDispositionEntity.getPersonByMusician().getLastname());
+        }
+        return musicians;
+    }
+
     /**
      * Getters and Setters
      */
