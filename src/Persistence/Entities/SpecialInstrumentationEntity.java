@@ -26,7 +26,7 @@ public class SpecialInstrumentationEntity {
         this.specialInstrumentationId = specialInstrumentationId;
     }
 
-    @Column(name = "sectionType", nullable = false, precision = 0, columnDefinition = "enum('Violin1', 'Violin2', 'Viola', 'Violincello', 'Doublebass', 'Woodwind', 'Brass', 'Percussion')")
+    @Column(name = "sectionType", nullable = false, precision = 0, columnDefinition = "enum('Violin1', 'Violin2', 'Viola', 'Violoncello', 'Doublebass', 'Woodwind', 'Brass', 'Percussion')")
     public String getSectionType() {
         return sectionType;
     }

@@ -203,7 +203,7 @@ public class CalculateMusicianCapacity {
         instrumentationMap.put("First Violin", stringInstrumentationEntity.getViolin1());
         instrumentationMap.put("Second Violin", stringInstrumentationEntity.getViolin2());
         instrumentationMap.put("Viola", stringInstrumentationEntity.getViola());
-        instrumentationMap.put("Violoncello", stringInstrumentationEntity.getViolincello());
+        instrumentationMap.put("Violoncello", stringInstrumentationEntity.getVioloncello());
         instrumentationMap.put("Double Bass", stringInstrumentationEntity.getDoublebass());
         return instrumentationMap;
     }

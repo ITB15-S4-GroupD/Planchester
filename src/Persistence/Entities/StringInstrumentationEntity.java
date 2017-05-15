@@ -13,7 +13,7 @@ public class StringInstrumentationEntity {
     private int violin1;
     private int violin2;
     private int viola;
-    private int violincello;
+    private int violoncello;
     private int doublebass;
     private Collection<InstrumentationEntity> instrumentationsByStringInstrumentationId;
 
@@ -60,12 +60,12 @@ public class StringInstrumentationEntity {
 
     @Basic
     @Column(name = "violincello", nullable = false)
-    public int getViolincello() {
-        return violincello;
+    public int getVioloncello() {
+        return violoncello;
     }
 
-    public void setViolincello(int violincello) {
-        this.violincello = violincello;
+    public void setVioloncello(int violoncello) {
+        this.violoncello = violoncello;
     }
 
     @Basic
@@ -89,7 +89,7 @@ public class StringInstrumentationEntity {
         if (violin1 != that.violin1) return false;
         if (violin2 != that.violin2) return false;
         if (viola != that.viola) return false;
-        if (violincello != that.violincello) return false;
+        if (violoncello != that.violoncello) return false;
         if (doublebass != that.doublebass) return false;
 
         return true;
@@ -101,7 +101,7 @@ public class StringInstrumentationEntity {
         result = 31 * result + violin1;
         result = 31 * result + violin2;
         result = 31 * result + viola;
-        result = 31 * result + violincello;
+        result = 31 * result + violoncello;
         result = 31 * result + doublebass;
         return result;
     }
