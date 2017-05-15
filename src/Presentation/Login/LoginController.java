@@ -1,7 +1,6 @@
 package Presentation.Login;
 
 import Application.AccountAdministrationManager;
-import Persistence.Entities.AccountEntity;
 import Presentation.PlanchesterGUI;
 import Utils.MessageHelper;
 import Utils.PlanchesterMessages;
@@ -22,10 +21,6 @@ public class LoginController {
     @FXML private TextField username;
     @FXML private PasswordField password;
     @FXML private Button btnLogin;
-    //public static AccountEntity loggedInUser;
-    public static Stage stage;
-    private boolean isAddedPassword = false;
-    private boolean isAddedUsername = false;
 
     @FXML
     public void initialize() {
@@ -61,6 +56,7 @@ public class LoginController {
             );
         }
     }
+
     //handles the Enter-Key-Button for faster login.
     @FXML
     public void handleEnterPressed(KeyEvent event){

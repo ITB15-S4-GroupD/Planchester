@@ -2,7 +2,6 @@ package Presentation.EventSchedule;
 
 import Utils.Enum.EventType;
 import javafx.fxml.FXML;
-
 import javax.xml.bind.ValidationException;
 
 /**

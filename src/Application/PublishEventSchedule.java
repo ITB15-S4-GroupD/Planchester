@@ -1,6 +1,5 @@
 package Application;
 
-import java.sql.Timestamp;
 import java.time.Month;
 import java.time.Year;
 import java.util.*;
@@ -13,8 +12,6 @@ import Utils.Enum.EventStatus;
 import Utils.MessageHelper;
 import Utils.Validator;
 import javax.xml.bind.ValidationException;
-
-import static Utils.DateHelper.convertCalendarToTimestamp;
 
 /**
  * Created by julia on 28.04.2017.
