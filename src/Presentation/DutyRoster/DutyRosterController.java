@@ -161,7 +161,7 @@ public class DutyRosterController extends CalenderController{
                     label1 ="Viola";
                     entries1 = getAdressed(eventDutyDTO, label1);
                     break;
-                case Violincello:
+                case Violoncello:
                     amountOfTables = 1;
                     required1 = instrumentation.getVioloncello();
                     label1 ="Violoncello";
@@ -310,6 +310,9 @@ public class DutyRosterController extends CalenderController{
         if(AccountAdministrationManager.getInstance().getUserPermissions().isPublishDutyRoster()) {
             publishDutyRoster.getItems().clear();
             List<EventDutyDTO> unpublishedEvents = DutyRosterManager.getAllUnpublishedMonths();
+            if(unpublishedEvents == null) {
+                return;
+            }
             List<String> months = new ArrayList<>();
             EventHandler<ActionEvent> action = chooseMonthToPublish();
             Calendar cal = Calendar.getInstance();

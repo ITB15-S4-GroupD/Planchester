@@ -237,7 +237,7 @@ public class EventScheduleManager {
         instrumentationModel.setTrumpet(instrumentationEntity.getBrassInstrumentationByBrassInstrumentation().getTrumpet());
         instrumentationModel.setTube(instrumentationEntity.getBrassInstrumentationByBrassInstrumentation().getTube());
         instrumentationModel.setViola(instrumentationEntity.getStringInstrumentationByStringInstrumentation().getViola());
-        instrumentationModel.setVioloncello(instrumentationEntity.getStringInstrumentationByStringInstrumentation().getViolincello());
+        instrumentationModel.setVioloncello(instrumentationEntity.getStringInstrumentationByStringInstrumentation().getVioloncello());
         return instrumentationModel;
     }
 
