@@ -71,7 +71,7 @@ public class DutyRosterController extends CalenderController{
 
         Permission permission = AccountAdministrationManager.getInstance().getUserPermissions();
         if(AccountAdministrationManager.getInstance().getSectionType() != null) {
-            dutyRosterLabel.setText("Duty Roster" + AccountAdministrationManager.getInstance().getSectionType());
+            dutyRosterLabel.setText("Duty Roster: " + AccountAdministrationManager.getInstance().getSectionType());
         }
         publishDutyRoster.setVisible(permission.isPublishDutyRoster());
     }
