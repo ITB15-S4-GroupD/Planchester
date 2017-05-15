@@ -2,7 +2,6 @@ package Presentation.EventSchedule;
 
 import Utils.Enum.EventType;
 import javafx.fxml.FXML;
-
 import javax.xml.bind.ValidationException;
 
 /**
@@ -10,7 +9,6 @@ import javax.xml.bind.ValidationException;
  */
 
 public class CreateHofkapelleController extends CreateController {
-
     @FXML
     @Override
     protected void insertEventDuty() throws ValidationException {

@@ -3,7 +3,6 @@ package Application;
 import Domain.Models.Permission;
 import Persistence.Entities.AccountEntity;
 import Persistence.Entities.MusicianPartEntity;
-import Persistence.Entities.PartEntity;
 import Persistence.PersistanceFacade;
 import Utils.Enum.AccountRole;
 import Utils.Enum.SectionType;

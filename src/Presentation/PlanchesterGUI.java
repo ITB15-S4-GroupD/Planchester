@@ -6,10 +6,8 @@ import Presentation.EventSchedule.EventScheduleController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
-
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.UnexpectedException;
@@ -21,10 +19,10 @@ public class PlanchesterGUI {
 
     public void start(Stage primaryStage) throws Exception {
         DatabaseSessionManager.beginSession();
-        showFirstLogin();
+        showFirstLogin(primaryStage);
     }
 
-    public void showFirstLogin() throws Exception {
+    public void showFirstLogin(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Planchester Login");
         scene = new Scene(FXMLLoader.load(getClass().getResource("Login/Login.fxml")));
         primaryStage.setScene(scene);

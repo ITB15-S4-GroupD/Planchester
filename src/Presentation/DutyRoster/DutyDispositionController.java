@@ -24,7 +24,6 @@ public class DutyDispositionController {
     @FXML private TableView<String> table4;
     @FXML private TableColumn<String, String> tableColumn4;
 
-
     @FXML public void initialize() {
         tableColumn1.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
         tableColumn2.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
