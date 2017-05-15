@@ -108,7 +108,7 @@
                         </GridPane>
                     </children>
                 </GridPane>
-                <Label contentDisplay="CENTER" text="Duty Roster " textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1">
+                <Label fx:id="dutyRosterLabel" contentDisplay="CENTER" text="Duty Roster " textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1">
                     <font>
                         <Font name="Calibri Bold" size="32.0" />
                     </font>
