@@ -21,10 +21,10 @@ public class PlanchesterGUI {
 
     public void start(Stage primaryStage) throws Exception {
         DatabaseSessionManager.beginSession();
-        showFirstLogin();
+        showFirstLogin(primaryStage);
     }
 
-    public void showFirstLogin() throws Exception {
+    public void showFirstLogin(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Planchester Login");
         scene = new Scene(FXMLLoader.load(getClass().getResource("Login/Login.fxml")));
         primaryStage.setScene(scene);

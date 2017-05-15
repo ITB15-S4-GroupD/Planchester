@@ -28,8 +28,14 @@ public class DutyRoster {
     private Calendar firstOfMonth = Calendar.getInstance();
     private Calendar firstOfNextMonth = Calendar.getInstance();
     private SectionType section;
-    private PartTypeEntity partTypeEntity;
 
+    /**
+     *
+     * @param year
+     * @param month
+     * @return  null : successful
+     *          EventDutyDTO : event which failed validation
+     */
     public EventDutyDTO validateMonth(Year year, Month month) {
         //zweimal selbe parameter übergeben, da aufruf und logik bei setter
         setFirstOfMonth(year, month);
@@ -37,10 +43,6 @@ public class DutyRoster {
 
         section = AccountAdministrationManager.getInstance().getSectionType();
         Collection<MusicianPartEntity> parts = AccountAdministrationManager.getInstance().getLoggedInAccount().getPersonAccountId().getMusicianPartsByPersonId();
-
-        for(MusicianPartEntity musicianPartEntity : parts) {
-            partTypeEntity = musicianPartEntity.getPartByPart().getPartTypeByPartType();
-        }
 
         for (EventDutyEntity event : DutyRosterManager.getDutyRosterEntitiesInRange(firstOfMonth, firstOfNextMonth)) {
             if(validateDuty(event) == false) {
@@ -102,7 +104,7 @@ public class DutyRoster {
                 break;
         }
 
-        int adressed = getCountMusicicansForEventAndPart(event, partTypeEntity, DutyDispositionStatus.Normal);
+        int adressed = getCountMusicicansForEventAndPart(event, section, DutyDispositionStatus.Normal);
 
         if(required > adressed) {
             int missing = required - adressed;
@@ -114,23 +116,27 @@ public class DutyRoster {
             warning.append(" on ");
             warning.append(event.getStarttime().toLocalDateTime().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             warning.append(".\n");
-            warning.append(missing);
-            warning.append(" ");
-            warning.append(partTypeEntity.getPartType());
-            warning.append(" are missing.");
+            if(missing == 1) {
+                warning.append("One musicians is missing.");
+            } else {
+                warning.append(missing);
+                warning.append(" musicians are missing.");
+            }
             MessageHelper.showErrorAlertMessage(warning.toString());
             return false;
         }
         return true;
     }
 
-    public int getCountMusicicansForEventAndPart(EventDutyEntity eventDutyEntity, PartTypeEntity partTypeEntity, DutyDispositionStatus dutyDispositionStatus) {
+    public int getCountMusicicansForEventAndPart(EventDutyEntity eventDutyEntity, SectionType sectionType, DutyDispositionStatus dutyDispositionStatus) {
         PersistanceFacade<DutyDispositionEntity> dutyDispositionEntityPersistanceFacade = new PersistanceFacade<>(DutyDispositionEntity.class);
 
-        return dutyDispositionEntityPersistanceFacade.list(p -> p.getEventDuty() == eventDutyEntity.getEventDutyId()
-                && p.getPersonByMusician().getMusicianPartsByPersonId().stream().filter(c -> c.getPartByPart().equals(partTypeEntity)) != null
+        List<DutyDispositionEntity> dutyDispositionEntities = dutyDispositionEntityPersistanceFacade.list(p -> p.getEventDuty() == eventDutyEntity.getEventDutyId()
+                && p.getPersonByMusician().getMusicianPartsByPersonId().stream().anyMatch(c -> c.getPartByPart().getSectionType().equals(sectionType.toString()))
                 && p.getDutyDispositionStatus().equals(dutyDispositionStatus.toString())
-        ).size();
+        );
+
+        return dutyDispositionEntities.size();
     }
 
     public static List<String> getAdressedMusicicansForEventAndPart(EventDutyDTO eventDutyDTO, String partType, DutyDispositionStatus dutyDispositionStatus) {
