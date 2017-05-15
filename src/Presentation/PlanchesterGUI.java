@@ -21,14 +21,16 @@ public class PlanchesterGUI {
 
     public void start(Stage primaryStage) throws Exception {
         DatabaseSessionManager.beginSession();
+        showFirstLogin();
+    }
 
+    public void showFirstLogin() throws Exception {
         primaryStage.setTitle("Planchester Login");
         scene = new Scene(FXMLLoader.load(getClass().getResource("Login/Login.fxml")));
         primaryStage.setScene(scene);
         primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
         primaryStage.show();
         checkLogin(primaryStage);
-
         this.primaryStage = primaryStage;
     }
 
