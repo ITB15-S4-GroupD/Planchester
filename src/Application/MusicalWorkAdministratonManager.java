@@ -5,7 +5,6 @@ import Application.DTO.MusicalWorkDTO;
 import Persistence.Entities.InstrumentationEntity;
 import Persistence.Entities.MusicalWorkEntity;
 import Persistence.PersistanceFacade;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +52,7 @@ public class MusicalWorkAdministratonManager {
         instrumentationDTO.setTrumpet(instrumentationEntity.getBrassInstrumentationByBrassInstrumentation().getTrumpet());
         instrumentationDTO.setTube(instrumentationEntity.getBrassInstrumentationByBrassInstrumentation().getTube());
         instrumentationDTO.setViola(instrumentationEntity.getStringInstrumentationByStringInstrumentation().getViola());
-        instrumentationDTO.setVioloncello(instrumentationEntity.getStringInstrumentationByStringInstrumentation().getViolincello());
+        instrumentationDTO.setVioloncello(instrumentationEntity.getStringInstrumentationByStringInstrumentation().getVioloncello());
         return instrumentationDTO;
     }
 }

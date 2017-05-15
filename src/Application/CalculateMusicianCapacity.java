@@ -1,18 +1,10 @@
 package Application;
 
 import Domain.Models.EventDutyModel;
-import Domain.Models.MusicalWorkModel;
 import Persistence.*;
 import Persistence.Entities.*;
-import Utils.DateHelper;
-import Utils.Enum.EventStatus;
-import Utils.Enum.EventType;
-
 import java.sql.Timestamp;
 import java.util.*;
-import java.util.function.Predicate;
-
-import static Utils.DateHelper.convertCalendarToTimestamp;
 
 /**
  * Created by Garvin u. Malena on 4/24/2017.
@@ -211,7 +203,7 @@ public class CalculateMusicianCapacity {
         instrumentationMap.put("First Violin", stringInstrumentationEntity.getViolin1());
         instrumentationMap.put("Second Violin", stringInstrumentationEntity.getViolin2());
         instrumentationMap.put("Viola", stringInstrumentationEntity.getViola());
-        instrumentationMap.put("Violoncello", stringInstrumentationEntity.getViolincello());
+        instrumentationMap.put("Violoncello", stringInstrumentationEntity.getVioloncello());
         instrumentationMap.put("Double Bass", stringInstrumentationEntity.getDoublebass());
         return instrumentationMap;
     }

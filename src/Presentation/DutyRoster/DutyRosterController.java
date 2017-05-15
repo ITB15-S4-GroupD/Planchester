@@ -2,19 +2,15 @@ package Presentation.DutyRoster;
 
 import Application.*;
 import Application.DTO.EventDutyDTO;
-import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
 import Application.DutyRosterManager;
 import Domain.Interfaces.IInstrumentation;
 import Domain.Models.Permission;
-import Persistence.Entities.*;
 import Presentation.CalenderController;
-
 import Presentation.PlanchesterGUI;
 import Utils.DateHelper;
 import Utils.Enum.*;
 import Utils.MessageHelper;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -24,7 +20,6 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import jfxtras.scene.control.agenda.Agenda;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -84,9 +79,16 @@ public class DutyRosterController extends CalenderController{
 
     private void showDutyDetailView() {
         try {
+            // fill content into side panel
             scrollPane.setContent(FXMLLoader.load(getClass().getResource("ShowDuty.fxml")));
             EventDutyDTO eventDutyDTO = getEventForAppointment(selectedAppointment);
             SectionType sectionType = AccountAdministrationManager.getInstance().getSectionType();
+
+            // if tour, load other fxml into tabpane
+            if(eventDutyDTO.getEventType().equals(EventType.Tour)) {
+                TabPane tabPane = (TabPane)PlanchesterGUI.scene.lookup("#tabPane");
+                tabPane.getTabs().get(0).setContent(FXMLLoader.load(getClass().getResource("DutyDetailTour.fxml")));
+            }
 
             // fill in event details
             Label eventName = (Label)PlanchesterGUI.scene.lookup("#eventName");
@@ -121,7 +123,6 @@ public class DutyRosterController extends CalenderController{
             }
 
             // fill in disposition details
-
             IInstrumentation instrumentation = eventDutyDTO.getInstrumentation();
             int amountOfTables = 0;
 
@@ -140,6 +141,7 @@ public class DutyRosterController extends CalenderController{
             List<String> entries3 = new ArrayList<>();
             List<String> entries4 = new ArrayList<>();
 
+            // get data from section type
             switch (sectionType) {
                 case Violin1:
                     amountOfTables = 1;
@@ -229,6 +231,7 @@ public class DutyRosterController extends CalenderController{
                     break;
             }
 
+            // get elements from scene
             GridPane dispositionGridPane = (GridPane)PlanchesterGUI.scene.lookup("#dispositionGridPane");
 
             TableView table1 = (TableView)PlanchesterGUI.scene.lookup("#table1");
@@ -242,8 +245,7 @@ public class DutyRosterController extends CalenderController{
             Label table4Label = (Label)PlanchesterGUI.scene.lookup("#table4Label");
 
 
-            // TODO hide tables not needed
-
+            // remove unneeded tables
             if(amountOfTables == 1) {
                 dispositionGridPane = removeRowFromGridPane(1, dispositionGridPane);
                 dispositionGridPane = removeRowFromGridPane(2, dispositionGridPane);
@@ -252,43 +254,29 @@ public class DutyRosterController extends CalenderController{
                 dispositionGridPane = removeRowFromGridPane(3, dispositionGridPane);
             }
 
+            // add data into tables
             if(amountOfTables > 0) {
-                table1Label.setText(label1);
-                for(String s : entries1) {
-                    table1.getItems().add(s);
-                }
-                for(int i = required1 - entries1.size(); i > 0; i--) {
-                    table1.getItems().add("Missing");
-                }
+                insertDataIntoTable(table1, label1, table1Label, entries1, required1);
             }
             if(amountOfTables > 2) {
-                table2Label.setText(label2);
-                for(String s : entries2) {
-                    table2.getItems().add(s);
-                }
-                for(int i = required2 - entries2.size(); i > 0; i--) {
-                    table2.getItems().add("Missing");
-                }
-
-                table3Label.setText(label3);
-                for(String s : entries3) {
-                    table3.getItems().add(s);
-                }
-                for(int i = required3 - entries3.size(); i > 0; i--) {
-                    table3.getItems().add("Missing");
-                }
+                insertDataIntoTable(table2, label2, table2Label, entries2, required2);
+                insertDataIntoTable(table3, label3, table3Label, entries3, required3);
             }
             if(amountOfTables > 3) {
-                table4Label.setText(label4);
-                for(String s : entries4) {
-                    table4.getItems().add(s);
-                }
-                for(int i = required4 - entries4.size(); i > 0; i--) {
-                    table4.getItems().add("Missing");
-                }
+                insertDataIntoTable(table4, label4, table4Label, entries4, required4);
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void insertDataIntoTable(TableView table, String labelText, Label label, List<String> entries, int required) {
+        label.setText(labelText);
+        for(String s : entries) {
+            table.getItems().add(s);
+        }
+        for(int i = required - entries.size(); i > 0; i--) {
+            table.getItems().add("Missing");
         }
     }
 

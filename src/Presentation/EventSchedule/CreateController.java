@@ -4,8 +4,6 @@ import Application.DTO.EventDutyDTO;
 import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
-import Presentation.EventSchedule.EventScheduleController;
-import Presentation.EventSchedule.InstrumentationController;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
@@ -20,7 +18,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
 import javax.xml.bind.ValidationException;
 import java.io.IOException;
 import java.time.LocalDate;
