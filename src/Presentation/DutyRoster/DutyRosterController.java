@@ -44,6 +44,7 @@ public class DutyRosterController extends CalenderController{
     protected static Agenda.Appointment selectedAppointment;
     @FXML private ScrollPane scrollPane;
     @FXML protected MenuButton publishDutyRoster;
+    @FXML private Label dutyRosterLabel;
 
     @FXML
     public void initialize() {
@@ -73,7 +74,11 @@ public class DutyRosterController extends CalenderController{
             showDutyDetailView();
         });
 
+
         Permission permission = AccountAdministrationManager.getInstance().getUserPermissions();
+        if(AccountAdministrationManager.getInstance().getSectionType() != null) {
+            dutyRosterLabel.setText("Duty Roster" + AccountAdministrationManager.getInstance().getSectionType());
+        }
         publishDutyRoster.setVisible(permission.isPublishDutyRoster());
     }
 
