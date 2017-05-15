@@ -48,6 +48,11 @@ public class AccountAdministrationManager {
         permission = new Permission(accountRole);
 
         // get section type
+        if(account.getPersonAccountId() == null) {
+            sectionType = null;
+            return;
+        }
+
         if(account.getPersonAccountId().getMusicianPartsByPersonId() != null) {
             Collection<MusicianPartEntity> parts = account.getPersonAccountId().getMusicianPartsByPersonId();
             for(MusicianPartEntity musicianPartEntity : parts) {

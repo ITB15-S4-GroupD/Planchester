@@ -90,11 +90,15 @@ public class DutyRosterManager {
     public static List<EventDutyDTO> getAllUnpublishedMonths() {
         AccountRole accountRole = AccountAdministrationManager.getInstance().getAccountRole();
 
+        if(AccountAdministrationManager.getInstance().getSectionType() == null) {
+            return null;
+        }
+
         // get all events for user section in specified time space and for his account role
         List<EventDutySectionDutyRosterEntity> eventDutySectionDutyRosterEntities = eventDutySectionDutyRosterEntityPersistanceFacade.list(p ->
                 (p.getSectionDutyRosterBySectionDutyRoster().getSectionType().equals(AccountAdministrationManager.getInstance().getSectionType().toString()))
-                        && (accountRole.equals(AccountRole.Section_representative)
-                        || p.getSectionDutyRosterBySectionDutyRoster().getDutyRosterStatus().equals(DutyRosterStatus.Unpublished.toString()))
+                        && (AccountRole.Section_representative.equals(accountRole)
+                        || DutyRosterStatus.Unpublished.toString().equals(p.getSectionDutyRosterBySectionDutyRoster().getDutyRosterStatus()))
         );
 
         List<EventDutyEntity> eventDuties = new ArrayList<>();

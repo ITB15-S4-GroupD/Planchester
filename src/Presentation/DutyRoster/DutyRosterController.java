@@ -309,6 +309,9 @@ public class DutyRosterController extends CalenderController{
         if(AccountAdministrationManager.getInstance().getUserPermissions().isPublishDutyRoster()) {
             publishDutyRoster.getItems().clear();
             List<EventDutyDTO> unpublishedEvents = DutyRosterManager.getAllUnpublishedMonths();
+            if(unpublishedEvents == null) {
+                return;
+            }
             List<String> months = new ArrayList<>();
             EventHandler<ActionEvent> action = chooseMonthToPublish();
             Calendar cal = Calendar.getInstance();
