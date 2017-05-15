@@ -160,7 +160,7 @@ public class DutyRosterController extends CalenderController{
                     label1 ="Viola";
                     entries1 = getAdressed(eventDutyDTO, label1);
                     break;
-                case Violincello:
+                case Violoncello:
                     amountOfTables = 1;
                     required1 = instrumentation.getVioloncello();
                     label1 ="Violoncello";
