@@ -2,19 +2,15 @@ package Presentation.DutyRoster;
 
 import Application.*;
 import Application.DTO.EventDutyDTO;
-import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
 import Application.DutyRosterManager;
 import Domain.Interfaces.IInstrumentation;
 import Domain.Models.Permission;
-import Persistence.Entities.*;
 import Presentation.CalenderController;
-
 import Presentation.PlanchesterGUI;
 import Utils.DateHelper;
 import Utils.Enum.*;
 import Utils.MessageHelper;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -24,7 +20,6 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import jfxtras.scene.control.agenda.Agenda;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.Month;

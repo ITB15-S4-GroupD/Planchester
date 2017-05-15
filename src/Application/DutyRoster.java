@@ -7,16 +7,10 @@ import Persistence.PersistanceFacade;
 import Utils.Enum.DutyDispositionStatus;
 import Utils.Enum.SectionType;
 import Utils.MessageHelper;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.Month;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
-import static Application.EventScheduleManager.createEventDutyModel;
 
 /**
  * Created by Bernd u. Garvin on 5/8/2017.

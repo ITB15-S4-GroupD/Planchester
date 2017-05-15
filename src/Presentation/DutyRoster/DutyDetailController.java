@@ -26,5 +26,4 @@ public class DutyDetailController {
     @FXML public void initialize() {
         selectedMusicalWorks.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
     }
-
 }

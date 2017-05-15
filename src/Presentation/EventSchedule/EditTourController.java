@@ -5,7 +5,6 @@ import Application.DTO.EventDutyDTO;
 import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
 import Domain.Models.Permission;
-import Presentation.EventSchedule.EventScheduleController;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
@@ -17,7 +16,6 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import jfxtras.scene.control.agenda.Agenda;
-
 import javax.xml.bind.ValidationException;
 import java.time.LocalDate;
 import java.time.LocalTime;

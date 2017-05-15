@@ -1,22 +1,15 @@
 package Application;
 
 import Application.DTO.EventDutyDTO;
-import Application.DTO.MusicalWorkDTO;
 import Domain.Models.EventDutyModel;
-import Persistence.Entities.DutyDispositionEntity;
 import Persistence.Entities.EventDutyEntity;
 import Persistence.Entities.EventDutySectionDutyRosterEntity;
 import Persistence.PersistanceFacade;
 import Utils.DateHelper;
 import Utils.Enum.AccountRole;
 import Utils.Enum.DutyRosterStatus;
-import Utils.Enum.EventStatus;
-import Utils.MessageHelper;
-
-import javax.xml.bind.ValidationException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 import static Application.EventScheduleManager.createEventDutyDTO;

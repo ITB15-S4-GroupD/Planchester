@@ -6,10 +6,8 @@ import Presentation.EventSchedule.EventScheduleController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
-
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.UnexpectedException;

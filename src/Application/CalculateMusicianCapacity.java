@@ -1,18 +1,10 @@
 package Application;
 
 import Domain.Models.EventDutyModel;
-import Domain.Models.MusicalWorkModel;
 import Persistence.*;
 import Persistence.Entities.*;
-import Utils.DateHelper;
-import Utils.Enum.EventStatus;
-import Utils.Enum.EventType;
-
 import java.sql.Timestamp;
 import java.util.*;
-import java.util.function.Predicate;
-
-import static Utils.DateHelper.convertCalendarToTimestamp;
 
 /**
  * Created by Garvin u. Malena on 4/24/2017.

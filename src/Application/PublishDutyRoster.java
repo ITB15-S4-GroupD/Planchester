@@ -1,21 +1,11 @@
 package Application;
 
-import Application.DTO.EventDutyDTO;
-import Domain.Models.EventDutyModel;
-import Persistence.Entities.EventDutyEntity;
 import Persistence.Entities.EventDutySectionDutyRosterEntity;
 import Persistence.Entities.SectionDutyRosterEntity;
 import Persistence.PersistanceFacade;
-import Presentation.EventSchedule.EventScheduleController;
 import Utils.Enum.DutyRosterStatus;
-import Utils.Enum.EventStatus;
-import Utils.MessageHelper;
-import Utils.Validator;
-
-import javax.xml.bind.ValidationException;
 import java.time.Month;
 import java.time.Year;
-import java.util.Collection;
 import java.util.List;
 
 /**

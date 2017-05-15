@@ -1,30 +1,18 @@
 package Presentation.EventSchedule;
 
 import Application.DTO.EventDutyDTO;
-import Application.DTO.InstrumentationDTO;
-import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
-import Presentation.EventSchedule.EventScheduleController;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import Utils.MessageHelper;
 import Utils.PlanchesterConstants;
 import Utils.PlanchesterMessages;
 import com.jfoenix.controls.JFXDatePicker;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
-
 import javax.xml.bind.ValidationException;
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.LinkedList;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Christina on 20.04.2017.
