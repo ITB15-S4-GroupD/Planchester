@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
@@ -15,7 +16,7 @@
 <?import javafx.scene.text.Font?>
 <?import jfxtras.scene.control.agenda.Agenda?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="993.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.DutyRoster.DutyRosterController">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1058.0" prefWidth="1946.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.DutyRoster.DutyRosterController">
     <children>
         <GridPane layoutX="52.0" layoutY="101.0" prefHeight="993.0" prefWidth="1500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
@@ -76,7 +77,7 @@
                         <GridPane prefHeight="30.0" GridPane.columnIndex="2">
                             <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="64.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="347.0" minWidth="161.0" prefWidth="347.0" />
+                                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="161.0" prefWidth="347.0" />
                             </columnConstraints>
                             <rowConstraints>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -121,7 +122,7 @@
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="95.0" prefWidth="95.0" />
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="95.0" prefWidth="95.0" />
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="95.0" prefWidth="95.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
@@ -147,6 +148,9 @@
                                 <Label fx:id="unpublishedLabel" text="(UP) ... Unpublished" />
                                 <Label text="(C) ... Cancelled" GridPane.columnIndex="1" />
                             </children>
+                     <GridPane.margin>
+                        <Insets right="10.0" />
+                     </GridPane.margin>
                         </GridPane>
                     </children>
                 </GridPane>

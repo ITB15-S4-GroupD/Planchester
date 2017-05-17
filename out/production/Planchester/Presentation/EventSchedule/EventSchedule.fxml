@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
@@ -15,9 +16,9 @@
 <?import javafx.scene.text.Font?>
 <?import jfxtras.scene.control.agenda.Agenda?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="993.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.EventScheduleController">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1028.0" prefWidth="1814.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.EventScheduleController">
     <children>
-        <GridPane layoutX="52.0" layoutY="101.0" prefHeight="993.0" prefWidth="1500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <GridPane layoutX="52.0" layoutY="101.0" prefHeight="993.0" prefWidth="1817.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="559.0" />
                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="400.0" />
@@ -139,19 +140,22 @@
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="95.0" prefWidth="95.0" />
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="95.0" prefWidth="95.0" />
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="95.0" prefWidth="95.0" />
-                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <JFXTextField fx:id="colorKeyConcert" alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="90.0" text="Concert" />
+                        <JFXTextField fx:id="colorKeyConcert" alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="90.0" text="Concert">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin></JFXTextField>
                         <JFXTextField fx:id="colorKeyOpera" alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="90.0" text="Opera" GridPane.columnIndex="1" />
                         <JFXTextField fx:id="colorKeyTour" alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="90.0" text="Tour" GridPane.columnIndex="2" />
                         <JFXTextField fx:id="colorKeyHofkapelle" alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="90.0" text="Hofkapelle" GridPane.columnIndex="3" />
                         <JFXTextField fx:id="colorKeyRehearsal" alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="90.0" text="Rehearsal" GridPane.columnIndex="4" />
                         <JFXTextField fx:id="colorKeyNonMusical" alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="90.0" text="Non Musical " GridPane.columnIndex="5" />
-                        <GridPane GridPane.columnIndex="6">
+                        <GridPane GridPane.columnIndex="6" GridPane.halignment="RIGHT">
                             <columnConstraints>
                                 <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="143.0" />
                                 <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="143.0" />
@@ -167,6 +171,9 @@
                             </children>
                         </GridPane>
                     </children>
+               <GridPane.margin>
+                  <Insets right="10.0" />
+               </GridPane.margin>
                 </GridPane>
                 <GridPane GridPane.columnIndex="1" GridPane.rowIndex="5">
                     <columnConstraints>
@@ -178,7 +185,10 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <JFXTextField fx:id="mandatoryField" alignment="CENTER" editable="false" text="Mandatory Field" GridPane.columnIndex="2" />
+                        <JFXTextField fx:id="mandatoryField" alignment="CENTER" editable="false" text="Mandatory Field" GridPane.columnIndex="2">
+                     <GridPane.margin>
+                        <Insets right="10.0" />
+                     </GridPane.margin></JFXTextField>
                     </children>
                 </GridPane>
 
