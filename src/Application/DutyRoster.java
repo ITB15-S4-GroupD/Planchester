@@ -99,10 +99,36 @@ public class DutyRoster {
         }
 
         int adressed = getCountMusicicansForEventAndPart(event, section, DutyDispositionStatus.Normal);
+        int spare = getCountMusicicansForEventAndPart(event, section, DutyDispositionStatus.Spare);
 
-        if(required > adressed) {
+        StringBuilder warning = new StringBuilder();
+
+        if(required > adressed && spare < 1) {
             int missing = required - adressed;
-            StringBuilder warning = new StringBuilder();
+            warning.append("There are not enough musicians assigned for ");
+            warning.append(event.getEventType());
+            warning.append(" ");
+            warning.append(event.getName());
+            warning.append(" on ");
+            warning.append(event.getStarttime().toLocalDateTime().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            warning.append(".\n");
+            if(missing == 1) {
+                warning.append("Two musicians, including the spare one, are missing.");
+            } else {
+                missing++;
+                warning.append(missing);
+                warning.append(" musicians, including the spare one, are missing.");
+            }
+        } else if(spare < 1) {
+            warning.append("There is no spare musician assigned for ");
+            warning.append(event.getEventType());
+            warning.append(" ");
+            warning.append(event.getName());
+            warning.append(" on ");
+            warning.append(event.getStarttime().toLocalDateTime().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            warning.append(".\n");
+        } else if(required > adressed) {
+            int missing = required - adressed;
             warning.append("There are not enough musicians assigned for ");
             warning.append(event.getEventType());
             warning.append(" ");
@@ -116,9 +142,13 @@ public class DutyRoster {
                 warning.append(missing);
                 warning.append(" musicians are missing.");
             }
+        }
+
+        if(required > adressed || spare < 1) {
             MessageHelper.showErrorAlertMessage(warning.toString());
             return false;
         }
+
         return true;
     }
 
