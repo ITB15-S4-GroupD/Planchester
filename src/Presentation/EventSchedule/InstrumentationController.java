@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class InstrumentationController {
     public static boolean selectMultipleMusicalWorks = true;
     public static String newHeading;
 
+
     public static boolean apply = false;
     public static List<MusicalWorkDTO> selectedMusicalWorks;
     public static InstrumentationDTO instrumentation;
@@ -29,6 +31,8 @@ public class InstrumentationController {
     @FXML private Label heading;
 
     @FXML private ScrollPane scrollPane;
+
+    @FXML private TextField filterTextField;
 
     @FXML private TextField standardFirstViolin;
     @FXML private TextField standardSecondViolin;
@@ -115,6 +119,21 @@ public class InstrumentationController {
                 tableSelected.getItems().add(musicalWorkDTO.getName());
             }
         }
+
+        filterTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            List<MusicalWorkDTO> filteredMusicalWorks = new ArrayList<MusicalWorkDTO>();
+
+            for(MusicalWorkDTO mwDTO : musicalWorks) {
+                if(mwDTO.getName().toLowerCase().contains(newValue.toLowerCase()) || mwDTO.getName().toLowerCase().equals(newValue.toLowerCase())) {
+                    filteredMusicalWorks.add(mwDTO);
+                }
+            }
+
+            tableAvailable.getItems().clear();
+            for(MusicalWorkDTO mwDTO : filteredMusicalWorks) {
+                tableAvailable.getItems().add(mwDTO.getName());
+            }
+        });
 
         tableSelected.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setSelectedMusicalWork(tableSelected.getSelectionModel().getSelectedItem()));
 
@@ -204,7 +223,9 @@ public class InstrumentationController {
     private void setStandardInstrumentation(IInstrumentation instrumentation) {
         standardBasson.setText(String.valueOf(instrumentation.getBasson()));
         standardClarinet.setText(String.valueOf(instrumentation.getClarinet()));
-        standardDescription.setText(instrumentation.getDescription() != null ? String.valueOf(instrumentation.getDescription()) : null);
+        if(instrumentation.getDescription() != null) {
+            standardDescription.setText(instrumentation.getDescription());
+        }
         standardDoublebass.setText(String.valueOf(instrumentation.getDoublebass()));
         standardFirstViolin.setText(String.valueOf(instrumentation.getFirstViolin()));
         standardFlute.setText(String.valueOf(instrumentation.getFlute()));

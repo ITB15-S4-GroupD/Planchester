@@ -252,7 +252,12 @@ public class EventScheduleController extends CalenderController {
                 cal.setTimeInMillis(unpublishedEvent.getStartTime().getTime());
                 int month = cal.get(Calendar.MONTH) + 1;
                 int year = cal.get(Calendar.YEAR);
-                String monthYear = String.valueOf(month + " | " + year);
+                String monthYear;
+                if(month < 10) {
+                    monthYear = String.valueOf("0" + month + " | " + year);
+                } else {
+                    monthYear = String.valueOf(month + " | " + year);
+                }
                 boolean isInList = false;
                 for (String monYear : months) {
                     if (monYear.equals(monthYear)) {
@@ -263,6 +268,7 @@ public class EventScheduleController extends CalenderController {
                     months.add(monthYear);
                 }
             }
+            Collections.sort(months);
             for (String monthYear : months) {
                 MenuItem month = new MenuItem(monthYear);
                 month.setOnAction(action);
