@@ -117,9 +117,11 @@ public class DutyRosterController extends CalenderController{
             eventPoints.setText(eventDutyDTO.getPoints().toString());
 
             // fill in musical works
-            TableView eventMusicalWorkTable = (TableView)PlanchesterGUI.scene.lookup("#eventMusicalWorkTable");
-            for(MusicalWorkDTO musicalWorkDTO : eventDutyDTO.getMusicalWorks()) {
-                eventMusicalWorkTable.getItems().add(musicalWorkDTO.getName());
+            if(eventDutyDTO.getMusicalWorks() != null) {
+                TableView eventMusicalWorkTable = (TableView) PlanchesterGUI.scene.lookup("#eventMusicalWorkTable");
+                for (MusicalWorkDTO musicalWorkDTO : eventDutyDTO.getMusicalWorks()) {
+                    eventMusicalWorkTable.getItems().add(musicalWorkDTO.getName());
+                }
             }
 
             // fill in disposition details

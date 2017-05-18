@@ -35,8 +35,8 @@ public interface IEventDuty {
     void setRehearsalFor(Integer rehearsalFor);
     IInstrumentation getInstrumentation();
     void setInstrumentation(IInstrumentation instrumentation);
-    int getInstrumentationId();
-    void setInstrumentationId(int instrumentationId);
+    Integer getInstrumentationId();
+    void setInstrumentationId(Integer instrumentationId);
     DutyRosterStatus getDutyRosterStatus();
     void setDutyRosterStatus(DutyRosterStatus dutyRosterStatus);
 }

@@ -52,6 +52,7 @@ public class CreateTourController extends CreateController {
             EventScheduleController.resetSideContent(); // remove content of sidebar
             EventScheduleController.setSelectedAppointment(eventDutyDTO); // select created appointment
         }
+        EventScheduleController.reload();
     }
 
     @FXML
