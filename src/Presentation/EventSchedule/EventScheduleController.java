@@ -34,8 +34,9 @@ import java.util.*;
  */
 public class EventScheduleController extends CalenderController {
 
-    protected static Agenda staticAgenda;
-    protected static ScrollPane staticScrollPane;
+    private static Agenda staticAgenda;
+    private static ScrollPane staticScrollPane;
+    private static MenuButton staticPublishEventSchedule;
 
     @FXML private MenuButton publishEventSchedule;
     @FXML private MenuButton addNewEvent;
@@ -57,6 +58,7 @@ public class EventScheduleController extends CalenderController {
     public void initialize() {
         staticAgenda = agenda;
         staticScrollPane = scrollPane;
+        staticPublishEventSchedule = publishEventSchedule;
 
         getGroupColorsFromCSS();
         initializeAppointmentGroupsForEventtypes(); //must be the first initialize-call
@@ -218,7 +220,7 @@ public class EventScheduleController extends CalenderController {
 
     public static void setSelectedAppointment(EventDutyDTO eventDutyDTO) {
         for (Map.Entry<Agenda.Appointment, EventDutyDTO> entry : staticLoadedEventsMap.entrySet()) {
-            if (eventDutyDTO.getEventDutyId() == entry.getValue().getEventDutyId()) {
+            if (eventDutyDTO.getEventDutyId().equals(entry.getValue().getEventDutyId())) {
                 staticAgenda.selectedAppointments().clear();
                 staticAgenda.selectedAppointments().add(entry.getKey());
             }
@@ -239,9 +241,9 @@ public class EventScheduleController extends CalenderController {
         }
     }
 
-    private void addMonthsEntriesToMenuButton() {
+    private static void addMonthsEntriesToMenuButton() {
         if(AccountAdministrationManager.getInstance().getUserPermissions().isPublishEventSchedule()) {
-            publishEventSchedule.getItems().clear();
+            staticPublishEventSchedule.getItems().clear();
             List<EventDutyDTO> unpublishedEvents = EventScheduleManager.getAllUnpublishedMonths();
             List<String> months = new ArrayList<>();
             EventHandler<ActionEvent> action = chooseMonthToPublish();
@@ -264,12 +266,12 @@ public class EventScheduleController extends CalenderController {
             for (String monthYear : months) {
                 MenuItem month = new MenuItem(monthYear);
                 month.setOnAction(action);
-                publishEventSchedule.getItems().add(month);
+                staticPublishEventSchedule.getItems().add(month);
             }
         }
     }
 
-    private EventHandler<ActionEvent> chooseMonthToPublish() {
+    private static EventHandler<ActionEvent> chooseMonthToPublish() {
         return event -> {
             MenuItem mItem = (MenuItem) event.getSource();
             ButtonType buttonType = MessageHelper.showConfirmationMessage("Are you sure to publish " + mItem.getText());
@@ -285,18 +287,18 @@ public class EventScheduleController extends CalenderController {
         refresh();
     }
 
-    private void publishEventSchedule(MenuItem item) {
+    private static void publishEventSchedule(MenuItem item) {
         String monthOfYear = item.getText();
         String[] parts = monthOfYear.split(" | ");
         int month = Integer.valueOf(parts[0]);
         int year = Integer.valueOf(parts[2]);
         EventDutyDTO eventDutyDTO = PublishEventSchedule.publish(Year.of(year), Month.of(month));
         if(eventDutyDTO != null) {
-            agenda.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime());
-            refresh();
+            staticAgenda.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime());
+            reload();
             setSelectedAppointment(eventDutyDTO);
         } else {
-            publishEventSchedule.getItems().remove(item);
+            staticPublishEventSchedule.getItems().remove(item);
         }
     }
 
@@ -445,6 +447,7 @@ public class EventScheduleController extends CalenderController {
         for(EventDutyDTO event : events) {
             addEventDutyToGUI(event);
         }
+        addMonthsEntriesToMenuButton();
     }
 
     public static void removeAllData() {
