@@ -28,7 +28,7 @@ public class EventDutyModel implements IEventDuty {
     private IInstrumentation instrumentation;
     private List<MusicalWorkModel> musicalWorks;
     private DutyRosterStatus dutyRosterStatus;
-    private int instrumentationId;
+    private Integer instrumentationId;
 
     public EventDutyModel() { }
 
@@ -147,11 +147,11 @@ public class EventDutyModel implements IEventDuty {
         this.instrumentation = instrumentation;
     }
 
-    public int getInstrumentationId() {
+    public Integer getInstrumentationId() {
         return instrumentationId;
     }
 
-    public void setInstrumentationId(int instrumentationId) {
+    public void setInstrumentationId(Integer instrumentationId) {
         this.instrumentationId = instrumentationId;
     }
 

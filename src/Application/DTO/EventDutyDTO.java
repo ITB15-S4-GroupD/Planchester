@@ -29,7 +29,7 @@ public class EventDutyDTO implements IEventDuty {
     private IInstrumentation instrumentation;
     private Integer rehearsalFor;
     private DutyRosterStatus dutyRosterStatus;
-    private int instrumentationId;
+    private Integer instrumentationId;
 
     public Integer getEventDutyId() {
         return eventDutyId;
@@ -127,11 +127,11 @@ public class EventDutyDTO implements IEventDuty {
         this.instrumentation = instrumentation;
     }
 
-    public int getInstrumentationId() {
+    public Integer getInstrumentationId() {
         return instrumentationId;
     }
 
-    public void setInstrumentationId(int instrumentationId) {
+    public void setInstrumentationId(Integer instrumentationId) {
         this.instrumentationId = instrumentationId;
     }
 
