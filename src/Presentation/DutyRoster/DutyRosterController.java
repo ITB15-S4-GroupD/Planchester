@@ -90,34 +90,34 @@ public class DutyRosterController extends CalenderController{
             }
 
             // fill in event details
-            Label eventName = (Label)PlanchesterGUI.scene.lookup("#eventName");
+            Label eventName = (Label)PlanchesterGUI.scene.lookup("#dutyDetailEventName");
             eventName.setText(eventDutyDTO.getName());
-            Label eventDescription = (Label)PlanchesterGUI.scene.lookup("#eventDescription");
+            Label eventDescription = (Label)PlanchesterGUI.scene.lookup("#dutyDetailEventDescription");
             eventDescription.setText(eventDutyDTO.getDescription());
 
             if(!eventDutyDTO.getEventType().equals(EventType.Tour)) {
-                Label eventDate = (Label)PlanchesterGUI.scene.lookup("#eventDate");
+                Label eventDate = (Label)PlanchesterGUI.scene.lookup("#dutyDetailEventDate");
                 eventDate.setText(eventDutyDTO.getStartTime().toLocalDateTime().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-                Label eventStartTime = (Label)PlanchesterGUI.scene.lookup("#eventStartTime");
+                Label eventStartTime = (Label)PlanchesterGUI.scene.lookup("#dutyDetailEventStartTime");
                 eventStartTime.setText(eventDutyDTO.getStartTime().toLocalDateTime().toLocalTime().format(DateTimeFormatter.ofPattern("hh:mm")));
-                Label eventEndTime = (Label)PlanchesterGUI.scene.lookup("#eventEndTime");
+                Label eventEndTime = (Label)PlanchesterGUI.scene.lookup("#dutyDetailEventEndTime");
                 eventEndTime.setText(eventDutyDTO.getEndTime().toLocalDateTime().toLocalTime().format(DateTimeFormatter.ofPattern("hh:mm")));
             } else {
-                Label eventStartDate = (Label)PlanchesterGUI.scene.lookup("#eventStartDate");
+                Label eventStartDate = (Label)PlanchesterGUI.scene.lookup("#dutyDetailEventStartDate");
                 eventStartDate.setText(eventDutyDTO.getStartTime().toLocalDateTime().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-                Label eventEndDate = (Label)PlanchesterGUI.scene.lookup("#eventEndDate");
+                Label eventEndDate = (Label)PlanchesterGUI.scene.lookup("#dutyDetailEventEndDate");
                 eventEndDate.setText(eventDutyDTO.getEndTime().toLocalDateTime().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             }
-            Label eventLocation = (Label) PlanchesterGUI.scene.lookup("#eventLocation");
+            Label eventLocation = (Label) PlanchesterGUI.scene.lookup("#dutyDetailEventLocation");
             eventLocation.setText(eventDutyDTO.getLocation());
-            Label eventConductor = (Label) PlanchesterGUI.scene.lookup("#eventConductor");
+            Label eventConductor = (Label) PlanchesterGUI.scene.lookup("#dutyDetailEventConductor");
             eventConductor.setText(eventDutyDTO.getConductor());
-            Label eventPoints = (Label) PlanchesterGUI.scene.lookup("#eventPoints");
+            Label eventPoints = (Label) PlanchesterGUI.scene.lookup("#dutyDetailEventPoints");
             eventPoints.setText(eventDutyDTO.getPoints().toString());
 
             // fill in musical works
             if(eventDutyDTO.getMusicalWorks() != null) {
-                TableView eventMusicalWorkTable = (TableView) PlanchesterGUI.scene.lookup("#eventMusicalWorkTable");
+                TableView eventMusicalWorkTable = (TableView) PlanchesterGUI.scene.lookup("#dutyDetailEventMusicalWorkTable");
                 for (MusicalWorkDTO musicalWorkDTO : eventDutyDTO.getMusicalWorks()) {
                     eventMusicalWorkTable.getItems().add(musicalWorkDTO.getName());
                 }
@@ -245,14 +245,13 @@ public class DutyRosterController extends CalenderController{
             Label table3Label = (Label)PlanchesterGUI.scene.lookup("#table3Label");
             Label table4Label = (Label)PlanchesterGUI.scene.lookup("#table4Label");
 
-
             // remove unneeded tables
             if(amountOfTables == 1) {
-                dispositionGridPane = removeRowFromGridPane(1, dispositionGridPane);
                 dispositionGridPane = removeRowFromGridPane(2, dispositionGridPane);
                 dispositionGridPane = removeRowFromGridPane(3, dispositionGridPane);
+                dispositionGridPane = removeRowFromGridPane(4, dispositionGridPane);
             } else if(amountOfTables == 3) {
-                dispositionGridPane = removeRowFromGridPane(3, dispositionGridPane);
+                dispositionGridPane = removeRowFromGridPane(4, dispositionGridPane);
             }
 
             // add data into tables
@@ -266,6 +265,17 @@ public class DutyRosterController extends CalenderController{
             if(amountOfTables > 3) {
                 insertDataIntoTable(table4, label4, table4Label, entries4, required4);
             }
+
+            // spare musician
+            Label labelSpareMusician = (Label)PlanchesterGUI.scene.lookup("#labelSpareMusician");
+            String spare = getSpare(eventDutyDTO, sectionType);
+
+            if(spare != null) {
+                labelSpareMusician.setText(spare);
+            } else {
+                labelSpareMusician.setText("Missing");
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -301,6 +311,10 @@ public class DutyRosterController extends CalenderController{
 
     private List<String> getAdressed(EventDutyDTO eventDutyDTO, String partType) {
         return DutyRoster.getAdressedMusicicansForEventAndPart(eventDutyDTO, partType, DutyDispositionStatus.Normal);
+    }
+
+    private String getSpare(EventDutyDTO eventDutyDTO, SectionType sectionType) {
+        return DutyRoster.getSpareMusicicansForEventAndSectionType(eventDutyDTO, sectionType);
     }
 
     public static EventDutyDTO getEventForAppointment(Agenda.Appointment appointment) {

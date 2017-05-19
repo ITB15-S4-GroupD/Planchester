@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.DutyRoster.DutyDispositionController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="381.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.DutyRoster.DutyDispositionController">
    <children>
       <GridPane id="dispositionGridPane" layoutX="-39.0" layoutY="31.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -17,29 +17,38 @@
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="280.0" minWidth="10.0" prefWidth="272.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="NEVER" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label fx:id="table1Label" text="Label">
+             <Label text="Spare Musician" GridPane.rowIndex="0">
+                 <GridPane.margin>
+                     <Insets left="10.0" />
+                 </GridPane.margin></Label>
+             <Label id="labelSpareMusician" text="spareName" GridPane.rowIndex="0" GridPane.columnIndex="1">
+                 <GridPane.margin>
+                     <Insets left="10.0" />
+                 </GridPane.margin></Label>
+            <Label fx:id="table1Label" text="Label" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin></Label>
-            <Label fx:id="table2Label" text="Label" GridPane.rowIndex="1">
+            <Label fx:id="table2Label" text="Label" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin></Label>
-            <Label fx:id="table3Label" text="Label" GridPane.rowIndex="2">
+            <Label fx:id="table3Label" text="Label" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin></Label>
-            <Label fx:id="table4Label" text="Label" GridPane.rowIndex="3">
+            <Label fx:id="table4Label" text="Label" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin></Label>
-            <TableView id="table1" fx:id="table1" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+            <TableView id="table1" fx:id="table1" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
               <columns>
                 <TableColumn fx:id="tableColumn1" prefWidth="271.0" text="Musician" />
               </columns>
@@ -47,7 +56,7 @@
                   <Insets bottom="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
             </TableView>
-            <TableView id="table2" fx:id="table2" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <TableView id="table2" fx:id="table2" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <columns>
                   <TableColumn fx:id="tableColumn2" prefWidth="271.0" text="Musician" />
                </columns>
@@ -55,7 +64,7 @@
                   <Insets bottom="5.0" right="5.0" />
                </GridPane.margin>
             </TableView>
-            <TableView id="table3" fx:id="table3" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <TableView id="table3" fx:id="table3" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <columns>
                   <TableColumn fx:id="tableColumn3" prefWidth="271.0" text="Musician" />
                </columns>
@@ -63,7 +72,7 @@
                   <Insets bottom="5.0" right="5.0" />
                </GridPane.margin>
             </TableView>
-            <TableView id="table4" fx:id="table4" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <TableView id="table4" fx:id="table4" prefHeight="154.0" prefWidth="267.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <columns>
                   <TableColumn fx:id="tableColumn4" prefWidth="271.0" text="Musician" />
                </columns>
