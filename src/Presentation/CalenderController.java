@@ -123,5 +123,7 @@ public abstract class CalenderController {
         agenda.setAllowResize(false);
         agenda.localeProperty().set(Locale.UK);
         agenda.setDisplayedLocalDateTime(LocalDateTime.now()); //show current week in event scheduler
+        // disable edit menu
+        agenda.setEditAppointmentCallback(param -> null);
     }
 }

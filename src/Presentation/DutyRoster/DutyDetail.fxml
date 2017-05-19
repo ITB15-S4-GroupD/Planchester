@@ -74,19 +74,19 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <Label id="eventName" fx:id="eventNameLabel" text="Label" GridPane.columnIndex="1" />
-            <Label id="eventDescription" fx:id="descriptionLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label id="eventDate" fx:id="dateLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label id="eventStartTime" fx:id="startTimeLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label id="eventEndTime" fx:id="endTimeLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Label id="eventLocation" fx:id="locationLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <TableView id="eventMusicalWorkTable" fx:id="musicalWorkTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <Label id="dutyDetailEventName" fx:id="eventNameLabel" text="Label" GridPane.columnIndex="1" />
+            <Label id="dutyDetailEventDescription" fx:id="descriptionLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label id="dutyDetailEventDate" fx:id="dateLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label id="dutyDetailEventStartTime" fx:id="startTimeLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label id="dutyDetailEventEndTime" fx:id="endTimeLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label id="dutyDetailEventLocation" fx:id="locationLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TableView id="dutyDetailEventMusicalWorkTable" fx:id="musicalWorkTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                <columns>
-                  <TableColumn id="eventMusicalWorkTableColumn" fx:id="selectedMusicalWorks" prefWidth="249.0" text="Title" />
+                  <TableColumn id="dutyDetailEventMusicalWorkTableColumn" fx:id="selectedMusicalWorks" prefWidth="249.0" text="Title" />
                </columns>
             </TableView>
-            <Label id="eventConductor" fx:id="conductorLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <Label id="eventPoints" fx:id="pointsLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="8" >
+            <Label id="dutyDetailEventConductor" fx:id="conductorLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Label id="dutyDetailEventPoints" fx:id="pointsLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="8" >
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
