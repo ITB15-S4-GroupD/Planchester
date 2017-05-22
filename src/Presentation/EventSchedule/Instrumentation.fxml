@@ -89,6 +89,44 @@
                         </GridPane>
                         <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="92.0" minWidth="10.0" prefWidth="92.0" />
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="101.0" minWidth="9.0" prefWidth="92.0" />
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="92.0" />
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="285.0" minWidth="10.0" prefWidth="92.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Label text="Flute" GridPane.rowIndex="1" />
+                                <Label text="Wood">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label text="Clarinet" GridPane.rowIndex="3" />
+                                <Label text="Oboe" GridPane.rowIndex="2" />
+                                <Label text="Bassoon" GridPane.rowIndex="4" />
+                                <TextField fx:id="standardFlute" editable="false" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <TextField fx:id="standardOboe" editable="false" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                <TextField fx:id="standardClarinet" editable="false" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                <TextField fx:id="standardBasson" editable="false" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                <TextField fx:id="alternativeFlute" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                <TextField fx:id="eventFlute" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                <TextField fx:id="alternativeOboe" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                <TextField fx:id="eventOboe" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                <TextField fx:id="alternativeClarinet" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                <TextField fx:id="eventClarinet" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                                <TextField fx:id="alternativeBasson" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                                <TextField fx:id="eventBassoon" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                            </children>
+                        </GridPane>
+                        <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
+                            <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="92.0" />
                                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="273.0" minWidth="10.0" prefWidth="92.0" />
                                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="273.0" minWidth="10.0" prefWidth="92.0" />
@@ -123,44 +161,6 @@
                            <TextField fx:id="eventTrumpet" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                            <TextField fx:id="eventTrombone" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                            <TextField fx:id="eventTuba" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                            </children>
-                        </GridPane>
-                        <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
-                            <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="92.0" minWidth="10.0" prefWidth="92.0" />
-                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="101.0" minWidth="9.0" prefWidth="92.0" />
-                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="92.0" />
-                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="285.0" minWidth="10.0" prefWidth="92.0" />
-                            </columnConstraints>
-                            <rowConstraints>
-                                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            </rowConstraints>
-                            <children>
-                                <Label text="Flute" GridPane.rowIndex="1" />
-                                <Label text="Wood">
-                                    <font>
-                                        <Font name="System Bold" size="14.0" />
-                                    </font>
-                                </Label>
-                                <Label text="Clarinet" GridPane.rowIndex="3" />
-                                <Label text="Oboe" GridPane.rowIndex="2" />
-                                <Label text="Bassoon" GridPane.rowIndex="4" />
-                                <TextField fx:id="standardFlute" editable="false" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                <TextField fx:id="standardOboe" editable="false" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                <TextField fx:id="standardClarinet" editable="false" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                <TextField fx:id="standardBasson" editable="false" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                           <TextField fx:id="alternativeFlute" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                           <TextField fx:id="eventFlute" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                           <TextField fx:id="alternativeOboe" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                           <TextField fx:id="eventOboe" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                           <TextField fx:id="alternativeClarinet" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                           <TextField fx:id="eventClarinet" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                           <TextField fx:id="alternativeBasson" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                           <TextField fx:id="eventBassoon" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="40.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
                             </children>
                         </GridPane>
                         <GridPane GridPane.columnIndex="1" GridPane.rowIndex="3">
@@ -235,11 +235,39 @@
                 <RowConstraints maxHeight="563.0" minHeight="10.0" prefHeight="550.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TableView fx:id="tableAvailable" prefHeight="200.0" prefWidth="200.0">
-                    <columns>
-                      <TableColumn fx:id="tableAvailableMusicalWorks" prefWidth="224.0" text="Available" />
-                    </columns>
-                  </TableView>
+                   <GridPane>
+                       <columnConstraints>
+                           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="229.0" minWidth="10.0" prefWidth="230.0" />
+                       </columnConstraints>
+                       <rowConstraints>
+                        <RowConstraints maxHeight="563.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="563.0" minHeight="10.0" prefHeight="505.0" vgrow="SOMETIMES" />
+                       </rowConstraints>
+                       <children>
+                           <TableView fx:id="tableAvailable" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                               <columns>
+                                   <TableColumn fx:id="tableAvailableMusicalWorks" prefWidth="224.0" text="Available" />
+                               </columns>
+                           </TableView>
+                        <GridPane>
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="107.0" minWidth="10.0" prefWidth="49.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="177.0" minWidth="10.0" prefWidth="177.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label text="Filter:" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                              <TextField fx:id="filterTextField" GridPane.columnIndex="1">
+                                 <GridPane.margin>
+                                    <Insets right="6.0" />
+                                 </GridPane.margin>
+                              </TextField>
+                           </children>
+                        </GridPane>
+                       </children>
+                   </GridPane>
                   <TableView fx:id="tableSelected" prefHeight="508.0" prefWidth="315.0" GridPane.columnIndex="2">
                     <columns>
                       <TableColumn fx:id="tableSelectedMusicalWorks" prefWidth="226.0" text="Selected" />

@@ -2,6 +2,7 @@ package Application;
 
 import Application.DTO.EventDutyDTO;
 import Domain.Models.EventDutyModel;
+import Persistence.DatabaseConnectionHandler;
 import Persistence.Entities.*;
 import Persistence.PersistanceFacade;
 import Utils.Enum.DutyDispositionStatus;
@@ -169,10 +170,15 @@ public class DutyRoster {
 
         PartTypeEntity partTypeEntity = partTypeEntityPersistanceFacade.get(p -> p.getPartType().equals(partType));
 
-        List<DutyDispositionEntity> dutyDispositionEntities = dutyDispositionEntityPersistanceFacade.list(p ->
+        if(partTypeEntity == null) {
+            return null;
+        }
+
+        List<DutyDispositionEntity> dutyDispositionEntities;
+        dutyDispositionEntities = dutyDispositionEntityPersistanceFacade.list(p ->
                 p.getEventDuty() == eventDutyDTO.getEventDutyId()
-                && p.getPersonByMusician().getMusicianPartsByPersonId().stream().anyMatch(c -> c.getPart() == partTypeEntity.getPartTypeId())
-                && p.getDutyDispositionStatus().equals(dutyDispositionStatus.toString())
+                        && p.getPersonByMusician().getMusicianPartsByPersonId().stream().anyMatch(c -> c.getPart() == partTypeEntity.getPartTypeId())
+                        && p.getDutyDispositionStatus().equals(dutyDispositionStatus.toString())
         );
 
         List<String> musicians = new ArrayList<>();
@@ -180,6 +186,22 @@ public class DutyRoster {
             musicians.add(dutyDispositionEntity.getPersonByMusician().getFirstname() + " " + dutyDispositionEntity.getPersonByMusician().getLastname());
         }
         return musicians;
+    }
+
+    public static String getSpareMusicicansForEventAndSectionType(EventDutyDTO eventDutyDTO, SectionType sectionType) {
+        PersistanceFacade<DutyDispositionEntity> dutyDispositionEntityPersistanceFacade = new PersistanceFacade<>(DutyDispositionEntity.class);
+
+        DutyDispositionEntity dutyDispositionEntity = dutyDispositionEntityPersistanceFacade.get(p ->
+                p.getEventDuty() == eventDutyDTO.getEventDutyId()
+                        && p.getPersonByMusician().getMusicianPartsByPersonId().stream().anyMatch(c -> c.getPartByPart().getSectionType().equals(sectionType.toString()))
+                        && p.getDutyDispositionStatus().equals(DutyDispositionStatus.Spare.toString())
+        );
+
+        if (dutyDispositionEntity == null) {
+            return null;
+        } else {
+            return dutyDispositionEntity.getPersonByMusician().getFirstname() + " " + dutyDispositionEntity.getPersonByMusician().getLastname();
+        }
     }
 
     /**

@@ -63,10 +63,10 @@ public class PlanchesterFrameController {
             ButtonType buttonType = MessageHelper.showLogoutUserMessage();
             if (buttonType.getText().equals("Cancel")) {
                 //do nothing
-            } else if (buttonType.getText().equals("Change User")) {
+            } else if (buttonType.getText().equals("Switch User")) {
                 AccountAdministrationManager.getInstance().resetUser();
                 PlanchesterGUI.showLogin();
-            } else if (buttonType.getText().equals("Close Planchester")) {
+            } else if (buttonType.getText().equals("Logout & Close")) {
                 DatabaseSessionManager.closeSession();
                 Platform.exit();
                 System.exit(0);
