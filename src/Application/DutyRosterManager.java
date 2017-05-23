@@ -38,6 +38,10 @@ public class DutyRosterManager {
 
         AccountRole accountRole = AccountAdministrationManager.getInstance().getAccountRole();
 
+        if(AccountAdministrationManager.getInstance().getSectionType() == null) {
+            return null;
+        }
+
         // get all events for user section in specified time space and for his account role
         List<EventDutySectionDutyRosterEntity> eventDutySectionDutyRosterEntities = eventDutySectionDutyRosterEntityPersistanceFacade.list(p ->
                 (p.getEventDutyByEventDuty().getStarttime().after(DateHelper.convertCalendarToTimestamp(startdayOfWeek))
@@ -70,6 +74,11 @@ public class DutyRosterManager {
 
         AccountRole accountRole = AccountAdministrationManager.getInstance().getAccountRole();
 
+        if(AccountAdministrationManager.getInstance().getSectionType() == null) {
+            return null;
+            //return new ArrayList<>();
+        }
+
         // get all events for user section in specified time space and for his account role
         List<EventDutySectionDutyRosterEntity> eventDutySectionDutyRosterEntities = eventDutySectionDutyRosterEntityPersistanceFacade.list(p ->
                 (p.getEventDutyByEventDuty().getStarttime().after(DateHelper.convertCalendarToTimestamp(startdayOfWeek))
@@ -96,9 +105,10 @@ public class DutyRosterManager {
 
         // get all events for user section in specified time space and for his account role
         List<EventDutySectionDutyRosterEntity> eventDutySectionDutyRosterEntities = eventDutySectionDutyRosterEntityPersistanceFacade.list(p ->
-                (p.getSectionDutyRosterBySectionDutyRoster().getSectionType().equals(AccountAdministrationManager.getInstance().getSectionType().toString()))
-                        && (AccountRole.Section_representative.equals(accountRole)
-                        || DutyRosterStatus.Unpublished.toString().equals(p.getSectionDutyRosterBySectionDutyRoster().getDutyRosterStatus()))
+                (
+                        p.getSectionDutyRosterBySectionDutyRoster().getSectionType().equals(AccountAdministrationManager.getInstance().getSectionType().toString()))
+                        && AccountRole.Section_representative.equals(accountRole)
+                        && DutyRosterStatus.Unpublished.toString().equals(p.getSectionDutyRosterBySectionDutyRoster().getDutyRosterStatus())
         );
 
         List<EventDutyEntity> eventDuties = new ArrayList<>();

@@ -378,22 +378,22 @@ public class DutyRosterController extends CalenderController{
 
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
         DutyRoster dutyRoster = new DutyRoster();
-        EventDutyDTO eventDutyDTO = dutyRoster.validateMonth(Year.of(displayedDate.getYear()), displayedDate.getMonth());
+        EventDutyDTO eventDutyDTO = dutyRoster.validateMonth(Year.of(year), Month.of(month));
 
-        if (eventDutyDTO != null) {
+        if (eventDutyDTO == null) {
             PublishDutyRoster.publish(Year.of(year), Month.of(month));
+            publishDutyRoster.getItems().remove(item);
+            refresh();
+        } else {
             agenda.setDisplayedLocalDateTime(eventDutyDTO.getStartTime().toLocalDateTime());
             refresh();
             setSelectedAppointment(eventDutyDTO);
-        } else {
-            publishDutyRoster.getItems().remove(item);
         }
-
     }
 
     public static void setSelectedAppointment(EventDutyDTO eventDutyDTO) {
         for (Map.Entry<Agenda.Appointment, EventDutyDTO> entry : staticLoadedEventsMap.entrySet()) {
-            if (eventDutyDTO.getEventDutyId() == entry.getValue().getEventDutyId()) {
+            if (eventDutyDTO.getEventDutyId().equals(entry.getValue().getEventDutyId())) {
                 staticAgenda.selectedAppointments().clear();
                 staticAgenda.selectedAppointments().add(entry.getKey());
             }
