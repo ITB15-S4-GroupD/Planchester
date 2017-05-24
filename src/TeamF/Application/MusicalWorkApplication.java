@@ -3,14 +3,6 @@ package TeamF.Application;
 import Persistence.Entities.*;
 import Persistence.PersistanceFacade;
 import javafx.util.Pair;
-import TeamF.Application.entities.SpecialInstrumentation;
-import TeamF.Hibernate.facade.MusicalWorkFacade;
-import TeamF.Domain.entities.Instrumentation;
-import TeamF.Domain.entities.MusicalWork;
-import TeamF.Domain.enums.EntityType;
-import TeamF.Domain.interfaces.DomainEntity;
-import TeamF.Domain.logic.DomainEntityManager;
-import TeamF.Domain.logic.MusicalWorkLogic;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
