@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-
 public class InstrumentationManagement extends BaseTablePage<InstrumentationErrorList, Instrumentation, Instrumentation, Instrumentation, InstrumentationParameter> {
     private TableView<Instrumentation> _instrumentationTable;
     private List<SpecialInstrumentationEntity> _specialInstrumentationEntityList;

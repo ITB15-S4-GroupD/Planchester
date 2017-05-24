@@ -10,15 +10,6 @@ import TeamF.Domain.enums.InstrumentType;
 import TeamF.Domain.enums.PersonRole;
 import TeamF.jsonconnector.enums.*;
 import javafx.util.Pair;
-import TeamF.Hibernate.facade.AccountFacade;
-import TeamF.Hibernate.facade.PersonFacade;
-import TeamF.Domain.entities.Account;
-import TeamF.Domain.entities.Person;
-import TeamF.Domain.enums.*;
-import TeamF.Domain.interfaces.DomainEntity;
-import TeamF.Domain.logic.AccountLogic;
-import TeamF.Domain.logic.DomainEntityManager;
-import TeamF.Domain.logic.PersonLogic;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -66,27 +57,6 @@ public class PersonApplication {
         person.setPersonRole(TeamF.jsonconnector.enums.PersonRole.valueOf(personEntity.getPersonRole()));
 
         return person;
-    }
-
-    public List<Pair<InstrumentType, List<Person>>> getMusicianListByPlayedInstrumentType(List<Person> persons) {
-        List<Pair<InstrumentType, List<Person>>> list = new LinkedList<>();
-        List<Person> instrumentList = new LinkedList<>();
-
-        for (InstrumentType instrumentType : InstrumentType.values()) {
-            Pair<InstrumentType, List<Person>> pair = new Pair<>(instrumentType, instrumentList);
-
-            for (Person person : persons) {
-                for(InstrumentType instrument : person.getPlayedInstruments()) {
-                    if(instrument == instrumentType) {
-                        instrumentList.add(person);
-                    }
-                }
-            }
-
-            list.add(pair);
-        }
-
-        return list;
     }
 
     public Pair<PersonEntity, List<Pair<String, String>>> add(TeamF.jsonconnector.entities.Person person) {
