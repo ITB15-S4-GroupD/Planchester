@@ -13,6 +13,7 @@ import Utils.DateHelper;
 import Utils.MessageHelper;
 import Utils.PlanchesterConstants;
 import com.jfoenix.controls.JFXTextField;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,7 +21,9 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import jfxtras.scene.control.agenda.Agenda;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -37,9 +40,12 @@ public class EventScheduleController extends CalenderController {
     private static Agenda staticAgenda;
     private static ScrollPane staticScrollPane;
     private static MenuButton staticPublishEventSchedule;
+    private static MenuButton staticEditWishes;
 
     @FXML private MenuButton publishEventSchedule;
     @FXML private MenuButton addNewEvent;
+    @FXML private MenuButton editWishes;
+
     @FXML private Label unpublishedLabel;
 
     @FXML private MenuItem addNewConcert;
@@ -59,6 +65,7 @@ public class EventScheduleController extends CalenderController {
         staticAgenda = agenda;
         staticScrollPane = scrollPane;
         staticPublishEventSchedule = publishEventSchedule;
+        staticEditWishes = editWishes;
 
         getGroupColorsFromCSS();
         initializeAppointmentGroupsForEventtypes(); //must be the first initialize-call
@@ -232,6 +239,7 @@ public class EventScheduleController extends CalenderController {
         setCalenderWeekLabel();
         addEventTypeEntriesToMenuButton();
         addMonthsEntriesToMenuButton();
+        addMonthsEntriesToWishesButton();
         setColorKeyMap();
 
         //put events to calendar
@@ -242,7 +250,7 @@ public class EventScheduleController extends CalenderController {
     }
 
     private static void addMonthsEntriesToMenuButton() {
-        if(AccountAdministrationManager.getInstance().getUserPermissions().isPublishEventSchedule()) {
+        if (AccountAdministrationManager.getInstance().getUserPermissions().isPublishEventSchedule()) {
             staticPublishEventSchedule.getItems().clear();
             List<EventDutyDTO> unpublishedEvents = EventScheduleManager.getAllUnpublishedMonths();
             List<String> months = new ArrayList<>();
@@ -253,7 +261,7 @@ public class EventScheduleController extends CalenderController {
                 int month = cal.get(Calendar.MONTH) + 1;
                 int year = cal.get(Calendar.YEAR);
                 String monthYear;
-                if(month < 10) {
+                if (month < 10) {
                     monthYear = String.valueOf("0" + month + " | " + year);
                 } else {
                     monthYear = String.valueOf(month + " | " + year);
@@ -434,6 +442,75 @@ public class EventScheduleController extends CalenderController {
                 }
             }
         });
+    }
+
+    private static void addMonthsEntriesToWishesButton() {
+        if(AccountAdministrationManager.getInstance().getUserPermissions().isEditWishes()) {
+            staticEditWishes.getItems().clear();
+
+            List<EventDutyDTO> monthsForWishes = EventScheduleManager.getAllMonthsForWishes();
+            List<String> months = new ArrayList<>();
+            EventHandler<ActionEvent> action = chooseMonthForWishes();
+            Calendar cal = Calendar.getInstance();
+            for (EventDutyDTO wishEvent : monthsForWishes) {
+                cal.setTimeInMillis(wishEvent.getStartTime().getTime());
+                int month = cal.get(Calendar.MONTH) + 1;
+                int year = cal.get(Calendar.YEAR);
+                String monthYear;
+                if(month < 10) {
+                    monthYear = String.valueOf("0" + month + " | " + year);
+                } else {
+                    monthYear = String.valueOf(month + " | " + year);
+                }
+                boolean isInList = false;
+                for (String monYear : months) {
+                    if (monYear.equals(monthYear)) {
+                        isInList = true;
+                    }
+                }
+                if (!isInList) {
+                    months.add(monthYear);
+                }
+            }
+            Collections.sort(months);
+            for (String monthYear : months) {
+                MenuItem month = new MenuItem(monthYear);
+                month.setOnAction(action);
+                staticEditWishes.getItems().add(month);
+            }
+        }
+    }
+
+    private static EventHandler<ActionEvent> chooseMonthForWishes() {
+        return event -> {
+            MenuItem mItem = (MenuItem) event.getSource();
+
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(EventScheduleController.class.getResource("EditWishes.fxml"));
+            Scene scene = null;
+            try {
+                scene = new Scene(fxmlLoader.load());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Stage stage = new Stage();
+            stage.setTitle("Edit Wishes");
+            stage.setScene(scene);
+
+            // set data of stage
+            String monthOfYear = mItem.getText();
+            String[] parts = monthOfYear.split(" | ");
+            EditWishesController.month = Integer.valueOf(parts[0]);
+            EditWishesController.year = Integer.valueOf(parts[2]);
+
+            stage.show();
+
+            stage.setOnCloseRequest(we -> {
+                // TODO implement
+                stage.close();
+            });
+            EditWishesController.stage = stage;
+        };
     }
 
     @FXML public void refresh() {

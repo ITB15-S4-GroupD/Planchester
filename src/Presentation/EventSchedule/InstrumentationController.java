@@ -22,7 +22,6 @@ public class InstrumentationController {
     public static boolean selectMultipleMusicalWorks = true;
     public static String newHeading;
 
-
     public static boolean apply = false;
     public static List<MusicalWorkDTO> selectedMusicalWorks;
     public static InstrumentationDTO instrumentation;
