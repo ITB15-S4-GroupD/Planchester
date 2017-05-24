@@ -14,7 +14,7 @@ public class SessionFactory {
     public static EntityManager getSession() throws HibernateException {
         if (_entityManagerFactory == null) {
             try {
-                _entityManagerFactory = Persistence.createEntityManagerFactory("sem4_team2");
+                _entityManagerFactory = Persistence.createEntityManagerFactory("planchester");
             } catch (Throwable ex) {
                 throw new ExceptionInInitializerError(ex);
             }
