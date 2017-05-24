@@ -3,6 +3,8 @@ package Presentation;
 import Application.AccountAdministrationManager;
 import Application.DatabaseSessionManager;
 import Presentation.EventSchedule.EventScheduleController;
+import TeamF.client.pages.musicalwork.MusicalWorkManagement;
+import TeamF.client.pages.musicianmanagement.MusicianManagement;
 import Utils.Enum.AccountRole;
 import Utils.MessageHelper;
 import javafx.application.Platform;
@@ -35,6 +37,16 @@ public class PlanchesterFrameController {
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         eventscheduleTab.setContent(FXMLLoader.load(getClass().getResource("EventSchedule/EventSchedule.fxml")));
         dutyRosterTab.setContent(FXMLLoader.load(getClass().getResource("DutyRoster/DutyRoster.fxml")));
+
+        MusicalWorkManagement musicalWorkManagement = new MusicalWorkManagement();
+        musicalWorkManagement.initialize();
+        musicalWorkManagement.load();
+        musicalWorksTab.setContent(musicalWorkManagement.getCenter());
+
+        MusicianManagement musicianManagement = new MusicianManagement();
+        musicianManagement.initialize();
+        musicianManagement.load();
+        useradministrationTab.setContent(musicianManagement.getCenter());
 
         if(!AccountRole.Manager.equals(accountRole) && !AccountRole.Administrator.equals(accountRole)) {
             tabPane.getTabs().remove(useradministrationTab);

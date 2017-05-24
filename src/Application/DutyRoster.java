@@ -2,10 +2,10 @@ package Application;
 
 import Application.DTO.EventDutyDTO;
 import Domain.Models.EventDutyModel;
-import Persistence.DatabaseConnectionHandler;
 import Persistence.Entities.*;
 import Persistence.PersistanceFacade;
 import Utils.Enum.DutyDispositionStatus;
+import Utils.Enum.OrchestraRole;
 import Utils.Enum.SectionType;
 import Utils.MessageHelper;
 import java.time.Month;
@@ -99,8 +99,9 @@ public class DutyRoster {
                 break;
         }
 
-        int adressed = getCountMusicicansForEventAndPart(event, section, DutyDispositionStatus.Normal);
-        int spare = getCountMusicicansForEventAndPart(event, section, DutyDispositionStatus.Spare);
+        int adressed = getCountMusicicansForEventAndSection(event, section, DutyDispositionStatus.Normal);
+        int spare = getCountMusicicansForEventAndSection(event, section, DutyDispositionStatus.Spare);
+        boolean sectionLeader = getSectionLeaderForEventAndSection(event, section);
 
         StringBuilder warning = new StringBuilder();
 
@@ -150,10 +151,36 @@ public class DutyRoster {
             return false;
         }
 
+        if(getSectionLeaderForEventAndSection(event, section) == false) {
+            warning = new StringBuilder();
+            warning.append("There is no section leader assigned for ");
+            warning.append(event.getEventType());
+            warning.append(" ");
+            warning.append(event.getName());
+            warning.append(" on ");
+            warning.append(event.getStarttime().toLocalDateTime().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            warning.append(".\n");
+            MessageHelper.showErrorAlertMessage(warning.toString());
+            return false;
+        }
         return true;
     }
 
-    public int getCountMusicicansForEventAndPart(EventDutyEntity eventDutyEntity, SectionType sectionType, DutyDispositionStatus dutyDispositionStatus) {
+    public boolean getSectionLeaderForEventAndSection(EventDutyEntity eventDutyEntity, SectionType sectionType) {
+        PersistanceFacade<DutyDispositionEntity> dutyDispositionEntityPersistanceFacade = new PersistanceFacade<>(DutyDispositionEntity.class);
+
+        List<DutyDispositionEntity> dutyDispositionEntities = dutyDispositionEntityPersistanceFacade.list(p -> p.getEventDuty() == eventDutyEntity.getEventDutyId()
+                && p.getPersonByMusician().getMusicianPartsByPersonId().stream().anyMatch(c -> c.getPartByPart().getSectionType().equals(sectionType.toString()))
+                && p.getPersonByMusician().getPersonOrchestraRolesByPersonId().stream().anyMatch(y -> y.getOrchestraRole().equals(OrchestraRole.Section_leader.toString()))
+        );
+
+        if(dutyDispositionEntities.size() > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public int getCountMusicicansForEventAndSection(EventDutyEntity eventDutyEntity, SectionType sectionType, DutyDispositionStatus dutyDispositionStatus) {
         PersistanceFacade<DutyDispositionEntity> dutyDispositionEntityPersistanceFacade = new PersistanceFacade<>(DutyDispositionEntity.class);
 
         List<DutyDispositionEntity> dutyDispositionEntities = dutyDispositionEntityPersistanceFacade.list(p -> p.getEventDuty() == eventDutyEntity.getEventDutyId()

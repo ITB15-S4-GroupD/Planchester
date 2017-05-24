@@ -4,6 +4,7 @@ import Application.DTO.EventDutyDTO;
 import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
 import Application.EventScheduleManager;
+import Presentation.PlanchesterGUI;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
@@ -78,6 +79,14 @@ public abstract class CreateController {
         stage.setTitle("Add new Rehearsal");
         stage.setScene(scene);
         stage.show();
+
+        TextField rehearsalConductor = (TextField) stage.getScene().lookup("#rehearsalConductor");
+        TextField rehearsalPoints = (TextField) stage.getScene().lookup("#rehearsalPoints");
+        TextField rehearsalLocation = (TextField) stage.getScene().lookup("#rehearsalLocation");
+
+        rehearsalConductor.setText(conductor.getText());
+        rehearsalPoints.setText(points.getText());
+        rehearsalLocation.setText(eventLocation.getText());
 
         stage.setOnCloseRequest(we -> {
             if(CreateRehearsalController.apply) {

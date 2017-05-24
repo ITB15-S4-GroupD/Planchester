@@ -58,9 +58,9 @@
             <JFXDatePicker fx:id="date" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <JFXTimePicker fx:id="startTime" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <JFXTimePicker fx:id="endTime" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <TextField fx:id="eventLocation" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <TextField fx:id="conductor" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <TextField fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <TextField id="rehearsalLocation" fx:id="eventLocation" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TextField id="rehearsalConductor" fx:id="conductor" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <TextField id="rehearsalPoints" fx:id="points" GridPane.columnIndex="1" GridPane.rowIndex="7" />
          </children>
          <padding>
             <Insets left="10.0" right="10.0" />
