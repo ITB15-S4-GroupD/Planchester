@@ -458,6 +458,7 @@ public class EventScheduleManager {
 
         if(requestType == null) {
             requestEntityPersistanceFacade.remove(requestEntity);
+            return;
         }
 
         if(requestEntity == null) {
