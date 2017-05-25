@@ -29,7 +29,6 @@ public class EditRequestsController {
     public static int year;
 
     @FXML private TableView<RequestEntry> table;
-    List<RequestEntry> initWishes;
 
     @FXML
     public void initialize() {
@@ -50,7 +49,7 @@ public class EditRequestsController {
             } else if(requestEntry.getRequestType().equals(RequestTypeGUI.Playrequest)) {
                 requestType = RequestType.Playrequest;
             }
-            EventScheduleManager.updateWish(requestEntry.eventDutyDTO, requestType, AccountAdministrationManager.getInstance().getLoggedInAccount(), requestEntry.getRequestDescription().getText());
+            EventScheduleManager.updateRequest(requestEntry.eventDutyDTO, requestType, AccountAdministrationManager.getInstance().getLoggedInAccount(), requestEntry.getRequestDescription().getText());
         }
         stage.fireEvent(
             new WindowEvent(
@@ -73,8 +72,8 @@ public class EditRequestsController {
     private void loadEventsForMonth() {
         table.getItems().clear();
 
-        List<EventDutyDTO> eventDutyDTOList = EventScheduleManager.getAvailableEventsForWishInMonth(Month.of(month), Year.of(year));
-        ObservableList<RequestEntry> wishEntries = FXCollections.observableArrayList();
+        List<EventDutyDTO> eventDutyDTOList = EventScheduleManager.getAvailableEventsForRequestInMonth(Month.of(month), Year.of(year));
+        ObservableList<RequestEntry> requestEntries = FXCollections.observableArrayList();
 
         for(EventDutyDTO eventDutyDTO : eventDutyDTOList){
             String dateTime = null;
@@ -92,7 +91,7 @@ public class EditRequestsController {
                 ;
             }
 
-            RequestType requestType = EventScheduleManager.getWishForEventAndLoggedInUser(eventDutyDTO);
+            RequestType requestType = EventScheduleManager.getRequestForEventAndLoggedInUser(eventDutyDTO);
             RequestTypeGUI requestTypeGUI = null;
             if(requestType == null){
                 requestTypeGUI = RequestTypeGUI.None;
@@ -102,20 +101,19 @@ public class EditRequestsController {
                 requestTypeGUI = RequestTypeGUI.Playrequest;
             }
 
-            RequestEntry wishEntry = new RequestEntry(eventDutyDTO.getEventType().toString(),
+            RequestEntry requestEntry = new RequestEntry(eventDutyDTO.getEventType().toString(),
                     eventDutyDTO.getName(),
                     dateTime,
                     eventDutyDTO.getLocation(),
                     eventDutyDTO.getConductor(),
                     requestTypeGUI,
-                    EventScheduleManager.getWishDescriptionForEventAndLoggedInUser(eventDutyDTO),
+                    EventScheduleManager.getRequestDescriptionForEventAndLoggedInUser(eventDutyDTO),
                     eventDutyDTO
 
             );
-            wishEntries.add(wishEntry);
+            requestEntries.add(requestEntry);
         }
-        initWishes = wishEntries;
-        table.setItems(wishEntries);
+        table.setItems(requestEntries);
     }
 
     private void createColumns() {

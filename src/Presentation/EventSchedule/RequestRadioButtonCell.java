@@ -44,9 +44,9 @@ public class RequestRadioButtonCell<S,T extends Enum<T>> extends TableCell<S,T> 
 
             // issue events on change of the selected radio button
             group.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-                RequestEntry wishEntry = (RequestEntry) getTableView().getItems().get(getIndex());
-                wishEntry.setEdited(true);
-                wishEntry.setRequestType((RequestTypeGUI) newValue.getUserData());
+                RequestEntry requestEntry = (RequestEntry) getTableView().getItems().get(getIndex());
+                requestEntry.setEdited(true);
+                requestEntry.setRequestType((RequestTypeGUI) newValue.getUserData());
             });
             setGraphic(hb);
         }

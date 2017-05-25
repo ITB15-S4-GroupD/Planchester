@@ -418,7 +418,7 @@ public class EventScheduleManager {
         return eventDutyDTOList;
     }
 
-    public static List<EventDutyDTO> getAvailableEventsForWishInMonth(Month month, Year year) {
+    public static List<EventDutyDTO> getAvailableEventsForRequestInMonth(Month month, Year year) {
         List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p ->
                 p.getEventStatus().equals(EventStatus.Published.toString())
                         && p.getEventDutySectionDutyRostersByEventDutyId().isEmpty()
@@ -437,7 +437,7 @@ public class EventScheduleManager {
         return eventDutyDTOList;
     }
 
-    public static RequestType getWishForEventAndLoggedInUser(EventDutyDTO eventDutyDTO) {
+    public static RequestType getRequestForEventAndLoggedInUser(EventDutyDTO eventDutyDTO) {
         RequestEntity requestEntity = requestEntityPersistanceFacade.get(p ->
                 p.getPersonByMusician().getAccountByAccount().equals(AccountAdministrationManager.getInstance().getLoggedInAccount())
                 && p.getEventDuty() == eventDutyDTO.getEventDutyId()
@@ -449,7 +449,7 @@ public class EventScheduleManager {
         return RequestType.valueOf(requestEntity.getRequestType());
     }
 
-    public static void updateWish(EventDutyDTO eventDutyDTO, RequestType requestType, AccountEntity accountEntity, String requestDescription) {
+    public static void updateRequest(EventDutyDTO eventDutyDTO, RequestType requestType, AccountEntity accountEntity, String requestDescription) {
         RequestEntity requestEntity = requestEntityPersistanceFacade.get(p ->
                 p.getPersonByMusician().getAccountByAccount().equals(accountEntity)
                 && eventDutyDTO.getEventDutyId().equals(p.getEventDuty())
@@ -475,7 +475,7 @@ public class EventScheduleManager {
         requestEntityPersistanceFacade.put(requestEntity);
     }
 
-    public static String getWishDescriptionForEventAndLoggedInUser(EventDutyDTO eventDutyDTO) {
+    public static String getRequestDescriptionForEventAndLoggedInUser(EventDutyDTO eventDutyDTO) {
         RequestEntity requestEntity = requestEntityPersistanceFacade.get(p ->
                 p.getPersonByMusician().getAccountByAccount().equals(AccountAdministrationManager.getInstance().getLoggedInAccount())
                         && p.getEventDuty() == eventDutyDTO.getEventDutyId()
