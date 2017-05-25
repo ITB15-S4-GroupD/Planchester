@@ -491,6 +491,7 @@ public class EventScheduleController extends CalenderController {
             EditWishesController.month = Integer.valueOf(parts[0]);
             EditWishesController.year = Integer.valueOf(parts[2]);
 
+
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(EventScheduleController.class.getResource("EditWishes.fxml"));
             Scene scene = null;
@@ -500,15 +501,10 @@ public class EventScheduleController extends CalenderController {
                 e.printStackTrace();
             }
             Stage stage = new Stage();
+            EditWishesController.stage = stage;
             stage.setTitle("Edit Wishes");
             stage.setScene(scene);
-            stage.show();
-
-            stage.setOnCloseRequest(we -> {
-                // TODO implement
-                stage.close();
-            });
-            EditWishesController.stage = stage;
+            stage.showAndWait();
         };
     }
 

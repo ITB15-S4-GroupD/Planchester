@@ -36,7 +36,30 @@ public class EditWishesController {
         loadEventsForMonth();
     }
 
-    public void loadEventsForMonth() {
+    @FXML
+    public void save() {
+        // TODO save entered data, show error message if someshing is missing or fails,
+        // TODO show message if wishes have been successfully saved
+        // TODO implement saving data in eventschedulemanager
+        stage.fireEvent(
+                new WindowEvent(
+                        stage,
+                        WindowEvent.WINDOW_CLOSE_REQUEST
+                )
+        );
+    }
+
+    @FXML
+    public void cancel() {
+        stage.fireEvent(
+                new WindowEvent(
+                        stage,
+                        WindowEvent.WINDOW_CLOSE_REQUEST
+                )
+        );
+    }
+
+    private void loadEventsForMonth() {
         table.getItems().clear();
 
         List<EventDutyDTO> eventDutyDTOList = EventScheduleManager.getAvailableEventsForWishInMonth(Month.of(month), Year.of(year));
@@ -116,26 +139,5 @@ public class EditWishesController {
         );
 
         table.getColumns().addAll(eventTypeCol, eventNameCol, eventDateTimeCol, eventLocationCol, eventConductorCol, requestTypeColumn);
-    }
-
-    @FXML
-    public void save() {
-        // TODO save entered data, show error message if someshing is missing or fails
-        stage.fireEvent(
-            new WindowEvent(
-                stage,
-                WindowEvent.WINDOW_CLOSE_REQUEST
-            )
-        );
-    }
-
-    @FXML
-    public void cancel() {
-        stage.fireEvent(
-            new WindowEvent(
-                stage,
-                WindowEvent.WINDOW_CLOSE_REQUEST
-            )
-        );
     }
 }
