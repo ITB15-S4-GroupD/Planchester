@@ -5,6 +5,11 @@ import Utils.Enum.RequestType;
 import Utils.Enum.RequestTypeGUI;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.TextFieldTableCell;
 
 /**
  * Created by timorzipa on 25/05/2017.
@@ -16,18 +21,26 @@ public class WishEntry {
     private final SimpleStringProperty eventLocation;
     private final SimpleStringProperty eventConductor;
     private final SimpleObjectProperty<RequestTypeGUI> requestType =  new SimpleObjectProperty<>();
+    private TextField requestDescription = new TextField();
 
     EventDutyDTO eventDutyDTO;
     boolean edited;
 
-    public WishEntry(String eventType, String eventName, String eventDateTime, String eventLocation, String eventConductor, RequestTypeGUI r, EventDutyDTO eventDutyDTO) {
+    public WishEntry(String eventType, String eventName, String eventDateTime, String eventLocation, String eventConductor, RequestTypeGUI r, String requestDescription,  EventDutyDTO eventDutyDTO) {
         this.eventType = new SimpleStringProperty(eventType);
         this.eventName = new SimpleStringProperty(eventName);
         this.eventDateTime = new SimpleStringProperty(eventDateTime);
         this.eventLocation = new SimpleStringProperty(eventLocation);
         this.eventConductor = new SimpleStringProperty(eventConductor);
+        this.requestDescription.setText(requestDescription);
         setRequestType(r);
         this.eventDutyDTO = eventDutyDTO;
+
+        this.requestDescription.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
+                this.setEdited(true);
+            }
+        });
     }
 
     public String getEventType() {
@@ -116,5 +129,13 @@ public class WishEntry {
 
     public void setEventDutyDTO(EventDutyDTO eventDutyDTO) {
         this.eventDutyDTO = eventDutyDTO;
+    }
+
+    public TextField getRequestDescription() {
+        return requestDescription;
+    }
+
+    public void setRequestDescription(TextField requestDescription) {
+        this.requestDescription = requestDescription;
     }
 }

@@ -46,15 +46,10 @@ public class WishRadioButtonCell<S,T extends Enum<T>> extends TableCell<S,T> {
             }
 
             // issue events on change of the selected radio button
-            group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-                @SuppressWarnings("unchecked")
-                @Override
-                public void changed(ObservableValue<? extends Toggle> observable,
-                                    Toggle oldValue, Toggle newValue) {
-                    WishEntry wishEntry = (WishEntry) getTableView().getItems().get(getIndex());
-                    wishEntry.setEdited(true);
-                    wishEntry.setRequestType((RequestTypeGUI) newValue.getUserData());
-                }
+            group.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+                WishEntry wishEntry = (WishEntry) getTableView().getItems().get(getIndex());
+                wishEntry.setEdited(true);
+                wishEntry.setRequestType((RequestTypeGUI) newValue.getUserData());
             });
             setGraphic(hb);
         }

@@ -14,7 +14,9 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import sun.misc.Request;
@@ -37,6 +39,7 @@ public class EditWishesController {
 
     @FXML
     public void initialize() {
+        table.setEditable(true);
         createColumns();
         loadEventsForMonth();
     }
@@ -53,7 +56,7 @@ public class EditWishesController {
             } else if(wishEntry.getRequestType().equals(RequestTypeGUI.Playrequest)) {
                 requestType = RequestType.Playrequest;
             }
-            EventScheduleManager.updateWish(wishEntry.eventDutyDTO, requestType, AccountAdministrationManager.getInstance().getLoggedInAccount());
+            EventScheduleManager.updateWish(wishEntry.eventDutyDTO, requestType, AccountAdministrationManager.getInstance().getLoggedInAccount(), wishEntry.getRequestDescription().getText());
         }
 
         // TODO save entered data, show error message if someshing is missing or fails,
@@ -115,6 +118,7 @@ public class EditWishesController {
                     eventDutyDTO.getLocation(),
                     eventDutyDTO.getConductor(),
                     requestTypeGUI,
+                    EventScheduleManager.getWishDescriptionForEventAndLoggedInUser(eventDutyDTO),
                     eventDutyDTO
 
             );
@@ -127,36 +131,32 @@ public class EditWishesController {
     private void createColumns() {
         TableColumn<WishEntry, String> eventTypeCol = new TableColumn("Type");
         eventTypeCol.setMinWidth(100);
-        eventTypeCol.setCellValueFactory(
-                new PropertyValueFactory<>("eventType"));
+        eventTypeCol.setCellValueFactory(new PropertyValueFactory<>("eventType"));
 
         TableColumn<WishEntry, String> eventNameCol = new TableColumn("Name");
         eventNameCol.setMinWidth(100);
-        eventNameCol.setCellValueFactory(
-                new PropertyValueFactory<>("eventName"));
+        eventNameCol.setCellValueFactory(new PropertyValueFactory<>("eventName"));
 
         TableColumn<WishEntry, String> eventDateTimeCol = new TableColumn("Time");
-        eventDateTimeCol.setMinWidth(100);
-        eventDateTimeCol.setCellValueFactory(
-                new PropertyValueFactory<>("eventDateTime"));
+        eventDateTimeCol.setMinWidth(200);
+        eventDateTimeCol.setCellValueFactory(new PropertyValueFactory<>("eventDateTime"));
 
         TableColumn<WishEntry, String> eventLocationCol = new TableColumn("Location");
         eventLocationCol.setMinWidth(100);
-        eventLocationCol.setCellValueFactory(
-                new PropertyValueFactory<>("eventLocation"));
+        eventLocationCol.setCellValueFactory(new PropertyValueFactory<>("eventLocation"));
 
         TableColumn<WishEntry, String> eventConductorCol = new TableColumn("Conductor");
         eventConductorCol.setMinWidth(100);
-        eventConductorCol.setCellValueFactory(
-                new PropertyValueFactory<>("eventConductor"));
+        eventConductorCol.setCellValueFactory(new PropertyValueFactory<>("eventConductor"));
 
-        TableColumn<WishEntry, RequestTypeGUI> requestTypeColumn = new TableColumn("Request");
-        requestTypeColumn.setCellFactory((param) -> new WishRadioButtonCell<>(EnumSet.allOf(RequestTypeGUI.class)));
-        requestTypeColumn.setCellValueFactory(new PropertyValueFactory<>("requestType"));
-        //requestTypeColumn.setOnEditCommit(
-        //        t -> (t.getTableView().getItems().get(t.getTablePosition().getRow())).setRequestType(t.getNewValue())
-        //);
+        TableColumn<WishEntry, RequestTypeGUI> requestTypeCol = new TableColumn("Request");
+        requestTypeCol.setCellFactory((param) -> new WishRadioButtonCell<>(EnumSet.allOf(RequestTypeGUI.class)));
+        requestTypeCol.setCellValueFactory(new PropertyValueFactory<>("requestType"));
 
-        table.getColumns().addAll(eventTypeCol, eventNameCol, eventDateTimeCol, eventLocationCol, eventConductorCol, requestTypeColumn);
+        TableColumn<WishEntry, TextField> eventDescriptionCol = new TableColumn("Description");
+        eventDescriptionCol.setMinWidth(300);
+        eventDescriptionCol.setCellValueFactory(new PropertyValueFactory<WishEntry, TextField>("requestDescription"));
+
+        table.getColumns().addAll(eventTypeCol, eventNameCol, eventDateTimeCol, eventLocationCol, eventConductorCol, requestTypeCol, eventDescriptionCol);
     }
 }
