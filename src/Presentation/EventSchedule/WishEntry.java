@@ -1,5 +1,6 @@
 package Presentation.EventSchedule;
 
+import Application.DTO.EventDutyDTO;
 import Utils.Enum.RequestType;
 import Utils.Enum.RequestTypeGUI;
 import javafx.beans.property.SimpleObjectProperty;
@@ -16,13 +17,17 @@ public class WishEntry {
     private final SimpleStringProperty eventConductor;
     private final SimpleObjectProperty<RequestTypeGUI> requestType =  new SimpleObjectProperty<>();
 
-    public WishEntry(String eventType, String eventName, String eventDateTime, String eventLocation, String eventConductor, RequestTypeGUI r) {
+    EventDutyDTO eventDutyDTO;
+    boolean edited;
+
+    public WishEntry(String eventType, String eventName, String eventDateTime, String eventLocation, String eventConductor, RequestTypeGUI r, EventDutyDTO eventDutyDTO) {
         this.eventType = new SimpleStringProperty(eventType);
         this.eventName = new SimpleStringProperty(eventName);
         this.eventDateTime = new SimpleStringProperty(eventDateTime);
         this.eventLocation = new SimpleStringProperty(eventLocation);
         this.eventConductor = new SimpleStringProperty(eventConductor);
-        this.requestType.set(r);
+        setRequestType(r);
+        this.eventDutyDTO = eventDutyDTO;
     }
 
     public String getEventType() {
@@ -95,5 +100,21 @@ public class WishEntry {
 
     public void setRequestType(RequestTypeGUI requestType) {
         this.requestType.set(requestType);
+    }
+
+    public boolean isEdited() {
+        return edited;
+    }
+
+    public void setEdited(boolean edited) {
+        this.edited = edited;
+    }
+
+    public EventDutyDTO getEventDutyDTO() {
+        return eventDutyDTO;
+    }
+
+    public void setEventDutyDTO(EventDutyDTO eventDutyDTO) {
+        this.eventDutyDTO = eventDutyDTO;
     }
 }

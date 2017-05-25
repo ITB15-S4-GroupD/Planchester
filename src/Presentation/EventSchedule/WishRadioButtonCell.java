@@ -1,5 +1,6 @@
 package Presentation.EventSchedule;
 
+import Utils.Enum.RequestTypeGUI;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
@@ -16,9 +17,9 @@ import java.util.EnumSet;
  */
 public class WishRadioButtonCell<S,T extends Enum<T>> extends TableCell<S,T> {
 
-    private EnumSet<T> enumeration;
+    private EnumSet<RequestTypeGUI> enumeration;
 
-    public WishRadioButtonCell(EnumSet<T> enumeration) {
+    public WishRadioButtonCell(EnumSet<RequestTypeGUI> enumeration) {
         this.enumeration = enumeration;
     }
 
@@ -34,7 +35,7 @@ public class WishRadioButtonCell<S,T extends Enum<T>> extends TableCell<S,T> {
             final ToggleGroup group = new ToggleGroup();
 
             // create a radio button for each 'element' of the enumeration
-            for (Enum<T> enumElement : enumeration) {
+            for (Enum<RequestTypeGUI> enumElement : enumeration) {
                 RadioButton radioButton = new RadioButton(enumElement.toString());
                 radioButton.setUserData(enumElement);
                 radioButton.setToggleGroup(group);
@@ -46,13 +47,13 @@ public class WishRadioButtonCell<S,T extends Enum<T>> extends TableCell<S,T> {
 
             // issue events on change of the selected radio button
             group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-
                 @SuppressWarnings("unchecked")
                 @Override
                 public void changed(ObservableValue<? extends Toggle> observable,
                                     Toggle oldValue, Toggle newValue) {
-                    getTableView().edit(getIndex(), getTableColumn());
-                    WishRadioButtonCell.this.commitEdit((T) newValue.getUserData());
+                    WishEntry wishEntry = (WishEntry) getTableView().getItems().get(getIndex());
+                    wishEntry.setEdited(true);
+                    wishEntry.setRequestType((RequestTypeGUI) newValue.getUserData());
                 }
             });
             setGraphic(hb);

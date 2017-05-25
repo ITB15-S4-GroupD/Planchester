@@ -1,5 +1,6 @@
 package Presentation.EventSchedule;
 
+import Application.AccountAdministrationManager;
 import Application.DTO.EventDutyDTO;
 import Application.EventScheduleManager;
 import Utils.Enum.EventType;
@@ -7,6 +8,7 @@ import Utils.Enum.RequestType;
 import Utils.Enum.RequestTypeGUI;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -20,8 +22,10 @@ import sun.misc.Request;
 import java.time.Month;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EditWishesController {
     public static Stage stage;
@@ -29,6 +33,7 @@ public class EditWishesController {
     public static int year;
 
     @FXML private TableView<WishEntry> table;
+    List<WishEntry> initWishes;
 
     @FXML
     public void initialize() {
@@ -38,14 +43,27 @@ public class EditWishesController {
 
     @FXML
     public void save() {
+        List<WishEntry> editedEntries = table.getItems().stream().filter(p -> p.edited == true).collect(Collectors.toList());
+
+        for(WishEntry wishEntry : editedEntries) {
+
+            RequestType requestType = null;
+            if(wishEntry.getRequestType().equals(RequestTypeGUI.Absence)) {
+                requestType = RequestType.Leave_of_absence;
+            } else if(wishEntry.getRequestType().equals(RequestTypeGUI.Playrequest)) {
+                requestType = RequestType.Playrequest;
+            }
+            EventScheduleManager.updateWish(wishEntry.eventDutyDTO, requestType, AccountAdministrationManager.getInstance().getLoggedInAccount());
+        }
+
         // TODO save entered data, show error message if someshing is missing or fails,
         // TODO show message if wishes have been successfully saved
         // TODO implement saving data in eventschedulemanager
         stage.fireEvent(
-                new WindowEvent(
-                        stage,
-                        WindowEvent.WINDOW_CLOSE_REQUEST
-                )
+            new WindowEvent(
+                stage,
+                WindowEvent.WINDOW_CLOSE_REQUEST
+            )
         );
     }
 
@@ -96,12 +114,13 @@ public class EditWishesController {
                     dateTime,
                     eventDutyDTO.getLocation(),
                     eventDutyDTO.getConductor(),
-                    requestTypeGUI
+                    requestTypeGUI,
+                    eventDutyDTO
 
             );
             wishEntries.add(wishEntry);
         }
-
+        initWishes = wishEntries;
         table.setItems(wishEntries);
     }
 
@@ -134,9 +153,9 @@ public class EditWishesController {
         TableColumn<WishEntry, RequestTypeGUI> requestTypeColumn = new TableColumn("Request");
         requestTypeColumn.setCellFactory((param) -> new WishRadioButtonCell<>(EnumSet.allOf(RequestTypeGUI.class)));
         requestTypeColumn.setCellValueFactory(new PropertyValueFactory<>("requestType"));
-        requestTypeColumn.setOnEditCommit(
-                t -> (t.getTableView().getItems().get(t.getTablePosition().getRow())).setRequestType(t.getNewValue())
-        );
+        //requestTypeColumn.setOnEditCommit(
+        //        t -> (t.getTableView().getItems().get(t.getTablePosition().getRow())).setRequestType(t.getNewValue())
+        //);
 
         table.getColumns().addAll(eventTypeCol, eventNameCol, eventDateTimeCol, eventLocationCol, eventConductorCol, requestTypeColumn);
     }

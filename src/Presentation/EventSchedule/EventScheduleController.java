@@ -496,7 +496,6 @@ public class EventScheduleController extends CalenderController {
             EditWishesController.month = Integer.valueOf(parts[0]);
             EditWishesController.year = Integer.valueOf(parts[2]);
 
-
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(EventScheduleController.class.getResource("EditWishes.fxml"));
             Scene scene = null;
@@ -505,12 +504,6 @@ public class EventScheduleController extends CalenderController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //Stage stage = new Stage();
-            //EditWishesController.stage = stage;
-            //stage.setTitle("Edit Wishes");
-            //stage.setScene(scene);
-            // TODO edit so that main window is no accessible while this window is shown
-            //stage.showAndWait();
 
             final Stage dialog = new Stage();
             EditWishesController.stage = dialog;

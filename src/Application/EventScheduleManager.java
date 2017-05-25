@@ -27,6 +27,7 @@ import static Utils.DateHelper.convertCalendarToTimestamp;
 public class EventScheduleManager {
     private static PersistanceFacade<EventDutyEntity> eventDutyEntityPersistanceFacade = new PersistanceFacade(EventDutyEntity.class);
     private static PersistanceFacade<EventDutyMusicalWorkEntity> eventDutyMusicalWorkEntityPersistanceFacade = new PersistanceFacade(EventDutyMusicalWorkEntity.class);
+    private static PersistanceFacade<RequestEntity> requestEntityPersistanceFacade = new PersistanceFacade(RequestEntity.class);
 
     public static EventDutyDTO createEventDuty(EventDutyDTO eventDutyDTO) throws ValidationException {
         EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
@@ -447,5 +448,26 @@ public class EventScheduleManager {
             return null;
         }
         return RequestType.valueOf(requestEntities.get(0).getRequestType());
+    }
+
+    public static void updateWish(EventDutyDTO eventDutyDTO, RequestType requestType, AccountEntity accountEntity) {
+        RequestEntity requestEntity = requestEntityPersistanceFacade.get(p ->
+                p.getPersonByMusician().getAccountByAccount().equals(accountEntity)
+                && eventDutyDTO.getEventDutyId().equals(p.getEventDuty())
+        );
+
+        if(requestType == null) {
+            requestEntityPersistanceFacade.remove(requestEntity);
+        }
+
+        if(requestEntity == null) {
+            requestEntity = new RequestEntity();
+            requestEntity.setRequestType(requestType.toString());
+            requestEntity.setEventDuty(eventDutyDTO.getEventDutyId());
+            requestEntity.setMusician(accountEntity.getPersonAccountId().getPersonId());
+        } else {
+            requestEntity.setRequestType(requestType.toString());
+        }
+        requestEntityPersistanceFacade.put(requestEntity);
     }
 }
