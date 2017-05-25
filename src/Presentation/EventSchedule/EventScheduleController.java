@@ -23,6 +23,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jfxtras.scene.control.agenda.Agenda;
 import java.io.IOException;
@@ -31,6 +34,8 @@ import java.time.Month;
 import java.time.Year;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+
+import static Presentation.PlanchesterGUI.primaryStage;
 
 /**
  * Created by timorzipa on 06/04/2017.
@@ -500,11 +505,20 @@ public class EventScheduleController extends CalenderController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Stage stage = new Stage();
-            EditWishesController.stage = stage;
-            stage.setTitle("Edit Wishes");
-            stage.setScene(scene);
-            stage.showAndWait();
+            //Stage stage = new Stage();
+            //EditWishesController.stage = stage;
+            //stage.setTitle("Edit Wishes");
+            //stage.setScene(scene);
+            // TODO edit so that main window is no accessible while this window is shown
+            //stage.showAndWait();
+
+            final Stage dialog = new Stage();
+            EditWishesController.stage = dialog;
+            dialog.setTitle("Edit Wishes");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(primaryStage);
+            dialog.setScene(scene);
+            dialog.show();
         };
     }
 
