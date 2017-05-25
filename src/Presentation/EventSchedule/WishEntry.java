@@ -1,6 +1,7 @@
 package Presentation.EventSchedule;
 
 import Utils.Enum.RequestType;
+import Utils.Enum.RequestTypeGUI;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -13,15 +14,15 @@ public class WishEntry {
     private final SimpleStringProperty eventDateTime;
     private final SimpleStringProperty eventLocation;
     private final SimpleStringProperty eventConductor;
-    private final SimpleObjectProperty<RequestType> requestType =  new SimpleObjectProperty<RequestType>();
+    private final SimpleObjectProperty<RequestTypeGUI> requestType =  new SimpleObjectProperty<>();
 
-    public WishEntry(String eventType, String eventName, String eventDateTime, String eventLocation, String eventConductor, RequestType r) {
+    public WishEntry(String eventType, String eventName, String eventDateTime, String eventLocation, String eventConductor, RequestTypeGUI r) {
         this.eventType = new SimpleStringProperty(eventType);
         this.eventName = new SimpleStringProperty(eventName);
         this.eventDateTime = new SimpleStringProperty(eventDateTime);
         this.eventLocation = new SimpleStringProperty(eventLocation);
         this.eventConductor = new SimpleStringProperty(eventConductor);
-        this.requestType.setValue(r);
+        this.requestType.set(r);
     }
 
     public String getEventType() {
@@ -84,15 +85,15 @@ public class WishEntry {
         this.eventConductor.set(eventConductor);
     }
 
-    public RequestType getRequestType() {
+    public RequestTypeGUI getRequestType() {
         return requestType.get();
     }
 
-    public SimpleObjectProperty<RequestType> requestTypeProperty() {
+    public SimpleObjectProperty<RequestTypeGUI> requestTypeProperty() {
         return requestType;
     }
 
-    public void setRequestType(RequestType requestType) {
+    public void setRequestType(RequestTypeGUI requestType) {
         this.requestType.set(requestType);
     }
 }

@@ -124,7 +124,7 @@ public class EditTourController extends EditController {
             eventDutyDTO.setLocation(eventLocation.getText());
             eventDutyDTO.setMusicalWorks(musicalWorks);
             eventDutyDTO.setPoints(((points.getText() == null || points.getText().isEmpty()) ? null : Double.valueOf(points.getText())));
-            eventDutyDTO.setInstrumentation(null); //TODO timebox 2
+            eventDutyDTO.setInstrumentation(null);
             eventDutyDTO.setRehearsalFor(null);
           
             EventScheduleManager.updateEventDuty(eventDutyDTO, initEventDutyDTO);

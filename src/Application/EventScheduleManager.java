@@ -5,20 +5,20 @@ import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
 import Domain.Models.InstrumentationModel;
 import Domain.Models.MusicalWorkModel;
-import Persistence.Entities.EventDutyEntity;
+import Persistence.Entities.*;
 import Domain.Models.EventDutyModel;
-import Persistence.Entities.EventDutyMusicalWorkEntity;
-import Persistence.Entities.InstrumentationEntity;
-import Persistence.Entities.MusicalWorkEntity;
 import Persistence.PersistanceFacade;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
+import Utils.Enum.RequestType;
 import Utils.MessageHelper;
 import javax.xml.bind.ValidationException;
 import java.time.Month;
 import java.time.Year;
 import java.util.*;
+import java.util.stream.Collectors;
+
 import static Utils.DateHelper.convertCalendarToTimestamp;
 
 /**
@@ -434,5 +434,18 @@ public class EventScheduleManager {
             eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
         }
         return eventDutyDTOList;
+    }
+
+    public static RequestType getWishForEventAndLoggedInUser(EventDutyDTO eventDutyDTO) {
+        EventDutyEntity eventDutyEntity = eventDutyEntityPersistanceFacade.get(eventDutyDTO.getEventDutyId());
+
+        List<RequestEntity> requestEntities = eventDutyEntity.getRequestsByEventDutyId().stream().filter(c ->
+                c.getPersonByMusician().getAccountByAccount().equals(AccountAdministrationManager.getInstance().getLoggedInAccount())
+        ).collect(Collectors.toList());
+
+        if(requestEntities.isEmpty()) {
+            return null;
+        }
+        return RequestType.valueOf(requestEntities.get(0).getRequestType());
     }
 }

@@ -4,6 +4,7 @@ import Application.DTO.EventDutyDTO;
 import Application.EventScheduleManager;
 import Utils.Enum.EventType;
 import Utils.Enum.RequestType;
+import Utils.Enum.RequestTypeGUI;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,6 +37,8 @@ public class EditWishesController {
     }
 
     public void loadEventsForMonth() {
+        table.getItems().clear();
+
         List<EventDutyDTO> eventDutyDTOList = EventScheduleManager.getAvailableEventsForWishInMonth(Month.of(month), Year.of(year));
         ObservableList<WishEntry> wishEntries = FXCollections.observableArrayList();
 
@@ -55,13 +58,22 @@ public class EditWishesController {
                 ;
             }
 
+            RequestType requestType = EventScheduleManager.getWishForEventAndLoggedInUser(eventDutyDTO);
+            RequestTypeGUI requestTypeGUI = null;
+            if(requestType == null){
+                requestTypeGUI = RequestTypeGUI.None;
+            } else if(requestType.equals(RequestType.Leave_of_absence)){
+                requestTypeGUI = RequestTypeGUI.Absence;
+            } else if(requestType.equals(RequestType.Playrequest)){
+                requestTypeGUI = RequestTypeGUI.Playrequest;
+            }
 
             WishEntry wishEntry = new WishEntry(eventDutyDTO.getEventType().toString(),
                     eventDutyDTO.getName(),
                     dateTime,
                     eventDutyDTO.getLocation(),
                     eventDutyDTO.getConductor(),
-                    RequestType.Leave_of_absence
+                    requestTypeGUI
 
             );
             wishEntries.add(wishEntry);
@@ -96,14 +108,14 @@ public class EditWishesController {
         eventConductorCol.setCellValueFactory(
                 new PropertyValueFactory<>("eventConductor"));
 
-        TableColumn<WishEntry, RequestType> requestTypeColumn = new TableColumn("Participation");
-        requestTypeColumn.setCellFactory((param) -> new WishRadioButtonCell<>(EnumSet.allOf(RequestType.class)));
-        requestTypeColumn.setCellValueFactory(new PropertyValueFactory<>("participation"));
+        TableColumn<WishEntry, RequestTypeGUI> requestTypeColumn = new TableColumn("Request");
+        requestTypeColumn.setCellFactory((param) -> new WishRadioButtonCell<>(EnumSet.allOf(RequestTypeGUI.class)));
+        requestTypeColumn.setCellValueFactory(new PropertyValueFactory<>("requestType"));
         requestTypeColumn.setOnEditCommit(
                 t -> (t.getTableView().getItems().get(t.getTablePosition().getRow())).setRequestType(t.getNewValue())
         );
 
-        table.getColumns().addAll(eventTypeCol, eventNameCol, eventDateTimeCol, eventLocationCol, eventConductorCol, requestTypeColumn );
+        table.getColumns().addAll(eventTypeCol, eventNameCol, eventDateTimeCol, eventLocationCol, eventConductorCol, requestTypeColumn);
     }
 
     @FXML
