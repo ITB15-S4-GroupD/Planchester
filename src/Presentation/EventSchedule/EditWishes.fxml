@@ -29,8 +29,7 @@
             </Label>
             <TableView fx:id="table" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
               <columns>
-                <TableColumn fx:id="eventColumn" prefWidth="346.0" text="Event" />
-                <TableColumn fx:id="wishColumn" minWidth="0.0" prefWidth="253.0" text="Wish" />
+
               </columns>
             </TableView>
             <GridPane GridPane.rowIndex="2">
