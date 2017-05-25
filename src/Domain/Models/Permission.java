@@ -19,6 +19,7 @@ public class Permission {
     private boolean publishDutyRoster = false;
     private boolean editMusicalWork = false;
     private boolean editInstrument = false;
+    private boolean editWishes = true; // TODO set to false, only true for tests
 
     public Permission(AccountRole accountRole) {
         this.accountRole = accountRole;
@@ -30,7 +31,7 @@ public class Permission {
             editMusicalWork = true;
             editInstrument = true;
         } else if(AccountRole.Musician.equals(accountRole) || AccountRole.Substitute.equals(accountRole)) {
-
+            editWishes = true;
         } else if(AccountRole.Music_librarian.equals(accountRole)) {
             editMusicalWork = true;
         } else if(AccountRole.Orchestral_facility_manager.equals(accountRole)) {
@@ -38,6 +39,7 @@ public class Permission {
         } else if(AccountRole.Section_representative.equals(accountRole)) {
             editDutyRoster = true;
             publishDutyRoster = true;
+            editWishes = true;
         }
     }
 
@@ -53,6 +55,10 @@ public class Permission {
             }
         }
         return newList;
+    }
+
+    public boolean isEditWishes() {
+        return editWishes;
     }
 
     public boolean isEditEventSchedule() {

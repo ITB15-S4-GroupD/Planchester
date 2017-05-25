@@ -22,7 +22,6 @@ public class InstrumentationController {
     public static boolean selectMultipleMusicalWorks = true;
     public static String newHeading;
 
-
     public static boolean apply = false;
     public static List<MusicalWorkDTO> selectedMusicalWorks;
     public static InstrumentationDTO instrumentation;
@@ -121,7 +120,7 @@ public class InstrumentationController {
         }
 
         filterTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            List<MusicalWorkDTO> filteredMusicalWorks = new ArrayList<MusicalWorkDTO>();
+            List<MusicalWorkDTO> filteredMusicalWorks = new ArrayList<>();
 
             for(MusicalWorkDTO mwDTO : musicalWorks) {
                 if(mwDTO.getName().toLowerCase().contains(newValue.toLowerCase()) || mwDTO.getName().toLowerCase().equals(newValue.toLowerCase())) {

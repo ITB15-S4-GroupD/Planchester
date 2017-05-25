@@ -103,6 +103,15 @@
                                                 </ImageView>
                                             </graphic>
                                         </MenuButton>
+                                        <MenuButton fx:id="editWishes" alignment="CENTER" graphicTextGap="10.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="31.0" prefWidth="170.0" text="Edit Wishes">
+                                            <graphic>
+                                                <ImageView disable="true" fitHeight="23.0" fitWidth="26.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" smooth="false">
+                                                    <image>
+                                                        <Image url="@../Images/Addicon.jpg" />
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                        </MenuButton>
                                     </buttons>
                                 </ButtonBar>
                                 <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#refresh" prefHeight="30.0" prefWidth="35.0">
