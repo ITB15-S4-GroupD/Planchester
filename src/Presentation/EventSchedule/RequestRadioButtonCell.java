@@ -1,12 +1,9 @@
 package Presentation.EventSchedule;
 
 import Utils.Enum.RequestTypeGUI;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 
@@ -15,11 +12,11 @@ import java.util.EnumSet;
 /**
  * Created by timorzipa on 25/05/2017.
  */
-public class WishRadioButtonCell<S,T extends Enum<T>> extends TableCell<S,T> {
+public class RequestRadioButtonCell<S,T extends Enum<T>> extends TableCell<S,T> {
 
     private EnumSet<RequestTypeGUI> enumeration;
 
-    public WishRadioButtonCell(EnumSet<RequestTypeGUI> enumeration) {
+    public RequestRadioButtonCell(EnumSet<RequestTypeGUI> enumeration) {
         this.enumeration = enumeration;
     }
 
@@ -47,7 +44,7 @@ public class WishRadioButtonCell<S,T extends Enum<T>> extends TableCell<S,T> {
 
             // issue events on change of the selected radio button
             group.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-                WishEntry wishEntry = (WishEntry) getTableView().getItems().get(getIndex());
+                RequestEntry wishEntry = (RequestEntry) getTableView().getItems().get(getIndex());
                 wishEntry.setEdited(true);
                 wishEntry.setRequestType((RequestTypeGUI) newValue.getUserData());
             });

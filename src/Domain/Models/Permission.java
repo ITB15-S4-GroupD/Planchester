@@ -57,7 +57,7 @@ public class Permission {
         return newList;
     }
 
-    public boolean isEditWishes() {
+    public boolean isEditRequests() {
         return editWishes;
     }
 

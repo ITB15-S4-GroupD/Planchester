@@ -14,7 +14,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 /**
  * Created by timorzipa on 25/05/2017.
  */
-public class WishEntry {
+public class RequestEntry {
     private final SimpleStringProperty eventType;
     private final SimpleStringProperty eventName;
     private final SimpleStringProperty eventDateTime;
@@ -26,7 +26,7 @@ public class WishEntry {
     EventDutyDTO eventDutyDTO;
     boolean edited;
 
-    public WishEntry(String eventType, String eventName, String eventDateTime, String eventLocation, String eventConductor, RequestTypeGUI r, String requestDescription,  EventDutyDTO eventDutyDTO) {
+    public RequestEntry(String eventType, String eventName, String eventDateTime, String eventLocation, String eventConductor, RequestTypeGUI r, String requestDescription, EventDutyDTO eventDutyDTO) {
         this.eventType = new SimpleStringProperty(eventType);
         this.eventName = new SimpleStringProperty(eventName);
         this.eventDateTime = new SimpleStringProperty(eventDateTime);
@@ -37,9 +37,7 @@ public class WishEntry {
         this.eventDutyDTO = eventDutyDTO;
 
         this.requestDescription.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*[\\,.]?\\d*?")) {
-                this.setEdited(true);
-            }
+            this.setEdited(true);
         });
     }
 

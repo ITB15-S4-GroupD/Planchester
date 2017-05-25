@@ -402,7 +402,7 @@ public class EventScheduleManager {
         return eventDutyDTOList;
     }
 
-    public static List<EventDutyDTO> getAllMonthsForWishes() {
+    public static List<EventDutyDTO> getAllMonthsForRequests() {
         List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p ->
                 p.getEventStatus().equals(EventStatus.Published.toString())
                 && p.getEventDutySectionDutyRostersByEventDutyId().isEmpty());
@@ -438,16 +438,15 @@ public class EventScheduleManager {
     }
 
     public static RequestType getWishForEventAndLoggedInUser(EventDutyDTO eventDutyDTO) {
-        EventDutyEntity eventDutyEntity = eventDutyEntityPersistanceFacade.get(eventDutyDTO.getEventDutyId());
+        RequestEntity requestEntity = requestEntityPersistanceFacade.get(p ->
+                p.getPersonByMusician().getAccountByAccount().equals(AccountAdministrationManager.getInstance().getLoggedInAccount())
+                && p.getEventDuty() == eventDutyDTO.getEventDutyId()
+        );
 
-        List<RequestEntity> requestEntities = eventDutyEntity.getRequestsByEventDutyId().stream().filter(c ->
-                c.getPersonByMusician().getAccountByAccount().equals(AccountAdministrationManager.getInstance().getLoggedInAccount())
-        ).collect(Collectors.toList());
-
-        if(requestEntities.isEmpty()) {
+        if(requestEntity == null) {
             return null;
         }
-        return RequestType.valueOf(requestEntities.get(0).getRequestType());
+        return RequestType.valueOf(requestEntity.getRequestType());
     }
 
     public static void updateWish(EventDutyDTO eventDutyDTO, RequestType requestType, AccountEntity accountEntity, String requestDescription) {
@@ -456,7 +455,9 @@ public class EventScheduleManager {
                 && eventDutyDTO.getEventDutyId().equals(p.getEventDuty())
         );
 
-        if(requestType == null) {
+        if(requestType == null && requestEntity != null) {
+            requestEntity.setDescription(null);
+            requestEntity.setRequestType(null);
             requestEntityPersistanceFacade.remove(requestEntity);
             return;
         }
@@ -475,15 +476,14 @@ public class EventScheduleManager {
     }
 
     public static String getWishDescriptionForEventAndLoggedInUser(EventDutyDTO eventDutyDTO) {
-        EventDutyEntity eventDutyEntity = eventDutyEntityPersistanceFacade.get(eventDutyDTO.getEventDutyId());
+        RequestEntity requestEntity = requestEntityPersistanceFacade.get(p ->
+                p.getPersonByMusician().getAccountByAccount().equals(AccountAdministrationManager.getInstance().getLoggedInAccount())
+                        && p.getEventDuty() == eventDutyDTO.getEventDutyId()
+        );
 
-        List<RequestEntity> requestEntities = eventDutyEntity.getRequestsByEventDutyId().stream().filter(c ->
-                c.getPersonByMusician().getAccountByAccount().equals(AccountAdministrationManager.getInstance().getLoggedInAccount())
-        ).collect(Collectors.toList());
-
-        if(requestEntities.isEmpty()) {
+        if(requestEntity == null) {
             return null;
         }
-        return requestEntities.get(0).getDescription();
+        return requestEntity.getDescription();
     }
 }
