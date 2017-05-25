@@ -120,7 +120,7 @@ public class InstrumentationController {
         }
 
         filterTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            List<MusicalWorkDTO> filteredMusicalWorks = new ArrayList<MusicalWorkDTO>();
+            List<MusicalWorkDTO> filteredMusicalWorks = new ArrayList<>();
 
             for(MusicalWorkDTO mwDTO : musicalWorks) {
                 if(mwDTO.getName().toLowerCase().contains(newValue.toLowerCase()) || mwDTO.getName().toLowerCase().equals(newValue.toLowerCase())) {

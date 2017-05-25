@@ -16,6 +16,8 @@ import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
 import Utils.MessageHelper;
 import javax.xml.bind.ValidationException;
+import java.time.Month;
+import java.time.Year;
 import java.util.*;
 import static Utils.DateHelper.convertCalendarToTimestamp;
 
@@ -401,8 +403,27 @@ public class EventScheduleManager {
 
     public static List<EventDutyDTO> getAllMonthsForWishes() {
         List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p ->
-                p.getEventStatus().equals(EventStatus.Unpublished.toString())
+                p.getEventStatus().equals(EventStatus.Published.toString())
                 && p.getEventDutySectionDutyRostersByEventDutyId().isEmpty());
+
+        List<EventDutyModel> eventDutyModelList = new ArrayList<>();
+        for(EventDutyEntity eventDutyEntity : eventDuties) {
+            eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
+        }
+        List<EventDutyDTO> eventDutyDTOList = new ArrayList<>();
+        for(EventDutyModel eventDutyModel : eventDutyModelList) {
+            eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
+        }
+        return eventDutyDTOList;
+    }
+
+    public static List<EventDutyDTO> getAvailableEventsForWishInMonth(Month month, Year year) {
+        List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p ->
+                p.getEventStatus().equals(EventStatus.Published.toString())
+                        && p.getEventDutySectionDutyRostersByEventDutyId().isEmpty()
+                        && p.getStarttime().toLocalDateTime().getMonth().equals(month)
+                        && p.getStarttime().toLocalDateTime().getYear() == year.getValue()
+        );
 
         List<EventDutyModel> eventDutyModelList = new ArrayList<>();
         for(EventDutyEntity eventDutyEntity : eventDuties) {

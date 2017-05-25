@@ -10,8 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.EditWishesController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.EventSchedule.EditWishesController">
    <children>
       <GridPane layoutX="81.0" layoutY="130.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -28,10 +27,10 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <TableView prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+            <TableView fx:id="table" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
               <columns>
-                <TableColumn prefWidth="314.0" text="Event" />
-                <TableColumn minWidth="0.0" prefWidth="285.0" text="Wish" />
+                <TableColumn fx:id="eventColumn" prefWidth="346.0" text="Event" />
+                <TableColumn fx:id="wishColumn" minWidth="0.0" prefWidth="253.0" text="Wish" />
               </columns>
             </TableView>
             <GridPane GridPane.rowIndex="2">

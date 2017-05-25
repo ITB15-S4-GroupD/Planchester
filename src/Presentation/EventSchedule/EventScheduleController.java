@@ -485,6 +485,12 @@ public class EventScheduleController extends CalenderController {
         return event -> {
             MenuItem mItem = (MenuItem) event.getSource();
 
+            // set data of editwishescontroller
+            String monthOfYear = mItem.getText();
+            String[] parts = monthOfYear.split(" | ");
+            EditWishesController.month = Integer.valueOf(parts[0]);
+            EditWishesController.year = Integer.valueOf(parts[2]);
+
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(EventScheduleController.class.getResource("EditWishes.fxml"));
             Scene scene = null;
@@ -496,13 +502,6 @@ public class EventScheduleController extends CalenderController {
             Stage stage = new Stage();
             stage.setTitle("Edit Wishes");
             stage.setScene(scene);
-
-            // set data of stage
-            String monthOfYear = mItem.getText();
-            String[] parts = monthOfYear.split(" | ");
-            EditWishesController.month = Integer.valueOf(parts[0]);
-            EditWishesController.year = Integer.valueOf(parts[2]);
-
             stage.show();
 
             stage.setOnCloseRequest(we -> {
