@@ -5,18 +5,20 @@ import Application.DTO.InstrumentationDTO;
 import Application.DTO.MusicalWorkDTO;
 import Domain.Models.InstrumentationModel;
 import Domain.Models.MusicalWorkModel;
-import Persistence.Entities.EventDutyEntity;
+import Persistence.Entities.*;
 import Domain.Models.EventDutyModel;
-import Persistence.Entities.EventDutyMusicalWorkEntity;
-import Persistence.Entities.InstrumentationEntity;
-import Persistence.Entities.MusicalWorkEntity;
 import Persistence.PersistanceFacade;
 import Utils.DateHelper;
 import Utils.Enum.EventStatus;
 import Utils.Enum.EventType;
+import Utils.Enum.RequestType;
 import Utils.MessageHelper;
 import javax.xml.bind.ValidationException;
+import java.time.Month;
+import java.time.Year;
 import java.util.*;
+import java.util.stream.Collectors;
+
 import static Utils.DateHelper.convertCalendarToTimestamp;
 
 /**
@@ -371,7 +373,8 @@ public class EventScheduleManager {
         eventDutyModel.setInstrumentation(getInstrumentationModel(eventDutyEntity.getInstrumentationByInstrumentation()));
         eventDutyModel.setRehearsalFor(eventDutyEntity.getRehearsalFor());
 
-        if(eventDutyEntity.getEventDutyMusicalWorksByEventDutyId() != null && !eventDutyEntity.getEventDutyMusicalWorksByEventDutyId().isEmpty()) {
+        if(eventDutyEntity.getEventDutyMusicalWorksByEventDutyId() != null
+                && !eventDutyEntity.getEventDutyMusicalWorksByEventDutyId().isEmpty()) {
             List<MusicalWorkModel> musicalWorkModels = new ArrayList<>();
             for (EventDutyMusicalWorkEntity eventDutyMusicalWorkEntity : eventDutyEntity.getEventDutyMusicalWorksByEventDutyId()) {
                 MusicalWorkEntity musicalWorkEntity = eventDutyMusicalWorkEntity.getMusicalWorkByMusicalWork();
@@ -384,7 +387,8 @@ public class EventScheduleManager {
     }
 
     public static List<EventDutyDTO> getAllUnpublishedMonths() {
-        List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p -> p.getEventStatus().equals(EventStatus.Unpublished.toString()));
+        List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p ->
+                p.getEventStatus().equals(EventStatus.Unpublished.toString()));
 
         List<EventDutyModel> eventDutyModelList = new ArrayList<>();
         for(EventDutyEntity eventDutyEntity : eventDuties) {
@@ -395,5 +399,53 @@ public class EventScheduleManager {
             eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
         }
         return eventDutyDTOList;
+    }
+
+    public static List<EventDutyDTO> getAllMonthsForWishes() {
+        List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p ->
+                p.getEventStatus().equals(EventStatus.Published.toString())
+                && p.getEventDutySectionDutyRostersByEventDutyId().isEmpty());
+
+        List<EventDutyModel> eventDutyModelList = new ArrayList<>();
+        for(EventDutyEntity eventDutyEntity : eventDuties) {
+            eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
+        }
+        List<EventDutyDTO> eventDutyDTOList = new ArrayList<>();
+        for(EventDutyModel eventDutyModel : eventDutyModelList) {
+            eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
+        }
+        return eventDutyDTOList;
+    }
+
+    public static List<EventDutyDTO> getAvailableEventsForWishInMonth(Month month, Year year) {
+        List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p ->
+                p.getEventStatus().equals(EventStatus.Published.toString())
+                        && p.getEventDutySectionDutyRostersByEventDutyId().isEmpty()
+                        && p.getStarttime().toLocalDateTime().getMonth().equals(month)
+                        && p.getStarttime().toLocalDateTime().getYear() == year.getValue()
+        );
+
+        List<EventDutyModel> eventDutyModelList = new ArrayList<>();
+        for(EventDutyEntity eventDutyEntity : eventDuties) {
+            eventDutyModelList.add(createEventDutyModel(eventDutyEntity));
+        }
+        List<EventDutyDTO> eventDutyDTOList = new ArrayList<>();
+        for(EventDutyModel eventDutyModel : eventDutyModelList) {
+            eventDutyDTOList.add(createEventDutyDTO(eventDutyModel));
+        }
+        return eventDutyDTOList;
+    }
+
+    public static RequestType getWishForEventAndLoggedInUser(EventDutyDTO eventDutyDTO) {
+        EventDutyEntity eventDutyEntity = eventDutyEntityPersistanceFacade.get(eventDutyDTO.getEventDutyId());
+
+        List<RequestEntity> requestEntities = eventDutyEntity.getRequestsByEventDutyId().stream().filter(c ->
+                c.getPersonByMusician().getAccountByAccount().equals(AccountAdministrationManager.getInstance().getLoggedInAccount())
+        ).collect(Collectors.toList());
+
+        if(requestEntities.isEmpty()) {
+            return null;
+        }
+        return RequestType.valueOf(requestEntities.get(0).getRequestType());
     }
 }
