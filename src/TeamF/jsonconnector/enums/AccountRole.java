@@ -5,5 +5,7 @@ public enum AccountRole {
     Administrator,
     Manager,
     Substitute,
-    Section_representative
+    Section_representative,
+    Orchestral_facility_manager,
+    Music_librarian
 }

@@ -508,6 +508,7 @@ public class EventScheduleController extends CalenderController {
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.initOwner(primaryStage);
             dialog.setScene(scene);
+            dialog.setResizable(false);
             dialog.show();
         };
     }

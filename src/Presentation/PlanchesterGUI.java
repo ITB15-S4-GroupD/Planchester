@@ -43,6 +43,7 @@ public class PlanchesterGUI {
             scene = new Scene(FXMLLoader.load(PlanchesterGUI.class.getResource("Login/Login.fxml")));
             primaryStage.setScene(scene);
             primaryStage.getIcons().add(new Image("file:src/Presentation/Images/logoplanchester.png"));
+            primaryStage.setResizable(false);
             primaryStage.show();
             checkLogin(primaryStage);
 
@@ -69,6 +70,7 @@ public class PlanchesterGUI {
         try {
             primaryStage = new Stage();
             primaryStage.setTitle("Planchester");
+            primaryStage.setResizable(false);
             primaryStage.setMaximized(true);
 
             primaryStage.setOnCloseRequest(t -> {

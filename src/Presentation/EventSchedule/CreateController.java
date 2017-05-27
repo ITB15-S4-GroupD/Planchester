@@ -78,6 +78,7 @@ public abstract class CreateController {
         Stage stage = new Stage();
         stage.setTitle("Add new Rehearsal");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
 
         TextField rehearsalConductor = (TextField) stage.getScene().lookup("#rehearsalConductor");
@@ -146,7 +147,7 @@ public abstract class CreateController {
 
         });
         InstrumentationController.stage = stage;
-
+        stage.setResizable(false);
         stage.showAndWait();
     }
 
