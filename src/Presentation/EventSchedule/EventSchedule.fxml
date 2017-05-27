@@ -79,25 +79,17 @@
                                 <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" />
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+                                <RowConstraints />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
                             </rowConstraints>
                             <children>
-                                <ButtonBar buttonMinWidth="100.0" GridPane.columnIndex="1">
+                                <ButtonBar buttonMinWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                     <buttons>
                                         <MenuButton fx:id="publishEventSchedule" alignment="CENTER" graphicTextGap="10.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="170.0" text="Publish Month">
                                             <graphic>
                                                 <ImageView fitHeight="23.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
                                                         <Image url="@../Images/publish.jpg" />
-                                                    </image>
-                                                </ImageView>
-                                            </graphic>
-                                        </MenuButton>
-                                        <MenuButton fx:id="addNewEvent" alignment="CENTER" graphicTextGap="10.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="31.0" prefWidth="170.0" text="Add new Event">
-                                            <graphic>
-                                                <ImageView disable="true" fitHeight="23.0" fitWidth="26.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" smooth="false">
-                                                    <image>
-                                                        <Image url="@../Images/Addicon.jpg" />
                                                     </image>
                                                 </ImageView>
                                             </graphic>
@@ -111,9 +103,18 @@
                                                 </ImageView>
                                             </graphic>
                                         </MenuButton>
+                                        <MenuButton fx:id="addNewEvent" alignment="CENTER" graphicTextGap="10.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="31.0" prefWidth="170.0" text="Add new Event">
+                                            <graphic>
+                                                <ImageView disable="true" fitHeight="23.0" fitWidth="26.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" smooth="false">
+                                                    <image>
+                                                        <Image url="@../Images/Addicon.jpg" />
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                        </MenuButton>
                                     </buttons>
                                 </ButtonBar>
-                                <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#refresh" prefHeight="30.0" prefWidth="35.0">
+                                <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#refresh" prefHeight="30.0" prefWidth="35.0" GridPane.rowIndex="1">
                                     <graphic>
                                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
