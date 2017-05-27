@@ -27,6 +27,7 @@ import static Utils.DateHelper.convertCalendarToTimestamp;
 public class EventScheduleManager {
     private static PersistanceFacade<EventDutyEntity> eventDutyEntityPersistanceFacade = new PersistanceFacade(EventDutyEntity.class);
     private static PersistanceFacade<EventDutyMusicalWorkEntity> eventDutyMusicalWorkEntityPersistanceFacade = new PersistanceFacade(EventDutyMusicalWorkEntity.class);
+    private static PersistanceFacade<RequestEntity> requestEntityPersistanceFacade = new PersistanceFacade(RequestEntity.class);
 
     public static EventDutyDTO createEventDuty(EventDutyDTO eventDutyDTO) throws ValidationException {
         EventDutyModel eventDutyModel = createEventDutyModel(eventDutyDTO);
@@ -401,7 +402,7 @@ public class EventScheduleManager {
         return eventDutyDTOList;
     }
 
-    public static List<EventDutyDTO> getAllMonthsForWishes() {
+    public static List<EventDutyDTO> getAllMonthsForRequests() {
         List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p ->
                 p.getEventStatus().equals(EventStatus.Published.toString())
                 && p.getEventDutySectionDutyRostersByEventDutyId().isEmpty());
@@ -417,7 +418,7 @@ public class EventScheduleManager {
         return eventDutyDTOList;
     }
 
-    public static List<EventDutyDTO> getAvailableEventsForWishInMonth(Month month, Year year) {
+    public static List<EventDutyDTO> getAvailableEventsForRequestInMonth(Month month, Year year) {
         List<EventDutyEntity> eventDuties = eventDutyEntityPersistanceFacade.list(p ->
                 p.getEventStatus().equals(EventStatus.Published.toString())
                         && p.getEventDutySectionDutyRostersByEventDutyId().isEmpty()
@@ -436,16 +437,53 @@ public class EventScheduleManager {
         return eventDutyDTOList;
     }
 
-    public static RequestType getWishForEventAndLoggedInUser(EventDutyDTO eventDutyDTO) {
-        EventDutyEntity eventDutyEntity = eventDutyEntityPersistanceFacade.get(eventDutyDTO.getEventDutyId());
+    public static RequestType getRequestForEventAndLoggedInUser(EventDutyDTO eventDutyDTO) {
+        RequestEntity requestEntity = requestEntityPersistanceFacade.get(p ->
+                p.getPersonByMusician().getAccountByAccount().equals(AccountAdministrationManager.getInstance().getLoggedInAccount())
+                && p.getEventDuty() == eventDutyDTO.getEventDutyId()
+        );
 
-        List<RequestEntity> requestEntities = eventDutyEntity.getRequestsByEventDutyId().stream().filter(c ->
-                c.getPersonByMusician().getAccountByAccount().equals(AccountAdministrationManager.getInstance().getLoggedInAccount())
-        ).collect(Collectors.toList());
-
-        if(requestEntities.isEmpty()) {
+        if(requestEntity == null) {
             return null;
         }
-        return RequestType.valueOf(requestEntities.get(0).getRequestType());
+        return RequestType.valueOf(requestEntity.getRequestType());
+    }
+
+    public static void updateRequest(EventDutyDTO eventDutyDTO, RequestType requestType, AccountEntity accountEntity, String requestDescription) {
+        RequestEntity requestEntity = requestEntityPersistanceFacade.get(p ->
+                p.getPersonByMusician().getAccountByAccount().equals(accountEntity)
+                && eventDutyDTO.getEventDutyId().equals(p.getEventDuty())
+        );
+
+        if(requestType == null && requestEntity != null) {
+            requestEntity.setDescription(null);
+            requestEntity.setRequestType(null);
+            requestEntityPersistanceFacade.remove(requestEntity);
+            return;
+        }
+
+        if(requestEntity == null) {
+            requestEntity = new RequestEntity();
+            requestEntity.setRequestType(requestType.toString());
+            requestEntity.setEventDuty(eventDutyDTO.getEventDutyId());
+            requestEntity.setMusician(accountEntity.getPersonAccountId().getPersonId());
+            requestEntity.setDescription(requestDescription);
+        } else {
+            requestEntity.setRequestType(requestType.toString());
+            requestEntity.setDescription(requestDescription);
+        }
+        requestEntityPersistanceFacade.put(requestEntity);
+    }
+
+    public static String getRequestDescriptionForEventAndLoggedInUser(EventDutyDTO eventDutyDTO) {
+        RequestEntity requestEntity = requestEntityPersistanceFacade.get(p ->
+                p.getPersonByMusician().getAccountByAccount().equals(AccountAdministrationManager.getInstance().getLoggedInAccount())
+                        && p.getEventDuty() == eventDutyDTO.getEventDutyId()
+        );
+
+        if(requestEntity == null) {
+            return null;
+        }
+        return requestEntity.getDescription();
     }
 }

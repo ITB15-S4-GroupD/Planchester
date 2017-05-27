@@ -13,7 +13,6 @@ import Utils.DateHelper;
 import Utils.MessageHelper;
 import Utils.PlanchesterConstants;
 import com.jfoenix.controls.JFXTextField;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,8 +22,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jfxtras.scene.control.agenda.Agenda;
@@ -45,11 +42,11 @@ public class EventScheduleController extends CalenderController {
     private static Agenda staticAgenda;
     private static ScrollPane staticScrollPane;
     private static MenuButton staticPublishEventSchedule;
-    private static MenuButton staticEditWishes;
+    private static MenuButton staticEditRequests;
 
     @FXML private MenuButton publishEventSchedule;
     @FXML private MenuButton addNewEvent;
-    @FXML private MenuButton editWishes;
+    @FXML private MenuButton editRequests;
 
     @FXML private Label unpublishedLabel;
 
@@ -70,7 +67,7 @@ public class EventScheduleController extends CalenderController {
         staticAgenda = agenda;
         staticScrollPane = scrollPane;
         staticPublishEventSchedule = publishEventSchedule;
-        staticEditWishes = editWishes;
+        staticEditRequests = editRequests;
 
         getGroupColorsFromCSS();
         initializeAppointmentGroupsForEventtypes(); //must be the first initialize-call
@@ -244,7 +241,7 @@ public class EventScheduleController extends CalenderController {
         setCalenderWeekLabel();
         addEventTypeEntriesToMenuButton();
         addMonthsEntriesToMenuButton();
-        addMonthsEntriesToWishesButton();
+        addMonthsEntriesToRequestsButton();
         setColorKeyMap();
 
         //put events to calendar
@@ -449,16 +446,16 @@ public class EventScheduleController extends CalenderController {
         });
     }
 
-    private static void addMonthsEntriesToWishesButton() {
-        if(AccountAdministrationManager.getInstance().getUserPermissions().isEditWishes()) {
-            staticEditWishes.getItems().clear();
+    private static void addMonthsEntriesToRequestsButton() {
+        if(AccountAdministrationManager.getInstance().getUserPermissions().isEditRequests()) {
+            staticEditRequests.getItems().clear();
 
-            List<EventDutyDTO> monthsForWishes = EventScheduleManager.getAllMonthsForWishes();
+            List<EventDutyDTO> monthsForRequests = EventScheduleManager.getAllMonthsForRequests();
             List<String> months = new ArrayList<>();
-            EventHandler<ActionEvent> action = chooseMonthForWishes();
+            EventHandler<ActionEvent> action = chooseMonthForRequests();
             Calendar cal = Calendar.getInstance();
-            for (EventDutyDTO wishEvent : monthsForWishes) {
-                cal.setTimeInMillis(wishEvent.getStartTime().getTime());
+            for (EventDutyDTO requestEvent : monthsForRequests) {
+                cal.setTimeInMillis(requestEvent.getStartTime().getTime());
                 int month = cal.get(Calendar.MONTH) + 1;
                 int year = cal.get(Calendar.YEAR);
                 String monthYear;
@@ -481,40 +478,33 @@ public class EventScheduleController extends CalenderController {
             for (String monthYear : months) {
                 MenuItem month = new MenuItem(monthYear);
                 month.setOnAction(action);
-                staticEditWishes.getItems().add(month);
+                staticEditRequests.getItems().add(month);
             }
         }
     }
 
-    private static EventHandler<ActionEvent> chooseMonthForWishes() {
+    private static EventHandler<ActionEvent> chooseMonthForRequests() {
         return event -> {
             MenuItem mItem = (MenuItem) event.getSource();
 
-            // set data of editwishescontroller
+            // set data of editrequestscontroller
             String monthOfYear = mItem.getText();
             String[] parts = monthOfYear.split(" | ");
-            EditWishesController.month = Integer.valueOf(parts[0]);
-            EditWishesController.year = Integer.valueOf(parts[2]);
-
+            EditRequestsController.month = Integer.valueOf(parts[0]);
+            EditRequestsController.year = Integer.valueOf(parts[2]);
 
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(EventScheduleController.class.getResource("EditWishes.fxml"));
+            fxmlLoader.setLocation(EventScheduleController.class.getResource("EditRequests.fxml"));
             Scene scene = null;
             try {
                 scene = new Scene(fxmlLoader.load());
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //Stage stage = new Stage();
-            //EditWishesController.stage = stage;
-            //stage.setTitle("Edit Wishes");
-            //stage.setScene(scene);
-            // TODO edit so that main window is no accessible while this window is shown
-            //stage.showAndWait();
 
             final Stage dialog = new Stage();
-            EditWishesController.stage = dialog;
-            dialog.setTitle("Edit Wishes");
+            EditRequestsController.stage = dialog;
+            dialog.setTitle("Edit Requests");
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.initOwner(primaryStage);
             dialog.setScene(scene);

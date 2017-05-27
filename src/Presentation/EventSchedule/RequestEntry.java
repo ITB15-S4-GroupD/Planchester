@@ -1,28 +1,44 @@
 package Presentation.EventSchedule;
 
+import Application.DTO.EventDutyDTO;
 import Utils.Enum.RequestType;
 import Utils.Enum.RequestTypeGUI;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.TextFieldTableCell;
 
 /**
  * Created by timorzipa on 25/05/2017.
  */
-public class WishEntry {
+public class RequestEntry {
     private final SimpleStringProperty eventType;
     private final SimpleStringProperty eventName;
     private final SimpleStringProperty eventDateTime;
     private final SimpleStringProperty eventLocation;
     private final SimpleStringProperty eventConductor;
     private final SimpleObjectProperty<RequestTypeGUI> requestType =  new SimpleObjectProperty<>();
+    private TextField requestDescription = new TextField();
 
-    public WishEntry(String eventType, String eventName, String eventDateTime, String eventLocation, String eventConductor, RequestTypeGUI r) {
+    EventDutyDTO eventDutyDTO;
+    boolean edited;
+
+    public RequestEntry(String eventType, String eventName, String eventDateTime, String eventLocation, String eventConductor, RequestTypeGUI r, String requestDescription, EventDutyDTO eventDutyDTO) {
         this.eventType = new SimpleStringProperty(eventType);
         this.eventName = new SimpleStringProperty(eventName);
         this.eventDateTime = new SimpleStringProperty(eventDateTime);
         this.eventLocation = new SimpleStringProperty(eventLocation);
         this.eventConductor = new SimpleStringProperty(eventConductor);
-        this.requestType.set(r);
+        this.requestDescription.setText(requestDescription);
+        setRequestType(r);
+        this.eventDutyDTO = eventDutyDTO;
+
+        this.requestDescription.textProperty().addListener((observable, oldValue, newValue) -> {
+            this.setEdited(true);
+        });
     }
 
     public String getEventType() {
@@ -95,5 +111,29 @@ public class WishEntry {
 
     public void setRequestType(RequestTypeGUI requestType) {
         this.requestType.set(requestType);
+    }
+
+    public boolean isEdited() {
+        return edited;
+    }
+
+    public void setEdited(boolean edited) {
+        this.edited = edited;
+    }
+
+    public EventDutyDTO getEventDutyDTO() {
+        return eventDutyDTO;
+    }
+
+    public void setEventDutyDTO(EventDutyDTO eventDutyDTO) {
+        this.eventDutyDTO = eventDutyDTO;
+    }
+
+    public TextField getRequestDescription() {
+        return requestDescription;
+    }
+
+    public void setRequestDescription(TextField requestDescription) {
+        this.requestDescription = requestDescription;
     }
 }

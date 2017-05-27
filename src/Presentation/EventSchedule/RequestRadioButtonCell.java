@@ -1,11 +1,9 @@
 package Presentation.EventSchedule;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import Utils.Enum.RequestTypeGUI;
 import javafx.geometry.Pos;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 
@@ -14,11 +12,11 @@ import java.util.EnumSet;
 /**
  * Created by timorzipa on 25/05/2017.
  */
-public class WishRadioButtonCell<S,T extends Enum<T>> extends TableCell<S,T> {
+public class RequestRadioButtonCell<S,T extends Enum<T>> extends TableCell<S,T> {
 
-    private EnumSet<T> enumeration;
+    private EnumSet<RequestTypeGUI> enumeration;
 
-    public WishRadioButtonCell(EnumSet<T> enumeration) {
+    public RequestRadioButtonCell(EnumSet<RequestTypeGUI> enumeration) {
         this.enumeration = enumeration;
     }
 
@@ -34,7 +32,7 @@ public class WishRadioButtonCell<S,T extends Enum<T>> extends TableCell<S,T> {
             final ToggleGroup group = new ToggleGroup();
 
             // create a radio button for each 'element' of the enumeration
-            for (Enum<T> enumElement : enumeration) {
+            for (Enum<RequestTypeGUI> enumElement : enumeration) {
                 RadioButton radioButton = new RadioButton(enumElement.toString());
                 radioButton.setUserData(enumElement);
                 radioButton.setToggleGroup(group);
@@ -45,15 +43,10 @@ public class WishRadioButtonCell<S,T extends Enum<T>> extends TableCell<S,T> {
             }
 
             // issue events on change of the selected radio button
-            group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-
-                @SuppressWarnings("unchecked")
-                @Override
-                public void changed(ObservableValue<? extends Toggle> observable,
-                                    Toggle oldValue, Toggle newValue) {
-                    getTableView().edit(getIndex(), getTableColumn());
-                    WishRadioButtonCell.this.commitEdit((T) newValue.getUserData());
-                }
+            group.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+                RequestEntry requestEntry = (RequestEntry) getTableView().getItems().get(getIndex());
+                requestEntry.setEdited(true);
+                requestEntry.setRequestType((RequestTypeGUI) newValue.getUserData());
             });
             setGraphic(hb);
         }
