@@ -46,7 +46,6 @@
                 <GridPane maxWidth="1.7976931348623157E308" GridPane.rowIndex="3">
                     <columnConstraints>
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="470.0" minWidth="10.0" prefWidth="470.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="309.0" minWidth="10.0" prefWidth="154.0" />
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="476.0" />
                     </columnConstraints>
                     <rowConstraints>
@@ -74,22 +73,32 @@
                                 <Button fx:id="btnOpenNewDuty" mnemonicParsing="false" onMouseClicked="#showActualWeekClicked" prefHeight="30.0" prefWidth="150.0" text="Current Week" GridPane.columnIndex="3" />
                             </children>
                         </GridPane>
-                        <GridPane prefHeight="30.0" prefWidth="464.0" GridPane.columnIndex="2">
+                        <GridPane prefHeight="30.0" prefWidth="464.0" GridPane.columnIndex="1">
                             <columnConstraints>
                                 <ColumnConstraints />
                                 <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" />
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
                             </rowConstraints>
                             <children>
-                                <ButtonBar buttonMinWidth="100.0" GridPane.columnIndex="1">
+                                <ButtonBar buttonMinWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                     <buttons>
                                         <MenuButton fx:id="publishEventSchedule" alignment="CENTER" graphicTextGap="10.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="170.0" text="Publish Month">
                                             <graphic>
                                                 <ImageView fitHeight="23.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
                                                         <Image url="@../Images/publish.jpg" />
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                        </MenuButton>
+                                        <MenuButton fx:id="editRequests" alignment="CENTER" graphicTextGap="10.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="31.0" prefWidth="170.0" text="Edit Requests">
+                                            <graphic>
+                                                <ImageView disable="true" fitHeight="23.0" fitWidth="26.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" smooth="false">
+                                                    <image>
+                                                        <Image url="@../Images/request.jpg" />
                                                     </image>
                                                 </ImageView>
                                             </graphic>
@@ -103,18 +112,9 @@
                                                 </ImageView>
                                             </graphic>
                                         </MenuButton>
-                                        <MenuButton fx:id="editRequests" alignment="CENTER" graphicTextGap="10.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="31.0" prefWidth="170.0" text="Edit Requests">
-                                            <graphic>
-                                                <ImageView disable="true" fitHeight="23.0" fitWidth="26.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" smooth="false">
-                                                    <image>
-                                                        <Image url="@../Images/Addicon.jpg" />
-                                                    </image>
-                                                </ImageView>
-                                            </graphic>
-                                        </MenuButton>
                                     </buttons>
                                 </ButtonBar>
-                                <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#refresh" prefHeight="30.0" prefWidth="35.0">
+                                <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#refresh" prefHeight="30.0" prefWidth="35.0" GridPane.rowIndex="1">
                                     <graphic>
                                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                             <image>

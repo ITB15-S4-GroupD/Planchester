@@ -36,5 +36,6 @@
     <orderEntry type="library" name="jackson-datatype-jsr310-2.9.0.pr3" level="project" />
     <orderEntry type="library" name="javax.ws.rs-api-2.0-m02" level="project" />
     <orderEntry type="library" name="jackson-core-2.9.0.pr3" level="project" />
+    <orderEntry type="library" name="jandex-2.0.3.Final" level="project" />
   </component>
 </module>

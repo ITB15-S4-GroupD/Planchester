@@ -144,6 +144,7 @@ public class EditRequestsController {
         TableColumn<RequestEntry, TextField> eventDescriptionCol = new TableColumn("Description");
         eventDescriptionCol.setMinWidth(300);
         eventDescriptionCol.setCellValueFactory(new PropertyValueFactory<RequestEntry, TextField>("requestDescription"));
+        eventDescriptionCol.setResizable(false);
 
         table.getColumns().addAll(eventTypeCol, eventNameCol, eventDateTimeCol, eventLocationCol, eventConductorCol, requestTypeCol, eventDescriptionCol);
     }
