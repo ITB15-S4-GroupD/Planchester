@@ -96,9 +96,7 @@ public class PersonApplication {
         account.setUsername(person.getAccount().getUsername());
         account.setAccountRole(person.getAccount().getRole().toString());
 
-        SecureRandom random = new SecureRandom();
-        // @TODO: save a hashed value to the DB
-        account.setPassword(new BigInteger(130, random).toString(32));
+        account.setPassword("test");
 
         PersistanceFacade<AccountEntity> accountEntityPersistanceFacade = new PersistanceFacade<>(AccountEntity.class);
         account = accountEntityPersistanceFacade.put(account);
