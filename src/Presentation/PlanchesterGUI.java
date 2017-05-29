@@ -70,7 +70,7 @@ public class PlanchesterGUI {
         try {
             primaryStage = new Stage();
             primaryStage.setTitle("Planchester");
-            primaryStage.setResizable(false);
+            //primaryStage.setResizable(false);
             primaryStage.setMaximized(true);
 
             primaryStage.setOnCloseRequest(t -> {

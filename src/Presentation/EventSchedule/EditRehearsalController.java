@@ -119,13 +119,12 @@ public class EditRehearsalController extends EditController {
 
         String pointRef = (initEventDutyDTO.getPoints() != null)? String.valueOf(initEventDutyDTO.getPoints()) : "0.0";
         if(!name.getText().equals(initEventDutyDTO.getName())
-                || !description.getText().equals(initEventDutyDTO.getDescription())
+                || (description.getText() != null && !description.getText().equals(initEventDutyDTO.getDescription()))
                 || !date.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalDate())
                 || !startTime.getValue().equals(initEventDutyDTO.getStartTime().toLocalDateTime().toLocalTime())
                 || !endTime.getValue().equals(initEventDutyDTO.getEndTime().toLocalDateTime().toLocalTime())
-                || !conductor.getText().equals(initEventDutyDTO.getConductor())
-                || !eventLocation.getText().equals(initEventDutyDTO.getLocation())
-                || !eventLocation.getText().equals(initEventDutyDTO.getLocation())
+                || (conductor.getText() != null && !conductor.getText().equals(initEventDutyDTO.getConductor()))
+                || (eventLocation.getText() != null && !eventLocation.getText().equals(initEventDutyDTO.getLocation()))
                 || !points.getText().equals(pointRef)
                 || (musicalWorks == null && initEventDutyDTO.getMusicalWorks() != null) // musical work removed
                 || (musicalWorks != null && initEventDutyDTO.getMusicalWorks() == null) // musical work added
