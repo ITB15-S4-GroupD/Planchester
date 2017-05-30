@@ -290,8 +290,8 @@ public class EventScheduleController extends CalenderController {
     private static EventHandler<ActionEvent> chooseMonthToPublish() {
         return event -> {
             MenuItem mItem = (MenuItem) event.getSource();
-            ButtonType buttonType = MessageHelper.showConfirmationMessage("Are you sure to publish " + mItem.getText());
-            if(buttonType.equals(ButtonType.YES)) {
+            ButtonType buttonType = MessageHelper.showPublishConfirmationMessage("Are you sure to publish " + mItem.getText());
+            if (buttonType.getText().equals("Publish")) {
                 publishEventSchedule(mItem);
             }
         };

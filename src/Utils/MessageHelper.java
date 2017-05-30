@@ -29,6 +29,19 @@ public class MessageHelper {
         return alert.getResult();
     }
 
+
+    public static ButtonType showPublishConfirmationMessage(String confirmationMessage) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Planchester Message");
+        alert.setHeaderText(confirmationMessage);
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().add(new ButtonType("Cancel"));
+        alert.getButtonTypes().add(new ButtonType("Publish"));
+        alert.showAndWait();
+        return alert.getResult();
+    }
+
+
     public static void showInformationMessage(String informationMessage) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Planchester Message");
