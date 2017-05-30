@@ -25,7 +25,7 @@ public class PlanchesterFrameController {
     @FXML private Tab eventscheduleTab;
     @FXML private Tab musicalWorksTab;
     @FXML private Tab instrumentsTab;
-    @FXML private Tab useradministrationTab;
+    @FXML private Tab personadministrationTab;
     @FXML private Tab supportTab;
     @FXML private Menu logoutMenu;
     @FXML private TabPane tabPane;
@@ -46,10 +46,10 @@ public class PlanchesterFrameController {
         MusicianManagement musicianManagement = new MusicianManagement();
         musicianManagement.initialize();
         musicianManagement.load();
-        useradministrationTab.setContent(musicianManagement.getCenter());
+        personadministrationTab.setContent(musicianManagement.getCenter());
 
         if(!AccountRole.Manager.equals(accountRole) && !AccountRole.Administrator.equals(accountRole)) {
-            tabPane.getTabs().remove(useradministrationTab);
+            tabPane.getTabs().remove(personadministrationTab);
         }
 
         if(AccountRole.Musician.equals(accountRole)
