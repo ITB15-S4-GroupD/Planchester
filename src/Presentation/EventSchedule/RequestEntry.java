@@ -22,7 +22,7 @@ public class RequestEntry {
     private final SimpleStringProperty eventConductor;
     private final SimpleObjectProperty<RequestTypeGUI> requestType =  new SimpleObjectProperty<>();
     private TextField requestDescription = new TextField();
-
+    private boolean gray;
     EventDutyDTO eventDutyDTO;
     boolean edited;
 
@@ -39,6 +39,14 @@ public class RequestEntry {
         this.requestDescription.textProperty().addListener((observable, oldValue, newValue) -> {
             this.setEdited(true);
         });
+    }
+
+    public boolean isGray() {
+        return gray;
+    }
+
+    public void setGray(boolean gray) {
+        this.gray = gray;
     }
 
     public String getEventType() {

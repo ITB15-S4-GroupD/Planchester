@@ -513,6 +513,9 @@ public class DutyRosterController extends CalenderController{
 
         //put events to calendar
         List<EventDutyDTO> events = DutyRosterManager.getDutyRosterListForCurrentWeek();
+        if(events == null || events.isEmpty()) {
+            return;
+        }
         for(EventDutyDTO event : events) {
             addDutyRosterToGUI(event);
         }
