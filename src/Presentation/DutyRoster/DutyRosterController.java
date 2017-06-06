@@ -311,11 +311,11 @@ public class DutyRosterController extends CalenderController{
     }
 
     private List<String> getAdressed(EventDutyDTO eventDutyDTO, String partType) {
-        return DutyRoster.getAdressedMusicicansForEventAndPart(eventDutyDTO, partType, DutyDispositionStatus.Normal);
+        return DutyRosterManager.getAdressedMusicicansForEventAndPart(eventDutyDTO, partType, DutyDispositionStatus.Normal);
     }
 
     private String getSpare(EventDutyDTO eventDutyDTO, SectionType sectionType) {
-        return DutyRoster.getSpareMusicicansForEventAndSectionType(eventDutyDTO, sectionType);
+        return DutyRosterManager.getSpareMusicicansForEventAndSectionType(eventDutyDTO, sectionType);
     }
 
     public static EventDutyDTO getEventForAppointment(Agenda.Appointment appointment) {
@@ -378,8 +378,8 @@ public class DutyRosterController extends CalenderController{
         int year = Integer.valueOf(parts[2]);
 
         LocalDateTime displayedDate = agenda.getDisplayedLocalDateTime();
-        DutyRoster dutyRoster = new DutyRoster();
-        EventDutyDTO eventDutyDTO = dutyRoster.validateMonth(Year.of(year), Month.of(month));
+        DutyRosterManager dutyRosterManager = new DutyRosterManager();
+        EventDutyDTO eventDutyDTO = dutyRosterManager.validateMonth(Year.of(year), Month.of(month));
 
         if (eventDutyDTO == null) {
             PublishDutyRoster.publish(Year.of(year), Month.of(month));

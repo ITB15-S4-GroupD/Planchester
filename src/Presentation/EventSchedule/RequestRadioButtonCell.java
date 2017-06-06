@@ -58,7 +58,6 @@ public class RequestRadioButtonCell<S,T extends Enum<T>> extends TableCell<S,T> 
                 if(disableEvent == true) {
                     return;
                 }
-
                 if(EditRequestsController.isEditable(requestEntry.getEventDutyDTO().getRehearsalFor())) {
                     requestEntry.setEdited(true);
                     RequestTypeGUI requestTypeGUI = (RequestTypeGUI) newValue.getUserData();
@@ -76,7 +75,6 @@ public class RequestRadioButtonCell<S,T extends Enum<T>> extends TableCell<S,T> 
                     requestEntry.setRequestType(RequestTypeGUI.Absence);
                 }
             });
-
             setGraphic(hb);
         }
     }
