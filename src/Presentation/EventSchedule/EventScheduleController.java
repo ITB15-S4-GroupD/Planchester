@@ -106,6 +106,7 @@ public class EventScheduleController extends CalenderController {
 
         Permission permission = AccountAdministrationManager.getInstance().getUserPermissions();
         publishEventSchedule.setVisible(permission.isPublishEventSchedule());
+        editRequests.setVisible(permission.isEditRequests());
         addNewEvent.setVisible(permission.isEditEventSchedule());
         unpublishedLabel.setVisible(permission.isEditEventSchedule());
     }

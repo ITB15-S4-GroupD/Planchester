@@ -19,15 +19,13 @@ public class Permission {
     private boolean publishDutyRoster = false;
     private boolean editMusicalWork = false;
     private boolean editInstrument = false;
-    private boolean editRequests = true; // TODO set to false, only true for tests
+    private boolean editRequests = false;
 
     public Permission(AccountRole accountRole) {
         this.accountRole = accountRole;
         if(AccountRole.Administrator.equals(accountRole) || AccountRole.Manager.equals(accountRole)) {
             editEventSchedule = true;
             publishEventSchedule = true;
-            editDutyRoster = true;
-            publishDutyRoster = true;
             editMusicalWork = true;
             editInstrument = true;
         } else if(AccountRole.Musician.equals(accountRole) || AccountRole.Substitute.equals(accountRole)) {
